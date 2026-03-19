@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Crea Mercato — CryptoPredict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head><body data-page="crea"><!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
+    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
+    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
+    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
+    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
+    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
+    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
+    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
+    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link" data-page="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="presale.html" class="nav-link" data-page="presale">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Presale</span>
+      <span class="badge"></span>
+    </a>
+    <a href="mercati.html" class="nav-link" data-page="mercati">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Mercati</span>
+    </a>
+    <a href="trading.html" class="nav-link" data-page="trading">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
+      <span>Trading</span>
+    </a>
+    <a href="vendi.html" class="nav-link" data-page="vendi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span>Vendi Quote</span>
+    </a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      <span>Portfolio</span>
+    </a>
+    <a href="staking.html" class="nav-link" data-page="staking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Staking</span>
+    </a>
+    <a href="crea.html" class="nav-link" data-page="crea">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <span>Crea</span>
+    </a>
+    <a href="docs.html" class="nav-link" data-page="docs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Docs</span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
+    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
+    <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<!-- PRESALE BANNER -->
+<div class="presale-banner">
+  <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
+  <span class="pb-price">· $0.080</span>
+  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
+  <a href="presale.html" class="pb-btn">Compra CPRED →</a>
+</div>
+<div class="page-wrap">
+<div class="page-header">
+  <span class="page-tag">// Crea</span>
+  <div class="page-title">Crea un Nuovo Mercato</div>
+  <div class="page-sub">Proponi una domanda, imposta i parametri e guadagna il 2% di ogni trade sul tuo mercato</div>
+</div>
+<div class="g2">
+  <div class="cp-card cp-card-accent" style="display:flex;flex-direction:column;gap:18px">
+    <div>
+      <label class="cp-label">Domanda del mercato *</label>
+      <textarea class="cp-input" rows="3" placeholder="Es: BTC supererà $100,000 entro fine aprile 2025?" style="resize:vertical"></textarea>
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:4px">Deve avere risposta binaria YES/NO</div>
+    </div>
+    <div class="g2">
+      <div>
+        <label class="cp-label">Categoria</label>
+        <select class="cp-input">
+          <option>Crypto Price</option>
+          <option>DeFi / TVL</option>
+          <option>Macro / ETF</option>
+          <option>NFT / Gaming</option>
+          <option>Governance</option>
+          <option>Altro</option>
+        </select>
+      </div>
+      <div>
+        <label class="cp-label">Asset di riferimento</label>
+        <select class="cp-input">
+          <option>Bitcoin (BTC)</option>
+          <option>Ethereum (ETH)</option>
+          <option>Solana (SOL)</option>
+          <option>BNB</option>
+          <option>XRP</option>
+          <option>Altro</option>
+        </select>
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <label class="cp-label">Data di scadenza</label>
+        <input type="date" class="cp-input">
+      </div>
+      <div>
+        <label class="cp-label">Ora di scadenza (UTC)</label>
+        <input type="time" class="cp-input" value="00:00">
+      </div>
+    </div>
+    <div>
+      <label class="cp-label">Liquidità iniziale (USDC) *</label>
+      <input type="number" class="cp-input" placeholder="100" id="init-liq" oninput="calcFee(this.value)">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:4px">Minimo $100 · Maggiore liquidità = più partecipanti</div>
+    </div>
+    <div>
+      <label class="cp-label">Fonte di risoluzione</label>
+      <select class="cp-input">
+        <option>CryptoCompare Price Feed</option>
+        <option>Binance API</option>
+        <option>Bybit API</option>
+        <option>CoinGecko</option>
+        <option>Votazione community</option>
+      </select>
+    </div>
+    <div>
+      <label class="cp-label">Descrizione (opzionale)</label>
+      <textarea class="cp-input" rows="2" placeholder="Aggiungi contesto o dettagli sulla risoluzione..."></textarea>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:.95rem;padding:13px">🔮 Crea Mercato</button>
+  </div>
+  <!-- Preview + info -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="cp-card cp-card-cyan">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// ANTEPRIMA</div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-weight:700;margin-bottom:8px;font-size:.9rem" id="prev-q">La tua domanda apparirà qui</div>
+        <div class="cp-bar"><div class="cp-bar-fill up" style="width:50%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;margin-bottom:10px"><span style="color:var(--green2)">YES 50%</span><span style="color:var(--red2)">NO 50%</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-up" style="flex:1;justify-content:center;font-size:.75rem">▲ YES</button>
+          <button class="btn btn-dn" style="flex:1;justify-content:center;font-size:.75rem">▼ NO</button>
+        </div>
+      </div>
+    </div>
+    <div class="cp-card cp-card-gold">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// LE TUE ENTRATE</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:.83rem">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Fee su ogni trade</span><span style="color:var(--gold2);font-family:'DM Mono',monospace">2%</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Con $10K volume</span><span style="color:var(--green2);font-family:'DM Mono',monospace" id="earn-est">$200</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Liquidità rimborsata</span><span style="color:var(--green2);font-family:'DM Mono',monospace">100%</span></div>
+      </div>
+    </div>
+    <div class="cp-card">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// REGOLE</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:.8rem;color:var(--text3)">
+        <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>La domanda deve essere binaria (YES/NO)</div>
+        <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>La scadenza deve essere almeno 1 ora nel futuro</div>
+        <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>La fonte di risoluzione deve essere verificabile</div>
+        <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Mercati irrisolvibili vengono annullati e rimborsati</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.querySelector('textarea').addEventListener('input',e=>{
+  document.getElementById('prev-q').textContent=e.target.value||'La tua domanda apparirà qui';
+});
+function calcFee(v){
+  const vol=parseFloat(v)||0;
+  document.getElementById('earn-est').textContent='$'+(vol*2*0.02).toFixed(0)+' (per 2x vol)';
+}
+</script>
+</div><script src="_shared.js"></script></body></html>

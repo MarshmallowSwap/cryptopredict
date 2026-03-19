@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presale — CryptoPredict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head><body data-page="presale"><!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
+    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
+    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
+    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
+    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
+    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
+    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
+    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
+    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link" data-page="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="presale.html" class="nav-link" data-page="presale">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Presale</span>
+      <span class="badge"></span>
+    </a>
+    <a href="mercati.html" class="nav-link" data-page="mercati">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Mercati</span>
+    </a>
+    <a href="trading.html" class="nav-link" data-page="trading">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
+      <span>Trading</span>
+    </a>
+    <a href="vendi.html" class="nav-link" data-page="vendi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span>Vendi Quote</span>
+    </a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      <span>Portfolio</span>
+    </a>
+    <a href="staking.html" class="nav-link" data-page="staking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Staking</span>
+    </a>
+    <a href="crea.html" class="nav-link" data-page="crea">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <span>Crea</span>
+    </a>
+    <a href="docs.html" class="nav-link" data-page="docs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Docs</span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
+    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
+    <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<!-- PRESALE BANNER -->
+<div class="presale-banner">
+  <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
+  <span class="pb-price">· $0.080</span>
+  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
+  <a href="presale.html" class="pb-btn">Compra CPRED →</a>
+</div>
+<div class="page-wrap">
+<div class="page-header">
+  <span class="page-tag">// Token CPRED</span>
+  <div class="page-title">Presale in corso — Stage 1</div>
+  <div class="page-sub">Acquista CPRED al prezzo di lancio prima che il mercato apra al pubblico.</div>
+</div>
+<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
+  <!-- Main buy card -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="cp-card cp-card-accent" style="background:linear-gradient(145deg,rgba(124,58,237,.08),var(--card))">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:4px">STAGE 1 PRICE</div>
+          <div style="font-size:2.4rem;font-weight:800;color:var(--gold2)">$0.080 <span style="font-size:.9rem;color:var(--text3);font-weight:400">USDC</span></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:4px">LISTING PRICE</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--green2)">$0.200</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--green2)">+150% al lancio</div>
+        </div>
+      </div>
+      <!-- Progress -->
+      <div style="margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:8px">
+          <span>Raccolti: <strong style="color:var(--gold2)">$640,000</strong></span>
+          <span>Obiettivo: <strong style="color:var(--text2)">$1,000,000</strong></span>
+        </div>
+        <div class="cp-bar" style="height:10px">
+          <div class="cp-bar-fill gold" style="width:64%"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:6px">64% completato · 12,500,000 CPRED rimanenti</div>
+      </div>
+      <!-- Buy form -->
+      <label class="cp-label">Importo USDC</label>
+      <div style="position:relative;margin-bottom:12px">
+        <input type="number" class="cp-input" placeholder="100" id="buy-amount" oninput="calcCpred(this.value)" style="padding-right:60px">
+        <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">USDC</span>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-family:'DM Mono',monospace;font-size:.82rem">
+        Riceverai: <strong style="color:var(--gold2)" id="cpred-out">1,250</strong> CPRED
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-ghost" style="font-size:.72rem" onclick="setAmt(50)">$50</button>
+        <button class="btn btn-ghost" style="font-size:.72rem" onclick="setAmt(100)">$100</button>
+        <button class="btn btn-ghost" style="font-size:.72rem" onclick="setAmt(500)">$500</button>
+        <button class="btn btn-ghost" style="font-size:.72rem" onclick="setAmt(1000)">$1,000</button>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:13px">⚡ Compra CPRED</button>
+    </div>
+    <!-- Stages -->
+    <div class="cp-card">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:14px">// ROADMAP PRESALE</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2)">
+          <div><div style="font-weight:700;font-size:.85rem">Stage 1 <span style="color:var(--green2);font-size:.7rem">● LIVE</span></div><div style="font-size:.72rem;color:var(--text3)">20,000,000 CPRED</div></div>
+          <div style="text-align:right"><div style="color:var(--gold2);font-weight:700">$0.080</div><div style="font-size:.7rem;color:var(--text3)">64% venduto</div></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border)">
+          <div><div style="font-weight:700;font-size:.85rem;color:var(--text3)">Stage 2</div><div style="font-size:.72rem;color:var(--text3)">15,000,000 CPRED</div></div>
+          <div style="text-align:right"><div style="color:var(--text3);font-weight:700">$0.120</div><div style="font-size:.7rem;color:var(--text3)">Non iniziato</div></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border)">
+          <div><div style="font-weight:700;font-size:.85rem;color:var(--text3)">Stage 3</div><div style="font-size:.72rem;color:var(--text3)">10,000,000 CPRED</div></div>
+          <div style="text-align:right"><div style="color:var(--text3);font-weight:700">$0.160</div><div style="font-size:.7rem;color:var(--text3)">Non iniziato</div></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2)">
+          <div><div style="font-weight:700;font-size:.85rem;color:var(--green2)">🚀 Listing</div><div style="font-size:.72rem;color:var(--text3)">DEX + CEX</div></div>
+          <div style="text-align:right"><div style="color:var(--green2);font-weight:700">$0.200</div><div style="font-size:.7rem;color:var(--text3)">Q3 2025</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Right side stats -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="cp-card cp-card-gold">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// TOKENOMICS</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Supply Totale</span><span style="font-family:'DM Mono',monospace;color:var(--gold2)">100,000,000 CPRED</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Presale (45%)</span><span style="font-family:'DM Mono',monospace">45,000,000</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Liquidità (30%)</span><span style="font-family:'DM Mono',monospace">30,000,000</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Team (15%)</span><span style="font-family:'DM Mono',monospace;color:var(--text3)">15M — lock 12mo</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Ecosystem (10%)</span><span style="font-family:'DM Mono',monospace">10,000,000</span></div>
+      </div>
+    </div>
+    <div class="cp-card">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// UTILITÀ CPRED</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:.83rem">
+        <div style="display:flex;gap:10px"><span style="color:var(--purple3)">✦</span><span>Fee ridotte (-50%) su tutti i mercati</span></div>
+        <div style="display:flex;gap:10px"><span style="color:var(--purple3)">✦</span><span>Staking APY fino al 28%</span></div>
+        <div style="display:flex;gap:10px"><span style="color:var(--purple3)">✦</span><span>Governance: vota nuovi mercati</span></div>
+        <div style="display:flex;gap:10px"><span style="color:var(--purple3)">✦</span><span>Bonus predizioni vincenti (+5%)</span></div>
+        <div style="display:flex;gap:10px"><span style="color:var(--purple3)">✦</span><span>Accesso mercati esclusivi CPRED</span></div>
+      </div>
+    </div>
+    <div class="cp-card cp-card-cyan">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// I TUOI TOKEN</div>
+      <div style="font-size:1.6rem;font-weight:800;color:var(--gold2);margin-bottom:4px">12,500 CPRED</div>
+      <div style="font-size:.78rem;color:var(--text3);margin-bottom:12px">Acquistati a $0.080 · Valore attuale: $1,000</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--green2)">Al listing ($0.200): <strong>+$1,500 (+150%)</strong></div>
+    </div>
+    <div class="cp-card" style="background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.2)">
+      <div style="font-size:.85rem;font-weight:700;color:var(--green2);margin-bottom:8px">✅ Accettato</div>
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:8px">USDC · USDT · ETH · BNB · SOL</div>
+      <div style="font-size:.75rem;color:var(--text3)">Powered by NOWPayments</div>
+    </div>
+  </div>
+</div>
+<script>
+function calcCpred(val) {
+  const amt = parseFloat(val) || 0;
+  document.getElementById('cpred-out').textContent = (amt / 0.08).toLocaleString(undefined, {maximumFractionDigits:0});
+}
+function setAmt(v) {
+  document.getElementById('buy-amount').value = v;
+  calcCpred(v);
+}
+</script>
+</div><script src="_shared.js"></script></body></html>

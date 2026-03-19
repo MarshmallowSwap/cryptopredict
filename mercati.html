@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercati — CryptoPredict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head><body data-page="mercati"><!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
+    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
+    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
+    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
+    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
+    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
+    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
+    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
+    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link" data-page="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="presale.html" class="nav-link" data-page="presale">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Presale</span>
+      <span class="badge"></span>
+    </a>
+    <a href="mercati.html" class="nav-link" data-page="mercati">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Mercati</span>
+    </a>
+    <a href="trading.html" class="nav-link" data-page="trading">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
+      <span>Trading</span>
+    </a>
+    <a href="vendi.html" class="nav-link" data-page="vendi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span>Vendi Quote</span>
+    </a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      <span>Portfolio</span>
+    </a>
+    <a href="staking.html" class="nav-link" data-page="staking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Staking</span>
+    </a>
+    <a href="crea.html" class="nav-link" data-page="crea">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <span>Crea</span>
+    </a>
+    <a href="docs.html" class="nav-link" data-page="docs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Docs</span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
+    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
+    <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<!-- PRESALE BANNER -->
+<div class="presale-banner">
+  <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
+  <span class="pb-price">· $0.080</span>
+  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
+  <a href="presale.html" class="pb-btn">Compra CPRED →</a>
+</div>
+<div class="page-wrap">
+<div class="page-header">
+  <span class="page-tag">// Tutti i mercati</span>
+  <div class="page-title">Mercati di Predizione</div>
+  <div class="page-sub">847 mercati attivi · Scommetti sulla tua analisi e vinci USDC</div>
+</div>
+<!-- Filters -->
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+  <div style="display:flex;gap:6px">
+    <button class="btn btn-primary" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('all',this)">Tutti (847)</button>
+    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('crypto',this)">Crypto</button>
+    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('macro',this)">Macro</button>
+    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('defi',this)">DeFi</button>
+    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('nft',this)">NFT</button>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:8px">
+    <select class="cp-input" style="width:auto;padding:6px 10px;font-size:.75rem">
+      <option>Più recenti</option>
+      <option>Pool più alto</option>
+      <option>Scadenza vicina</option>
+      <option>Più popolare</option>
+    </select>
+    <a href="crea.html" class="btn btn-primary" style="font-size:.75rem;padding:6px 14px">+ Crea mercato</a>
+  </div>
+</div>
+<!-- Markets grid -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px" id="markets-grid">
+
+  <!-- Market card macro -->
+  <div class="cp-card cp-card-accent" style="cursor:pointer" onclick="openMarket('btc100k')">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(247,147,26,.15);display:flex;align-items:center;justify-content:center;font-size:16px">₿</div>
+        <div><div style="font-weight:700;font-size:.82rem">Bitcoin</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Crypto · Mensile</div></div>
+      </div>
+      <span class="tag tag-green">YES 64%</span>
+    </div>
+    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">BTC supererà $100,000 entro fine mese?</div>
+    <div class="cp-bar"><div class="cp-bar-fill up" style="width:64%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 64%</span><span style="color:var(--red2)">NO 36%</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $18,240</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px" onclick="event.stopPropagation()">▲ YES</button>
+        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px" onclick="event.stopPropagation()">▼ NO</button>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 12g 4h · 312 partecipanti</div>
+  </div>
+
+  <div class="cp-card" style="cursor:pointer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(98,126,234,.15);display:flex;align-items:center;justify-content:center;font-size:16px">Ξ</div>
+        <div><div style="font-weight:700;font-size:.82rem">Ethereum</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Crypto · Settimanale</div></div>
+      </div>
+      <span class="tag tag-red">NO 59%</span>
+    </div>
+    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">ETH recupererà $3,000 questa settimana?</div>
+    <div class="cp-bar"><div class="cp-bar-fill up" style="width:41%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 41%</span><span style="color:var(--red2)">NO 59%</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $9,840</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
+        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 5g 12h · 187 partecipanti</div>
+  </div>
+
+  <div class="cp-card" style="cursor:pointer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(20,241,149,.15);display:flex;align-items:center;justify-content:center;font-size:16px">◎</div>
+        <div><div style="font-weight:700;font-size:.82rem">Solana</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Macro · Trimestrale</div></div>
+      </div>
+      <span class="tag tag-green">YES 82%</span>
+    </div>
+    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">SOL ETF approvato dalla SEC nel 2025?</div>
+    <div class="cp-bar"><div class="cp-bar-fill up" style="width:82%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 82%</span><span style="color:var(--red2)">NO 18%</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $22,100</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
+        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 90g · 521 partecipanti</div>
+  </div>
+
+  <div class="cp-card" style="cursor:pointer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(124,58,237,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🦄</div>
+        <div><div style="font-weight:700;font-size:.82rem">Uniswap</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">DeFi · Mensile</div></div>
+      </div>
+      <span class="tag tag-purple">YES 53%</span>
+    </div>
+    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">UNI v4 raggiungerà $1B TVL entro Q2?</div>
+    <div class="cp-bar"><div class="cp-bar-fill up" style="width:53%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 53%</span><span style="color:var(--red2)">NO 47%</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $6,300</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
+        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 28g · 94 partecipanti</div>
+  </div>
+
+  <div class="cp-card" style="cursor:pointer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🔶</div>
+        <div><div style="font-weight:700;font-size:.82rem">BNB</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Crypto · Giornaliero</div></div>
+      </div>
+      <span class="tag tag-red">NO 56%</span>
+    </div>
+    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">BNB guadagnerà più del 2% nelle prossime 4 ore?</div>
+    <div class="cp-bar"><div class="cp-bar-fill up" style="width:44%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 44%</span><span style="color:var(--red2)">NO 56%</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $2,950</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
+        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 3h 42m · 67 partecipanti</div>
+  </div>
+
+  <div class="cp-card" style="cursor:pointer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(6,182,212,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🌊</div>
+        <div><div style="font-weight:700;font-size:.82rem">Crypto Macro</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Macro · Annuale</div></div>
+      </div>
+      <span class="tag tag-green">YES 71%</span>
+    </div>
+    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">Crypto market cap supererà $5 trilioni nel 2025?</div>
+    <div class="cp-bar"><div class="cp-bar-fill up" style="width:71%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 71%</span><span style="color:var(--red2)">NO 29%</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $41,800</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
+        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 280g · 1,240 partecipanti</div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:24px">
+  <button class="btn btn-ghost">Carica altri mercati (841 rimanenti)</button>
+</div>
+</div><script src="_shared.js"></script></body></html>
