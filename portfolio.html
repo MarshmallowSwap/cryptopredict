@@ -363,9 +363,10 @@ async function claimStakingReward() {
   }
 }
 
-// ── INIT — ascolta cp:wallet-ready da _shared.js ─────────────────
-window.addEventListener('cp:wallet-ready', async (e) => {
-  // Override refreshWalletData per aggiornamenti futuri
+// ── INIT — listener diretto, fuori da DOMContentLoaded ───────────
+// Così è già registrato quando _shared.js emette cp:wallet-ready
+window.addEventListener('cp:wallet-ready', async function onWalletReady(e) {
+  // Override refreshWalletData per aggiornamenti futuri (connect/disconnect)
   const orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() { await orig(); await loadPortfolio(); };
 
