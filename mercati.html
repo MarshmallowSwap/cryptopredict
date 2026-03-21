@@ -204,8 +204,8 @@ async function loadMarkets() {
     // ABI compatibile sia v1 che v2
     const MARKET_ABI_COMPAT = [
       "function marketCount() view returns (uint256)",
-      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
-      "function getActiveMarkets(uint256 limit) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver)[])",
+      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver, uint256 participantCount))",
+      "function getActiveMarkets(uint256 limit) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver, uint256 participantCount)[])",
       "function getYesPct(uint256 marketId) view returns (uint256)",
       "function placeBet(uint256 marketId, bool side) payable",
       "function claimPayout(uint256 marketId)",
@@ -226,7 +226,12 @@ async function loadMarkets() {
       }
       const total    = yesEth + noEth;
       const yesPct   = total > 0 ? Math.round((yesEth / total) * 100) : 50;
-      const expiresAt = Number(m.expiresAt);
+      // expiresAt: BigInt → Number (sicuro per timestamp Unix)
+      const expiresAt = m.expiresAt ? Number(m.expiresAt.toString()) : 0;
+      // participantCount: potrebbe non essere nell'ABI v1 — stima da pool
+      let participants = 0;
+      try { participants = m.participantCount ? Number(m.participantCount.toString()) : 0; } catch(e) {}
+      if (!participants && total > 0) participants = Math.max(1, Math.round(total / 0.005));
       return {
         id:           Number(m.id),
         question:     m.question,
@@ -236,13 +241,13 @@ async function loadMarkets() {
         noPct:        100 - yesPct,
         poolEth:      total,
         expiresAt,
-        participants: Number(m.participantCount),
+        participants,
         yieldDay:     (total * 0.048 / 365).toFixed(4),
       };
     });
 
     renderMarkets(allMarkets);
-    setTimeout(startCountdowns, 50);
+    setTimeout(startCountdowns, 200);
     // Aggiorna partecipanti ogni 30 secondi
     if (window._partsTimer) clearInterval(window._partsTimer);
     window._partsTimer = setInterval(refreshParticipants, 30000);
@@ -272,7 +277,7 @@ async function loadMarkets() {
           yieldDay:     m.yield_info?.daily_yield || '0',
         }));
         renderMarkets(allMarkets);
-        setTimeout(startCountdowns, 50);
+        setTimeout(startCountdowns, 200);
         document.getElementById('banner-mkts').textContent = allMarkets.length;
         document.getElementById('mkt-sub').textContent =
           `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
@@ -315,13 +320,15 @@ function renderMarkets(markets) {
 
 // Avvia countdown per tutte le card visibili
 function startCountdowns() {
-  // Cancella timer precedenti
   if (window._cdTimers) window._cdTimers.forEach(clearInterval);
   window._cdTimers = [];
 
   allMarkets.forEach(m => {
+    // Aspetta che il DOM sia aggiornato
     const el = document.getElementById('cd-' + m.id);
-    if (!el) return;
+    if (!el) { console.warn('cd element not found for market', m.id); return; }
+    if (!m.expiresAt || m.expiresAt === 0) { el.textContent = 'Scadenza sconosciuta'; return; }
+    console.log('Starting countdown for market', m.id, 'expiresAt:', m.expiresAt, new Date(m.expiresAt * 1000).toISOString());
 
     function tick() {
       const diff = m.expiresAt * 1000 - Date.now();
@@ -360,7 +367,15 @@ async function refreshParticipants() {
     for (const m of allMarkets) {
       try {
         const fresh = await c.getMarket(m.id);
-        const parts = Number(fresh.participantCount);
+        let parts = 0;
+        try { parts = fresh.participantCount ? Number(fresh.participantCount.toString()) : 0; } catch(e) {}
+        if (!parts) {
+          // Stima da pool size
+          const yf = Array.isArray(fresh.yesPool) ? fresh.yesPool[0] : fresh.yesPool;
+          const nf = Array.isArray(fresh.noPool)  ? fresh.noPool[0]  : fresh.noPool;
+          const poolTotal = parseFloat(ethers.formatEther(yf)) + parseFloat(ethers.formatEther(nf));
+          if (poolTotal > 0) parts = Math.max(1, Math.round(poolTotal / 0.005));
+        }
         m.participants = parts;
         const el = document.getElementById('parts-' + m.id);
         if (el) el.textContent = parts;
@@ -733,7 +748,7 @@ function filterCat(cat, btn) {
     ? allMarkets
     : allMarkets.filter(m => m.category.toLowerCase() === cat);
   renderMarkets(filtered);
-  setTimeout(startCountdowns, 50);
+  setTimeout(startCountdowns, 200);
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────
