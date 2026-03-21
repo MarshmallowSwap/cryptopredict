@@ -678,7 +678,7 @@ async function loadMyBets() {
   const section = document.getElementById('my-bets-section');
   const list    = document.getElementById('my-bets-list');
   section.style.display = 'block';
-  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem;padding:8px 0"><span class="spin"></span> Caricamento...</div>';
+  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem;padding:4px 0"><span class="spin"></span> Caricamento scommesse...</div>';
 
   try {
     const MARKET_ABI = [
@@ -694,62 +694,88 @@ async function loadMyBets() {
     for (let i = 0; i < count; i++) {
       try {
         const pos = await c.getPosition(i, WALLET.address);
-        if (pos.amount > 0n) {
+        // BigInt o number — gestiamo entrambi
+        const amt = typeof pos.amount === 'bigint' ? pos.amount : BigInt(pos.amount.toString());
+        if (amt > 0n) {
           const mkt = await c.getMarket(i);
-          bets.push({ pos, mkt, id: i });
+          bets.push({ pos, mkt, id: i, amt });
         }
-      } catch(e) {}
+      } catch(e) { /* mercato non trovato, skip */ }
     }
 
     if (!bets.length) {
-      document.getElementById('my-bets-section').style.display = 'none';
+      section.style.display = 'none';
       return;
     }
 
     document.getElementById('my-bets-count').textContent = bets.length;
     list.innerHTML = '';
-    bets.forEach(({ pos, mkt, id }) => {
-      const stake    = parseFloat(ethers.formatEther(pos.amount));
-      const side     = pos.side;
-      const claimed  = pos.claimed;
-      const status   = ['Aperta','Chiusa','Risolta','Cancellata'][Number(mkt.status)] || 'Aperta';
-      const outcome  = ['—','YES','NO'][Number(mkt.outcome)] || '—';
-      const yesEth   = parseFloat(ethers.formatEther(mkt.yesPool));
-      const noEth    = parseFloat(ethers.formatEther(mkt.noPool));
-      const total    = yesEth + noEth;
-      const winPool  = side ? yesEth : noEth;
-      const payout   = winPool > 0 ? (total * stake / winPool * 0.98) : 0;
+
+    bets.forEach(({ pos, mkt, id, amt }) => {
+      const stake   = parseFloat(ethers.formatEther(amt));
+      const side    = pos.side === true || pos.side === 1 || pos.side === 1n;
+      const claimed = pos.claimed === true;
+
+      // status e outcome: ethers v6 può restituire number O bigint per uint8
+      const statusN  = Number(mkt.status);
+      const outcomeN = Number(mkt.outcome);
+      const statusLabels  = ['Aperta','Chiusa','Risolta','Cancellata'];
+      const outcomeLabels = ['—','YES','NO'];
+      const status  = statusLabels[statusN]  || 'Aperta';
+      const outcome = outcomeLabels[outcomeN] || '—';
+
+      const won  = statusN === 2 && ((outcomeN === 1 && side) || (outcomeN === 2 && !side));
+      const lost = statusN === 2 && !won;
+
+      let yesEth, noEth;
+      try {
+        yesEth = Array.isArray(mkt.yesPool)
+          ? parseFloat(ethers.formatEther(mkt.yesPool[0]))
+          : parseFloat(ethers.formatEther(mkt.yesPool));
+        noEth = Array.isArray(mkt.noPool)
+          ? parseFloat(ethers.formatEther(mkt.noPool[0]))
+          : parseFloat(ethers.formatEther(mkt.noPool));
+      } catch(e) { yesEth = 0; noEth = 0; }
+
+      const total   = yesEth + noEth;
+      const winPool = side ? yesEth : noEth;
+      const payout  = winPool > 0 ? (total * stake / winPool * 0.98) : 0;
       const daysLeft = Math.max(0, Math.ceil((Number(mkt.expiresAt) - Date.now()/1000) / 86400));
-      const won = mkt.status === 2n && ((mkt.outcome === 1n && side) || (mkt.outcome === 2n && !side));
-      const lost = mkt.status === 2n && !won;
+
+      const borderColor = won && !claimed ? 'rgba(16,185,129,.4)'
+                        : lost            ? 'rgba(239,68,68,.3)'
+                        : 'var(--border)';
 
       const el = document.createElement('div');
-      el.style.cssText = 'background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap';
-      el.innerHTML = `
-        <div style="flex:1;min-width:200px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-            <span class="${side ? 'tag tag-green' : 'tag tag-red'}" style="font-size:.65rem">${side ? '▲ YES' : '▼ NO'}</span>
-            <span style="font-size:.78rem;font-weight:700">${mkt.question.length > 55 ? mkt.question.slice(0,55)+'…' : mkt.question}</span>
-          </div>
-          <div style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3);display:flex;gap:14px">
-            <span>Stake: <strong style="color:var(--text)">${stake.toFixed(4)} ETH</strong></span>
-            <span>Payout est: <strong style="color:var(--green2)">${payout.toFixed(4)} ETH</strong></span>
-            <span>${Number(mkt.status) === 0 ? `⏱ ${daysLeft}g` : `${status}${Number(mkt.status) === 2 ? ' · '+outcome : ''}`}</span>
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center">
-          ${won && !claimed ? `<button onclick="claimWin(${id}, this)" class="btn btn-up" style="font-size:.72rem;padding:5px 12px">🎉 Ritira</button>` : ''}
-          ${claimed ? '<span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--green2)">✅ Ritirato</span>' : ''}
-          ${lost ? '<span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--red2)">❌ Perso</span>' : ''}
-          ${Number(mkt.status) === 0 ? '<span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">In corso</span>' : ''}
-          <a href="https://sepolia.basescan.org/address/${WALLET.address}" target="_blank"
-             style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--purple3)">BaseScan →</a>
-        </div>`;
+      el.style.cssText = `flex-shrink:0;width:270px;background:rgba(255,255,255,.04);border:1px solid ${borderColor};border-radius:10px;padding:12px 14px`;
+      el.innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">' +
+          '<span class="' + (side ? 'tag tag-green' : 'tag tag-red') + '" style="font-size:.62rem">' + (side ? '▲ YES' : '▼ NO') + '</span>' +
+          '<span style="font-size:.65rem;color:' + (won ? '#10b981' : lost ? '#ef4444' : 'var(--text3)') + '">' +
+            (won && !claimed ? '🎉 Hai vinto!' : won && claimed ? '✅ Ritirato' : lost ? '❌ Persa' : ('⏱ ' + (statusN === 0 ? daysLeft + 'g' : status))) +
+          '</span>' +
+        '</div>' +
+        '<div style="font-size:.78rem;font-weight:700;line-height:1.3;margin-bottom:8px;color:var(--text)">' +
+          (mkt.question.length > 52 ? mkt.question.slice(0,52)+'…' : mkt.question) +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:8px">' +
+          '<span>' + stake.toFixed(4) + ' ETH</span>' +
+          '<span style="color:var(--green2)">→ ' + payout.toFixed(4) + ' ETH</span>' +
+        '</div>' +
+        (won && !claimed
+          ? '<button onclick="claimWin(' + id + ', this)" class="btn btn-up" style="width:100%;justify-content:center;font-size:.72rem;padding:5px">🎉 Ritira Vincita</button>'
+          : claimed
+          ? '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--green2);text-align:center">✅ Payout ritirato</div>'
+          : lost
+          ? '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--red2);text-align:center">❌ Posizione persa</div>'
+          : '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center">⏱ In attesa di risoluzione</div>');
+
       list.appendChild(el);
     });
 
   } catch(e) {
-    list.innerHTML = `<div style="color:var(--text3);font-size:.78rem;padding:8px 0">Errore: ${e.message}</div>`;
+    console.error('loadMyBets error:', e);
+    list.innerHTML = '<div style="color:var(--text3);font-size:.75rem;padding:4px 0">Errore caricamento: ' + e.message + '</div>';
   }
 }
 
