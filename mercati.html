@@ -1,58 +1,77 @@
 <!DOCTYPE html>
 <html lang="it"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Mercati — CryptoPredict</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css">
 <style>
-.yield-bar{display:flex;align-items:center;justify-content:space-between;
-  margin-top:10px;padding:7px 10px;border-radius:7px;
-  background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)}
-.yield-dot{width:5px;height:5px;border-radius:50%;background:#00e87a;
-  animation:yieldPulse 2s infinite;flex-shrink:0}
-@keyframes yieldPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,232,122,.5)}
-  50%{opacity:.7;box-shadow:0 0 0 5px transparent}}
-.yield-label{font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700;letter-spacing:.06em}
-.yield-val{font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700}
-.yield-apy{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
 
-/* Yield banner top */
-.yield-banner{background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18);
-  border-radius:10px;padding:12px 16px;margin-bottom:20px;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.yield-banner-left{display:flex;align-items:center;gap:10px}
-.yield-banner-icon{width:32px;height:32px;border-radius:8px;
-  background:rgba(0,232,122,.15);border:1px solid rgba(0,232,122,.3);
-  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.yield-banner-stats{display:flex;gap:24px}
-.yield-stat{text-align:center}
-.yield-stat-val{font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a}
-.yield-stat-lbl{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em}
+/* Market card */
+.mkt-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s}
+.mkt-card:hover{border-color:var(--border2)}
+.mkt-body{padding:16px}
+
+/* Bet panel */
+.bet-panel{background:rgba(0,0,0,.3);border-top:1px solid var(--border2);padding:14px 16px;animation:slideDown .2s ease}
+.bet-panel.yes-panel{border-top-color:rgba(16,185,129,.3)}
+.bet-panel.no-panel{border-top-color:rgba(239,68,68,.3)}
+
+/* Currency tabs */
+.cur-tabs{display:flex;gap:4px;margin-bottom:12px;background:rgba(255,255,255,.04);border-radius:8px;padding:3px}
+.cur-tab{flex:1;padding:5px 0;border:none;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);background:transparent;transition:all .15s}
+.cur-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.cur-tab.eth.active{color:#00d4ff}
+.cur-tab.usdc.active{color:#2775ca}
+.cur-tab.usdt.active{color:#26a17b}
+.cur-tab.cpred.active{color:#fbbf24}
+
+/* Amount input row */
+.bet-input-row{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.bet-input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:7px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:.85rem;color:var(--text);outline:none}
+.bet-input:focus{border-color:var(--purple2)}
+.bet-quick{display:flex;gap:4px;margin-bottom:10px}
+.bet-quick-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);transition:all .15s}
+.bet-quick-btn:hover{border-color:var(--purple2);color:var(--text)}
+
+/* Preview row */
+.bet-preview{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3);margin-bottom:10px;padding:7px 10px;background:rgba(255,255,255,.03);border-radius:6px}
+
+/* Confirm button */
+.bet-confirm-yes{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;background:linear-gradient(135deg,rgba(16,185,129,.8),rgba(16,185,129,.5));color:#fff;transition:all .2s}
+.bet-confirm-yes:hover{background:linear-gradient(135deg,#10b981,rgba(16,185,129,.7))}
+.bet-confirm-no{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;background:linear-gradient(135deg,rgba(239,68,68,.8),rgba(239,68,68,.5));color:#fff;transition:all .2s}
+.bet-confirm-no:hover{background:linear-gradient(135deg,#ef4444,rgba(239,68,68,.7))}
+
+/* Faucet notice */
+.faucet-notice{font-size:.68rem;color:var(--text3);text-align:center;margin-top:6px}
+.faucet-notice a{color:var(--purple3)}
+
+/* Yield bar */
+.yield-bar{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:6px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)}
+
+/* Toast */
+.tx-toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;max-width:380px;opacity:0;transition:opacity .3s;pointer-events:none}
+.tx-toast.show{opacity:1;pointer-events:all}
 </style>
-</head><body data-page="mercati"><!-- TICKER -->
+</head>
+<body data-page="mercati">
+
+<!-- TICKER -->
 <div class="ticker-bar">
-  <div class="ticker-track" id="ticker">
-    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+  <div class="ticker-track">
+    <span class="tick-live"><span class="tick-dot"></span>MERCATI LIVE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
     <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
+    <span class="tick-item">Valute accettate: <strong style="color:var(--cyan2)">ETH · USDC · USDT · CPRED</strong></span>
+    <span class="tick-live"><span class="tick-dot"></span>MERCATI LIVE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
   </div>
 </div>
 
@@ -74,260 +93,522 @@
     <a href="docs.html" class="nav-link" data-page="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Docs</span></a>
   </div>
   <div class="nav-right">
-    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
-    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
+    <span class="nav-balance" id="nav-balance" style="display:none"></span>
+    <span class="nav-wallet" id="nav-wallet" style="display:none"></span>
     <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
     <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </nav>
 
-<!-- PRESALE BANNER -->
 <div class="presale-banner">
   <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
-  <span class="pb-price">· $0.080</span>
-  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
+  <span class="pb-price">· $0.050</span>
+  <span class="pb-timer" id="pb-countdown">—</span>
   <a href="presale.html" class="pb-btn">Compra CPRED →</a>
 </div>
 
 <div class="page-wrap">
-<div class="page-header">
-  <span class="page-tag">// Tutti i mercati</span>
-  <div class="page-title">Mercati di Predizione</div>
-  <div class="page-sub">847 mercati attivi · Scommetti sulla tua analisi e vinci USDC</div>
-</div>
+  <div class="page-header">
+    <span class="page-tag">// Tutti i mercati</span>
+    <div class="page-title">Mercati di Predizione</div>
+    <div class="page-sub" id="mkt-sub">Caricamento mercati on-chain...</div>
+  </div>
 
-<!-- YIELD BANNER -->
-<div class="yield-banner">
-  <div class="yield-banner-left">
-    <div class="yield-banner-icon">⚡</div>
-    <div>
-      <div style="font-size:.82rem;font-weight:700;color:#dde3f5;margin-bottom:2px">Capital Yield Attivo</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Tutto il capitale nei pool genera yield automatico — anche mentre aspetti la risoluzione</div>
+  <!-- Yield banner -->
+  <div style="background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,232,122,.15);border:1px solid rgba(0,232,122,.3);display:flex;align-items:center;justify-content:center">⚡</div>
+      <div>
+        <div style="font-size:.82rem;font-weight:700;color:#dde3f5;margin-bottom:2px">Capital Yield Attivo — Scommetti in 4 valute</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">ETH · USDC · USDT · CPRED · Il capitale nei pool genera 4.8% APY automatico</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px">
+      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a" id="banner-capital">—</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">CAPITALE ETH</div></div>
+      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a">4.8%</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">APY</div></div>
+      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a" id="banner-mkts">—</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">MERCATI ATTIVI</div></div>
     </div>
   </div>
-  <div class="yield-banner-stats">
-    <div class="yield-stat">
-      <div class="yield-stat-val">$127K</div>
-      <div class="yield-stat-lbl">CAPITALE TOTALE</div>
-    </div>
-    <div class="yield-stat">
-      <div class="yield-stat-val">+$17.40</div>
-      <div class="yield-stat-lbl">YIELD OGGI</div>
-    </div>
-    <div class="yield-stat">
-      <div class="yield-stat-val">4.8% APY</div>
-      <div class="yield-stat-lbl">RENDIMENTO</div>
-    </div>
-  </div>
-</div>
 
-<!-- Filters -->
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
-  <div style="display:flex;gap:6px">
-    <button class="btn btn-primary" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('all',this)">Tutti (847)</button>
-    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('crypto',this)">Crypto</button>
-    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('macro',this)">Macro</button>
-    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('defi',this)">DeFi</button>
-    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 14px" onclick="filterMkt('nft',this)">NFT</button>
+  <!-- Filters -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+    <div style="display:flex;gap:5px" id="filter-btns">
+      <button class="btn btn-primary" style="font-size:.75rem;padding:5px 12px" onclick="filterCat('all',this)">Tutti</button>
+      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterCat('crypto',this)">Crypto</button>
+      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterCat('macro',this)">Macro</button>
+      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterCat('defi',this)">DeFi</button>
+    </div>
+    <div style="margin-left:auto">
+      <a href="crea.html" class="btn btn-primary" style="font-size:.75rem;padding:5px 14px">+ Crea mercato</a>
+    </div>
   </div>
-  <div style="margin-left:auto;display:flex;gap:8px">
-    <select class="cp-input" style="width:auto;padding:6px 10px;font-size:.75rem">
-      <option>Più recenti</option>
-      <option>Pool più alto</option>
-      <option>Scadenza vicina</option>
-      <option>Più popolare</option>
-    </select>
-    <a href="crea.html" class="btn btn-primary" style="font-size:.75rem;padding:6px 14px">+ Crea mercato</a>
+
+  <!-- Markets grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px" id="markets-grid">
+    <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1">
+      <span class="spin"></span>
+      <span style="margin-left:8px;color:var(--text3);font-size:.85rem">Caricamento mercati da Base Sepolia...</span>
+    </div>
   </div>
 </div>
 
-<!-- Markets grid -->
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px" id="markets-grid">
-
-  <!-- BTC -->
-  <div class="cp-card cp-card-accent" style="cursor:pointer" onclick="openMarket('btc100k')">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(247,147,26,.15);display:flex;align-items:center;justify-content:center;font-size:16px">₿</div>
-        <div><div style="font-weight:700;font-size:.82rem">Bitcoin</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Crypto · Mensile</div></div>
-      </div>
-      <span class="tag tag-green">YES 64%</span>
-    </div>
-    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">BTC supererà $100,000 entro fine mese?</div>
-    <div class="cp-bar"><div class="cp-bar-fill up" style="width:64%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 64%</span><span style="color:var(--red2)">NO 36%</span></div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $18,240</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px" onclick="event.stopPropagation()">▲ YES</button>
-        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px" onclick="event.stopPropagation()">▼ NO</button>
-      </div>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 12g 4h · 312 partecipanti</div>
-    <div class="yield-bar">
-      <div style="display:flex;align-items:center;gap:6px">
-        <div class="yield-dot"></div>
-        <span class="yield-label">POOL YIELD</span>
-      </div>
-      <span class="yield-val">+$2.50/giorno</span>
-      <span class="yield-apy">· Tot. ~$29.97 · 4.8% APY</span>
-    </div>
+<!-- TX Toast -->
+<div class="tx-toast" id="tx-toast">
+  <span id="toast-icon">✅</span>
+  <div style="flex:1">
+    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--purple3);display:none"></a>
   </div>
-
-  <!-- ETH -->
-  <div class="cp-card" style="cursor:pointer">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(98,126,234,.15);display:flex;align-items:center;justify-content:center;font-size:16px">Ξ</div>
-        <div><div style="font-weight:700;font-size:.82rem">Ethereum</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Crypto · Settimanale</div></div>
-      </div>
-      <span class="tag tag-red">NO 59%</span>
-    </div>
-    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">ETH recupererà $3,000 questa settimana?</div>
-    <div class="cp-bar"><div class="cp-bar-fill up" style="width:41%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 41%</span><span style="color:var(--red2)">NO 59%</span></div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $9,840</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
-        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
-      </div>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 5g 12h · 187 partecipanti</div>
-    <div class="yield-bar">
-      <div style="display:flex;align-items:center;gap:6px">
-        <div class="yield-dot"></div>
-        <span class="yield-label">POOL YIELD</span>
-      </div>
-      <span class="yield-val">+$1.35/giorno</span>
-      <span class="yield-apy">· Tot. ~$7.42 · 4.8% APY</span>
-    </div>
-  </div>
-
-  <!-- SOL -->
-  <div class="cp-card" style="cursor:pointer">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(20,241,149,.15);display:flex;align-items:center;justify-content:center;font-size:16px">◎</div>
-        <div><div style="font-weight:700;font-size:.82rem">Solana</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Macro · Trimestrale</div></div>
-      </div>
-      <span class="tag tag-green">YES 82%</span>
-    </div>
-    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">SOL ETF approvato dalla SEC nel 2025?</div>
-    <div class="cp-bar"><div class="cp-bar-fill up" style="width:82%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 82%</span><span style="color:var(--red2)">NO 18%</span></div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $22,100</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
-        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
-      </div>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 90g · 521 partecipanti</div>
-    <div class="yield-bar">
-      <div style="display:flex;align-items:center;gap:6px">
-        <div class="yield-dot"></div>
-        <span class="yield-label">POOL YIELD</span>
-      </div>
-      <span class="yield-val">+$3.03/giorno</span>
-      <span class="yield-apy">· Tot. ~$272.87 · 4.8% APY</span>
-    </div>
-  </div>
-
-  <!-- UNI -->
-  <div class="cp-card" style="cursor:pointer">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(124,58,237,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🦄</div>
-        <div><div style="font-weight:700;font-size:.82rem">Uniswap</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">DeFi · Mensile</div></div>
-      </div>
-      <span class="tag tag-purple">YES 53%</span>
-    </div>
-    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">UNI v4 raggiungerà $1B TVL entro Q2?</div>
-    <div class="cp-bar"><div class="cp-bar-fill up" style="width:53%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 53%</span><span style="color:var(--red2)">NO 47%</span></div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $6,300</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
-        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
-      </div>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 28g · 94 partecipanti</div>
-    <div class="yield-bar">
-      <div style="display:flex;align-items:center;gap:6px">
-        <div class="yield-dot"></div>
-        <span class="yield-label">POOL YIELD</span>
-      </div>
-      <span class="yield-val">+$0.83/giorno</span>
-      <span class="yield-apy">· Tot. ~$23.24 · 4.8% APY</span>
-    </div>
-  </div>
-
-  <!-- BNB -->
-  <div class="cp-card" style="cursor:pointer">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🔶</div>
-        <div><div style="font-weight:700;font-size:.82rem">BNB</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Crypto · Giornaliero</div></div>
-      </div>
-      <span class="tag tag-red">NO 56%</span>
-    </div>
-    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">BNB guadagnerà più del 2% nelle prossime 4 ore?</div>
-    <div class="cp-bar"><div class="cp-bar-fill up" style="width:44%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 44%</span><span style="color:var(--red2)">NO 56%</span></div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $2,950</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
-        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
-      </div>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 3h 42m · 67 partecipanti</div>
-    <div class="yield-bar">
-      <div style="display:flex;align-items:center;gap:6px">
-        <div class="yield-dot"></div>
-        <span class="yield-label">POOL YIELD</span>
-      </div>
-      <span class="yield-val">+$0.39/giorno</span>
-      <span class="yield-apy">· Tot. ~$0.06 (short) · 4.8% APY</span>
-    </div>
-  </div>
-
-  <!-- MACRO -->
-  <div class="cp-card" style="cursor:pointer">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(6,182,212,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🌊</div>
-        <div><div style="font-weight:700;font-size:.82rem">Crypto Macro</div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Macro · Annuale</div></div>
-      </div>
-      <span class="tag tag-green">YES 71%</span>
-    </div>
-    <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">Crypto market cap supererà $5 trilioni nel 2025?</div>
-    <div class="cp-bar"><div class="cp-bar-fill up" style="width:71%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px"><span style="color:var(--green2)">YES 71%</span><span style="color:var(--red2)">NO 29%</span></div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">Pool: $41,800</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-up" style="font-size:.72rem;padding:5px 10px">▲ YES</button>
-        <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
-      </div>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 280g · 1,240 partecipanti</div>
-    <div class="yield-bar">
-      <div style="display:flex;align-items:center;gap:6px">
-        <div class="yield-dot"></div>
-        <span class="yield-label">POOL YIELD</span>
-      </div>
-      <span class="yield-val">+$5.73/giorno</span>
-      <span class="yield-apy">· Tot. ~$1,603 · 4.8% APY</span>
-    </div>
-  </div>
-
+  <button onclick="document.getElementById('tx-toast').classList.remove('show')"
+    style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px">✕</button>
 </div>
-<div style="text-align:center;margin-top:24px">
-  <button class="btn btn-ghost">Carica altri mercati (841 rimanenti)</button>
-</div>
-</div><script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <script src="web3.js"></script>
-<script src="_shared.js"></script></body></html>
+<script src="_shared.js"></script>
+<script>
+// ── CURRENCY CONFIG ───────────────────────────────────────────────
+const CURRENCIES = [
+  { id: 0, key: 'eth',  label: 'ETH',  symbol: 'ETH',  decimals: 18, min: 0.0001, step: 0.0001, color: '#00d4ff' },
+  { id: 1, key: 'usdc', label: 'USDC', symbol: 'USDC', decimals: 6,  min: 1,      step: 1,      color: '#2775ca' },
+  { id: 2, key: 'usdt', label: 'USDT', symbol: 'USDT', decimals: 6,  min: 1,      step: 1,      color: '#26a17b' },
+  { id: 3, key: 'cpred',label: 'CPRED',symbol: 'CPRED',decimals: 18, min: 1,      step: 1,      color: '#fbbf24' },
+];
+
+// Prezzi mock per preview (USD)
+const PRICES = { eth: 2000, usdc: 1, usdt: 1, cpred: 0.05 };
+
+// Stato pannelli aperti: marketId → { side, currency }
+const openPanels = {};
+
+let allMarkets = [];
+
+// ── LOAD ─────────────────────────────────────────────────────────
+async function loadMarkets() {
+  try {
+    const c = await W3.getContract('market');
+    const raw = await c.getActiveMarkets(20);
+    allMarkets = raw.map(m => {
+      const yesEth = parseFloat(ethers.formatEther(m.yesPool[0]));
+      const noEth  = parseFloat(ethers.formatEther(m.noPool[0]));
+      const total  = yesEth + noEth;
+      const yesPct = total > 0 ? Math.round((yesEth / total) * 100) : 50;
+      const daysLeft = Math.max(0, Math.ceil((Number(m.expiresAt) - Date.now()/1000) / 86400));
+      return {
+        id:         Number(m.id),
+        question:   m.question,
+        category:   m.category,
+        asset:      m.assetSymbol,
+        yesPct,
+        noPct: 100 - yesPct,
+        poolEth: total,
+        daysLeft,
+        participants: Number(m.participantCount),
+        yieldDay: (total * 0.048 / 365).toFixed(4),
+      };
+    });
+
+    renderMarkets(allMarkets);
+
+    // Update banner
+    const totalEth = allMarkets.reduce((s,m) => s + m.poolEth, 0);
+    document.getElementById('banner-capital').textContent = totalEth.toFixed(3) + ' ETH';
+    document.getElementById('banner-mkts').textContent    = allMarkets.length;
+    document.getElementById('mkt-sub').textContent = `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
+
+  } catch(e) {
+    console.warn('Load markets error:', e);
+    document.getElementById('markets-grid').innerHTML = `
+      <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">
+        <div style="font-size:24px;margin-bottom:8px">⚠️</div>
+        <div>Errore caricamento mercati. Assicurati di essere su Base Sepolia.</div>
+      </div>`;
+  }
+}
+
+function renderMarkets(markets) {
+  const grid = document.getElementById('markets-grid');
+  grid.innerHTML = '';
+  if (!markets.length) {
+    grid.innerHTML = `<div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">Nessun mercato trovato.</div>`;
+    return;
+  }
+  markets.forEach(m => {
+    const el = document.createElement('div');
+    el.className = 'mkt-card';
+    el.id = `card-${m.id}`;
+    el.innerHTML = buildCardHTML(m);
+    grid.appendChild(el);
+  });
+}
+
+function buildCardHTML(m) {
+  const isYes = m.yesPct >= 50;
+  const tagClass = isYes ? 'tag tag-green' : 'tag tag-red';
+  const panel = openPanels[m.id];
+
+  return `
+    <div class="mkt-body">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-weight:700;font-size:.78rem;color:var(--text3)">${m.asset || m.category}</div>
+        <span class="${tagClass}">${isYes?'YES':'NO'} ${m.yesPct}%</span>
+      </div>
+      <!-- Question -->
+      <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">${m.question}</div>
+      <!-- Bar -->
+      <div class="cp-bar" style="margin-bottom:6px"><div class="cp-bar-fill up" style="width:${m.yesPct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px">
+        <span style="color:var(--green2)">YES ${m.yesPct}%</span>
+        <span style="color:var(--red2)">NO ${m.noPct}%</span>
+      </div>
+      <!-- Pool + bet buttons -->
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">
+          Pool: ${m.poolEth.toFixed(3)} ETH
+        </div>
+        <div style="display:flex;gap:6px">
+          <button
+            class="btn btn-up${panel?.side === true ? ' btn-up-active' : ''}"
+            style="font-size:.72rem;padding:5px 12px;font-weight:700"
+            onclick="togglePanel(${m.id}, true)">
+            ${panel?.side === true ? '✕ YES' : '▲ YES'}
+          </button>
+          <button
+            class="btn btn-dn${panel?.side === false ? ' btn-dn-active' : ''}"
+            style="font-size:.72rem;padding:5px 12px;font-weight:700"
+            onclick="togglePanel(${m.id}, false)">
+            ${panel?.side === false ? '✕ NO' : '▼ NO'}
+          </button>
+        </div>
+      </div>
+      <!-- Meta -->
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">
+        ⏱ ${m.daysLeft > 0 ? `Scade tra ${m.daysLeft}g` : 'Scade oggi'} · ${m.participants} partecipanti
+      </div>
+      <!-- Yield -->
+      <div class="yield-bar">
+        <div style="display:flex;align-items:center;gap:5px">
+          <div style="width:5px;height:5px;border-radius:50%;background:#00e87a;animation:pulse 2s infinite"></div>
+          <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700">ON-CHAIN YIELD</span>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700">+${m.yieldDay} ETH/g</span>
+        <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">4.8% APY</span>
+      </div>
+    </div>
+    ${panel ? buildBetPanel(m, panel) : ''}`;
+}
+
+function buildBetPanel(m, panel) {
+  const isYes = panel.side;
+  const cur   = CURRENCIES[panel.currency];
+  const cls   = isYes ? 'yes-panel' : 'no-panel';
+  const label = isYes ? '▲ YES' : '▼ NO';
+  const color = isYes ? '#10b981' : '#ef4444';
+  const val   = panel.amount || '';
+
+  return `
+    <div class="bet-panel ${cls}" id="panel-${m.id}">
+      <!-- Title -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:.8rem;font-weight:700;color:${color}">${label} — Piazza Scommessa</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">
+          Saldo: <span id="bal-${m.id}" style="color:var(--cyan2)">—</span>
+        </div>
+      </div>
+
+      <!-- Currency tabs -->
+      <div class="cur-tabs">
+        ${CURRENCIES.map(c => `
+          <button class="cur-tab ${c.key}${panel.currency === c.id ? ' active' : ''}"
+            onclick="setCurrency(${m.id}, ${c.id})">${c.label}</button>
+        `).join('')}
+      </div>
+
+      <!-- Amount input -->
+      <div class="bet-input-row">
+        <input type="number" class="bet-input" id="amt-${m.id}"
+          placeholder="${cur.min}" step="${cur.step}" min="${cur.min}"
+          value="${val}"
+          oninput="updatePreview(${m.id})">
+        <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3);flex-shrink:0">${cur.symbol}</span>
+        <button onclick="setMax(${m.id})" style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);border-radius:5px;padding:4px 8px;cursor:pointer;color:var(--cyan2);font-size:.65rem;font-family:'DM Mono',monospace;flex-shrink:0">MAX</button>
+      </div>
+
+      <!-- Quick amounts -->
+      <div class="bet-quick">
+        ${getQuickAmounts(cur).map(q => `
+          <button class="bet-quick-btn" onclick="setAmount(${m.id}, ${q})">${q} ${cur.symbol}</button>
+        `).join('')}
+      </div>
+
+      <!-- Preview -->
+      <div class="bet-preview" id="preview-${m.id}">
+        <span>Valore USD: <strong id="usd-${m.id}">—</strong></span>
+        <span>Payout est: <strong id="payout-${m.id}" style="color:${color}">—</strong></span>
+      </div>
+
+      <!-- Faucet notice for USDC/USDT/CPRED -->
+      ${panel.currency > 0 ? `
+        <div class="faucet-notice">
+          ${panel.currency < 3
+            ? `Hai bisogno di ${CURRENCIES[panel.currency].symbol} testnet?
+               <a href="#" onclick="claimFaucet(${m.id}, ${panel.currency}); return false">Claim faucet gratuito →</a>`
+            : `Hai bisogno di CPRED?
+               <a href="presale.html">Compra in presale →</a>`
+          }
+        </div>
+      ` : ''}
+
+      <!-- Confirm button -->
+      <button
+        id="confirm-${m.id}"
+        onclick="confirmBet(${m.id})"
+        class="bet-confirm-${isYes ? 'yes' : 'no'}"
+        style="margin-top:8px">
+        ${isYes ? '▲ Conferma YES' : '▼ Conferma NO'}
+      </button>
+    </div>`;
+}
+
+function getQuickAmounts(cur) {
+  if (cur.key === 'eth')  return [0.001, 0.005, 0.01, 0.05];
+  if (cur.key === 'cpred') return [100, 500, 1000, 5000];
+  return [10, 50, 100, 500]; // USDC/USDT
+}
+
+// ── PANEL LOGIC ───────────────────────────────────────────────────
+
+function togglePanel(marketId, side) {
+  const cur = openPanels[marketId];
+  // Chiudi se già aperto sullo stesso lato
+  if (cur && cur.side === side) {
+    delete openPanels[marketId];
+  } else {
+    openPanels[marketId] = { side, currency: 0, amount: '' };
+  }
+  refreshCard(marketId);
+  if (openPanels[marketId]) {
+    updateBalance(marketId);
+    updatePreview(marketId);
+  }
+}
+
+function setCurrency(marketId, currencyId) {
+  if (!openPanels[marketId]) return;
+  openPanels[marketId].currency = currencyId;
+  openPanels[marketId].amount = '';
+  refreshCard(marketId);
+  updateBalance(marketId);
+}
+
+function setAmount(marketId, val) {
+  if (!openPanels[marketId]) return;
+  document.getElementById(`amt-${marketId}`).value = val;
+  openPanels[marketId].amount = val;
+  updatePreview(marketId);
+}
+
+function setMax(marketId) {
+  if (!WALLET.address) { openModal('wallet-modal'); return; }
+  const panel = openPanels[marketId];
+  if (!panel) return;
+  // Prende il valore dal testo del saldo mostrato
+  const balEl = document.getElementById(`bal-${marketId}`);
+  const bal = parseFloat(balEl?.textContent) || 0;
+  if (bal > 0) setAmount(marketId, bal);
+}
+
+function updatePreview(marketId) {
+  const panel = openPanels[marketId];
+  if (!panel) return;
+  const amt = parseFloat(document.getElementById(`amt-${marketId}`)?.value) || 0;
+  panel.amount = amt;
+  const cur = CURRENCIES[panel.currency];
+  const usd = amt * PRICES[cur.key];
+  const m   = allMarkets.find(x => x.id === marketId);
+  if (!m) return;
+
+  // Stima payout proporzionale
+  const winPool   = panel.side ? (m.poolEth || 0.001) : (m.poolEth || 0.001) * m.noPct / 100;
+  const totalPool = m.poolEth + (usd / PRICES['eth']);
+  const payout    = winPool > 0 ? (totalPool * (usd / PRICES['eth']) / winPool) * 0.98 : 0;
+  const payoutCur = payout * PRICES['eth'] / PRICES[cur.key];
+
+  const usdEl    = document.getElementById(`usd-${marketId}`);
+  const payoutEl = document.getElementById(`payout-${marketId}`);
+  if (usdEl)    usdEl.textContent    = '$' + usd.toFixed(2);
+  if (payoutEl) payoutEl.textContent = amt > 0 ? `~${payoutCur.toFixed(4)} ${cur.symbol}` : '—';
+}
+
+async function updateBalance(marketId) {
+  const panel = openPanels[marketId];
+  if (!panel || !WALLET.address || !window.W3) return;
+  const balEl = document.getElementById(`bal-${marketId}`);
+  if (!balEl) return;
+
+  try {
+    let bal = 0;
+    const cur = CURRENCIES[panel.currency];
+    if (panel.currency === 0) {
+      bal = await W3.getEthBalance(WALLET.address);
+    } else {
+      const addr = W3.CONTRACTS[cur.key === 'usdc' ? 'mockUsdc' : cur.key === 'usdt' ? 'mockUsdt' : 'token'];
+      if (addr) {
+        const c = await W3.getProvider().then(p => new ethers.Contract(addr,
+          ['function balanceOf(address) view returns (uint256)'], p));
+        const raw = await c.balanceOf(WALLET.address);
+        bal = parseFloat(ethers.formatUnits(raw, cur.decimals));
+      }
+    }
+    balEl.textContent = bal.toFixed(cur.decimals === 6 ? 2 : 4) + ' ' + cur.symbol;
+  } catch(e) {
+    balEl.textContent = '— ' + CURRENCIES[panel.currency].symbol;
+  }
+}
+
+function refreshCard(marketId) {
+  const m = allMarkets.find(x => x.id === marketId);
+  if (!m) return;
+  const card = document.getElementById(`card-${marketId}`);
+  if (!card) return;
+  card.innerHTML = buildCardHTML(m);
+  if (openPanels[marketId]) {
+    updateBalance(marketId);
+    updatePreview(marketId);
+  }
+}
+
+// ── BET EXECUTION ─────────────────────────────────────────────────
+
+async function confirmBet(marketId) {
+  if (!WALLET.address) { openModal('wallet-modal'); return; }
+
+  const panel = openPanels[marketId];
+  if (!panel) return;
+  const amt = parseFloat(document.getElementById(`amt-${marketId}`)?.value) || 0;
+  if (!amt || amt <= 0) { toast('❌', 'Inserisci un importo valido'); return; }
+
+  const btn = document.getElementById(`confirm-${marketId}`);
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Transazione...';
+
+  try {
+    const ok = await W3.ensureNetwork();
+    if (!ok) throw new Error('Cambia rete a Base Sepolia');
+
+    let result;
+    if (panel.currency === 0) {
+      // ETH
+      result = await W3.placeBetOnChain(marketId, panel.side, amt);
+    } else {
+      // ERC20
+      result = await placeBetERC20(marketId, panel.side, panel.currency, amt);
+    }
+
+    const cur = CURRENCIES[panel.currency];
+    const side = panel.side ? 'YES ▲' : 'NO ▼';
+    toast('✅', `Scommessa ${side} · ${amt} ${cur.symbol}`, result.explorerUrl);
+
+    delete openPanels[marketId];
+    await loadMarkets(); // ricarica dati aggiornati
+  } catch(e) {
+    toast('❌', e.reason || e.message || 'Transazione fallita');
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
+}
+
+async function placeBetERC20(marketId, side, currencyId, amount) {
+  const ok = await W3.ensureNetwork();
+  if (!ok) throw new Error('Cambia rete a Base Sepolia');
+
+  const cur = CURRENCIES[currencyId];
+  const contractAddr = W3.CONTRACTS.market;
+  const tokenAddr    = W3.CONTRACTS[cur.key === 'usdc' ? 'mockUsdc' : cur.key === 'usdt' ? 'mockUsdt' : 'token'];
+  if (!tokenAddr) throw new Error(`Contratto ${cur.label} non configurato`);
+
+  const signer = await W3.getSigner();
+  const amt    = ethers.parseUnits(amount.toString(), cur.decimals);
+
+  // Approve
+  const token = new ethers.Contract(tokenAddr,
+    ['function approve(address,uint256) returns (bool)',
+     'function allowance(address,address) view returns (uint256)'], signer);
+
+  const allowance = await token.allowance(WALLET.address, contractAddr);
+  if (allowance < amt) {
+    const approveTx = await token.approve(contractAddr, amt);
+    await approveTx.wait();
+  }
+
+  // PlaceBetERC20
+  const market = new ethers.Contract(contractAddr,
+    ['function placeBetERC20(uint256 marketId, bool side, uint8 currency, uint256 amount)'],
+    signer);
+  const tx = await market.placeBetERC20(marketId, side, currencyId, amt);
+  const receipt = await tx.wait();
+  return {
+    txHash: receipt.hash,
+    explorerUrl: `${W3.CHAIN.explorer}/tx/${receipt.hash}`
+  };
+}
+
+async function claimFaucet(marketId, currencyId) {
+  if (!WALLET.address) { openModal('wallet-modal'); return; }
+  const cur = CURRENCIES[currencyId];
+  const tokenAddr = W3.CONTRACTS[cur.key === 'usdc' ? 'mockUsdc' : 'mockUsdt'];
+  if (!tokenAddr) { toast('❌', 'Contratto faucet non disponibile'); return; }
+  try {
+    const ok = await W3.ensureNetwork();
+    if (!ok) throw new Error('Cambia rete a Base Sepolia');
+    const signer = await W3.getSigner();
+    const token  = new ethers.Contract(tokenAddr,
+      ['function faucet()'], signer);
+    const tx = await token.faucet();
+    await tx.wait();
+    toast('✅', `10,000 ${cur.symbol} testnet accreditati!`);
+    updateBalance(marketId);
+  } catch(e) {
+    toast('❌', e.reason || e.message || 'Faucet failed');
+  }
+}
+
+// ── FILTER ───────────────────────────────────────────────────────
+function filterCat(cat, btn) {
+  document.querySelectorAll('#filter-btns .btn').forEach(b => {
+    b.className = 'btn btn-ghost';
+    b.style.fontSize = '.75rem';
+    b.style.padding  = '5px 12px';
+  });
+  btn.className = 'btn btn-primary';
+  btn.style.fontSize = '.75rem';
+  btn.style.padding  = '5px 12px';
+
+  const filtered = cat === 'all'
+    ? allMarkets
+    : allMarkets.filter(m => m.category.toLowerCase() === cat);
+  renderMarkets(filtered);
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function toast(icon, msg, link) {
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent  = msg;
+  const l = document.getElementById('toast-link');
+  if (link) { l.href = link; l.textContent = 'Vedi su BaseScan →'; l.style.display = 'block'; }
+  else l.style.display = 'none';
+  const t = document.getElementById('tx-toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 7000);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+CP.ready.then(async () => {
+  const orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() { await orig(); };
+  await loadMarkets();
+});
+</script>
+</body></html>
