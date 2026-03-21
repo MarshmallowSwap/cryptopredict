@@ -386,6 +386,7 @@ window.W3 = {
   getCpredBalance, stakeCpred,
   getPresaleInfo, buyPresaleTokens,
   getEthBalance,
+  getContract,
   getPresaleStakingInfo, getUserPresaleStaking,
   stakePresale, unstakePresale, claimPresaleRewards,
 };
