@@ -363,35 +363,21 @@ async function claimStakingReward() {
   }
 }
 
-// ── INIT BULLETPROOF ─────────────────────────────────────────────
-// Polling ogni 200ms fino a che W3, WALLET e CP sono pronti
-(function() {
-  let attempts = 0;
-  const timer = setInterval(async () => {
-    attempts++;
-    if (attempts > 60) { // 12s timeout
-      clearInterval(timer);
-      document.getElementById('no-wallet-view').style.display = 'block';
-      document.getElementById('portfolio-view').style.display = 'none';
-      return;
-    }
-    if (!window.W3 || !window.WALLET || !window.CP) return;
-    clearInterval(timer);
+// ── INIT — aspetta CP.ready (risolto dopo autoReconnect) ─────────
+(async function() {
+  // Aspetta che _shared.js finisca init() compreso autoReconnect
+  const state = await CP.ready;
 
-    // Override CP.refreshWalletData per aggiornamenti futuri
-    const origRefresh = CP.refreshWalletData.bind(CP);
-    CP.refreshWalletData = async function() {
-      await origRefresh();
-      await loadPortfolio();
-    };
+  // Override per aggiornamenti futuri
+  const orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() { await orig(); await loadPortfolio(); };
 
-    if (WALLET.address) {
-      await loadPortfolio();
-    } else {
-      document.getElementById('no-wallet-view').style.display = 'block';
-      document.getElementById('portfolio-view').style.display = 'none';
-    }
-  }, 200);
+  if (state.address) {
+    await loadPortfolio();
+  } else {
+    document.getElementById('no-wallet-view').style.display = 'block';
+    document.getElementById('portfolio-view').style.display = 'none';
+  }
 })();
 </script>
 </body></html>
