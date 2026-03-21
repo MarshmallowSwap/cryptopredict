@@ -521,6 +521,104 @@
 
 <div class="section-line"></div>
 
+
+<!-- ═══ COME FUNZIONA IL YIELD ═══ -->
+<section style="padding:80px 24px;background:var(--black);position:relative">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(0,232,122,.04),transparent)"></div>
+  <div style="max-width:1100px;margin:0 auto;position:relative">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="section-eyebrow" style="color:var(--grn)">IL MECCANISMO</div>
+      <div class="section-title">Il Capitale non Dorme.<br><span style="background:linear-gradient(135deg,var(--grn),var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Genera Yield Automatico.</span></div>
+      <p style="font-size:16px;color:var(--dim);margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.7">
+        Mentre aspetti la risoluzione del mercato, il tuo capitale lavora. Ogni pool è deployato su Aave — e il rendimento viene redistribuito tra vincitori, staker e protocollo.
+      </p>
+    </div>
+
+    <!-- Formula visiva -->
+    <div style="background:var(--bg2);border:1px solid var(--brd2);border-radius:18px;padding:32px;margin-bottom:32px">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--grn);letter-spacing:.1em;margin-bottom:20px">// ESEMPIO REALE — Pool BTC $100K (30 giorni)</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--brd)">
+        <div style="background:var(--bg2);padding:20px;text-align:center">
+          <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:#dde3f5;margin-bottom:6px">$500K</div>
+          <div style="font-size:12px;color:var(--dim)">Capitale nel pool</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:4px">stakato da 847 utenti</div>
+        </div>
+        <div style="background:var(--bg2);padding:20px;text-align:center">
+          <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:var(--grn);margin-bottom:6px">×5%</div>
+          <div style="font-size:12px;color:var(--dim)">APY su Aave</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:4px">rendimento annuo</div>
+        </div>
+        <div style="background:var(--bg2);padding:20px;text-align:center">
+          <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:var(--acc);margin-bottom:6px">÷12</div>
+          <div style="font-size:12px;color:var(--dim)">Durata (1 mese)</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:4px">30 giorni di attesa</div>
+        </div>
+        <div style="background:var(--bg2);padding:20px;text-align:center;border-radius:0 12px 12px 0">
+          <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:var(--gld);margin-bottom:6px">$2,083</div>
+          <div style="font-size:12px;color:var(--dim)">Yield generato</div>
+          <div style="font-size:11px;color:var(--grn);margin-top:4px">in 30 giorni</div>
+        </div>
+      </div>
+
+      <!-- Redistribution -->
+      <div style="margin-top:24px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--dim);letter-spacing:.08em;margin-bottom:14px">COME VIENE REDISTRIBUITO IL YIELD</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div style="background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.2);border-radius:10px;padding:14px 16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:13px;font-weight:700;color:#dde3f5">Boost vincitori</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--grn);font-weight:700">50%</span>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:900;color:var(--grn);margin-bottom:4px">$1,041</div>
+            <div style="font-size:12px;color:var(--dim)">Extra per chi indovina — la vincita è più alta del normale</div>
+          </div>
+          <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:14px 16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:13px;font-weight:700;color:#dde3f5">Staker CPRED</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--acc);font-weight:700">30%</span>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:900;color:var(--acc);margin-bottom:4px">$625</div>
+            <div style="font-size:12px;color:var(--dim)">Distribuito agli staker — anche senza partecipare al mercato</div>
+          </div>
+          <div style="background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);border-radius:10px;padding:14px 16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:13px;font-weight:700;color:#dde3f5">Treasury</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--gld);font-weight:700">20%</span>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:900;color:var(--gld);margin-bottom:4px">$417</div>
+            <div style="font-size:12px;color:var(--dim)">Finanzia sviluppo e sicurezza del protocollo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why nobody else does this -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px">
+      <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:22px;margin-bottom:10px">📈</div>
+        <div style="font-size:13px;font-weight:700;color:#dde3f5;margin-bottom:6px">Vincita aumentata</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.6">Ricevi più del semplice pool share — il yield ti premia</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:22px;margin-bottom:10px">⚡</div>
+        <div style="font-size:13px;font-weight:700;color:#dde3f5;margin-bottom:6px">Zero idle capital</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.6">I tuoi USDC lavorano dal deposito alla risoluzione</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:22px;margin-bottom:10px">🔒</div>
+        <div style="font-size:13px;font-weight:700;color:#dde3f5;margin-bottom:6px">Staking passivo</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.6">Gli staker CPRED guadagnano dai pool anche senza scommettere</div>
+      </div>
+      <div style="background:rgba(255,58,92,.05);border:1px solid rgba(255,58,92,.15);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:22px;margin-bottom:10px">🏆</div>
+        <div style="font-size:13px;font-weight:700;color:#dde3f5;margin-bottom:6px">Unico nel settore</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.6">Polymarket e Kalshi non lo fanno — il capitale dorme</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-line"></div>
 <!-- ═══ DEFI ADVANTAGE ═══ -->
 <section class="defi-section">
   <div class="defi-grid">
