@@ -10,9 +10,10 @@ const CHAIN = {
 };
 
 const CONTRACTS = {
-  token:   "0x699304A362E41539d918E44188E1033999202cA0",
-  market:  "0x160842b6b4b253F9c9EfA17FC0EfBB3c4B2c6c45",
-  presale: "0xC9173e1C16Bc82D67f41Ffd025a89CC4f6C4Ac17",
+  token:          "0x699304A362E41539d918E44188E1033999202cA0",
+  market:         "0x160842b6b4b253F9c9EfA17FC0EfBB3c4B2c6c45",
+  presale:        "0xC9173e1C16Bc82D67f41Ffd025a89CC4f6C4Ac17",
+  stakingPresale: "0x5dB131b4e81297c7e200017dA54eC28820454491",
 };
 
 // ABI minimali (solo le funzioni usate dal frontend)
@@ -54,6 +55,27 @@ const PRESALE_ABI = [
 let _provider = null;
 let _signer   = null;
 
+
+const PRESALE_STAKING_ABI = [
+  "function stake(uint256 poolId, uint256 amount)",
+  "function unstake(uint256 poolId)",
+  "function claimReward(uint256 poolId)",
+  "function claimAllRewards()",
+  "function pendingReward(address user, uint256 poolId) view returns (uint256)",
+  "function pendingRewardAll(address user) view returns (uint256)",
+  "function getPosition(address user, uint256 poolId) view returns (uint256 amount, uint256 stakedAt, uint256 lockedUntil, uint256 pending, bool locked)",
+  "function getPoolInfo(uint256 poolId) view returns (uint256 apyBps, uint256 lockDays, uint256 maxCapacity, uint256 totalStaked, uint256 available)",
+  "function getAllPoolsInfo() view returns (uint256[3] apys, uint256[3] locks, uint256[3] totals, uint256[3] caps)",
+  "function getUserPositions(address user) view returns (uint256[3] amounts, uint256[3] pendings, uint256[3] lockedUntils, bool[3] locked)",
+  "function timeUntilUnlock(address user, uint256 poolId) view returns (uint256)",
+  "function rewardPoolBalance() view returns (uint256)",
+  "function presaleActive() view returns (bool)",
+  "function presaleEndsAt() view returns (uint256)",
+  "event Staked(address indexed user, uint256 poolId, uint256 amount)",
+  "event Unstaked(address indexed user, uint256 poolId, uint256 amount, uint256 reward)",
+  "event RewardClaimed(address indexed user, uint256 poolId, uint256 reward)",
+];
+
 async function getProvider() {
   if (_provider) return _provider;
   if (typeof ethers === "undefined") {
@@ -75,7 +97,7 @@ async function getSigner() {
 }
 
 async function getContract(name, withSigner = false) {
-  const abis = { market: MARKET_ABI, token: TOKEN_ABI, presale: PRESALE_ABI };
+  const abis = { market: MARKET_ABI, token: TOKEN_ABI, presale: PRESALE_ABI, stakingPresale: PRESALE_STAKING_ABI };
   const runner = withSigner ? await getSigner() : await getProvider();
   return new ethers.Contract(CONTRACTS[name], abis[name], runner);
 }
@@ -268,6 +290,91 @@ async function getEthBalance(address) {
   } catch(e) { return 0; }
 }
 
+// ── Presale Staking ──────────────────────────────────────────────
+async function getPresaleStakingInfo() {
+  try {
+    const c = await getContract('stakingPresale');
+    const [pools, rewardBal, active, endsAt] = await Promise.all([
+      c.getAllPoolsInfo(),
+      c.rewardPoolBalance(),
+      c.presaleActive(),
+      c.presaleEndsAt(),
+    ]);
+    return {
+      pools: [0,1,2].map(i => ({
+        id: i,
+        apyBps:     Number(pools.apys[i]),
+        apy:        Number(pools.apys[i]) / 100,
+        lockDays:   Number(pools.locks[i]),
+        totalStaked: parseFloat(ethers.formatEther(pools.totals[i])),
+        maxCapacity: parseFloat(ethers.formatEther(pools.caps[i])),
+        available:   parseFloat(ethers.formatEther(pools.caps[i] - pools.totals[i])),
+        pctFull:     Number(pools.totals[i]) * 100 / Number(pools.caps[i]),
+      })),
+      rewardPoolBalance: parseFloat(ethers.formatEther(rewardBal)),
+      presaleActive: active,
+      presaleEndsAt: Number(endsAt),
+      daysLeft: Math.max(0, Math.ceil((Number(endsAt) - Date.now()/1000) / 86400)),
+    };
+  } catch(e) { console.warn('PresaleStaking info error:', e); return null; }
+}
+
+async function getUserPresaleStaking(address) {
+  try {
+    const c = await getContract('stakingPresale');
+    const [positions, totalReward] = await Promise.all([
+      c.getUserPositions(address),
+      c.pendingRewardAll(address),
+    ]);
+    return {
+      positions: [0,1,2].map(i => ({
+        poolId: i,
+        amount:      parseFloat(ethers.formatEther(positions.amounts[i])),
+        pending:     parseFloat(ethers.formatEther(positions.pendings[i])),
+        lockedUntil: Number(positions.lockedUntils[i]),
+        locked:      positions.locked[i],
+        daysUntilUnlock: positions.locked[i]
+          ? Math.ceil((Number(positions.lockedUntils[i]) - Date.now()/1000) / 86400)
+          : 0,
+      })),
+      totalPending: parseFloat(ethers.formatEther(totalReward)),
+    };
+  } catch(e) { console.warn('User staking error:', e); return null; }
+}
+
+async function stakePresale(poolId, amount) {
+  const ok = await ensureNetwork();
+  if (!ok) throw new Error('Cambia rete a Base Sepolia');
+  const token = await getContract('token', true);
+  const staking = await getContract('stakingPresale', true);
+  const amt = ethers.parseEther(amount.toString());
+  // Approva token
+  const approveTx = await token.approve(CONTRACTS.stakingPresale, amt);
+  await approveTx.wait();
+  // Staka
+  const tx = await staking.stake(poolId, amt);
+  const receipt = await tx.wait();
+  return { txHash: receipt.hash, explorerUrl: `${CHAIN.explorer}/tx/${receipt.hash}` };
+}
+
+async function unstakePresale(poolId) {
+  const ok = await ensureNetwork();
+  if (!ok) throw new Error('Cambia rete a Base Sepolia');
+  const c = await getContract('stakingPresale', true);
+  const tx = await c.unstake(poolId);
+  const receipt = await tx.wait();
+  return { txHash: receipt.hash, explorerUrl: `${CHAIN.explorer}/tx/${receipt.hash}` };
+}
+
+async function claimPresaleRewards(poolId) {
+  const ok = await ensureNetwork();
+  if (!ok) throw new Error('Cambia rete a Base Sepolia');
+  const c = await getContract('stakingPresale', true);
+  const tx = poolId !== undefined ? await c.claimReward(poolId) : await c.claimAllRewards();
+  const receipt = await tx.wait();
+  return { txHash: receipt.hash, explorerUrl: `${CHAIN.explorer}/tx/${receipt.hash}` };
+}
+
 // Export globale
 window.W3 = {
   CHAIN, CONTRACTS,
@@ -276,4 +383,6 @@ window.W3 = {
   getCpredBalance, stakeCpred,
   getPresaleInfo, buyPresaleTokens,
   getEthBalance,
+  getPresaleStakingInfo, getUserPresaleStaking,
+  stakePresale, unstakePresale, claimPresaleRewards,
 };
