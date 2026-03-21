@@ -186,42 +186,95 @@ let allMarkets = [];
 // ── LOAD ─────────────────────────────────────────────────────────
 async function loadMarkets() {
   try {
-    const c = await W3.getContract('market');
+    // ABI compatibile sia v1 che v2
+    const MARKET_ABI_COMPAT = [
+      "function marketCount() view returns (uint256)",
+      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
+      "function getActiveMarkets(uint256 limit) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver)[])",
+      "function getYesPct(uint256 marketId) view returns (uint256)",
+      "function placeBet(uint256 marketId, bool side) payable",
+      "function claimPayout(uint256 marketId)",
+    ];
+
+    const provider = await W3.getProvider();
+    const c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_COMPAT, provider);
     const raw = await c.getActiveMarkets(20);
+
     allMarkets = raw.map(m => {
-      const yesEth = parseFloat(ethers.formatEther(m.yesPool[0]));
-      const noEth  = parseFloat(ethers.formatEther(m.noPool[0]));
-      const total  = yesEth + noEth;
-      const yesPct = total > 0 ? Math.round((yesEth / total) * 100) : 50;
+      // v1: yesPool/noPool sono uint256 singoli
+      // v2: sono array [4] — gestiamo entrambi
+      let yesEth, noEth;
+      if (Array.isArray(m.yesPool)) {
+        yesEth = parseFloat(ethers.formatEther(m.yesPool[0]));
+        noEth  = parseFloat(ethers.formatEther(m.noPool[0]));
+      } else {
+        yesEth = parseFloat(ethers.formatEther(m.yesPool));
+        noEth  = parseFloat(ethers.formatEther(m.noPool));
+      }
+      const total    = yesEth + noEth;
+      const yesPct   = total > 0 ? Math.round((yesEth / total) * 100) : 50;
       const daysLeft = Math.max(0, Math.ceil((Number(m.expiresAt) - Date.now()/1000) / 86400));
       return {
-        id:         Number(m.id),
-        question:   m.question,
-        category:   m.category,
-        asset:      m.assetSymbol,
+        id:           Number(m.id),
+        question:     m.question,
+        category:     m.category,
+        asset:        m.assetSymbol,
         yesPct,
-        noPct: 100 - yesPct,
-        poolEth: total,
+        noPct:        100 - yesPct,
+        poolEth:      total,
         daysLeft,
         participants: Number(m.participantCount),
-        yieldDay: (total * 0.048 / 365).toFixed(4),
+        yieldDay:     (total * 0.048 / 365).toFixed(4),
       };
     });
 
     renderMarkets(allMarkets);
 
-    // Update banner
     const totalEth = allMarkets.reduce((s,m) => s + m.poolEth, 0);
     document.getElementById('banner-capital').textContent = totalEth.toFixed(3) + ' ETH';
     document.getElementById('banner-mkts').textContent    = allMarkets.length;
-    document.getElementById('mkt-sub').textContent = `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
+    document.getElementById('mkt-sub').textContent =
+      `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
 
   } catch(e) {
-    console.warn('Load markets error:', e);
+    console.warn('Load markets error:', e.message);
+    // Fallback: usa W3.loadMarketsOnChain
+    try {
+      const markets = await W3.loadMarketsOnChain();
+      if (markets && markets.length) {
+        allMarkets = markets.map(m => ({
+          id:           m.id,
+          question:     m.title,
+          category:     m.category,
+          asset:        m.asset_symbol,
+          yesPct:       m.yes_pct,
+          noPct:        m.no_pct,
+          poolEth:      m.pool_size,
+          daysLeft:     m.days_left,
+          participants: m.participant_count || 0,
+          yieldDay:     m.yield_info?.daily_yield || '0',
+        }));
+        renderMarkets(allMarkets);
+        document.getElementById('banner-mkts').textContent = allMarkets.length;
+        document.getElementById('mkt-sub').textContent =
+          `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
+        return;
+      }
+    } catch(e2) {}
+
     document.getElementById('markets-grid').innerHTML = `
-      <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">
-        <div style="font-size:24px;margin-bottom:8px">⚠️</div>
-        <div>Errore caricamento mercati. Assicurati di essere su Base Sepolia.</div>
+      <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1">
+        <div style="font-size:24px;margin-bottom:10px">⚠️</div>
+        <div style="color:var(--text3);margin-bottom:14px">Errore caricamento mercati on-chain.</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3);margin-bottom:16px">
+          ${e.message}
+        </div>
+        <button onclick="loadMarkets()" class="btn btn-primary" style="font-size:.8rem">
+          🔄 Riprova
+        </button>
+        <div style="font-size:.72rem;color:var(--text3);margin-top:12px">
+          Assicurati di avere MetaMask su <strong>Base Sepolia</strong> (chain ID 84532)
+        </div>
       </div>`;
   }
 }
