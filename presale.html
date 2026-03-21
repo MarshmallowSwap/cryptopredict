@@ -120,7 +120,16 @@
       </div>
 
       <!-- Buy form -->
-      <label class="cp-label">Importo ETH</label>
+      <!-- Saldo ETH live -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <label class="cp-label" style="margin-bottom:0">Importo ETH</label>
+        <div id="eth-balance-row" style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3)">
+          Saldo: <span id="eth-balance-val" style="color:var(--cyan2)">—</span>
+          <button onclick="setEth(parseFloat(document.getElementById('eth-balance-val').textContent)||0)"
+            style="margin-left:6px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);border-radius:4px;padding:1px 7px;cursor:pointer;color:var(--cyan2);font-size:.65rem;font-family:'DM Mono',monospace">MAX</button>
+        </div>
+      </div>
+      <label class="cp-label" style="display:none">Importo ETH</label>
       <div style="position:relative;margin-bottom:10px">
         <input type="number" class="cp-input" placeholder="0.01" id="buy-eth" step="0.001" min="0.001"
           oninput="calcCpred(this.value)" style="padding-right:54px">
@@ -388,7 +397,18 @@ async function buyPresale() {
 
   const eth = parseFloat(document.getElementById('buy-eth').value) || 0;
   if (eth < 0.001) { alert('Minimo 0.001 ETH'); return; }
-  if (eth > WALLET.ethBalance) { alert('Saldo ETH insufficiente'); return; }
+
+  // Leggi il saldo fresco on-chain (non cache)
+  let freshBal = 0;
+  try {
+    freshBal = await W3.getEthBalance(WALLET.address);
+    WALLET.ethBalance = freshBal; // aggiorna cache
+    updateBalanceDisplay(freshBal);
+  } catch(e) {}
+  if (freshBal > 0 && eth > freshBal) {
+    alert(`Saldo ETH insufficiente.\nHai: ${freshBal.toFixed(4)} ETH\nNecessari: ${eth} ETH\n\nOttieni ETH testnet su:\nhttps://faucet.quicknode.com/base/sepolia`);
+    return;
+  }
 
   const btn = document.getElementById('buy-btn');
   btn.disabled = true;
@@ -436,6 +456,20 @@ async function updateMyTokens() {
   } catch(e) {}
 }
 
+function updateBalanceDisplay(bal) {
+  const el = document.getElementById('eth-balance-val');
+  if (el) el.textContent = bal.toFixed(4) + ' ETH';
+}
+
+async function refreshEthBalance() {
+  if (!WALLET.address || !window.W3) return;
+  try {
+    const bal = await W3.getEthBalance(WALLET.address);
+    WALLET.ethBalance = bal;
+    updateBalanceDisplay(bal);
+  } catch(e) {}
+}
+
 function showToast(icon, msg, link) {
   const t = document.getElementById('tx-toast');
   document.getElementById('tx-toast-icon').textContent = icon;
@@ -451,6 +485,12 @@ function showToast(icon, msg, link) {
 document.addEventListener('DOMContentLoaded', async () => {
   // Carica dati anche senza wallet (read-only via RPC)
   await loadPresalePage();
+
+  // Aggiorna saldo se wallet già connesso
+  if (WALLET.address) {
+    await refreshEthBalance();
+    await updateMyTokens();
+  }
 });
 
 // Aggiorna quando wallet si connette
@@ -458,6 +498,7 @@ const origRefresh = window.CP?.refreshWalletData?.bind(CP);
 if (origRefresh) {
   CP.refreshWalletData = async function() {
     await origRefresh();
+    await refreshEthBalance();
     await updateMyTokens();
   };
 }
