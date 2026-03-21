@@ -1138,6 +1138,18 @@
     obs.observe(el);
   });
 })();
+
+/* ── TOKENOMICS — carica dati presale live ── */
+CP.ready.then(async function() {
+  try {
+    const info = await W3.getPresaleInfo();
+    if (!info) return;
+    const bar = document.getElementById('tok-stage1-bar');
+    const lbl = document.getElementById('tok-stage1-pct');
+    if (bar) bar.style.width = info.pctSold + '%';
+    if (lbl) lbl.textContent = info.pctSold + '% venduto · $' + info.priceUsd.toFixed(3);
+  } catch(e) {}
+});
 </script>
 </body>
 </html>
