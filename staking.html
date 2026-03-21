@@ -406,8 +406,8 @@ function toast(icon, msg, link) {
   setTimeout(() => t.classList.remove('show'), 6000);
 }
 
-// ── INIT — ascolta cp:wallet-ready da _shared.js ─────────────────
-window.addEventListener('cp:wallet-ready', async (e) => {
+// ── INIT — listener diretto, fuori da DOMContentLoaded ───────────
+window.addEventListener('cp:wallet-ready', async function onWalletReady(e) {
   const orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() { await orig(); await loadStaking(); };
   if (e.detail.address) await loadStaking();
