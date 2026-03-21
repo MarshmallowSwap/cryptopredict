@@ -430,13 +430,18 @@ function updatePreview() {
   const preview = document.getElementById('stake-preview');
   if (!amt) { preview.style.display = 'none'; return; }
 
-  const apy = POOL_APY[selectedPool] / 100;
-  const lock = POOL_LOCK[selectedPool] || 90; // usa 90g come default per flessibile
-  const reward = amt * apy * (lock / 365);
+  const apy    = POOL_APY[selectedPool] / 100;
+  const lock   = POOL_LOCK[selectedPool]; // 0 = flessibile, 30, 90
   const daily  = amt * apy / 365;
-  const total  = amt + reward;
 
-  document.getElementById('preview-reward').textContent = reward.toFixed(2) + ' CPRED';
+  // Periodo di riferimento per il reward stimato
+  // Flessibile → 365g (annuale), 30g → 30g, 90g → 90g
+  const periodDays  = lock === 0 ? 365 : lock;
+  const periodLabel = lock === 0 ? 'per anno' : `in ${lock} giorni`;
+  const reward      = amt * apy * (periodDays / 365);
+  const total       = amt + reward;
+
+  document.getElementById('preview-reward').textContent = reward.toFixed(2) + ' CPRED · ' + periodLabel;
   document.getElementById('preview-daily').textContent  = daily.toFixed(2) + ' CPRED/giorno';
   document.getElementById('preview-total').textContent  = total.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED totali';
   preview.style.display = 'block';
