@@ -75,8 +75,10 @@ function closeModal(id) { const m=document.getElementById(id); if(m){m.style.dis
 function fmtEth(v, d=4) { return parseFloat(v).toFixed(d) + ' ETH'; }
 
 // ── MAIN APP ──────────────────────────────────────────────────────
+let _cpReadyResolve;
 const CP = {
   connected: false,
+  ready: new Promise(r => { _cpReadyResolve = r; }),
 
   async init() {
     const page = document.body.dataset.page;
@@ -92,7 +94,9 @@ const CP = {
       await this.refreshWalletData();
     }
     this.updateNav();
-    // Emetti evento: le pagine possono ascoltare cp:wallet-ready
+    // Risolvi la promise CP.ready — le pagine aspettano questa
+    _cpReadyResolve({ address: WALLET.address, connected: !!WALLET.address });
+    // Emetti anche evento per compatibilità
     window.dispatchEvent(new CustomEvent('cp:wallet-ready', {
       detail: { address: WALLET.address, connected: !!WALLET.address }
     }));
