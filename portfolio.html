@@ -7,13 +7,18 @@
 <link rel="stylesheet" href="_shared.css">
 <style>
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--purple2);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
 .pos-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px}
 .pos-card:last-child{margin-bottom:0}
-.pos-side-yes{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green2);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
-.pos-side-no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red2);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
-.no-wallet{text-align:center;padding:40px 20px}
-.no-wallet-icon{font-size:40px;margin-bottom:16px}
+.side-yes{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#34d399;padding:2px 9px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
+.side-no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171;padding:2px 9px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
+.asset-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.asset-row:last-child{border-bottom:none}
+.tx-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;
+  background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;
+  padding:14px 20px;display:flex;align-items:center;gap:12px;font-size:.82rem;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:300px;opacity:0;transition:opacity .3s;pointer-events:none}
+.tx-toast.show{opacity:1;pointer-events:all}
 </style>
 </head>
 <body data-page="portfolio">
@@ -22,13 +27,10 @@
 <div class="ticker-bar">
   <div class="ticker-track">
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲</span></span>
+    <span class="tick-item"><span class="sym">ETH</span> $2,840</span>
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲</span></span>
   </div>
 </div>
 
@@ -68,99 +70,100 @@
   <div class="page-header">
     <span class="page-tag">// Il tuo conto — On-Chain</span>
     <div class="page-title">Portfolio</div>
-    <div class="page-sub">Dati live da Base Sepolia · <a href="https://sepolia.basescan.org" target="_blank" style="color:var(--purple3);font-size:.75rem">BaseScan →</a></div>
+    <div class="page-sub">Dati live da Base Sepolia · <a id="basescan-link" href="https://sepolia.basescan.org" target="_blank" style="color:var(--purple3);font-size:.75rem">Vedi su BaseScan →</a></div>
   </div>
 
-  <!-- No wallet state -->
-  <div id="no-wallet-view" style="display:none">
+  <!-- No wallet -->
+  <div id="no-wallet" style="display:none">
     <div class="cp-card" style="text-align:center;padding:48px 24px">
       <div style="font-size:40px;margin-bottom:16px">👤</div>
-      <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:8px">Connetti il wallet</div>
+      <div style="font-size:1.1rem;font-weight:800;margin-bottom:8px">Connetti il wallet</div>
       <div style="font-size:.85rem;color:var(--text3);margin-bottom:24px">Connetti MetaMask su Base Sepolia per vedere il tuo portfolio on-chain</div>
       <button onclick="connectWallet()" class="btn btn-primary" style="font-size:.9rem;padding:12px 28px">Connetti Wallet →</button>
     </div>
   </div>
 
-  <!-- Main portfolio view -->
-  <div id="portfolio-view" style="display:none">
+  <!-- Main content -->
+  <div id="main-content" style="display:none">
 
-    <!-- Stats cards -->
+    <!-- Stats -->
     <div class="g-stats">
       <div class="stat-card cp-card-green">
         <div class="stat-label">Saldo ETH</div>
-        <div class="stat-val" id="stat-eth" style="color:var(--green2)"><span class="spin"></span></div>
-        <span class="stat-change" id="stat-eth-sub">Base Sepolia</span>
+        <div class="stat-val" id="stat-eth" style="color:var(--green2)">—</div>
+        <span class="stat-change">Base Sepolia</span>
       </div>
       <div class="stat-card cp-card-gold">
         <div class="stat-label">CPRED Totali</div>
-        <div class="stat-val" id="stat-cpred" style="color:var(--gold2)"><span class="spin"></span></div>
-        <span class="stat-change up" id="stat-cpred-val">—</span>
+        <div class="stat-val" id="stat-cpred" style="color:var(--gold2)">—</div>
+        <span class="stat-change up" id="stat-cpred-sub">—</span>
       </div>
       <div class="stat-card cp-card-accent">
-        <div class="stat-label">In Staking</div>
-        <div class="stat-val" id="stat-staked" style="color:var(--purple3)"><span class="spin"></span></div>
-        <span class="stat-change" id="stat-staked-sub">reward accumulati</span>
+        <div class="stat-label">CPRED in Staking</div>
+        <div class="stat-val" id="stat-staked" style="color:var(--purple3)">—</div>
+        <span class="stat-change" id="stat-staked-sub">—</span>
       </div>
       <div class="stat-card cp-card-cyan">
-        <div class="stat-label">Posizioni Aperte</div>
-        <div class="stat-val" id="stat-positions" style="color:var(--cyan2)"><span class="spin"></span></div>
-        <span class="stat-change" id="stat-positions-sub">sui mercati</span>
+        <div class="stat-label">Staking Rewards</div>
+        <div class="stat-val" id="stat-reward" style="color:var(--cyan2)">—</div>
+        <span class="stat-change">CPRED accumulati</span>
       </div>
     </div>
 
     <div class="g2" style="margin-bottom:20px">
 
-      <!-- Asset table on-chain -->
+      <!-- Asset on-chain -->
       <div class="cp-card cp-card-accent">
         <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// ASSET ON-CHAIN</div>
-        <table class="cp-table">
-          <thead><tr><th>Asset</th><th>Quantità</th><th>Valore</th><th>Note</th></tr></thead>
-          <tbody id="assets-tbody">
-            <tr><td colspan="4" style="text-align:center;padding:20px"><span class="spin"></span></td></tr>
-          </tbody>
-        </table>
-        <div style="margin-top:14px;display:flex;gap:8px">
+        <div id="assets-list">
+          <div style="text-align:center;padding:20px"><span class="spin"></span></div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
           <a href="https://faucet.quicknode.com/base/sepolia" target="_blank"
-             class="btn btn-ghost" style="font-size:.75rem">🚰 Faucet ETH testnet</a>
+             class="btn btn-ghost" style="font-size:.75rem">🚰 Faucet ETH</a>
           <a href="presale.html" class="btn btn-gold" style="font-size:.75rem">💎 Compra CPRED</a>
+          <a href="staking.html" class="btn btn-ghost" style="font-size:.75rem">🔒 Staking →</a>
         </div>
       </div>
 
-      <!-- Right column -->
+      <!-- Right -->
       <div style="display:flex;flex-direction:column;gap:16px">
 
-        <!-- Staking reward claim -->
+        <!-- Staking rewards claim -->
         <div class="cp-card cp-card-cyan">
-          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// STAKING REWARDS</div>
-          <div style="font-size:1.5rem;font-weight:800;color:var(--green2);margin-bottom:4px" id="reward-amount">— ETH</div>
-          <div style="font-size:.78rem;color:var(--text3);margin-bottom:14px">Reward accumulati dal yield dei pool</div>
-          <button id="claim-btn" onclick="claimStakingReward()" class="btn btn-primary" style="width:100%;justify-content:center;font-size:.85rem">
-            ⚡ Ritira Reward
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// STAKING REWARDS PRESALE</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--green2);margin-bottom:4px" id="reward-big">— CPRED</div>
+          <div style="font-size:.75rem;color:var(--text3);margin-bottom:12px">da tutti i pool attivi</div>
+          <button id="claim-btn" onclick="doClaim()" class="btn btn-up" style="width:100%;justify-content:center;font-size:.85rem">
+            ⚡ Ritira Rewards
           </button>
+          <a href="staking.html" style="display:block;text-align:center;margin-top:8px;font-size:.72rem;color:var(--purple3)">
+            Gestisci staking →
+          </a>
         </div>
 
-        <!-- Quick links -->
+        <!-- Azioni rapide -->
         <div class="cp-card cp-card-gold">
           <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// AZIONI RAPIDE</div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <a href="staking.html" class="btn btn-gold" style="justify-content:space-between">
-              <span>🔒 Staking CPRED</span><span style="font-size:.75rem">→</span>
+              <span>🔒 Staking Presale</span><span style="font-size:.75rem;opacity:.7">→</span>
             </a>
             <a href="mercati.html" class="btn btn-up" style="justify-content:space-between">
-              <span>📊 Esplora Mercati</span><span style="font-size:.75rem">→</span>
+              <span>📊 Esplora Mercati</span><span style="font-size:.75rem;opacity:.7">→</span>
             </a>
             <a href="presale.html" class="btn btn-ghost" style="justify-content:space-between">
-              <span>💎 Compra CPRED</span><span style="font-size:.75rem">→</span>
+              <span>💎 Compra CPRED</span><span style="font-size:.75rem;opacity:.7">→</span>
             </a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Posizioni aperte on-chain -->
+    <!-- Posizioni mercati on-chain -->
     <div class="cp-card cp-card-accent" style="margin-bottom:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3)">// POSIZIONI APERTE ON-CHAIN</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3)">// POSIZIONI SUI MERCATI — ON-CHAIN</div>
         <a href="mercati.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 12px">+ Nuova →</a>
       </div>
       <div id="positions-list">
@@ -168,214 +171,260 @@
       </div>
     </div>
 
-    <!-- Wallet on BaseScan -->
-    <div style="text-align:center;padding:8px 0 4px">
-      <a id="basescan-link" href="#" target="_blank"
-         style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--purple3)">
-        Vedi wallet su BaseScan →
-      </a>
+    <!-- Staking presale posizioni -->
+    <div class="cp-card" style="margin-bottom:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// STAKING PRESALE — POSIZIONI ATTIVE</div>
+      <div id="staking-list">
+        <div style="text-align:center;padding:16px"><span class="spin"></span></div>
+      </div>
     </div>
+
   </div>
+</div>
+
+<!-- Toast -->
+<div class="tx-toast" id="tx-toast">
+  <span id="toast-icon">✅</span>
+  <div>
+    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--purple3);display:none"></a>
+  </div>
+  <button onclick="document.getElementById('tx-toast').classList.remove('show')"
+    style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px">✕</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <script src="web3.js"></script>
 <script src="_shared.js"></script>
 <script>
-// Funzioni definite qui, init tramite CP.ready
+const POOL_NAMES  = ['Flessibile', '30 Giorni', '90 Giorni'];
+const POOL_COLORS = ['#a855f7', '#06b6d4', '#f59e0b'];
+const POOL_APY    = [12, 20, 28];
 
 async function loadPortfolio() {
-  if (!WALLET.address) {
-    document.getElementById('no-wallet-view').style.display = 'block';
-    document.getElementById('portfolio-view').style.display = 'none';
+  const addr = WALLET.address;
+  if (!addr) {
+    document.getElementById('no-wallet').style.display = 'block';
+    document.getElementById('main-content').style.display = 'none';
     return;
   }
-  document.getElementById('no-wallet-view').style.display = 'none';
-  document.getElementById('portfolio-view').style.display = 'block';
 
-  const addr = WALLET.address;
+  document.getElementById('no-wallet').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
   document.getElementById('basescan-link').href = `https://sepolia.basescan.org/address/${addr}`;
 
   try {
     // Carica tutto in parallelo
-    const [ethBal, cpred, marketContract] = await Promise.all([
+    const [ethBal, cpred, userStaking, marketC, presaleC] = await Promise.all([
       W3.getEthBalance(addr),
       W3.getCpredBalance(addr),
+      W3.getUserPresaleStaking(addr),
       W3.getContract('market'),
+      W3.getContract('presale'),
     ]);
 
-    // Stats cards
+    // ── STATS ──────────────────────────────────────────────────
     document.getElementById('stat-eth').textContent = ethBal.toFixed(4) + ' ETH';
-    document.getElementById('stat-eth-sub').textContent = 'Base Sepolia testnet';
 
     const cpredTotal = cpred.balance + cpred.staked;
-    document.getElementById('stat-cpred').textContent = cpredTotal.toLocaleString(undefined,{maximumFractionDigits:0});
-    document.getElementById('stat-cpred-val').textContent = `↑ listing +200% · $${(cpredTotal * 0.15).toFixed(2)}`;
+    document.getElementById('stat-cpred').textContent = cpredTotal.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
+    document.getElementById('stat-cpred-sub').textContent = `listing +200% · $${(cpredTotal*0.05).toFixed(2)}`;
 
-    document.getElementById('stat-staked').textContent = cpred.staked.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
-    document.getElementById('stat-staked-sub').textContent = `${cpred.reward.toFixed(6)} ETH reward`;
+    // Staking dal contratto PresaleStaking
+    const totalStaked = userStaking ? userStaking.positions.reduce((s,p) => s + p.amount, 0) : 0;
+    const totalReward = userStaking ? userStaking.totalPending : 0;
+    document.getElementById('stat-staked').textContent = totalStaked.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
+    document.getElementById('stat-staked-sub').textContent = totalStaked > 0 ? `in ${userStaking.positions.filter(p=>p.amount>0).length} pool` : 'nessuno';
+    document.getElementById('stat-reward').textContent = totalReward.toFixed(4) + ' CPRED';
+    document.getElementById('reward-big').textContent = totalReward.toFixed(4) + ' CPRED';
 
-    // Reward amount
-    document.getElementById('reward-amount').textContent = cpred.reward.toFixed(6) + ' ETH';
-    if (cpred.reward <= 0) {
+    if (totalReward <= 0) {
       document.getElementById('claim-btn').disabled = true;
-      document.getElementById('claim-btn').style.opacity = '0.4';
+      document.getElementById('claim-btn').style.opacity = '.4';
     }
 
-    // Assets table
-    const presaleC = await W3.getContract('presale');
-    const purchased = await presaleC.purchased(addr).then(v => parseFloat(ethers.formatEther(v))).catch(() => 0);
+    // ── ASSETS ─────────────────────────────────────────────────
+    const purchased = await presaleC.purchased(addr)
+      .then(v => parseFloat(ethers.formatEther(v))).catch(() => 0);
 
-    const tbody = document.getElementById('assets-tbody');
-    tbody.innerHTML = `
-      <tr>
-        <td><div style="font-weight:700">ETH</div><div style="font-size:.7rem;color:var(--text3)">Base Sepolia</div></td>
-        <td style="font-family:'DM Mono',monospace">${ethBal.toFixed(4)}</td>
-        <td style="font-family:'DM Mono',monospace">~$${(ethBal * 2000).toFixed(0)}</td>
-        <td style="color:var(--text3);font-size:.78rem">Nativo</td>
-      </tr>
-      <tr>
-        <td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">In wallet</div></td>
-        <td style="font-family:'DM Mono',monospace">${cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
-        <td style="font-family:'DM Mono',monospace">$${(cpred.balance * 0.05).toFixed(2)}</td>
-        <td style="color:var(--green2);font-size:.78rem">listing +200%</td>
-      </tr>
-      ${cpred.staked > 0 ? `
-      <tr>
-        <td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">In staking</div></td>
-        <td style="font-family:'DM Mono',monospace">${cpred.staked.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
-        <td style="font-family:'DM Mono',monospace">$${(cpred.staked * 0.05).toFixed(2)}</td>
-        <td style="color:var(--cyan2);font-size:.78rem">genera yield</td>
-      </tr>` : ''}
-      ${purchased > 0 ? `
-      <tr>
-        <td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">Acquistati presale</div></td>
-        <td style="font-family:'DM Mono',monospace">${purchased.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
-        <td style="font-family:'DM Mono',monospace">—</td>
-        <td style="color:var(--gold2);font-size:.78rem">inclusi sopra</td>
-      </tr>` : ''}`;
+    const assetsList = document.getElementById('assets-list');
+    assetsList.innerHTML = '';
 
-    // Posizioni on-chain
-    await loadPositions(addr, marketContract);
+    const assets = [
+      { name: 'ETH', sub: 'Base Sepolia', qty: ethBal.toFixed(4), val: `~$${(ethBal*2000).toFixed(0)}`, note: 'testnet', noteColor: 'var(--text3)' },
+      { name: 'CPRED', sub: 'In wallet', qty: cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0}), val: `$${(cpred.balance*0.05).toFixed(2)}`, note: 'listing +200%', noteColor: 'var(--green2)' },
+    ];
+    if (totalStaked > 0)
+      assets.push({ name: 'CPRED', sub: 'In staking', qty: totalStaked.toLocaleString(undefined,{maximumFractionDigits:0}), val: `$${(totalStaked*0.05).toFixed(2)}`, note: 'genera rewards', noteColor: 'var(--cyan2)' });
+    if (totalReward > 0)
+      assets.push({ name: 'CPRED', sub: 'Rewards', qty: totalReward.toFixed(4), val: '—', note: 'da ritirare', noteColor: 'var(--gold2)' });
+
+    assets.forEach(a => {
+      assetsList.innerHTML += `
+        <div class="asset-row">
+          <div><div style="font-weight:700;font-size:.88rem">${a.name}</div><div style="font-size:.7rem;color:var(--text3)">${a.sub}</div></div>
+          <div style="text-align:right">
+            <div style="font-family:'DM Mono',monospace;font-size:.82rem">${a.qty}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:${a.noteColor}">${a.note}</div>
+          </div>
+        </div>`;
+    });
+
+    // ── POSIZIONI MERCATI ──────────────────────────────────────
+    await loadMarketPositions(addr, marketC);
+
+    // ── STAKING POSIZIONI ──────────────────────────────────────
+    renderStakingPositions(userStaking);
 
   } catch(e) {
-    console.error('Portfolio load error:', e);
+    console.error('Portfolio error:', e);
+    toast('❌', 'Errore: ' + e.message);
   }
 }
 
-async function loadPositions(addr, marketContract) {
+async function loadMarketPositions(addr, marketC) {
   const list = document.getElementById('positions-list');
   try {
-    const marketCount = Number(await marketContract.marketCount());
-    const positions = [];
-    for (let i = 0; i < marketCount; i++) {
-      const pos = await marketContract.getPosition(i, addr);
+    const count = Number(await marketC.marketCount());
+    const active = [];
+    for (let i = 0; i < count; i++) {
+      const pos = await marketC.getPosition(i, addr);
       if (pos.amount > 0n) {
-        const mkt = await marketContract.getMarket(i);
-        positions.push({ id: i, pos, mkt });
+        const mkt = await marketC.getMarket(i);
+        active.push({ id: i, pos, mkt });
       }
     }
 
-    document.getElementById('stat-positions').textContent = positions.length;
-    document.getElementById('stat-positions-sub').textContent = positions.length === 0 ? 'nessuna posizione' : 'posizioni totali';
-
-    if (positions.length === 0) {
+    if (active.length === 0) {
       list.innerHTML = `
-        <div style="text-align:center;padding:28px;color:var(--text3)">
-          <div style="font-size:28px;margin-bottom:10px">📊</div>
-          <div style="font-size:.85rem;margin-bottom:14px">Nessuna posizione aperta</div>
-          <a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Esplora i mercati →</a>
+        <div style="text-align:center;padding:24px;color:var(--text3)">
+          <div style="font-size:24px;margin-bottom:8px">📊</div>
+          <div style="font-size:.85rem;margin-bottom:12px">Nessuna posizione aperta</div>
+          <a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Esplora mercati →</a>
         </div>`;
       return;
     }
 
     list.innerHTML = '';
-    for (const { id, pos, mkt } of positions) {
+    for (const { id, pos, mkt } of active) {
       const stake = parseFloat(ethers.formatEther(pos.amount));
-      const side = pos.side;
-      const status = ['Aperta','Chiusa','Risolta','Cancellata'][mkt.status];
-      const outcome = ['—','YES','NO'][mkt.outcome];
-      const won = mkt.status === 2n && ((mkt.outcome === 1n && pos.side) || (mkt.outcome === 2n && !pos.side));
+      const side  = pos.side;
+      const statusLabels = ['Aperta','Chiusa','Risolta','Cancellata'];
+      const outcomeLabels = ['—','YES','NO'];
+      const won = mkt.status === 2n && ((mkt.outcome === 1n && side) || (mkt.outcome === 2n && !side));
       const lost = mkt.status === 2n && !won;
-      const claimed = pos.claimed;
-
       const yesPool = parseFloat(ethers.formatEther(mkt.yesPool));
       const noPool  = parseFloat(ethers.formatEther(mkt.noPool));
       const total   = yesPool + noPool;
-      const myShare = total > 0 ? (stake / (side ? yesPool : noPool)) * total * 0.98 : 0;
+      const payout  = total > 0 ? (stake / (side ? yesPool : noPool)) * total * 0.98 : 0;
       const daysLeft = Math.max(0, Math.ceil((Number(mkt.expiresAt) - Date.now()/1000) / 86400));
 
-      const div = document.createElement('div');
-      div.className = 'pos-card';
-      div.innerHTML = `
+      const card = document.createElement('div');
+      card.className = 'pos-card';
+      card.innerHTML = `
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div style="font-weight:700;font-size:.88rem;flex:1;margin-right:10px">${mkt.question}</div>
-          <span class="${side ? 'pos-side-yes' : 'pos-side-no'}">${side ? 'YES' : 'NO'}</span>
+          <div style="font-weight:700;font-size:.88rem;flex:1;margin-right:10px;line-height:1.3">${mkt.question}</div>
+          <span class="${side ? 'side-yes' : 'side-no'}">${side ? 'YES' : 'NO'}</span>
         </div>
-        <div style="display:flex;gap:16px;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3);margin-bottom:${won && !claimed ? '10px' : '0'}">
+        <div style="display:flex;gap:16px;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3)">
           <span>Stake: <strong style="color:var(--text)">${stake.toFixed(4)} ETH</strong></span>
-          <span>Payout est: <strong style="color:var(--green2)">${myShare.toFixed(4)} ETH</strong></span>
-          <span>${mkt.status === 0n ? `⏱ ${daysLeft}g` : `Stato: ${status}${mkt.status === 2n ? ' · '+outcome : ''}`}</span>
+          <span>Payout est: <strong style="color:var(--green2)">${payout.toFixed(4)} ETH</strong></span>
+          <span>${mkt.status === 0n ? `⏱ ${daysLeft}g` : `${statusLabels[Number(mkt.status)]} · ${outcomeLabels[Number(mkt.outcome)]}`}</span>
         </div>
-        ${won && !claimed ? `
-        <button onclick="claimPayout(${id}, this)" class="btn btn-up" style="font-size:.75rem;padding:6px 14px;margin-top:8px">
+        ${won && !pos.claimed ? `
+        <button onclick="doClaimPayout(${id}, this)" class="btn btn-up"
+          style="margin-top:10px;font-size:.75rem;padding:6px 14px">
           🎉 Ritira Vincita
         </button>` : ''}
-        ${claimed ? '<div style="font-size:.72rem;color:var(--green2);margin-top:6px">✅ Payout ritirato</div>' : ''}
+        ${pos.claimed ? '<div style="font-size:.72rem;color:var(--green2);margin-top:6px">✅ Payout ritirato</div>' : ''}
         ${lost ? '<div style="font-size:.72rem;color:var(--red2);margin-top:6px">❌ Posizione persa</div>' : ''}`;
-      list.appendChild(div);
+      list.appendChild(card);
     }
   } catch(e) {
     list.innerHTML = '<div style="color:var(--text3);font-size:.82rem;padding:10px">Errore nel caricamento delle posizioni</div>';
   }
 }
 
-async function claimPayout(marketId, btn) {
-  btn.disabled = true;
-  btn.textContent = '...';
+function renderStakingPositions(userStaking) {
+  const list = document.getElementById('staking-list');
+  if (!userStaking) { list.innerHTML = '<div style="color:var(--text3);font-size:.82rem">Dati non disponibili</div>'; return; }
+
+  const active = userStaking.positions.filter(p => p.amount > 0);
+  if (active.length === 0) {
+    list.innerHTML = `
+      <div style="text-align:center;padding:16px;color:var(--text3)">
+        <div style="font-size:.85rem;margin-bottom:10px">Nessuna posizione di staking attiva</div>
+        <a href="staking.html" class="btn btn-gold" style="font-size:.8rem">Vai allo staking →</a>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  active.forEach(p => {
+    list.innerHTML += `
+      <div class="pos-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+              <span style="font-weight:700;color:${POOL_COLORS[p.poolId]}">${POOL_NAMES[p.poolId]}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:${POOL_COLORS[p.poolId]}">${POOL_APY[p.poolId]}% APY</span>
+              ${p.locked ? `<span style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171;padding:2px 8px;border-radius:12px;font-size:.65rem;font-family:'DM Mono',monospace">🔒 ${p.daysUntilUnlock}g</span>` : `<span style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#34d399;padding:2px 8px;border-radius:12px;font-size:.65rem;font-family:'DM Mono',monospace">✅ libero</span>`}
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">
+              Staked: <strong style="color:var(--text)">${p.amount.toLocaleString(undefined,{maximumFractionDigits:0})} CPRED</strong>
+              · Reward: <strong style="color:var(--green2)">${p.pending.toFixed(4)} CPRED</strong>
+            </div>
+          </div>
+          <a href="staking.html" class="btn btn-ghost" style="font-size:.72rem;padding:5px 12px">Gestisci →</a>
+        </div>
+      </div>`;
+  });
+}
+
+async function doClaimPayout(marketId, btn) {
+  btn.disabled = true; btn.textContent = '...';
   try {
     const result = await W3.claimPayoutOnChain(marketId);
-    btn.closest('.pos-card').querySelector('[onclick]').outerHTML =
-      '<div style="font-size:.72rem;color:var(--green2);margin-top:8px">✅ Payout ritirato · <a href="'+result.explorerUrl+'" target="_blank" style="color:var(--purple3)">Tx →</a></div>';
+    toast('✅', 'Vincita ritirata!', result.explorerUrl);
     await loadPortfolio();
   } catch(e) {
-    alert(e.message);
-    btn.disabled = false;
-    btn.textContent = '🎉 Ritira Vincita';
+    toast('❌', e.message || 'Errore');
+    btn.disabled = false; btn.textContent = '🎉 Ritira Vincita';
   }
 }
 
-async function claimStakingReward() {
-  if (!WALLET.address) return;
+async function doClaim() {
   const btn = document.getElementById('claim-btn');
-  btn.disabled = true;
-  btn.textContent = '...';
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
   try {
-    const ok = await W3.ensureNetwork();
-    if (!ok) throw new Error('Cambia rete a Base Sepolia');
-    const c = await W3.getContract('token', true);
-    const tx = await c.claimRewards();
-    await tx.wait();
-    alert('✅ Reward ritirati con successo!');
+    const result = await W3.claimPresaleRewards();
+    toast('✅', 'Rewards ritirati!', result.explorerUrl);
     await loadPortfolio();
   } catch(e) {
-    alert(e.message || 'Errore nel ritiro rewards');
-    btn.disabled = false;
-    btn.textContent = '⚡ Ritira Reward';
+    toast('❌', e.reason || e.message || 'Nessun reward disponibile');
+    btn.disabled = false; btn.textContent = '⚡ Ritira Rewards';
   }
 }
 
-// ── INIT: aspetta CP.ready (settato dopo autoReconnect in _shared.js) ──
+function toast(icon, msg, link) {
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent = msg;
+  const l = document.getElementById('toast-link');
+  if (link) { l.href = link; l.textContent = 'Vedi su BaseScan →'; l.style.display = 'block'; }
+  else l.style.display = 'none';
+  document.getElementById('tx-toast').classList.add('show');
+  setTimeout(() => document.getElementById('tx-toast').classList.remove('show'), 7000);
+}
+
+// ── INIT: stesso pattern della staking che funziona ───────────────
 CP.ready.then(async function(state) {
-  // Intercetta futuri refresh
   const orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() { await orig(); await loadPortfolio(); };
-  // Carica
   if (state.address) {
     await loadPortfolio();
   } else {
-    document.getElementById('no-wallet-view').style.display = 'block';
-    document.getElementById('portfolio-view').style.display = 'none';
+    document.getElementById('no-wallet').style.display = 'block';
+    document.getElementById('main-content').style.display = 'none';
   }
 });
 </script>
