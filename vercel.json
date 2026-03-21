@@ -12,6 +12,10 @@
     {
       "src": "_shared.js",
       "use": "@vercel/static"
+    },
+    {
+      "src": "web3.js",
+      "use": "@vercel/static"
     }
   ],
   "rewrites": [
