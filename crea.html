@@ -86,7 +86,7 @@
             <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);line-height:1.8">
               JPG · PNG · WebP · GIF<br>
               <strong style="color:var(--text2)">1200 × 630 px</strong> consigliato (16:9)<br>
-              Max <strong style="color:var(--gold2)">1 MB</strong>
+              Max <strong style="color:var(--gold2)">1 MB</strong> · Caricata su cloud storage
             </div>
           </div>
           <div class="img-overlay" id="img-overlay" style="display:none">
@@ -96,17 +96,9 @@
         </div>
         <input type="file" id="img-file" accept="image/*" style="display:none" onchange="handleImageFile(this)">
 
-        <!-- Oppure URL -->
-        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;margin-bottom:10px">
-          <div style="flex:1;height:1px;background:var(--border)"></div>
-          <span style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">oppure</span>
-          <div style="flex:1;height:1px;background:var(--border)"></div>
-        </div>
-        <input type="url" class="cp-input" id="img-url" placeholder="https://... URL immagine"
-               oninput="handleImageUrl(this.value)">
-        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px;line-height:1.7">
-          URL diretto a un'immagine (Telegram, Twitter, IPFS, CDN)<br>
-          Dimensioni consigliate: <strong style="color:var(--text2)">1200 × 630 px</strong> · Max 1 MB
+        <!-- Stato upload -->
+        <div id="upload-status" style="display:none;margin-top:10px;padding:8px 12px;border-radius:7px;font-family:'DM Mono',monospace;font-size:.68rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);color:var(--green2)">
+          ✓ Immagine pronta · verrà caricata su cloud storage al salvataggio
         </div>
       </div>
 
@@ -298,25 +290,24 @@ var imageUrl     = "";   // URL finale da salvare
 
 // ── IMAGE HANDLING ────────────────────────────────────────────────
 
+var imageFile = null; // File object originale per upload
+
 function handleImageFile(input) {
   var file = input.files[0];
   if (!file) return;
-  if (file.size > 1 * 1024 * 1024) { showToast("❌","Immagine troppo grande (max 1MB) · Comprimi su tinypng.com"); return; }
-
+  if (file.size > 1 * 1024 * 1024) {
+    showToast("❌", "Immagine troppo grande (max 1MB) — comprimi su tinypng.com");
+    return;
+  }
+  imageFile = file;
   var reader = new FileReader();
   reader.onload = function(e) {
     imageDataUrl = e.target.result;
-    imageUrl     = ""; // resettiamo l'URL — useremo upload base64 al backend
     showImagePreview(imageDataUrl, file.name);
+    var st = document.getElementById("upload-status");
+    if (st) st.style.display = "block";
   };
   reader.readAsDataURL(file);
-}
-
-function handleImageUrl(url) {
-  if (!url || !url.startsWith("http")) return;
-  imageUrl     = url;
-  imageDataUrl = url;
-  showImagePreview(url, url.split("/").pop().slice(0,40));
 }
 
 function showImagePreview(src, name) {
@@ -345,12 +336,14 @@ function clearImage(e) {
   e.stopPropagation();
   imageDataUrl = "";
   imageUrl     = "";
+  imageFile    = null;
   document.getElementById("img-preview-el").style.display = "none";
   document.getElementById("img-placeholder").style.display = "flex";
   document.getElementById("img-overlay").style.display = "none";
   document.getElementById("img-drop").classList.remove("has-img");
-  document.getElementById("img-url").value = "";
   document.getElementById("img-file").value = "";
+  var st = document.getElementById("upload-status");
+  if (st) st.style.display = "none";
   document.getElementById("prev-img").style.display = "none";
   document.getElementById("prev-img-icon").style.display = "";
   updatePreview();
@@ -449,10 +442,41 @@ async function createMarket() {
     showToast("✅", "Mercato creato on-chain!" + (marketId !== null ? " ID: #"+marketId : ""),
               "https://sepolia.basescan.org/tx/"+receipt.hash);
 
-    // 2. Salva nel backend (per immagine + metadata)
-    btn.innerHTML = '<span class="spin"></span> Salvataggio immagine...';
+    // 2. Upload immagine su Supabase Storage (se presente)
+    var finalImageUrl = null;
+    if (imageFile) {
+      btn.innerHTML = '<span class="spin"></span> Caricamento immagine...';
+      try {
+        var ext  = imageFile.name.split(".").pop().toLowerCase() || "jpg";
+        var path = "markets/" + (marketId !== null ? marketId : Date.now()) + "." + ext;
+        var upRes = await fetch(
+          "https://ezcnodxtqwcwwsdmwbsf.supabase.co/storage/v1/object/market-images/" + path,
+          {
+            method:  "POST",
+            headers: {
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6Y25vZHh0cXdjd3dzZG13YnNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDA1MTY0NywiZXhwIjoyMDg5NjI3NjQ3fQ.3F5PvxyVgPr47xUvsHEF93R_OOhwoomPADVGeOabcb4",
+              "Content-Type": imageFile.type || "image/jpeg",
+              "x-upsert": "true"
+            },
+            body: imageFile
+          }
+        );
+        if (upRes.ok) {
+          // URL pubblica del file
+          finalImageUrl = "https://ezcnodxtqwcwwsdmwbsf.supabase.co/storage/v1/object/public/market-images/" + path;
+          console.log("Image uploaded:", finalImageUrl);
+        } else {
+          var err = await upRes.text();
+          console.warn("Image upload failed:", err);
+        }
+      } catch(e4) {
+        console.warn("Image upload error:", e4);
+      }
+    }
+
+    // 3. Salva nel backend (metadata + image_url)
+    btn.innerHTML = '<span class="spin"></span> Salvataggio...';
     try {
-      var finalImageUrl = imageUrl || imageDataUrl;
       var payload = {
         title:           question,
         description:     description || null,
@@ -461,7 +485,7 @@ async function createMarket() {
         resolution_type: "manual",
         expires_at:      new Date(expiresAt * 1000).toISOString(),
         creator_id:      WALLET.address,
-        image_url:       finalImageUrl || null,
+        image_url:       finalImageUrl,
         onchain_id:      marketId
       };
       await fetch("/api/v1/markets", {
@@ -469,20 +493,19 @@ async function createMarket() {
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify(payload)
       });
-    } catch(e4) {
-      console.warn("Backend save failed:", e4);
-      // Non bloccante — il mercato è comunque on-chain
+    } catch(e5) {
+      console.warn("Backend save failed:", e5);
     }
 
-    // 3. Se c'è immagine e abbiamo l'ID, salva anche tramite endpoint dedicato
-    if ((imageUrl || imageDataUrl) && marketId !== null) {
+    // 4. Aggiorna anche image per onchain_id
+    if (finalImageUrl && marketId !== null) {
       try {
         await fetch("/api/v1/markets/onchain/"+marketId+"/image", {
           method: "PATCH",
           headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({image_url: imageUrl || imageDataUrl})
+          body: JSON.stringify({image_url: finalImageUrl})
         });
-      } catch(e5) {}
+      } catch(e6) {}
     }
 
     // Redirect a mercati dopo 2 secondi
