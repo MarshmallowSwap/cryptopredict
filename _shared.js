@@ -1,6 +1,6 @@
 // ═══ CRYPTOPREDICT SHARED JS ═══
-
-const API_BASE = 'http://95.217.10.201/api/v1';
+// API proxata da Vercel → VPS (no mixed content)
+const API_BASE = '/api/v1';
 
 const CP = {
   connected: false,
@@ -15,10 +15,8 @@ const CP = {
       if (l.dataset.page === page) l.classList.add('active');
     });
     this.startCountdown();
-    // Auto-connect demo
     this.connected = true;
     this.updateNav();
-    // Load live data if on relevant pages
     if (page === 'mercati') this.loadMarkets();
     if (page === 'home') this.loadHomeStats();
   },
@@ -109,7 +107,6 @@ const CP = {
       const res = await fetch(`${API_BASE}/yield/stats`);
       if (!res.ok) return;
       const data = await res.json();
-      // Aggiorna stats nella home se presenti
       const els = {
         capital: document.querySelector('[data-stat="capital"]'),
         yield_today: document.querySelector('[data-stat="yield_today"]'),
@@ -118,9 +115,7 @@ const CP = {
       if (els.capital) els.capital.textContent = '$' + Number(data.total_capital_locked).toLocaleString();
       if (els.yield_today) els.yield_today.textContent = '+$' + data.yield_today.toFixed(2);
       if (els.markets) els.markets.textContent = data.active_markets;
-    } catch(e) {
-      // Silently fail — static data already shown
-    }
+    } catch(e) {}
   }
 };
 
