@@ -12,7 +12,7 @@ const CHAIN = {
 const CONTRACTS = {
   token:          "0x699304A362E41539d918E44188E1033999202cA0",
   market:         "0x5264C5212b57ca1bf412b104165Cbd8173aD6F11",  // v2
-  presale:        "0xC9173e1C16Bc82D67f41Ffd025a89CC4f6C4Ac17",
+  presale:        "0x320Af9D3a57863aC3A3a715121a5216Ac26eDe69",
   stakingPresale: "0x5dB131b4e81297c7e200017dA54eC28820454491",
   mockUsdc:       "0x53142fD0C5Ad28b07CBC85215dB9219b58314D36",
   mockUsdt:       "0x3cfd2e869d4b2ddF4E4D62e5749b510f718fecee",
