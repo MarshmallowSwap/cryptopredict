@@ -406,11 +406,23 @@ function toast(icon, msg, link) {
   setTimeout(() => t.classList.remove('show'), 6000);
 }
 
-// ── INIT — listener diretto, fuori da DOMContentLoaded ───────────
-window.addEventListener('cp:wallet-ready', async function onWalletReady(e) {
-  const orig = CP.refreshWalletData.bind(CP);
-  CP.refreshWalletData = async function() { await orig(); await loadStaking(); };
-  if (e.detail.address) await loadStaking();
-});
+// ── INIT BULLETPROOF ─────────────────────────────────────────────
+(function() {
+  let attempts = 0;
+  const timer = setInterval(async () => {
+    attempts++;
+    if (attempts > 60) { clearInterval(timer); return; }
+    if (!window.W3 || !window.WALLET || !window.CP) return;
+    clearInterval(timer);
+
+    const origRefresh = CP.refreshWalletData.bind(CP);
+    CP.refreshWalletData = async function() {
+      await origRefresh();
+      await loadStaking();
+    };
+
+    if (WALLET.address) await loadStaking();
+  }, 200);
+})();
 </script>
 </body></html>
