@@ -406,23 +406,14 @@ function toast(icon, msg, link) {
   setTimeout(() => t.classList.remove('show'), 6000);
 }
 
-// ── INIT BULLETPROOF ─────────────────────────────────────────────
-(function() {
-  let attempts = 0;
-  const timer = setInterval(async () => {
-    attempts++;
-    if (attempts > 60) { clearInterval(timer); return; }
-    if (!window.W3 || !window.WALLET || !window.CP) return;
-    clearInterval(timer);
+// ── INIT — aspetta CP.ready ───────────────────────────────────────
+(async function() {
+  const state = await CP.ready;
 
-    const origRefresh = CP.refreshWalletData.bind(CP);
-    CP.refreshWalletData = async function() {
-      await origRefresh();
-      await loadStaking();
-    };
+  const orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() { await orig(); await loadStaking(); };
 
-    if (WALLET.address) await loadStaking();
-  }, 200);
+  if (state.address) await loadStaking();
 })();
 </script>
 </body></html>
