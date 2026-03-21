@@ -344,7 +344,7 @@ function renderPools(info) {
     card.innerHTML = `
       <div class="pool-tag">${p.lockDays === 0 ? 'FLESSIBILE' : `LOCK ${p.lockDays} GIORNI`}</div>
       <div class="apy-num">${p.apy}%</div>
-      <div style="font-size:.72rem;opacity:.7;margin-bottom:14px">APY annuo in CPRED</div>
+      <div style="font-size:.72rem;opacity:.7;margin-bottom:14px">${p.lockDays === 0 ? 'APY su base annua in CPRED' : 'APY annuo in CPRED'}</div>
       <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:${pct}%"></div></div>
       <div class="pool-stat"><span style="opacity:.7">TVL</span><span style="font-family:'DM Mono',monospace">${p.totalStaked.toLocaleString(undefined,{maximumFractionDigits:0})} CPRED</span></div>
       <div class="pool-stat"><span style="opacity:.7">Disponibile</span><span style="font-family:'DM Mono',monospace">${p.available.toLocaleString(undefined,{maximumFractionDigits:0})}</span></div>
