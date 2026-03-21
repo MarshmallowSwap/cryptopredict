@@ -442,35 +442,32 @@ async function createMarket() {
     showToast("✅", "Mercato creato on-chain!" + (marketId !== null ? " ID: #"+marketId : ""),
               "https://sepolia.basescan.org/tx/"+receipt.hash);
 
-    // 2. Upload immagine su Supabase Storage (se presente)
+    // 2. Upload immagine tramite backend (sicuro, nessuna key esposta)
     var finalImageUrl = null;
     if (imageFile) {
       btn.innerHTML = '<span class="spin"></span> Caricamento immagine...';
       try {
-        var ext  = imageFile.name.split(".").pop().toLowerCase() || "jpg";
-        var path = "markets/" + (marketId !== null ? marketId : Date.now()) + "." + ext;
-        var upRes = await fetch(
-          "https://ezcnodxtqwcwwsdmwbsf.supabase.co/storage/v1/object/market-images/" + path,
-          {
-            method:  "POST",
-            headers: {
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6Y25vZHh0cXdjd3dzZG13YnNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDA1MTY0NywiZXhwIjoyMDg5NjI3NjQ3fQ.3F5PvxyVgPr47xUvsHEF93R_OOhwoomPADVGeOabcb4",
-              "Content-Type": imageFile.type || "image/jpeg",
-              "x-upsert": "true"
-            },
-            body: imageFile
-          }
-        );
+        var formData = new FormData();
+        formData.append("file", imageFile);
+        if (marketId !== null) formData.append("onchain_id", String(marketId));
+
+        var upRes = await fetch("/api/v1/markets/upload/image", {
+          method: "POST",
+          body: formData
+        });
+
         if (upRes.ok) {
-          // URL pubblica del file
-          finalImageUrl = "https://ezcnodxtqwcwwsdmwbsf.supabase.co/storage/v1/object/public/market-images/" + path;
+          var upData = await upRes.json();
+          finalImageUrl = upData.url;
           console.log("Image uploaded:", finalImageUrl);
         } else {
-          var err = await upRes.text();
-          console.warn("Image upload failed:", err);
+          var errTxt = await upRes.text();
+          console.warn("Image upload failed:", upRes.status, errTxt);
+          showToast("⚠️", "Mercato creato ma immagine non caricata: " + upRes.status);
         }
       } catch(e4) {
         console.warn("Image upload error:", e4);
+        showToast("⚠️", "Mercato creato — errore immagine, riprova dal portfolio");
       }
     }
 
