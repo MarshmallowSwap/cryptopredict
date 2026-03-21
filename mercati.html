@@ -31,7 +31,7 @@
 .toast-box{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast-box.on{opacity:1;pointer-events:all}
 .card-img{width:100%;height:160px;object-fit:cover;display:block;background:rgba(255,255,255,.03)}
-.card-img-placeholder{width:100%;height:140px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(0,212,255,.05));font-size:2rem;flex-shrink:0}
+.card-img-placeholder{width:100%;height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0}
 .my-bets-bar{display:none;background:rgba(124,58,237,.07);border-bottom:1px solid rgba(124,58,237,.2)}
 .my-bets-bar.on{display:block}
 .bet-chip{flex-shrink:0;width:270px;background:rgba(255,255,255,.04);border-radius:10px;padding:12px 14px;border:1px solid rgba(124,58,237,.2)}
@@ -423,11 +423,37 @@ function buildCard(el, m) {
     img.onerror = function() { imgWrap.style.display="none"; };
     imgWrap.appendChild(img);
   } else {
-    // Placeholder con emoji per categoria
+    // Placeholder con gradiente + emoji + titolo categoria
+    var THEMES = {
+      crypto:     {bg:"linear-gradient(135deg,rgba(247,147,26,.18),rgba(247,147,26,.05))", border:"rgba(247,147,26,.25)", icon:"₿",  label:"CRYPTO"},
+      macro:      {bg:"linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,212,255,.04))",   border:"rgba(0,212,255,.25)",  icon:"🌐", label:"MACRO"},
+      defi:       {bg:"linear-gradient(135deg,rgba(124,58,237,.18),rgba(124,58,237,.05))", border:"rgba(124,58,237,.25)", icon:"⚡", label:"DEFI"},
+      nft:        {bg:"linear-gradient(135deg,rgba(236,72,153,.18),rgba(236,72,153,.05))", border:"rgba(236,72,153,.25)", icon:"🖼️", label:"NFT"},
+      governance: {bg:"linear-gradient(135deg,rgba(16,185,129,.15),rgba(16,185,129,.04))",  border:"rgba(16,185,129,.25)", icon:"🗳️", label:"GOV"},
+      altro:      {bg:"linear-gradient(135deg,rgba(167,139,250,.15),rgba(167,139,250,.04))",border:"rgba(167,139,250,.25)",icon:"🔮", label:"OTHER"},
+    };
+    var th = THEMES[m.category] || THEMES.altro;
     var ph = document.createElement("div");
-    ph.className = "card-img-placeholder";
-    var icons = {crypto:"₿",macro:"🌐",defi:"⚡",nft:"🖼️",governance:"🗳️"};
-    ph.textContent = icons[m.category] || "🔮";
+    ph.style.cssText = "width:100%;height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;" +
+      "background:" + th.bg + ";border-bottom:1px solid " + th.border + ";";
+    var iconEl = document.createElement("div");
+    iconEl.style.cssText = "font-size:2.2rem;line-height:1";
+    iconEl.textContent = th.icon;
+    var labelEl = document.createElement("div");
+    labelEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:.12em;opacity:.5";
+    labelEl.textContent = th.label;
+    // Asset symbol se disponibile
+    if (m.asset && m.asset !== "OTHER") {
+      var assetEl = document.createElement("div");
+      assetEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.75rem;font-weight:700;opacity:.7";
+      assetEl.textContent = m.asset;
+      ph.appendChild(iconEl);
+      ph.appendChild(assetEl);
+      ph.appendChild(labelEl);
+    } else {
+      ph.appendChild(iconEl);
+      ph.appendChild(labelEl);
+    }
     imgWrap.appendChild(ph);
   }
   el.appendChild(imgWrap);
