@@ -406,16 +406,31 @@ function toast(icon, msg, link) {
   setTimeout(() => t.classList.remove('show'), 6000);
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-  const origRefresh = CP.refreshWalletData.bind(CP);
+// ── INIT ROBUSTO ──────────────────────────────────────────────────
+window._stakingLoaded = false;
+
+function _initStakingPage() {
+  const orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() {
-    await origRefresh();
+    await orig();
     await loadStaking();
   };
-  setTimeout(async () => {
-    if (WALLET.address) await loadStaking();
-  }, 600);
-});
+}
+
+function _waitAndLoadStaking(maxMs = 5000, interval = 100) {
+  let elapsed = 0;
+  const timer = setInterval(async () => {
+    elapsed += interval;
+    if (window.CP && window.WALLET) {
+      clearInterval(timer);
+      _initStakingPage();
+      if (WALLET.address) await loadStaking();
+    } else if (elapsed >= maxMs) {
+      clearInterval(timer);
+    }
+  }, interval);
+}
+
+document.addEventListener('DOMContentLoaded', () => _waitAndLoadStaking());
 </script>
 </body></html>
