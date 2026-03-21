@@ -5,6 +5,31 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css">
+<style>
+.yield-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;padding:7px 10px;border-radius:7px;
+  background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)}
+.yield-dot{width:5px;height:5px;border-radius:50%;background:#00e87a;
+  animation:yieldPulse 2s infinite;flex-shrink:0}
+@keyframes yieldPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,232,122,.5)}
+  50%{opacity:.7;box-shadow:0 0 0 5px transparent}}
+.yield-label{font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700;letter-spacing:.06em}
+.yield-val{font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700}
+.yield-apy{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)}
+
+/* Yield banner top */
+.yield-banner{background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18);
+  border-radius:10px;padding:12px 16px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.yield-banner-left{display:flex;align-items:center;gap:10px}
+.yield-banner-icon{width:32px;height:32px;border-radius:8px;
+  background:rgba(0,232,122,.15);border:1px solid rgba(0,232,122,.3);
+  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.yield-banner-stats{display:flex;gap:24px}
+.yield-stat{text-align:center}
+.yield-stat-val{font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a}
+.yield-stat-lbl{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em}
+</style>
 </head><body data-page="mercati"><!-- TICKER -->
 <div class="ticker-bar">
   <div class="ticker-track" id="ticker">
@@ -18,7 +43,6 @@
     <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
     <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
     <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <!-- duplicate for seamless loop -->
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
@@ -39,43 +63,15 @@
     <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
   </a>
   <div class="nav-links">
-    <a href="index.html" class="nav-link" data-page="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-    <a href="presale.html" class="nav-link" data-page="presale">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      <span>Presale</span>
-      <span class="badge"></span>
-    </a>
-    <a href="mercati.html" class="nav-link" data-page="mercati">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span>Mercati</span>
-    </a>
-    <a href="trading.html" class="nav-link" data-page="trading">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
-      <span>Trading</span>
-    </a>
-    <a href="vendi.html" class="nav-link" data-page="vendi">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      <span>Vendi Quote</span>
-    </a>
-    <a href="portfolio.html" class="nav-link" data-page="portfolio">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
-      <span>Portfolio</span>
-    </a>
-    <a href="staking.html" class="nav-link" data-page="staking">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>Staking</span>
-    </a>
-    <a href="crea.html" class="nav-link" data-page="crea">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span>Crea</span>
-    </a>
-    <a href="docs.html" class="nav-link" data-page="docs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Docs</span>
-    </a>
+    <a href="index.html" class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="presale.html" class="nav-link" data-page="presale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Presale</span><span class="badge"></span></a>
+    <a href="mercati.html" class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="trading.html" class="nav-link" data-page="trading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg><span>Trading</span></a>
+    <a href="vendi.html" class="nav-link" data-page="vendi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><span>Vendi Quote</span></a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
+    <a href="staking.html" class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
+    <a href="crea.html" class="nav-link" data-page="crea"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Crea</span></a>
+    <a href="docs.html" class="nav-link" data-page="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Docs</span></a>
   </div>
   <div class="nav-right">
     <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
@@ -92,12 +88,39 @@
   <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
   <a href="presale.html" class="pb-btn">Compra CPRED →</a>
 </div>
+
 <div class="page-wrap">
 <div class="page-header">
   <span class="page-tag">// Tutti i mercati</span>
   <div class="page-title">Mercati di Predizione</div>
   <div class="page-sub">847 mercati attivi · Scommetti sulla tua analisi e vinci USDC</div>
 </div>
+
+<!-- YIELD BANNER -->
+<div class="yield-banner">
+  <div class="yield-banner-left">
+    <div class="yield-banner-icon">⚡</div>
+    <div>
+      <div style="font-size:.82rem;font-weight:700;color:#dde3f5;margin-bottom:2px">Capital Yield Attivo</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Tutto il capitale nei pool genera yield automatico — anche mentre aspetti la risoluzione</div>
+    </div>
+  </div>
+  <div class="yield-banner-stats">
+    <div class="yield-stat">
+      <div class="yield-stat-val">$127K</div>
+      <div class="yield-stat-lbl">CAPITALE TOTALE</div>
+    </div>
+    <div class="yield-stat">
+      <div class="yield-stat-val">+$17.40</div>
+      <div class="yield-stat-lbl">YIELD OGGI</div>
+    </div>
+    <div class="yield-stat">
+      <div class="yield-stat-val">4.8% APY</div>
+      <div class="yield-stat-lbl">RENDIMENTO</div>
+    </div>
+  </div>
+</div>
+
 <!-- Filters -->
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
   <div style="display:flex;gap:6px">
@@ -117,10 +140,11 @@
     <a href="crea.html" class="btn btn-primary" style="font-size:.75rem;padding:6px 14px">+ Crea mercato</a>
   </div>
 </div>
+
 <!-- Markets grid -->
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px" id="markets-grid">
 
-  <!-- Market card macro -->
+  <!-- BTC -->
   <div class="cp-card cp-card-accent" style="cursor:pointer" onclick="openMarket('btc100k')">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -139,9 +163,18 @@
         <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px" onclick="event.stopPropagation()">▼ NO</button>
       </div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 12g 4h · 312 partecipanti</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 12g 4h · 312 partecipanti</div>
+    <div class="yield-bar">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="yield-dot"></div>
+        <span class="yield-label">POOL YIELD</span>
+      </div>
+      <span class="yield-val">+$2.50/giorno</span>
+      <span class="yield-apy">· Tot. ~$29.97 · 4.8% APY</span>
+    </div>
   </div>
 
+  <!-- ETH -->
   <div class="cp-card" style="cursor:pointer">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -160,9 +193,18 @@
         <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
       </div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 5g 12h · 187 partecipanti</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 5g 12h · 187 partecipanti</div>
+    <div class="yield-bar">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="yield-dot"></div>
+        <span class="yield-label">POOL YIELD</span>
+      </div>
+      <span class="yield-val">+$1.35/giorno</span>
+      <span class="yield-apy">· Tot. ~$7.42 · 4.8% APY</span>
+    </div>
   </div>
 
+  <!-- SOL -->
   <div class="cp-card" style="cursor:pointer">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -181,9 +223,18 @@
         <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
       </div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 90g · 521 partecipanti</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 90g · 521 partecipanti</div>
+    <div class="yield-bar">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="yield-dot"></div>
+        <span class="yield-label">POOL YIELD</span>
+      </div>
+      <span class="yield-val">+$3.03/giorno</span>
+      <span class="yield-apy">· Tot. ~$272.87 · 4.8% APY</span>
+    </div>
   </div>
 
+  <!-- UNI -->
   <div class="cp-card" style="cursor:pointer">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -202,9 +253,18 @@
         <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
       </div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 28g · 94 partecipanti</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 28g · 94 partecipanti</div>
+    <div class="yield-bar">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="yield-dot"></div>
+        <span class="yield-label">POOL YIELD</span>
+      </div>
+      <span class="yield-val">+$0.83/giorno</span>
+      <span class="yield-apy">· Tot. ~$23.24 · 4.8% APY</span>
+    </div>
   </div>
 
+  <!-- BNB -->
   <div class="cp-card" style="cursor:pointer">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -223,9 +283,18 @@
         <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
       </div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 3h 42m · 67 partecipanti</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 3h 42m · 67 partecipanti</div>
+    <div class="yield-bar">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="yield-dot"></div>
+        <span class="yield-label">POOL YIELD</span>
+      </div>
+      <span class="yield-val">+$0.39/giorno</span>
+      <span class="yield-apy">· Tot. ~$0.06 (short) · 4.8% APY</span>
+    </div>
   </div>
 
+  <!-- MACRO -->
   <div class="cp-card" style="cursor:pointer">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -244,7 +313,15 @@
         <button class="btn btn-dn" style="font-size:.72rem;padding:5px 10px">▼ NO</button>
       </div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">⏱ Scade tra 280g · 1,240 partecipanti</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">⏱ Scade tra 280g · 1,240 partecipanti</div>
+    <div class="yield-bar">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="yield-dot"></div>
+        <span class="yield-label">POOL YIELD</span>
+      </div>
+      <span class="yield-val">+$5.73/giorno</span>
+      <span class="yield-apy">· Tot. ~$1,603 · 4.8% APY</span>
+    </div>
   </div>
 
 </div>
