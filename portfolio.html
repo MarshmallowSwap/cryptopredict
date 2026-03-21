@@ -182,6 +182,8 @@
 <script src="web3.js"></script>
 <script src="_shared.js"></script>
 <script>
+// Funzioni definite qui, init tramite CP.ready
+
 async function loadPortfolio() {
   if (!WALLET.address) {
     document.getElementById('no-wallet-view').style.display = 'block';
@@ -363,21 +365,18 @@ async function claimStakingReward() {
   }
 }
 
-// ── INIT — aspetta CP.ready (risolto dopo autoReconnect) ─────────
-(async function() {
-  // Aspetta che _shared.js finisca init() compreso autoReconnect
-  const state = await CP.ready;
-
-  // Override per aggiornamenti futuri
+// ── INIT: aspetta CP.ready (settato dopo autoReconnect in _shared.js) ──
+CP.ready.then(async function(state) {
+  // Intercetta futuri refresh
   const orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() { await orig(); await loadPortfolio(); };
-
+  // Carica
   if (state.address) {
     await loadPortfolio();
   } else {
     document.getElementById('no-wallet-view').style.display = 'block';
     document.getElementById('portfolio-view').style.display = 'none';
   }
-})();
+});
 </script>
 </body></html>
