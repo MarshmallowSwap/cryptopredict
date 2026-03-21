@@ -127,12 +127,17 @@
           <div>
             <label class="cp-label">Categoria</label>
             <select class="cp-input" id="category" onchange="updatePreview()">
-              <option value="crypto">Crypto</option>
-              <option value="macro">Macro / ETF</option>
-              <option value="defi">DeFi</option>
-              <option value="nft">NFT / Gaming</option>
-              <option value="governance">Governance</option>
-              <option value="altro">Altro</option>
+              <option value="crypto">₿ Crypto — prezzi, ETF, halving</option>
+              <option value="defi">⚡ DeFi — TVL, protocol, yield</option>
+              <option value="sport">⚽ Sport — calcio, NBA, MMA, F1, Esport</option>
+              <option value="politica">🗳️ Politica — elezioni, governi</option>
+              <option value="macro">📈 Macro & Finance — Fed, tassi, PIL</option>
+              <option value="tech">🤖 Tech & AI — release, IPO, AI</option>
+              <option value="entertainment">🎬 Entertainment — Oscar, Grammy, cinema</option>
+              <option value="scienza">🔬 Scienza — spazio, medicina, clima</option>
+              <option value="nft">🎮 NFT & Gaming — NFT, metaverso</option>
+              <option value="geopolitica">🌍 Geopolitica — conflitti, accordi</option>
+              <option value="altro">🔮 Altro</option>
             </select>
           </div>
           <div>
@@ -364,7 +369,9 @@ function updatePreview() {
 
   // Aggiorna icona categoria se no immagine
   if (!imageDataUrl) {
-    var icons = {crypto:"₿", macro:"🌐", defi:"⚡", nft:"🖼️", governance:"🗳️", altro:"🔮"};
+    var icons = {crypto:"\u20BF", defi:"\u26A1", sport:"\u26BD", politica:"\uD83D\uDDF3",
+      macro:"\uD83D\uDCC8", tech:"\uD83E\uDD16", entertainment:"\uD83C\uDFAC",
+      scienza:"\uD83D\uDD2C", nft:"\uD83C\uDFAE", geopolitica:"\uD83C\uDF0D", altro:"\uD83D\uDD2E"};
     var cat2 = document.getElementById("category").value;
     document.getElementById("prev-img-icon").textContent = icons[cat2] || "🔮";
   }
