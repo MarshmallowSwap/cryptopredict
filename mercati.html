@@ -812,4 +812,151 @@ CP.ready.then(async (state) => {
   if (state.address) loadMyBets();
 });
 </script>
+</body></html>// ── LE MIE SCOMMESSE ─────────────────────────────────────────────
+async function loadMyBets() {
+  if (!WALLET.address) return;
+  const section = document.getElementById('my-bets-section');
+  const list    = document.getElementById('my-bets-list');
+  section.style.display = 'block';
+  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem;padding:4px 0"><span class="spin"></span> Caricamento...</div>';
+
+  try {
+    const MARKET_ABI_BETS = [
+      "function marketCount() view returns (uint256)",
+      "function getUserMarkets(address user) view returns (uint256[])",
+      "function getPosition(uint256 marketId, address user) view returns (tuple(uint256 marketId, bool side, uint256 amount, bool claimed))",
+      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
+    ];
+    const provider = await W3.getProvider();
+    const c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_BETS, provider);
+
+    let marketIds = [];
+    try {
+      const ids = await c.getUserMarkets(WALLET.address);
+      marketIds = [...new Set(ids.map(id => Number(id)))];
+      console.log('getUserMarkets found:', marketIds);
+    } catch(e) {
+      console.log('getUserMarkets fallback scan. Error:', e.message);
+      const count = Number(await c.marketCount());
+      marketIds = Array.from({length: count}, (_, i) => i);
+    }
+
+    const bets = [];
+    for (const id of marketIds) {
+      try {
+        const pos = await c.getPosition(id, WALLET.address);
+        const rawAmt = pos.amount;
+        const amtBig = typeof rawAmt === 'bigint' ? rawAmt : BigInt(rawAmt.toString());
+        if (amtBig > 0n) {
+          const mkt = await c.getMarket(id);
+          bets.push({ pos, mkt, id, amtBig });
+        }
+      } catch(e) {}
+    }
+
+    console.log('Bets found:', bets.length);
+
+    if (!bets.length) {
+      section.style.display = 'none';
+      return;
+    }
+
+    document.getElementById('my-bets-count').textContent = bets.length;
+    list.innerHTML = '';
+
+    bets.forEach(function(bet) {
+      var pos = bet.pos, mkt = bet.mkt, id = bet.id, amtBig = bet.amtBig;
+      var stake   = parseFloat(ethers.formatEther(amtBig));
+      var side    = pos.side === true || pos.side === 1;
+      var claimed = pos.claimed === true;
+      var statusN  = Number(mkt.status);
+      var outcomeN = Number(mkt.outcome);
+      var won  = statusN === 2 && ((outcomeN === 1 && side) || (outcomeN === 2 && !side));
+      var lost = statusN === 2 && !won;
+
+      var yesEth = 0, noEth = 0;
+      try {
+        yesEth = Array.isArray(mkt.yesPool)
+          ? parseFloat(ethers.formatEther(mkt.yesPool[0]))
+          : parseFloat(ethers.formatEther(mkt.yesPool));
+        noEth = Array.isArray(mkt.noPool)
+          ? parseFloat(ethers.formatEther(mkt.noPool[0]))
+          : parseFloat(ethers.formatEther(mkt.noPool));
+      } catch(e2) {}
+
+      var total   = yesEth + noEth;
+      var winPool = side ? yesEth : noEth;
+      var payout  = winPool > 0 ? (total * stake / winPool * 0.98) : stake * 2 * 0.98;
+      var daysLeft = Math.max(0, Math.ceil((Number(mkt.expiresAt) - Date.now()/1000) / 86400));
+      var question = mkt.question.length > 52 ? mkt.question.slice(0,52) + '...' : mkt.question;
+      var statusLabels  = ['Aperta','Chiusa','Risolta','Cancellata'];
+
+      // Stato e colore
+      var borderC = won && !claimed ? 'rgba(16,185,129,.4)' : lost ? 'rgba(239,68,68,.3)' : 'rgba(124,58,237,.25)';
+      var statTxt = won && !claimed ? 'Hai vinto!'
+                  : won && claimed  ? 'Ritirato'
+                  : lost ? 'Persa'
+                  : statusN === 0 ? daysLeft + 'g rimasti' : statusLabels[statusN];
+      var statColor = won ? '#10b981' : lost ? '#ef4444' : 'var(--purple3)';
+      var sideTxt  = side ? 'YES' : 'NO';
+      var sideClass = side ? 'tag tag-green' : 'tag tag-red';
+
+      var actionHTML;
+      if (won && !claimed) {
+        actionHTML = '<button onclick="claimWin(' + id + ', this)" class="btn btn-up" style="width:100%;justify-content:center;font-size:.72rem;padding:5px">Ritira Vincita</button>';
+      } else if (claimed) {
+        actionHTML = '<div style="text-align:center;font-size:.65rem;color:#10b981">Payout ritirato</div>';
+      } else if (lost) {
+        actionHTML = '<div style="text-align:center;font-size:.65rem;color:#ef4444">Posizione persa</div>';
+      } else {
+        actionHTML = '<div style="text-align:center;font-size:.65rem;color:var(--text3)">In attesa di risoluzione</div>';
+      }
+
+      var el = document.createElement('div');
+      el.style.cssText = 'flex-shrink:0;width:280px;background:rgba(255,255,255,.04);border:1px solid ' + borderC + ';border-radius:10px;padding:12px 14px';
+      el.innerHTML = (
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">' +
+          '<span class="' + sideClass + '" style="font-size:.62rem">' + sideTxt + '</span>' +
+          '<span style="font-size:.65rem;color:' + statColor + '">' + statTxt + '</span>' +
+        '</div>' +
+        '<div style="font-size:.78rem;font-weight:700;line-height:1.3;margin-bottom:8px">' + question + '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--text3);margin-bottom:8px">' +
+          '<span>Stake: ' + stake.toFixed(4) + ' ETH</span>' +
+          '<span style="color:var(--green2)">Est: ' + payout.toFixed(4) + ' ETH</span>' +
+        '</div>' +
+        actionHTML
+      );
+      list.appendChild(el);
+    });
+
+  } catch(e) {
+    console.error('loadMyBets error:', e);
+    list.innerHTML = '<div style="color:#ef4444;font-size:.75rem;padding:4px 0">Errore: ' + e.message + '</div>';
+  }
+}
+
+
+async function claimWin(marketId, btn) {
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const result = await W3.claimPayoutOnChain(marketId);
+    toast('✅', 'Vincita ritirata!', result.explorerUrl);
+    await loadMyBets();
+  } catch(e) {
+    toast('❌', e.reason || e.message || 'Errore');
+    btn.disabled = false; btn.textContent = '🎉 Ritira';
+  }
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+CP.ready.then(async (state) => {
+  const orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() {
+    await orig();
+    if (WALLET.address) loadMyBets();
+  };
+  await loadMarkets();
+  if (state.address) loadMyBets();
+});
+</script>
 </body></html>
