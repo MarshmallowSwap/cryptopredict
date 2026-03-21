@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — CryptoPredict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+#login-screen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:999}
+.mkt-row{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+.mkt-row.expired{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.03)}
+.mkt-row.resolved-yes{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.03)}
+.mkt-row.resolved-no{border-color:rgba(239,68,68,.2);background:rgba(239,68,68,.02)}
+.resolve-btn-yes{padding:6px 16px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:7px;color:#fff;font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Syne',sans-serif;transition:opacity .2s}
+.resolve-btn-yes:hover{opacity:.85}
+.resolve-btn-no{padding:6px 16px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:7px;color:#fff;font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Syne',sans-serif;transition:opacity .2s}
+.resolve-btn-no:hover{opacity:.85}
+.resolve-btn-cancel{padding:6px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:7px;color:var(--text3);font-weight:700;font-size:.78rem;cursor:pointer;font-family:'DM Mono',monospace}
+.tx-toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;opacity:0;transition:opacity .3s;pointer-events:none}
+.tx-toast.show{opacity:1;pointer-events:all}
+.tab-btn{padding:7px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text3);font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.4);color:var(--purple3)}
+</style>
+</head>
+<body>
+
+<!-- Login screen -->
+<div id="login-screen">
+  <div class="cp-card cp-card-accent" style="width:360px;text-align:center;padding:36px">
+    <div style="font-size:2rem;margin-bottom:12px">🔐</div>
+    <div style="font-size:1.2rem;font-weight:800;margin-bottom:4px">CryptoPredict Admin</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:24px">Team dashboard — risoluzione mercati</div>
+    <input type="password" id="admin-pwd" class="cp-input" placeholder="Password admin"
+           style="margin-bottom:12px;text-align:center" onkeydown="if(event.key==='Enter')login()">
+    <button onclick="login()" class="btn btn-primary" style="width:100%;justify-content:center">Accedi →</button>
+    <div id="login-err" style="color:var(--red2);font-size:.75rem;margin-top:10px;display:none">Password errata</div>
+  </div>
+</div>
+
+<!-- Main admin -->
+<div id="admin-main" style="display:none">
+
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">ADMIN PANEL</div></div>
+  </a>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+    <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--red2);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);padding:4px 10px;border-radius:6px">🔒 ADMIN</span>
+    <span class="nav-wallet" id="nav-wallet" style="display:none"></span>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Team Wallet</button>
+    <button onclick="logout()" style="background:none;border:1px solid var(--border);border-radius:7px;padding:6px 12px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <span class="page-tag">// Admin Panel</span>
+    <div class="page-title">Gestione Mercati</div>
+    <div class="page-sub">Risoluzione mercati scaduti · Wallet team firma on-chain · Base Sepolia</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="g-stats" style="margin-bottom:24px">
+    <div class="stat-card cp-card-gold">
+      <div class="stat-label">Da risolvere</div>
+      <div class="stat-val" id="stat-pending" style="color:var(--gold2)">—</div>
+      <span class="stat-change">mercati scaduti</span>
+    </div>
+    <div class="stat-card cp-card-green">
+      <div class="stat-label">Aperti</div>
+      <div class="stat-val" id="stat-open" style="color:var(--green2)">—</div>
+      <span class="stat-change">in corso</span>
+    </div>
+    <div class="stat-card cp-card-accent">
+      <div class="stat-label">Risolti</div>
+      <div class="stat-val" id="stat-resolved" style="color:var(--purple3)">—</div>
+      <span class="stat-change">totali</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Wallet</div>
+      <div class="stat-val" id="stat-wallet" style="color:var(--cyan2);font-size:.8rem">Non connesso</div>
+      <span class="stat-change">team wallet</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px">
+    <button class="tab-btn active" id="tab-pending" onclick="switchTab('pending')">⏰ Da risolvere</button>
+    <button class="tab-btn" id="tab-open"    onclick="switchTab('open')">📊 Aperti</button>
+    <button class="tab-btn" id="tab-resolved" onclick="switchTab('resolved')">✅ Risolti</button>
+    <button class="tab-btn" id="tab-all"     onclick="switchTab('all')">🔮 Tutti</button>
+    <button onclick="loadMarkets()" class="btn btn-ghost" style="margin-left:auto;font-size:.75rem">🔄 Aggiorna</button>
+  </div>
+
+  <!-- Markets list -->
+  <div id="markets-list">
+    <div style="text-align:center;padding:30px;color:var(--text3)">
+      <span class="spin"></span> Caricamento mercati...
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Toast -->
+<div class="tx-toast" id="tx-toast">
+  <span id="toast-icon">✅</span>
+  <div style="flex:1">
+    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;display:none"></a>
+  </div>
+  <button onclick="document.getElementById('tx-toast').classList.remove('show')"
+    style="background:none;border:none;color:var(--text3);cursor:pointer">✕</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+<script src="web3.js"></script>
+<script src="_shared.js"></script>
+<script>
+const ADMIN_PWD  = "cp-admin-2026";
+const MARKET_ABI_ADMIN = [
+  "function marketCount() view returns (uint256)",
+  "function getMarket(uint256 id) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver))",
+  "function resolveMarket(uint256 marketId, bool yesWon)",
+  "function cancelMarket(uint256 marketId)",
+  "function getYesPct(uint256 marketId) view returns (uint256)",
+];
+
+var allMarkets  = [];
+var currentTab  = "pending";
+var isLoggedIn  = false;
+
+// ── AUTH ──────────────────────────────────────────────────────────
+function login() {
+  var pwd = document.getElementById("admin-pwd").value;
+  if (pwd === ADMIN_PWD) {
+    isLoggedIn = true;
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("admin-main").style.display  = "block";
+    loadMarkets();
+  } else {
+    document.getElementById("login-err").style.display = "block";
+    document.getElementById("admin-pwd").value = "";
+  }
+}
+
+function logout() {
+  isLoggedIn = false;
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("admin-main").style.display   = "none";
+  document.getElementById("admin-pwd").value = "";
+}
+
+// ── LOAD MARKETS ──────────────────────────────────────────────────
+async function loadMarkets() {
+  document.getElementById("markets-list").innerHTML =
+    '<div style="text-align:center;padding:30px;color:var(--text3)"><span class="spin"></span> Caricamento...</div>';
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_ADMIN, provider);
+    var count = Number(await c.marketCount());
+    allMarkets = [];
+    for (var i = 0; i < count; i++) {
+      try {
+        var m = await c.getMarket(i);
+        allMarkets.push({
+          id:         Number(m.id),
+          question:   m.question,
+          category:   m.category,
+          asset:      m.assetSymbol,
+          targetPrice:Number(m.targetPrice) / 1e8,
+          targetAbove:m.targetAbove,
+          expiresAt:  Number(m.expiresAt),
+          yesPool:    parseFloat(ethers.formatEther(m.yesPool)),
+          noPool:     parseFloat(ethers.formatEther(m.noPool)),
+          yield:      parseFloat(ethers.formatEther(m.yieldAccrued)),
+          status:     Number(m.status),   // 0=Open 1=Closed 2=Resolved 3=Cancelled
+          outcome:    Number(m.outcome),  // 0=Unresolved 1=YES 2=NO
+          resolver:   m.resolver,
+        });
+      } catch(e) {}
+    }
+
+    // Update stats
+    var now = Date.now() / 1000;
+    var pending  = allMarkets.filter(m => m.status === 0 && m.expiresAt < now);
+    var open     = allMarkets.filter(m => m.status === 0 && m.expiresAt >= now);
+    var resolved = allMarkets.filter(m => m.status === 2);
+    document.getElementById("stat-pending").textContent  = pending.length;
+    document.getElementById("stat-open").textContent     = open.length;
+    document.getElementById("stat-resolved").textContent = resolved.length;
+
+    renderTab(currentTab);
+  } catch(e) {
+    document.getElementById("markets-list").innerHTML =
+      '<div style="color:var(--red2);padding:20px">Errore: ' + e.message + '</div>';
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ["pending","open","resolved","all"].forEach(function(t) {
+    var btn = document.getElementById("tab-" + t);
+    if (btn) btn.className = "tab-btn" + (t === tab ? " active" : "");
+  });
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  var now  = Date.now() / 1000;
+  var list;
+  if      (tab === "pending")  list = allMarkets.filter(m => m.status === 0 && m.expiresAt < now);
+  else if (tab === "open")     list = allMarkets.filter(m => m.status === 0 && m.expiresAt >= now);
+  else if (tab === "resolved") list = allMarkets.filter(m => m.status === 2);
+  else                         list = allMarkets;
+
+  var el = document.getElementById("markets-list");
+  if (!list.length) {
+    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">Nessun mercato in questa categoria</div>';
+    return;
+  }
+
+  el.innerHTML = "";
+  list.forEach(function(m) { el.appendChild(buildRow(m)); });
+}
+
+function buildRow(m) {
+  var now       = Date.now() / 1000;
+  var isExpired = m.status === 0 && m.expiresAt < now;
+  var total     = m.yesPool + m.noPool;
+  var yesPct    = total > 0 ? Math.round(m.yesPool / total * 100) : 50;
+  var daysLeft  = Math.ceil((m.expiresAt - now) / 86400);
+  var expDate   = new Date(m.expiresAt * 1000).toLocaleDateString("it-IT");
+
+  var statusLabels  = ["Aperto","Chiuso","Risolto","Cancellato"];
+  var outcomeLabels = ["—","YES ✅","NO ❌"];
+  var statusColors  = ["var(--green2)","var(--text3)","var(--cyan2)","var(--red2)"];
+
+  var rowClass = isExpired ? "mkt-row expired"
+               : m.status === 2 && m.outcome === 1 ? "mkt-row resolved-yes"
+               : m.status === 2 && m.outcome === 2 ? "mkt-row resolved-no"
+               : "mkt-row";
+
+  var div = document.createElement("div");
+  div.className = rowClass;
+
+  // Header row
+  var hdr = document.createElement("div");
+  hdr.style.cssText = "display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:10px";
+
+  var left = document.createElement("div");
+  left.style.flex = "1";
+
+  // Title + badges
+  var titleRow = document.createElement("div");
+  titleRow.style.cssText = "display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap";
+  var idBadge = document.createElement("span");
+  idBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);background:rgba(255,255,255,.05);padding:1px 7px;border-radius:4px";
+  idBadge.textContent = "#" + m.id;
+  var catBadge = document.createElement("span");
+  catBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;color:var(--purple3);background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:1px 7px;border-radius:4px";
+  catBadge.textContent = m.category.toUpperCase();
+  var statusBadge = document.createElement("span");
+  statusBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:4px";
+  statusBadge.style.color = statusColors[m.status];
+  statusBadge.style.background = "rgba(255,255,255,.04)";
+  statusBadge.textContent = isExpired ? "⏰ SCADUTO" : statusLabels[m.status];
+  if (m.status === 2) {
+    statusBadge.textContent += " → " + outcomeLabels[m.outcome];
+  }
+  titleRow.appendChild(idBadge);
+  titleRow.appendChild(catBadge);
+  titleRow.appendChild(statusBadge);
+
+  var question = document.createElement("div");
+  question.style.cssText = "font-size:.9rem;font-weight:700;line-height:1.4";
+  question.textContent = m.question;
+
+  left.appendChild(titleRow);
+  left.appendChild(question);
+
+  // Stats
+  var stats = document.createElement("div");
+  stats.style.cssText = "display:flex;gap:20px;flex-shrink:0;flex-wrap:wrap";
+
+  function stat(label, val, color) {
+    var d = document.createElement("div");
+    d.style.textAlign = "right";
+    var v = document.createElement("div");
+    v.style.cssText = "font-family:'DM Mono',monospace;font-size:.82rem;font-weight:700;color:" + color;
+    v.textContent = val;
+    var l = document.createElement("div");
+    l.style.cssText = "font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)";
+    l.textContent = label;
+    d.appendChild(v); d.appendChild(l);
+    return d;
+  }
+
+  stats.appendChild(stat("Pool totale",  total.toFixed(4)+" ETH", "var(--gold2)"));
+  stats.appendChild(stat("YES",          yesPct+"%",              "var(--green2)"));
+  stats.appendChild(stat("NO",           (100-yesPct)+"%",        "var(--red2)"));
+  stats.appendChild(stat("Scadenza",     expDate,                 isExpired ? "var(--gold2)" : "var(--text3)"));
+
+  if (m.targetPrice > 0) {
+    stats.appendChild(stat("Target",
+      "$" + m.targetPrice.toLocaleString() + " " + (m.targetAbove ? "▲" : "▼"),
+      "var(--cyan2)"));
+  }
+
+  hdr.appendChild(left);
+  hdr.appendChild(stats);
+  div.appendChild(hdr);
+
+  // Pool bar
+  var barWrap = document.createElement("div");
+  barWrap.style.cssText = "display:flex;height:4px;border-radius:2px;overflow:hidden;margin-bottom:10px";
+  var yesBar = document.createElement("div");
+  yesBar.style.cssText = "height:4px;background:var(--green2);border-radius:2px 0 0 2px;width:" + yesPct + "%";
+  var noBar = document.createElement("div");
+  noBar.style.cssText = "height:4px;background:var(--red2);border-radius:0 2px 2px 0;width:" + (100-yesPct) + "%";
+  barWrap.appendChild(yesBar); barWrap.appendChild(noBar);
+  div.appendChild(barWrap);
+
+  // Azioni
+  if (isExpired) {
+    var actions = document.createElement("div");
+    actions.style.cssText = "display:flex;align-items:center;gap:10px;flex-wrap:wrap";
+
+    var hint = document.createElement("div");
+    hint.style.cssText = "font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3);flex:1";
+    hint.textContent = m.asset && m.targetPrice > 0
+      ? "Price target: " + m.asset + " " + (m.targetAbove ? ">" : "<") + " $" + m.targetPrice.toLocaleString() + " — controlla su Binance"
+      : "Risoluzione manuale — controlla il risultato reale";
+
+    var btnYes = document.createElement("button");
+    btnYes.className = "resolve-btn-yes";
+    btnYes.textContent = "✅ YES vince";
+    btnYes.onclick = (function(id){ return function(e) { confirmResolve(id, true, e.target); }; })(m.id);
+
+    var btnNo = document.createElement("button");
+    btnNo.className = "resolve-btn-no";
+    btnNo.textContent = "❌ NO vince";
+    btnNo.onclick = (function(id){ return function(e) { confirmResolve(id, false, e.target); }; })(m.id);
+
+    var btnCancel = document.createElement("button");
+    btnCancel.className = "resolve-btn-cancel";
+    btnCancel.textContent = "🚫 Cancella";
+    btnCancel.onclick = (function(id){ return function(e) { cancelMarket(id, e.target); }; })(m.id);
+
+    actions.appendChild(hint);
+    actions.appendChild(btnYes);
+    actions.appendChild(btnNo);
+    actions.appendChild(btnCancel);
+    div.appendChild(actions);
+  } else if (m.status === 0) {
+    // Mercato aperto — mostra countdown e pulsante force-resolve
+    var openRow = document.createElement("div");
+    openRow.style.cssText = "display:flex;align-items:center;justify-content:space-between";
+    var cdEl = document.createElement("div");
+    cdEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.68rem;color:var(--cyan2)";
+    cdEl.textContent = daysLeft > 0 ? "⏱ Scade tra " + daysLeft + " giorni" : "⏱ Scade oggi";
+    var forceBtn = document.createElement("button");
+    forceBtn.className = "resolve-btn-cancel";
+    forceBtn.textContent = "⚡ Forza risoluzione";
+    forceBtn.onclick = (function(id){ return function(e) { confirmResolve(id, null, e.target); }; })(m.id);
+    openRow.appendChild(cdEl);
+    openRow.appendChild(forceBtn);
+    div.appendChild(openRow);
+  } else if (m.status === 2) {
+    // Risolto — mostra chi ha risolto
+    var resolvedRow = document.createElement("div");
+    resolvedRow.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)";
+    resolvedRow.textContent = "Risolto da: " + (m.resolver === "0x0000000000000000000000000000000000000000" ? "auto" : m.resolver.slice(0,10) + "...");
+    div.appendChild(resolvedRow);
+  }
+
+  return div;
+}
+
+// ── RESOLVE ───────────────────────────────────────────────────────
+async function confirmResolve(marketId, yesWon, btn) {
+  if (!WALLET.address) {
+    showToast("❌", "Connetti il team wallet prima");
+    openModal("wallet-modal");
+    return;
+  }
+
+  // Se yesWon è null → mostra dialog per scegliere
+  if (yesWon === null) {
+    var choice = confirm("Mercato #" + marketId + "\n\nQual è il risultato?\nOK = YES vince\nAnnulla = NO vince");
+    yesWon = choice;
+  }
+
+  var orig = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Firma...";
+
+  try {
+    var ok = await W3.ensureNetwork();
+    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+
+    var signer = await W3.getSigner();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_ADMIN, signer);
+
+    var tx = await c.resolveMarket(marketId, yesWon);
+    btn.textContent = "Attesa...";
+    var receipt = await tx.wait();
+
+    showToast("✅",
+      "Mercato #" + marketId + " risolto: " + (yesWon ? "YES vince" : "NO vince"),
+      "https://sepolia.basescan.org/tx/" + receipt.hash
+    );
+
+    setTimeout(loadMarkets, 2000);
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+}
+
+async function cancelMarket(marketId, btn) {
+  if (!WALLET.address) { showToast("❌","Connetti wallet"); return; }
+  if (!confirm("Cancellare il mercato #" + marketId + "?\nGli utenti riceveranno un rimborso completo.")) return;
+
+  var orig = btn.textContent;
+  btn.disabled = true; btn.textContent = "...";
+
+  try {
+    var signer = await W3.getSigner();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_ADMIN, signer);
+    var tx = await c.cancelMarket(marketId);
+    await tx.wait();
+    showToast("✅", "Mercato #" + marketId + " cancellato — rimborsi attivi");
+    setTimeout(loadMarkets, 2000);
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+    btn.disabled = false; btn.textContent = orig;
+  }
+}
+
+// ── WALLET DISPLAY ────────────────────────────────────────────────
+function updateWalletDisplay() {
+  if (WALLET.address) {
+    document.getElementById("stat-wallet").textContent =
+      WALLET.address.slice(0,6) + "..." + WALLET.address.slice(-4);
+    var wEl = document.getElementById("nav-wallet");
+    if (wEl) { wEl.textContent = WALLET.address.slice(0,6)+"..."+WALLET.address.slice(-4); wEl.style.display="inline"; }
+    document.getElementById("nav-connect-btn").textContent = "✅ Wallet connesso";
+    document.getElementById("nav-connect-btn").style.background = "rgba(16,185,129,.15)";
+    document.getElementById("nav-connect-btn").style.borderColor = "rgba(16,185,129,.3)";
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(icon, msg, link) {
+  document.getElementById("toast-icon").textContent = icon;
+  document.getElementById("toast-msg").textContent  = msg;
+  var l = document.getElementById("toast-link");
+  if (link) { l.href=link; l.textContent="Vedi su BaseScan →"; l.style.display="block"; }
+  else l.style.display="none";
+  var t = document.getElementById("tx-toast");
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 8000);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+CP.ready.then(function(state) {
+  if (state.address) updateWalletDisplay();
+  var orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() { await orig(); updateWalletDisplay(); };
+});
+
+// Auto-aggiorna ogni 60 secondi se loggato
+setInterval(function() { if (isLoggedIn) loadMarkets(); }, 60000);
+</script>
+</body></html>
