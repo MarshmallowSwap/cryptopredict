@@ -678,30 +678,48 @@ async function loadMyBets() {
   const section = document.getElementById('my-bets-section');
   const list    = document.getElementById('my-bets-list');
   section.style.display = 'block';
-  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem;padding:4px 0"><span class="spin"></span> Caricamento scommesse...</div>';
+  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem;padding:4px 0"><span class="spin"></span> Caricamento...</div>';
 
   try {
-    const MARKET_ABI = [
+    const MARKET_ABI_BETS = [
       "function marketCount() view returns (uint256)",
+      "function getUserMarkets(address user) view returns (uint256[])",
       "function getPosition(uint256 marketId, address user) view returns (tuple(uint256 marketId, bool side, uint256 amount, bool claimed))",
       "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
     ];
     const provider = await W3.getProvider();
-    const c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
-    const count = Number(await c.marketCount());
+    const c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_BETS, provider);
+
+    // Prova prima getUserMarkets (più efficiente)
+    let marketIds = [];
+    try {
+      const ids = await c.getUserMarkets(WALLET.address);
+      // Deduplica — userMarkets può avere duplicati
+      marketIds = [...new Set(ids.map(id => Number(id)))];
+      console.log('getUserMarkets:', marketIds);
+    } catch(e) {
+      // Fallback: scan tutti i mercati
+      console.log('getUserMarkets failed, scanning all:', e.message);
+      const count = Number(await c.marketCount());
+      marketIds = Array.from({length: count}, (_, i) => i);
+    }
 
     const bets = [];
-    for (let i = 0; i < count; i++) {
+    for (const id of marketIds) {
       try {
-        const pos = await c.getPosition(i, WALLET.address);
-        // BigInt o number — gestiamo entrambi
-        const amt = typeof pos.amount === 'bigint' ? pos.amount : BigInt(pos.amount.toString());
-        if (amt > 0n) {
-          const mkt = await c.getMarket(i);
-          bets.push({ pos, mkt, id: i, amt });
+        const pos = await c.getPosition(id, WALLET.address);
+        // Gestisce sia bigint che number (ethers v6 variabile)
+        const rawAmt = pos.amount;
+        const amtBig = typeof rawAmt === 'bigint' ? rawAmt : BigInt(rawAmt.toString());
+        console.log(`Market ${id}: amount=${amtBig.toString()}, side=${pos.side}, claimed=${pos.claimed}`);
+        if (amtBig > 0n) {
+          const mkt = await c.getMarket(id);
+          bets.push({ pos, mkt, id, amtBig });
         }
-      } catch(e) { /* mercato non trovato, skip */ }
+      } catch(e) { console.warn(`Market ${id} error:`, e.message); }
     }
+
+    console.log('Total bets found:', bets.length);
 
     if (!bets.length) {
       section.style.display = 'none';
@@ -711,23 +729,18 @@ async function loadMyBets() {
     document.getElementById('my-bets-count').textContent = bets.length;
     list.innerHTML = '';
 
-    bets.forEach(({ pos, mkt, id, amt }) => {
-      const stake   = parseFloat(ethers.formatEther(amt));
-      const side    = pos.side === true || pos.side === 1 || pos.side === 1n;
-      const claimed = pos.claimed === true;
-
-      // status e outcome: ethers v6 può restituire number O bigint per uint8
+    bets.forEach(({ pos, mkt, id, amtBig }) => {
+      const stake   = parseFloat(ethers.formatEther(amtBig));
+      const side    = pos.side === true || pos.side === 1 || String(pos.side) === 'true';
+      const claimed = pos.claimed === true || String(pos.claimed) === 'true';
       const statusN  = Number(mkt.status);
       const outcomeN = Number(mkt.outcome);
       const statusLabels  = ['Aperta','Chiusa','Risolta','Cancellata'];
       const outcomeLabels = ['—','YES','NO'];
-      const status  = statusLabels[statusN]  || 'Aperta';
-      const outcome = outcomeLabels[outcomeN] || '—';
-
       const won  = statusN === 2 && ((outcomeN === 1 && side) || (outcomeN === 2 && !side));
       const lost = statusN === 2 && !won;
 
-      let yesEth, noEth;
+      let yesEth = 0, noEth = 0;
       try {
         yesEth = Array.isArray(mkt.yesPool)
           ? parseFloat(ethers.formatEther(mkt.yesPool[0]))
@@ -735,49 +748,46 @@ async function loadMyBets() {
         noEth = Array.isArray(mkt.noPool)
           ? parseFloat(ethers.formatEther(mkt.noPool[0]))
           : parseFloat(ethers.formatEther(mkt.noPool));
-      } catch(e) { yesEth = 0; noEth = 0; }
+      } catch(e) {}
 
       const total   = yesEth + noEth;
       const winPool = side ? yesEth : noEth;
-      const payout  = winPool > 0 ? (total * stake / winPool * 0.98) : 0;
+      const payout  = winPool > 0 ? (total * stake / winPool * 0.98) : stake * 2 * 0.98;
       const daysLeft = Math.max(0, Math.ceil((Number(mkt.expiresAt) - Date.now()/1000) / 86400));
-
-      const borderColor = won && !claimed ? 'rgba(16,185,129,.4)'
-                        : lost            ? 'rgba(239,68,68,.3)'
-                        : 'var(--border)';
+      const borderColor = won && !claimed ? 'rgba(16,185,129,.4)' : lost ? 'rgba(239,68,68,.3)' : 'rgba(124,58,237,.25)';
 
       const el = document.createElement('div');
-      el.style.cssText = `flex-shrink:0;width:270px;background:rgba(255,255,255,.04);border:1px solid ${borderColor};border-radius:10px;padding:12px 14px`;
+      el.style.cssText = 'flex-shrink:0;width:280px;background:rgba(255,255,255,.04);border:1px solid ' + borderColor + ';border-radius:10px;padding:12px 14px';
       el.innerHTML =
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">' +
           '<span class="' + (side ? 'tag tag-green' : 'tag tag-red') + '" style="font-size:.62rem">' + (side ? '▲ YES' : '▼ NO') + '</span>' +
-          '<span style="font-size:.65rem;color:' + (won ? '#10b981' : lost ? '#ef4444' : 'var(--text3)') + '">' +
-            (won && !claimed ? '🎉 Hai vinto!' : won && claimed ? '✅ Ritirato' : lost ? '❌ Persa' : ('⏱ ' + (statusN === 0 ? daysLeft + 'g' : status))) +
+          '<span style="font-size:.65rem;color:' + (won ? '#10b981' : lost ? '#ef4444' : 'var(--purple3)') + '">' +
+            (won && !claimed ? '🎉 Hai vinto!' : won && claimed ? '✅ Ritirato' : lost ? '❌ Persa' : ('⏱ ' + (statusN === 0 ? daysLeft + 'g rimasti' : statusLabels[statusN]))) +
           '</span>' +
         '</div>' +
         '<div style="font-size:.78rem;font-weight:700;line-height:1.3;margin-bottom:8px;color:var(--text)">' +
-          (mkt.question.length > 52 ? mkt.question.slice(0,52)+'…' : mkt.question) +
+          (mkt.question.length > 52 ? mkt.question.slice(0,52) + '…' : mkt.question) +
         '</div>' +
         '<div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:8px">' +
-          '<span>' + stake.toFixed(4) + ' ETH</span>' +
-          '<span style="color:var(--green2)">→ ' + payout.toFixed(4) + ' ETH</span>' +
+          '<span>Stake: ' + stake.toFixed(4) + ' ETH</span>' +
+          '<span style="color:var(--green2)">Est: ' + payout.toFixed(4) + ' ETH</span>' +
         '</div>' +
         (won && !claimed
           ? '<button onclick="claimWin(' + id + ', this)" class="btn btn-up" style="width:100%;justify-content:center;font-size:.72rem;padding:5px">🎉 Ritira Vincita</button>'
-          : claimed
-          ? '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--green2);text-align:center">✅ Payout ritirato</div>'
-          : lost
-          ? '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--red2);text-align:center">❌ Posizione persa</div>'
-          : '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center">⏱ In attesa di risoluzione</div>');
+          : claimed ? '<div style="text-align:center;font-size:.65rem;color:var(--green2)">✅ Payout ritirato</div>'
+          : lost    ? '<div style="text-align:center;font-size:.65rem;color:var(--red2)">❌ Posizione persa</div>'
+          : '<div style="text-align:center;font-size:.65rem;color:var(--text3)">⏱ In attesa di risoluzione</div>');
 
       list.appendChild(el);
     });
 
   } catch(e) {
     console.error('loadMyBets error:', e);
-    list.innerHTML = '<div style="color:var(--text3);font-size:.75rem;padding:4px 0">Errore caricamento: ' + e.message + '</div>';
+    section.style.display = 'block';
+    list.innerHTML = '<div style="color:var(--red2);font-size:.75rem;padding:4px 0">Errore: ' + e.message + '</div>';
   }
 }
+
 
 async function claimWin(marketId, btn) {
   btn.disabled = true; btn.textContent = '...';
