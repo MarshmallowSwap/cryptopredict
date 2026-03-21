@@ -363,44 +363,18 @@ async function claimStakingReward() {
   }
 }
 
-// ── INIT ROBUSTO ──────────────────────────────────────────────────
-// Override refreshWalletData subito (prima che _shared.js lo chiami)
-window._portfolioLoaded = false;
-
-function _initPortfolioPage() {
+// ── INIT — ascolta cp:wallet-ready da _shared.js ─────────────────
+window.addEventListener('cp:wallet-ready', async (e) => {
+  // Override refreshWalletData per aggiornamenti futuri
   const orig = CP.refreshWalletData.bind(CP);
-  CP.refreshWalletData = async function() {
-    await orig();
-    if (!window._portfolioLoaded) {
-      window._portfolioLoaded = true;
-      await loadPortfolio();
-    } else {
-      await loadPortfolio();
-    }
-  };
-}
+  CP.refreshWalletData = async function() { await orig(); await loadPortfolio(); };
 
-// Polling: aspetta che CP e WALLET siano pronti
-function _waitAndLoad(fn, maxMs = 5000, interval = 100) {
-  let elapsed = 0;
-  const timer = setInterval(async () => {
-    elapsed += interval;
-    if (window.CP && window.WALLET) {
-      clearInterval(timer);
-      _initPortfolioPage();
-      if (WALLET.address) await fn();
-      else {
-        document.getElementById('no-wallet-view').style.display = 'block';
-        document.getElementById('portfolio-view').style.display = 'none';
-      }
-    } else if (elapsed >= maxMs) {
-      clearInterval(timer);
-      document.getElementById('no-wallet-view').style.display = 'block';
-      document.getElementById('portfolio-view').style.display = 'none';
-    }
-  }, interval);
-}
-
-document.addEventListener('DOMContentLoaded', () => _waitAndLoad(loadPortfolio));
+  if (e.detail.address) {
+    await loadPortfolio();
+  } else {
+    document.getElementById('no-wallet-view').style.display = 'block';
+    document.getElementById('portfolio-view').style.display = 'none';
+  }
+});
 </script>
 </body></html>
