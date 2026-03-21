@@ -83,7 +83,11 @@
           <div id="img-placeholder" style="text-align:center">
             <div style="font-size:2rem;margin-bottom:8px">🖼️</div>
             <div style="font-size:.82rem;font-weight:700;margin-bottom:4px">Carica immagine</div>
-            <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">JPG, PNG, GIF, WebP · Max 5MB</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);line-height:1.8">
+              JPG · PNG · WebP · GIF<br>
+              <strong style="color:var(--text2)">1200 × 630 px</strong> consigliato (16:9)<br>
+              Max <strong style="color:var(--gold2)">1 MB</strong>
+            </div>
           </div>
           <div class="img-overlay" id="img-overlay" style="display:none">
             <span id="img-name" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
@@ -100,8 +104,9 @@
         </div>
         <input type="url" class="cp-input" id="img-url" placeholder="https://... URL immagine"
                oninput="handleImageUrl(this.value)">
-        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">
-          Incolla un URL diretto a un'immagine — es. link Telegram, Twitter, IPFS
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px;line-height:1.7">
+          URL diretto a un'immagine (Telegram, Twitter, IPFS, CDN)<br>
+          Dimensioni consigliate: <strong style="color:var(--text2)">1200 × 630 px</strong> · Max 1 MB
         </div>
       </div>
 
@@ -291,7 +296,7 @@ var imageUrl     = "";   // URL finale da salvare
 function handleImageFile(input) {
   var file = input.files[0];
   if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { showToast("❌","Immagine troppo grande (max 5MB)"); return; }
+  if (file.size > 1 * 1024 * 1024) { showToast("❌","Immagine troppo grande (max 1MB) · Comprimi su tinypng.com"); return; }
 
   var reader = new FileReader();
   reader.onload = function(e) {
