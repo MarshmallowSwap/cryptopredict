@@ -11,11 +11,11 @@ const CHAIN = {
 
 const CONTRACTS = {
   token:          "0x699304A362E41539d918E44188E1033999202cA0",
-  market:         "0x5b9f2C8fD7E6cd25ed2542F7124626CDdBA74975",  // v2
+  market:         "0x9ED7cCAB3730CE5fbf6089592Ba5764cCf0c4C02",  // v2
   presale:        "0xC9173e1C16Bc82D67f41Ffd025a89CC4f6C4Ac17",
   stakingPresale: "0x5dB131b4e81297c7e200017dA54eC28820454491",
-  mockUsdc:       "0x748352acAc216C69322B7abb300097cD6f6b132e",
-  mockUsdt:       "0xaAA12Bea671809BEa4627968d17bbA42131487bd",
+  mockUsdc:       "0x53142fD0C5Ad28b07CBC85215dB9219b58314D36",
+  mockUsdt:       "0x3cfd2e869d4b2ddF4E4D62e5749b510f718fecee",
 };
 
 // ABI minimali (solo le funzioni usate dal frontend)
