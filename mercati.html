@@ -216,8 +216,6 @@ async function loadMarkets() {
     const raw = await c.getActiveMarkets(20);
 
     allMarkets = raw.map(m => {
-      // v1: yesPool/noPool sono uint256 singoli
-      // v2: sono array [4] — gestiamo entrambi
       let yesEth, noEth;
       if (Array.isArray(m.yesPool)) {
         yesEth = parseFloat(ethers.formatEther(m.yesPool[0]));
@@ -228,7 +226,7 @@ async function loadMarkets() {
       }
       const total    = yesEth + noEth;
       const yesPct   = total > 0 ? Math.round((yesEth / total) * 100) : 50;
-      const daysLeft = Math.max(0, Math.ceil((Number(m.expiresAt) - Date.now()/1000) / 86400));
+      const expiresAt = Number(m.expiresAt);
       return {
         id:           Number(m.id),
         question:     m.question,
@@ -237,13 +235,17 @@ async function loadMarkets() {
         yesPct,
         noPct:        100 - yesPct,
         poolEth:      total,
-        daysLeft,
+        expiresAt,
         participants: Number(m.participantCount),
         yieldDay:     (total * 0.048 / 365).toFixed(4),
       };
     });
 
     renderMarkets(allMarkets);
+    setTimeout(startCountdowns, 50);
+    // Aggiorna partecipanti ogni 30 secondi
+    if (window._partsTimer) clearInterval(window._partsTimer);
+    window._partsTimer = setInterval(refreshParticipants, 30000);
 
     const totalEth = allMarkets.reduce((s,m) => s + m.poolEth, 0);
     document.getElementById('banner-capital').textContent = totalEth.toFixed(3) + ' ETH';
@@ -270,6 +272,7 @@ async function loadMarkets() {
           yieldDay:     m.yield_info?.daily_yield || '0',
         }));
         renderMarkets(allMarkets);
+        setTimeout(startCountdowns, 50);
         document.getElementById('banner-mkts').textContent = allMarkets.length;
         document.getElementById('mkt-sub').textContent =
           `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
@@ -308,6 +311,73 @@ function renderMarkets(markets) {
     el.innerHTML = buildCardHTML(m);
     grid.appendChild(el);
   });
+}
+
+// Avvia countdown per tutte le card visibili
+function startCountdowns() {
+  // Cancella timer precedenti
+  if (window._cdTimers) window._cdTimers.forEach(clearInterval);
+  window._cdTimers = [];
+
+  allMarkets.forEach(m => {
+    const el = document.getElementById('cd-' + m.id);
+    if (!el) return;
+
+    function tick() {
+      const diff = m.expiresAt * 1000 - Date.now();
+      if (diff <= 0) {
+        el.textContent = 'Scaduto';
+        el.style.color = 'var(--red2)';
+        return;
+      }
+      const d = Math.floor(diff / 864e5);
+      const h = Math.floor(diff % 864e5 / 36e5);
+      const mm = Math.floor(diff % 36e5 / 6e4);
+      const s = Math.floor(diff % 6e4 / 1e3);
+      const pad = v => String(v).padStart(2, '0');
+      if (d > 0) {
+        el.textContent = d + 'g ' + pad(h) + 'h ' + pad(mm) + 'm';
+        el.style.color = d < 2 ? 'var(--gold2)' : 'var(--cyan2)';
+      } else {
+        el.textContent = pad(h) + ':' + pad(mm) + ':' + pad(s);
+        el.style.color = h < 1 ? 'var(--red2)' : 'var(--gold2)';
+      }
+    }
+    tick();
+    window._cdTimers.push(setInterval(tick, 1000));
+  });
+}
+
+// Aggiorna partecipanti live dal contratto
+async function refreshParticipants() {
+  if (!allMarkets.length) return;
+  try {
+    const MINI_ABI = [
+      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
+    ];
+    const provider = await W3.getProvider();
+    const c = new ethers.Contract(W3.CONTRACTS.market, MINI_ABI, provider);
+    for (const m of allMarkets) {
+      try {
+        const fresh = await c.getMarket(m.id);
+        const parts = Number(fresh.participantCount);
+        m.participants = parts;
+        const el = document.getElementById('parts-' + m.id);
+        if (el) el.textContent = parts;
+        // Aggiorna anche pool
+        const yesEth = Array.isArray(fresh.yesPool)
+          ? parseFloat(ethers.formatEther(fresh.yesPool[0]))
+          : parseFloat(ethers.formatEther(fresh.yesPool));
+        const noEth = Array.isArray(fresh.noPool)
+          ? parseFloat(ethers.formatEther(fresh.noPool[0]))
+          : parseFloat(ethers.formatEther(fresh.noPool));
+        m.poolEth = yesEth + noEth;
+        const yesPct = m.poolEth > 0 ? Math.round(yesEth / m.poolEth * 100) : 50;
+        m.yesPct = yesPct;
+        m.noPct  = 100 - yesPct;
+      } catch(e) {}
+    }
+  } catch(e) {}
 }
 
 function buildCardHTML(m) {
@@ -350,9 +420,14 @@ function buildCardHTML(m) {
           </button>
         </div>
       </div>
-      <!-- Meta -->
-      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">
-        ⏱ ${m.daysLeft > 0 ? `Scade tra ${m.daysLeft}g` : 'Scade oggi'} · ${m.participants} partecipanti
+      <!-- Meta: countdown + partecipanti -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+        <div id="cd-${m.id}" style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--cyan2);font-weight:700">
+          ⏱ --
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">
+          👤 <span id="parts-${m.id}">${m.participants}</span> partecipanti
+        </div>
       </div>
       <!-- Yield -->
       <div class="yield-bar">
@@ -658,6 +733,7 @@ function filterCat(cat, btn) {
     ? allMarkets
     : allMarkets.filter(m => m.category.toLowerCase() === cat);
   renderMarkets(filtered);
+  setTimeout(startCountdowns, 50);
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────
