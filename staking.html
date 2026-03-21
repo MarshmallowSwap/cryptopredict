@@ -247,6 +247,8 @@
 <script src="web3.js"></script>
 <script src="_shared.js"></script>
 <script>
+// Funzioni definite qui, init tramite CP.ready
+
 let userBalance = 0;
 let userStaked  = 0;
 let totalStaked = 0;
@@ -406,14 +408,11 @@ function toast(icon, msg, link) {
   setTimeout(() => t.classList.remove('show'), 6000);
 }
 
-// ── INIT — aspetta CP.ready ───────────────────────────────────────
-(async function() {
-  const state = await CP.ready;
-
+// ── INIT: aspetta CP.ready ──────────────────────────────────────
+CP.ready.then(async function(state) {
   const orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() { await orig(); await loadStaking(); };
-
   if (state.address) await loadStaking();
-})();
+});
 </script>
 </body></html>
