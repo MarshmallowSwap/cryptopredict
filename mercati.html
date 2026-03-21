@@ -207,31 +207,26 @@ function fmtCountdown(expiresAt) {
 /* ---------- LOAD MARKETS ---------- */
 async function loadMarkets() {
   try {
-    var provider = await W3.getProvider();
-    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
-    var raw = await c.getActiveMarkets(20);
+    // Usa W3.loadMarketsOnChain() — già testato e funzionante
+    var raw = await W3.loadMarketsOnChain();
+    if (!raw || !raw.length) throw new Error("Nessun mercato trovato on-chain");
 
-    markets = [];
-    for (var i = 0; i < raw.length; i++) {
-      var m = raw[i];
-      var yesEth = fmtEth(m.yesPool);
-      var noEth  = fmtEth(m.noPool);
-      var total  = yesEth + noEth;
-      var yesPct = total > 0 ? Math.round(yesEth / total * 100) : 50;
-      var exp    = toNum(m.expiresAt);
-      markets.push({
-        id:       toNum(m.id),
-        question: m.question,
-        category: m.category,
-        asset:    m.assetSymbol,
-        yesPct:   yesPct,
-        noPct:    100 - yesPct,
-        poolEth:  total,
-        expiresAt: exp,
-        participants: toNum(m.participantCount),
-        yieldDay: (total * 0.048 / 365).toFixed(4)
-      });
-    }
+    markets = raw.map(function(m) {
+      // Converte dal formato di W3.loadMarketsOnChain al formato interno
+      var exp = m.expires_at ? Math.floor(new Date(m.expires_at).getTime() / 1000) : 0;
+      return {
+        id:           m.id,
+        question:     m.title,
+        category:     m.category,
+        asset:        m.asset_symbol,
+        yesPct:       m.yes_pct,
+        noPct:        m.no_pct,
+        poolEth:      m.pool_size,
+        expiresAt:    exp,
+        participants: m.participant_count || 0,
+        yieldDay:     m.yield_info ? m.yield_info.daily_yield : "0"
+      };
+    });
 
     renderGrid(markets);
 
@@ -242,15 +237,16 @@ async function loadMarkets() {
       markets.length+" mercati attivi · Scommetti in ETH, USDC, USDT o CPRED";
 
     startCountdowns();
+    refreshParticipants();
 
   } catch(err) {
     console.error("loadMarkets:", err);
     document.getElementById("grid").innerHTML =
       '<div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">' +
-      '<div style="font-size:24px;margin-bottom:10px">⚠️</div>' +
+      '<div style="font-size:24px;margin-bottom:10px">!</div>' +
       '<div style="margin-bottom:14px">'+err.message+'</div>' +
       '<button onclick="loadMarkets()" class="btn btn-primary" style="font-size:.8rem">Riprova</button>' +
-      '<div style="font-size:.72rem;margin-top:10px">Connetti MetaMask su Base Sepolia (chain 84532)</div>' +
+      '<div style="font-size:.72rem;margin-top:10px">Connetti MetaMask su Base Sepolia</div>' +
       '</div>';
   }
 }
