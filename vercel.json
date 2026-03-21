@@ -1,24 +1,85 @@
 {
   "version": 2,
   "builds": [
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "_shared.css", "use": "@vercel/static" },
-    { "src": "_shared.js", "use": "@vercel/static" }
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "_shared.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "_shared.js",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "http://95.217.10.201/api/v1/:path*"
+    }
   ],
   "routes": [
-    { "src": "/presale", "dest": "/presale.html" },
-    { "src": "/mercati", "dest": "/mercati.html" },
-    { "src": "/trading", "dest": "/trading.html" },
-    { "src": "/vendi", "dest": "/vendi.html" },
-    { "src": "/portfolio", "dest": "/portfolio.html" },
-    { "src": "/staking", "dest": "/staking.html" },
-    { "src": "/crea", "dest": "/crea.html" },
-    { "src": "/docs", "dest": "/docs.html" },
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    {
+      "src": "/presale",
+      "dest": "/presale.html"
+    },
+    {
+      "src": "/mercati",
+      "dest": "/mercati.html"
+    },
+    {
+      "src": "/trading",
+      "dest": "/trading.html"
+    },
+    {
+      "src": "/vendi",
+      "dest": "/vendi.html"
+    },
+    {
+      "src": "/portfolio",
+      "dest": "/portfolio.html"
+    },
+    {
+      "src": "/staking",
+      "dest": "/staking.html"
+    },
+    {
+      "src": "/crea",
+      "dest": "/crea.html"
+    },
+    {
+      "src": "/docs",
+      "dest": "/docs.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ],
   "headers": [
-    { "source": "/(.*).html", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+    {
+      "source": "/(.*).html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
   ]
 }
