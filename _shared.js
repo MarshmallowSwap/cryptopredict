@@ -284,6 +284,35 @@ const CP = {
     } catch(e) {}
   },
 
+
+  // ── PRESALE BANNER — dati live dal contratto ─────────────────
+  async updatePresaleBanner() {
+    try {
+      if (!window.W3) return;
+      const info = await W3.getPresaleInfo();
+      if (!info) return;
+      const liveEl  = document.querySelector('.pb-live');
+      const priceEl = document.querySelector('.pb-price');
+      if (liveEl)  liveEl.innerHTML  = `<span class="tick-dot"></span>PRESALE LIVE — STAGE ${info.currentStage} · ${info.pctSold}% VENDUTO`;
+      if (priceEl) priceEl.textContent = `· $${info.priceUsd.toFixed(3)} · ${info.totalRaisedEth.toFixed(3)} ETH raccolti`;
+      // Countdown dal contratto
+      const endsAt = info.presaleEndsAt * 1000;
+      const el = document.getElementById('pb-countdown');
+      if (el && endsAt > Date.now()) {
+        const tick = () => {
+          const diff = endsAt - Date.now();
+          if (diff <= 0) { el.textContent = 'PRESALE TERMINATA'; return; }
+          const dd = Math.floor(diff/864e5);
+          const hh = Math.floor(diff%864e5/36e5);
+          const mm = Math.floor(diff%36e5/6e4);
+          const ss = Math.floor(diff%6e4/1e3);
+          el.textContent = `CHIUDE TRA ${dd}G ${hh}H ${mm}M ${String(ss).padStart(2,'0')}S`;
+        };
+        tick(); setInterval(tick, 1000);
+      }
+    } catch(e) {}
+  },
+
   // ── Wallet Modal ─────────────────────────────────────────────────
   injectWalletModal() {
     if (document.getElementById('wallet-modal')) return;
