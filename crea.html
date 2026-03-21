@@ -8,13 +8,13 @@
 <style>
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
-.img-drop{width:100%;height:160px;border:2px dashed var(--border2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);position:relative;overflow:hidden}
+.img-drop{width:100%;aspect-ratio:1200/630;height:auto;min-height:120px;border:2px dashed var(--border2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);position:relative;overflow:hidden}
 .img-drop:hover{border-color:var(--purple2);background:rgba(124,58,237,.06)}
 .img-drop.has-img{border-style:solid;border-color:rgba(124,58,237,.4)}
 .img-preview{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
 .img-overlay{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);padding:6px 10px;font-family:'DM Mono',monospace;font-size:.65rem;color:#fff;display:flex;align-items:center;justify-content:space-between}
 .preview-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.preview-card-img{width:100%;height:150px;object-fit:cover;background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(0,212,255,.06));display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.preview-card-img{width:100%;aspect-ratio:1200/630;height:auto;object-fit:cover;background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(0,212,255,.06));display:flex;align-items:center;justify-content:center;font-size:2.5rem}
 .tx-toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;opacity:0;transition:opacity .3s;pointer-events:none}
 .tx-toast.show{opacity:1;pointer-events:all}
 </style>
@@ -85,7 +85,7 @@
             <div style="font-size:.82rem;font-weight:700;margin-bottom:4px">Carica immagine</div>
             <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);line-height:1.8">
               JPG · PNG · WebP · GIF<br>
-              <strong style="color:var(--text2)">1200 × 630 px</strong> consigliato (16:9)<br>
+              <strong style="color:var(--text2)">1200 × 630 px</strong> — formato standard OpenGraph<br>
               Max <strong style="color:var(--gold2)">1 MB</strong> · Caricata su cloud storage
             </div>
           </div>
