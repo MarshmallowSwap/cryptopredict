@@ -107,6 +107,21 @@
   <a href="presale.html" class="pb-btn">Compra CPRED →</a>
 </div>
 
+<!-- LE MIE SCOMMESSE — barra fissa in cima -->
+<div id="my-bets-section" style="display:none;background:rgba(124,58,237,.06);border-bottom:1px solid rgba(124,58,237,.2)">
+  <div style="max-width:1200px;margin:0 auto;padding:14px 24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--purple3);animation:pulse 2s infinite"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--purple3);font-weight:700">LE MIE SCOMMESSE</span>
+        <span id="my-bets-count" style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:10px;padding:1px 8px;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--purple3)">—</span>
+      </div>
+      <button onclick="loadMyBets()" style="background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">🔄 Aggiorna</button>
+    </div>
+    <div id="my-bets-list" style="display:flex;flex-direction:row;gap:8px;overflow-x:auto;padding-bottom:4px"></div>
+  </div>
+</div>
+
 <div class="page-wrap">
   <div class="page-header">
     <span class="page-tag">// Tutti i mercati</span>
@@ -141,15 +156,6 @@
     <div style="margin-left:auto">
       <a href="crea.html" class="btn btn-primary" style="font-size:.75rem;padding:5px 14px">+ Crea mercato</a>
     </div>
-  </div>
-
-  <!-- Le mie scommesse -->
-  <div id="my-bets-section" style="display:none;margin-bottom:24px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3)">// LE MIE SCOMMESSE ON-CHAIN</div>
-      <button onclick="loadMyBets()" style="background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--purple3)">🔄 Aggiorna</button>
-    </div>
-    <div id="my-bets-list" style="display:flex;flex-direction:column;gap:8px"></div>
   </div>
 
   <!-- Markets grid -->
@@ -696,10 +702,11 @@ async function loadMyBets() {
     }
 
     if (!bets.length) {
-      list.innerHTML = '<div style="color:var(--text3);font-size:.82rem;padding:8px 0">Nessuna scommessa attiva su questo wallet.</div>';
+      document.getElementById('my-bets-section').style.display = 'none';
       return;
     }
 
+    document.getElementById('my-bets-count').textContent = bets.length;
     list.innerHTML = '';
     bets.forEach(({ pos, mkt, id }) => {
       const stake    = parseFloat(ethers.formatEther(pos.amount));
