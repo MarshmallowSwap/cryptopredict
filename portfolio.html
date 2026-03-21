@@ -6,49 +6,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css">
 <style>
-.yield-section{background:linear-gradient(135deg,rgba(0,232,122,.06),rgba(0,212,255,.04));
-  border:1px solid rgba(0,232,122,.2);border-radius:16px;padding:20px;margin-bottom:20px}
-.yield-section-title{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;
-  color:var(--green2);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.yield-dot-sm{width:6px;height:6px;border-radius:50%;background:var(--green2);
-  animation:yieldPulse 2s infinite;flex-shrink:0}
-@keyframes yieldPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,232,122,.5)}
-  50%{opacity:.7;box-shadow:0 0 0 5px transparent}}
-.yield-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.yield-block{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-  border-radius:10px;padding:12px 14px}
-.yield-big{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:900;
-  color:var(--green2);margin-bottom:4px}
-.yield-sub{font-size:.75rem;color:var(--text3);line-height:1.5}
-.yield-pool-row{display:flex;align-items:center;justify-content:space-between;
-  padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.yield-pool-row:last-child{border-bottom:none;padding-bottom:0}
-@media(max-width:600px){.yield-breakdown{grid-template-columns:1fr 1fr}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--purple2);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+.pos-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.pos-card:last-child{margin-bottom:0}
+.pos-side-yes{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green2);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
+.pos-side-no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red2);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
+.no-wallet{text-align:center;padding:40px 20px}
+.no-wallet-icon{font-size:40px;margin-bottom:16px}
 </style>
-</head><body data-page="portfolio"><!-- TICKER -->
+</head>
+<body data-page="portfolio">
+
+<!-- TICKER -->
 <div class="ticker-bar">
-  <div class="ticker-track" id="ticker">
+  <div class="ticker-track">
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
     <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <!-- duplicate for seamless loop -->
+    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
   </div>
 </div>
 
@@ -59,179 +39,349 @@
     <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
   </a>
   <div class="nav-links">
-    <a href="index.html" class="nav-link" data-page="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-    <a href="presale.html" class="nav-link" data-page="presale">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      <span>Presale</span>
-      <span class="badge"></span>
-    </a>
-    <a href="mercati.html" class="nav-link" data-page="mercati">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span>Mercati</span>
-    </a>
-    <a href="trading.html" class="nav-link" data-page="trading">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
-      <span>Trading</span>
-    </a>
-    <a href="vendi.html" class="nav-link" data-page="vendi">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      <span>Vendi Quote</span>
-    </a>
-    <a href="portfolio.html" class="nav-link" data-page="portfolio">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
-      <span>Portfolio</span>
-    </a>
-    <a href="staking.html" class="nav-link" data-page="staking">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>Staking</span>
-    </a>
-    <a href="crea.html" class="nav-link" data-page="crea">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span>Crea</span>
-    </a>
-    <a href="docs.html" class="nav-link" data-page="docs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Docs</span>
-    </a>
+    <a href="index.html" class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="presale.html" class="nav-link" data-page="presale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Presale</span><span class="badge"></span></a>
+    <a href="mercati.html" class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="trading.html" class="nav-link" data-page="trading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg><span>Trading</span></a>
+    <a href="vendi.html" class="nav-link" data-page="vendi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><span>Vendi Quote</span></a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
+    <a href="staking.html" class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
+    <a href="crea.html" class="nav-link" data-page="crea"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Crea</span></a>
+    <a href="docs.html" class="nav-link" data-page="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Docs</span></a>
   </div>
   <div class="nav-right">
-    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
-    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
+    <span class="nav-balance" id="nav-balance" style="display:none"></span>
+    <span class="nav-wallet" id="nav-wallet" style="display:none"></span>
     <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
     <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </nav>
 
-<!-- PRESALE BANNER -->
 <div class="presale-banner">
   <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
-  <span class="pb-price">· $0.080</span>
-  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
+  <span class="pb-price">· $0.050</span>
+  <span class="pb-timer" id="pb-countdown">—</span>
   <a href="presale.html" class="pb-btn">Compra CPRED →</a>
 </div>
+
 <div class="page-wrap">
-<div class="page-header">
-  <span class="page-tag">// Il tuo conto</span>
-  <div class="page-title">Portfolio</div>
-  <div class="page-sub">Panoramica completa dei tuoi asset, guadagni e statistiche</div>
-</div>
-<div class="g-stats">
-  <div class="stat-card cp-card-green"><div class="stat-label">Saldo USDC</div><div class="stat-val" style="color:var(--green2)">$4,280</div><span class="stat-change up">▲ +$420 questo mese</span></div>
-  <div class="stat-card cp-card-gold"><div class="stat-label">CPRED Posseduti</div><div class="stat-val" style="color:var(--gold2)">12,500</div><span class="stat-change up">▲ Valore: $1,000</span></div>
-  <div class="stat-card cp-card-accent"><div class="stat-label">Quote Aperte</div><div class="stat-val" style="color:var(--purple3)">$640</div><span class="stat-change">3 posizioni</span></div>
-  <div class="stat-card cp-card-cyan"><div class="stat-label">P&L Realizzato</div><div class="stat-val" style="color:var(--cyan2)">+$1,840</div><span class="stat-change up">▲ All time</span></div>
-</div>
-<div class="g2" style="margin-bottom:20px">
-  <div class="cp-card cp-card-accent">
-    <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// ASSET</div>
-    <table class="cp-table">
-      <thead><tr><th>Asset</th><th>Quantità</th><th>Valore</th><th>P&L</th></tr></thead>
-      <tbody>
-        <tr><td><div style="font-weight:700">USDC</div></td><td style="font-family:'DM Mono',monospace">4,280</td><td style="font-family:'DM Mono',monospace">$4,280</td><td style="color:var(--text3)">—</td></tr>
-        <tr><td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">Presale $0.080</div></td><td style="font-family:'DM Mono',monospace">12,500</td><td style="font-family:'DM Mono',monospace">$1,000</td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$0 <span style="font-size:.65rem">(al listing +150%)</span></td></tr>
-        <tr><td><div style="font-weight:700">Quote Aperte</div></td><td style="font-family:'DM Mono',monospace">3</td><td style="font-family:'DM Mono',monospace">$640</td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$275 est.</td></tr>
-        <tr><td><div style="font-weight:700">Staking</div></td><td style="font-family:'DM Mono',monospace">5,000 CPRED</td><td style="font-family:'DM Mono',monospace">$400</td><td style="color:var(--green2);font-family:'DM Mono',monospace">+28% APY</td></tr>
-      </tbody>
-    </table>
+  <div class="page-header">
+    <span class="page-tag">// Il tuo conto — On-Chain</span>
+    <div class="page-title">Portfolio</div>
+    <div class="page-sub">Dati live da Base Sepolia · <a href="https://sepolia.basescan.org" target="_blank" style="color:var(--purple3);font-size:.75rem">BaseScan →</a></div>
   </div>
-  <div style="display:flex;flex-direction:column;gap:16px">
-    <div class="cp-card cp-card-cyan">
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// STATISTICHE</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Predizioni totali</span><span style="font-family:'DM Mono',monospace">31</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Vinte</span><span style="color:var(--green2);font-family:'DM Mono',monospace">19 (61%)</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Perse</span><span style="color:var(--red2);font-family:'DM Mono',monospace">12 (39%)</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Stake medio</span><span style="font-family:'DM Mono',monospace">$126</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Vincita media</span><span style="color:var(--green2);font-family:'DM Mono',monospace">$178</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.83rem"><span style="color:var(--text3)">Ranking</span><span style="color:var(--purple3);font-family:'DM Mono',monospace">#24 globale</span></div>
+
+  <!-- No wallet state -->
+  <div id="no-wallet-view" style="display:none">
+    <div class="cp-card" style="text-align:center;padding:48px 24px">
+      <div style="font-size:40px;margin-bottom:16px">👤</div>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:8px">Connetti il wallet</div>
+      <div style="font-size:.85rem;color:var(--text3);margin-bottom:24px">Connetti MetaMask su Base Sepolia per vedere il tuo portfolio on-chain</div>
+      <button onclick="connectWallet()" class="btn btn-primary" style="font-size:.9rem;padding:12px 28px">Connetti Wallet →</button>
+    </div>
+  </div>
+
+  <!-- Main portfolio view -->
+  <div id="portfolio-view" style="display:none">
+
+    <!-- Stats cards -->
+    <div class="g-stats">
+      <div class="stat-card cp-card-green">
+        <div class="stat-label">Saldo ETH</div>
+        <div class="stat-val" id="stat-eth" style="color:var(--green2)"><span class="spin"></span></div>
+        <span class="stat-change" id="stat-eth-sub">Base Sepolia</span>
+      </div>
+      <div class="stat-card cp-card-gold">
+        <div class="stat-label">CPRED Totali</div>
+        <div class="stat-val" id="stat-cpred" style="color:var(--gold2)"><span class="spin"></span></div>
+        <span class="stat-change up" id="stat-cpred-val">—</span>
+      </div>
+      <div class="stat-card cp-card-accent">
+        <div class="stat-label">In Staking</div>
+        <div class="stat-val" id="stat-staked" style="color:var(--purple3)"><span class="spin"></span></div>
+        <span class="stat-change" id="stat-staked-sub">reward accumulati</span>
+      </div>
+      <div class="stat-card cp-card-cyan">
+        <div class="stat-label">Posizioni Aperte</div>
+        <div class="stat-val" id="stat-positions" style="color:var(--cyan2)"><span class="spin"></span></div>
+        <span class="stat-change" id="stat-positions-sub">sui mercati</span>
       </div>
     </div>
-    <div class="cp-card cp-card-gold">
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// DEPOSITA / PRELEVA</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" style="flex:1;justify-content:center;font-size:.82rem">⬇ Deposita</button>
-        <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:.82rem">⬆ Preleva</button>
+
+    <div class="g2" style="margin-bottom:20px">
+
+      <!-- Asset table on-chain -->
+      <div class="cp-card cp-card-accent">
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// ASSET ON-CHAIN</div>
+        <table class="cp-table">
+          <thead><tr><th>Asset</th><th>Quantità</th><th>Valore</th><th>Note</th></tr></thead>
+          <tbody id="assets-tbody">
+            <tr><td colspan="4" style="text-align:center;padding:20px"><span class="spin"></span></td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <a href="https://faucet.quicknode.com/base/sepolia" target="_blank"
+             class="btn btn-ghost" style="font-size:.75rem">🚰 Faucet ETH testnet</a>
+          <a href="presale.html" class="btn btn-gold" style="font-size:.75rem">💎 Compra CPRED</a>
+        </div>
       </div>
+
+      <!-- Right column -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- Staking reward claim -->
+        <div class="cp-card cp-card-cyan">
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// STAKING REWARDS</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--green2);margin-bottom:4px" id="reward-amount">— ETH</div>
+          <div style="font-size:.78rem;color:var(--text3);margin-bottom:14px">Reward accumulati dal yield dei pool</div>
+          <button id="claim-btn" onclick="claimStakingReward()" class="btn btn-primary" style="width:100%;justify-content:center;font-size:.85rem">
+            ⚡ Ritira Reward
+          </button>
+        </div>
+
+        <!-- Quick links -->
+        <div class="cp-card cp-card-gold">
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// AZIONI RAPIDE</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="staking.html" class="btn btn-gold" style="justify-content:space-between">
+              <span>🔒 Staking CPRED</span><span style="font-size:.75rem">→</span>
+            </a>
+            <a href="mercati.html" class="btn btn-up" style="justify-content:space-between">
+              <span>📊 Esplora Mercati</span><span style="font-size:.75rem">→</span>
+            </a>
+            <a href="presale.html" class="btn btn-ghost" style="justify-content:space-between">
+              <span>💎 Compra CPRED</span><span style="font-size:.75rem">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posizioni aperte on-chain -->
+    <div class="cp-card cp-card-accent" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3)">// POSIZIONI APERTE ON-CHAIN</div>
+        <a href="mercati.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 12px">+ Nuova →</a>
+      </div>
+      <div id="positions-list">
+        <div style="text-align:center;padding:20px"><span class="spin"></span></div>
+      </div>
+    </div>
+
+    <!-- Wallet on BaseScan -->
+    <div style="text-align:center;padding:8px 0 4px">
+      <a id="basescan-link" href="#" target="_blank"
+         style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--purple3)">
+        Vedi wallet su BaseScan →
+      </a>
     </div>
   </div>
 </div>
 
-<!-- YIELD SHARE SECTION -->
-<div class="yield-section">
-  <div class="yield-section-title">
-    <div class="yield-dot-sm"></div>
-    <span>// IL TUO YIELD SHARE — Capital Yield dai Pool</span>
-  </div>
-  <div class="yield-breakdown">
-    <div class="yield-block">
-      <div class="yield-big">$3.74</div>
-      <div class="yield-sub">Yield accumulato<br>dai tuoi 3 pool attivi</div>
-    </div>
-    <div class="yield-block">
-      <div class="yield-big" style="color:var(--cyan2)">$0.47/gg</div>
-      <div class="yield-sub">Generazione giornaliera<br>sulla tua quota del pool</div>
-    </div>
-    <div class="yield-block">
-      <div class="yield-big" style="color:var(--gold2)">+4.8%</div>
-      <div class="yield-sub">APY effettivo sul capitale<br>in posizioni aperte ($640)</div>
-    </div>
-  </div>
-  <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:12px;letter-spacing:.06em">BREAKDOWN PER MERCATO</div>
-  <div class="yield-pool-row">
-    <div>
-      <div style="font-weight:700;font-size:.83rem">₿ BTC supererà $100K?</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Stake: $200 · Quota pool: 1.10% · Scade 12g</div>
-    </div>
-    <div style="text-align:right">
-      <div style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--green2);font-weight:700">+$0.33</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">yield accumulato</div>
-    </div>
-  </div>
-  <div class="yield-pool-row">
-    <div>
-      <div style="font-weight:700;font-size:.83rem">◎ SOL ETF approvato?</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Stake: $300 · Quota pool: 1.36% · Scade 90g</div>
-    </div>
-    <div style="text-align:right">
-      <div style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--green2);font-weight:700">+$3.20</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">yield accumulato</div>
-    </div>
-  </div>
-  <div class="yield-pool-row">
-    <div>
-      <div style="font-weight:700;font-size:.83rem">Ξ ETH recupererà $3K?</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Stake: $140 · Quota pool: 1.42% · Scade 5g</div>
-    </div>
-    <div style="text-align:right">
-      <div style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--green2);font-weight:700">+$0.21</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">yield accumulato</div>
-    </div>
-  </div>
-  <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);
-    display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:.8rem;color:var(--text3);max-width:440px;line-height:1.6">
-      Il tuo yield share viene accreditato automaticamente al momento della risoluzione del mercato.<br>
-      <span style="color:var(--green2)">50%</span> boost ai vincitori · <span style="color:var(--cyan2)">30%</span> agli staker CPRED · <span style="color:var(--text3)">20%</span> treasury
-    </div>
-    <button class="btn btn-ghost" style="font-size:.78rem;flex-shrink:0">Vedi dettagli →</button>
-  </div>
-</div>
-
-<div class="cp-card">
-  <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// TRANSAZIONI RECENTI</div>
-  <table class="cp-table">
-    <thead><tr><th>Data</th><th>Tipo</th><th>Importo</th><th>Stato</th></tr></thead>
-    <tbody>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">18 Mar 14:32</td><td>Vincita predizione BTC</td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$84</td><td><span class="tag tag-green">Completato</span></td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">17 Mar 09:15</td><td>Acquisto CPRED presale</td><td style="color:var(--red2);font-family:'DM Mono',monospace">-$1,000</td><td><span class="tag tag-green">Completato</span></td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">16 Mar 18:44</td><td>Vincita predizione MCap</td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$140</td><td><span class="tag tag-green">Completato</span></td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">15 Mar 11:20</td><td>Deposito USDC</td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$2,000</td><td><span class="tag tag-green">Completato</span></td></tr>
-    </tbody>
-  </table>
-</div>
-</div><script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <script src="web3.js"></script>
-<script src="_shared.js"></script></body></html>
+<script src="_shared.js"></script>
+<script>
+async function loadPortfolio() {
+  if (!WALLET.address) {
+    document.getElementById('no-wallet-view').style.display = 'block';
+    document.getElementById('portfolio-view').style.display = 'none';
+    return;
+  }
+  document.getElementById('no-wallet-view').style.display = 'none';
+  document.getElementById('portfolio-view').style.display = 'block';
+
+  const addr = WALLET.address;
+  document.getElementById('basescan-link').href = `https://sepolia.basescan.org/address/${addr}`;
+
+  try {
+    // Carica tutto in parallelo
+    const [ethBal, cpred, marketContract] = await Promise.all([
+      W3.getEthBalance(addr),
+      W3.getCpredBalance(addr),
+      W3.getContract('market'),
+    ]);
+
+    // Stats cards
+    document.getElementById('stat-eth').textContent = ethBal.toFixed(4) + ' ETH';
+    document.getElementById('stat-eth-sub').textContent = 'Base Sepolia testnet';
+
+    const cpredTotal = cpred.balance + cpred.staked;
+    document.getElementById('stat-cpred').textContent = cpredTotal.toLocaleString(undefined,{maximumFractionDigits:0});
+    document.getElementById('stat-cpred-val').textContent = `↑ listing +200% · $${(cpredTotal * 0.15).toFixed(2)}`;
+
+    document.getElementById('stat-staked').textContent = cpred.staked.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
+    document.getElementById('stat-staked-sub').textContent = `${cpred.reward.toFixed(6)} ETH reward`;
+
+    // Reward amount
+    document.getElementById('reward-amount').textContent = cpred.reward.toFixed(6) + ' ETH';
+    if (cpred.reward <= 0) {
+      document.getElementById('claim-btn').disabled = true;
+      document.getElementById('claim-btn').style.opacity = '0.4';
+    }
+
+    // Assets table
+    const presaleC = await W3.getContract('presale');
+    const purchased = await presaleC.purchased(addr).then(v => parseFloat(ethers.formatEther(v))).catch(() => 0);
+
+    const tbody = document.getElementById('assets-tbody');
+    tbody.innerHTML = `
+      <tr>
+        <td><div style="font-weight:700">ETH</div><div style="font-size:.7rem;color:var(--text3)">Base Sepolia</div></td>
+        <td style="font-family:'DM Mono',monospace">${ethBal.toFixed(4)}</td>
+        <td style="font-family:'DM Mono',monospace">~$${(ethBal * 2000).toFixed(0)}</td>
+        <td style="color:var(--text3);font-size:.78rem">Nativo</td>
+      </tr>
+      <tr>
+        <td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">In wallet</div></td>
+        <td style="font-family:'DM Mono',monospace">${cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td style="font-family:'DM Mono',monospace">$${(cpred.balance * 0.05).toFixed(2)}</td>
+        <td style="color:var(--green2);font-size:.78rem">listing +200%</td>
+      </tr>
+      ${cpred.staked > 0 ? `
+      <tr>
+        <td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">In staking</div></td>
+        <td style="font-family:'DM Mono',monospace">${cpred.staked.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td style="font-family:'DM Mono',monospace">$${(cpred.staked * 0.05).toFixed(2)}</td>
+        <td style="color:var(--cyan2);font-size:.78rem">genera yield</td>
+      </tr>` : ''}
+      ${purchased > 0 ? `
+      <tr>
+        <td><div style="font-weight:700">CPRED</div><div style="font-size:.7rem;color:var(--text3)">Acquistati presale</div></td>
+        <td style="font-family:'DM Mono',monospace">${purchased.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td style="font-family:'DM Mono',monospace">—</td>
+        <td style="color:var(--gold2);font-size:.78rem">inclusi sopra</td>
+      </tr>` : ''}`;
+
+    // Posizioni on-chain
+    await loadPositions(addr, marketContract);
+
+  } catch(e) {
+    console.error('Portfolio load error:', e);
+  }
+}
+
+async function loadPositions(addr, marketContract) {
+  const list = document.getElementById('positions-list');
+  try {
+    const marketCount = Number(await marketContract.marketCount());
+    const positions = [];
+    for (let i = 0; i < marketCount; i++) {
+      const pos = await marketContract.getPosition(i, addr);
+      if (pos.amount > 0n) {
+        const mkt = await marketContract.getMarket(i);
+        positions.push({ id: i, pos, mkt });
+      }
+    }
+
+    document.getElementById('stat-positions').textContent = positions.length;
+    document.getElementById('stat-positions-sub').textContent = positions.length === 0 ? 'nessuna posizione' : 'posizioni totali';
+
+    if (positions.length === 0) {
+      list.innerHTML = `
+        <div style="text-align:center;padding:28px;color:var(--text3)">
+          <div style="font-size:28px;margin-bottom:10px">📊</div>
+          <div style="font-size:.85rem;margin-bottom:14px">Nessuna posizione aperta</div>
+          <a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Esplora i mercati →</a>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = '';
+    for (const { id, pos, mkt } of positions) {
+      const stake = parseFloat(ethers.formatEther(pos.amount));
+      const side = pos.side;
+      const status = ['Aperta','Chiusa','Risolta','Cancellata'][mkt.status];
+      const outcome = ['—','YES','NO'][mkt.outcome];
+      const won = mkt.status === 2n && ((mkt.outcome === 1n && pos.side) || (mkt.outcome === 2n && !pos.side));
+      const lost = mkt.status === 2n && !won;
+      const claimed = pos.claimed;
+
+      const yesPool = parseFloat(ethers.formatEther(mkt.yesPool));
+      const noPool  = parseFloat(ethers.formatEther(mkt.noPool));
+      const total   = yesPool + noPool;
+      const myShare = total > 0 ? (stake / (side ? yesPool : noPool)) * total * 0.98 : 0;
+      const daysLeft = Math.max(0, Math.ceil((Number(mkt.expiresAt) - Date.now()/1000) / 86400));
+
+      const div = document.createElement('div');
+      div.className = 'pos-card';
+      div.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-weight:700;font-size:.88rem;flex:1;margin-right:10px">${mkt.question}</div>
+          <span class="${side ? 'pos-side-yes' : 'pos-side-no'}">${side ? 'YES' : 'NO'}</span>
+        </div>
+        <div style="display:flex;gap:16px;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3);margin-bottom:${won && !claimed ? '10px' : '0'}">
+          <span>Stake: <strong style="color:var(--text)">${stake.toFixed(4)} ETH</strong></span>
+          <span>Payout est: <strong style="color:var(--green2)">${myShare.toFixed(4)} ETH</strong></span>
+          <span>${mkt.status === 0n ? `⏱ ${daysLeft}g` : `Stato: ${status}${mkt.status === 2n ? ' · '+outcome : ''}`}</span>
+        </div>
+        ${won && !claimed ? `
+        <button onclick="claimPayout(${id}, this)" class="btn btn-up" style="font-size:.75rem;padding:6px 14px;margin-top:8px">
+          🎉 Ritira Vincita
+        </button>` : ''}
+        ${claimed ? '<div style="font-size:.72rem;color:var(--green2);margin-top:6px">✅ Payout ritirato</div>' : ''}
+        ${lost ? '<div style="font-size:.72rem;color:var(--red2);margin-top:6px">❌ Posizione persa</div>' : ''}`;
+      list.appendChild(div);
+    }
+  } catch(e) {
+    list.innerHTML = '<div style="color:var(--text3);font-size:.82rem;padding:10px">Errore nel caricamento delle posizioni</div>';
+  }
+}
+
+async function claimPayout(marketId, btn) {
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const result = await W3.claimPayoutOnChain(marketId);
+    btn.closest('.pos-card').querySelector('[onclick]').outerHTML =
+      '<div style="font-size:.72rem;color:var(--green2);margin-top:8px">✅ Payout ritirato · <a href="'+result.explorerUrl+'" target="_blank" style="color:var(--purple3)">Tx →</a></div>';
+    await loadPortfolio();
+  } catch(e) {
+    alert(e.message);
+    btn.disabled = false;
+    btn.textContent = '🎉 Ritira Vincita';
+  }
+}
+
+async function claimStakingReward() {
+  if (!WALLET.address) return;
+  const btn = document.getElementById('claim-btn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const ok = await W3.ensureNetwork();
+    if (!ok) throw new Error('Cambia rete a Base Sepolia');
+    const c = await W3.getContract('token', true);
+    const tx = await c.claimRewards();
+    await tx.wait();
+    alert('✅ Reward ritirati con successo!');
+    await loadPortfolio();
+  } catch(e) {
+    alert(e.message || 'Errore nel ritiro rewards');
+    btn.disabled = false;
+    btn.textContent = '⚡ Ritira Reward';
+  }
+}
+
+// Hook: ricarica portfolio quando wallet si connette
+document.addEventListener('DOMContentLoaded', () => {
+  const origRefresh = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() {
+    await origRefresh();
+    await loadPortfolio();
+  };
+  // Se già connesso
+  if (WALLET.address) loadPortfolio();
+  else {
+    // Aspetta init di _shared.js poi controlla
+    setTimeout(() => {
+      if (WALLET.address) loadPortfolio();
+      else {
+        document.getElementById('no-wallet-view').style.display = 'block';
+        document.getElementById('portfolio-view').style.display = 'none';
+      }
+    }, 800);
+  }
+});
+</script>
+</body></html>
