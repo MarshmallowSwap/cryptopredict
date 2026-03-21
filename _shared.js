@@ -92,6 +92,10 @@ const CP = {
       await this.refreshWalletData();
     }
     this.updateNav();
+    // Emetti evento: le pagine possono ascoltare cp:wallet-ready
+    window.dispatchEvent(new CustomEvent('cp:wallet-ready', {
+      detail: { address: WALLET.address, connected: !!WALLET.address }
+    }));
 
     if (page === 'mercati')  this.loadMarkets();
     if (page === 'home')     this.loadHomeStats();
