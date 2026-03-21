@@ -7,75 +7,49 @@
 <link rel="stylesheet" href="_shared.css">
 <style>
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
-
-/* Market card */
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.15);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
 .mkt-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s}
 .mkt-card:hover{border-color:var(--border2)}
-.mkt-body{padding:16px}
-
-/* Bet panel */
-.bet-panel{background:rgba(0,0,0,.3);border-top:1px solid var(--border2);padding:14px 16px;animation:slideDown .2s ease}
-.bet-panel.yes-panel{border-top-color:rgba(16,185,129,.3)}
-.bet-panel.no-panel{border-top-color:rgba(239,68,68,.3)}
-
-/* Currency tabs */
-.cur-tabs{display:flex;gap:4px;margin-bottom:12px;background:rgba(255,255,255,.04);border-radius:8px;padding:3px}
-.cur-tab{flex:1;padding:5px 0;border:none;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);background:transparent;transition:all .15s}
-.cur-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.4)}
-.cur-tab.eth.active{color:#00d4ff}
-.cur-tab.usdc.active{color:#2775ca}
-.cur-tab.usdt.active{color:#26a17b}
-.cur-tab.cpred.active{color:#fbbf24}
-
-/* Amount input row */
-.bet-input-row{display:flex;gap:6px;align-items:center;margin-bottom:8px}
-.bet-input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:7px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:.85rem;color:var(--text);outline:none}
-.bet-input:focus{border-color:var(--purple2)}
-.bet-quick{display:flex;gap:4px;margin-bottom:10px}
-.bet-quick-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);transition:all .15s}
-.bet-quick-btn:hover{border-color:var(--purple2);color:var(--text)}
-
-/* Preview row */
-.bet-preview{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3);margin-bottom:10px;padding:7px 10px;background:rgba(255,255,255,.03);border-radius:6px}
-
-/* Confirm button */
-.bet-confirm-yes{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;background:linear-gradient(135deg,rgba(16,185,129,.8),rgba(16,185,129,.5));color:#fff;transition:all .2s}
-.bet-confirm-yes:hover{background:linear-gradient(135deg,#10b981,rgba(16,185,129,.7))}
-.bet-confirm-no{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;background:linear-gradient(135deg,rgba(239,68,68,.8),rgba(239,68,68,.5));color:#fff;transition:all .2s}
-.bet-confirm-no:hover{background:linear-gradient(135deg,#ef4444,rgba(239,68,68,.7))}
-
-/* Faucet notice */
-.faucet-notice{font-size:.68rem;color:var(--text3);text-align:center;margin-top:6px}
-.faucet-notice a{color:var(--purple3)}
-
-/* Yield bar */
-.yield-bar{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:6px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)}
-
-/* Toast */
-.tx-toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;max-width:380px;opacity:0;transition:opacity .3s;pointer-events:none}
-.tx-toast.show{opacity:1;pointer-events:all}
+.bet-panel{background:rgba(0,0,0,.25);border-top:2px solid;padding:14px 16px;animation:slideDown .18s ease}
+.bet-panel.yes-mode{border-top-color:rgba(16,185,129,.5)}
+.bet-panel.no-mode{border-top-color:rgba(239,68,68,.5)}
+.cur-tabs{display:flex;gap:3px;background:rgba(255,255,255,.04);border-radius:8px;padding:3px;margin-bottom:12px}
+.cur-tab{flex:1;padding:5px 0;border:none;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);background:transparent;transition:all .15s;text-align:center}
+.cur-tab.on{background:rgba(255,255,255,.08);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.cur-tab.on.eth{color:#00d4ff}.cur-tab.on.usdc{color:#2775ca}.cur-tab.on.usdt{color:#26a17b}.cur-tab.on.cpred{color:#fbbf24}
+.bet-inp{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:7px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:.88rem;color:var(--text);outline:none;box-sizing:border-box}
+.bet-inp:focus{border-color:var(--purple2)}
+.q-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:3px 9px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)}
+.q-btn:hover{border-color:var(--purple2);color:var(--text)}
+.confirm-yes{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;background:linear-gradient(135deg,#10b981,#059669);color:#fff;margin-top:10px;transition:opacity .2s}
+.confirm-yes:hover{opacity:.85}
+.confirm-no{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;margin-top:10px;transition:opacity .2s}
+.confirm-no:hover{opacity:.85}
+.yield-dot{width:5px;height:5px;border-radius:50%;background:#00e87a;display:inline-block;animation:pulse 2s infinite}
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast-box.on{opacity:1;pointer-events:all}
+.my-bets-bar{display:none;background:rgba(124,58,237,.07);border-bottom:1px solid rgba(124,58,237,.2)}
+.my-bets-bar.on{display:block}
+.bet-chip{flex-shrink:0;width:270px;background:rgba(255,255,255,.04);border-radius:10px;padding:12px 14px;border:1px solid rgba(124,58,237,.2)}
+.bet-chip.won{border-color:rgba(16,185,129,.4)}
+.bet-chip.lost{border-color:rgba(239,68,68,.3)}
 </style>
 </head>
 <body data-page="mercati">
 
-<!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-track">
-    <span class="tick-live"><span class="tick-dot"></span>MERCATI LIVE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
-    <span class="tick-item">Valute accettate: <strong style="color:var(--cyan2)">ETH · USDC · USDT · CPRED</strong></span>
-    <span class="tick-live"><span class="tick-dot"></span>MERCATI LIVE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-  </div>
-</div>
+<div class="ticker-bar"><div class="ticker-track">
+  <span class="tick-live"><span class="tick-dot"></span>MERCATI LIVE</span>
+  <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
+  <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
+  <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
+  <span class="tick-item">Valute: <strong style="color:var(--cyan2)">ETH · USDC · USDT · CPRED</strong></span>
+  <span class="tick-live"><span class="tick-dot"></span>MERCATI LIVE</span>
+  <span class="tick-item"><span class="sym">BTC</span> $94,210</span>
+  <span class="tick-item"><span class="sym">ETH</span> $2,840</span>
+</div></div>
 
-<!-- NAV -->
 <nav class="main-nav">
   <a href="index.html" class="nav-brand">
     <div class="nav-brand-icon">🔮</div>
@@ -107,800 +81,819 @@
   <a href="presale.html" class="pb-btn">Compra CPRED →</a>
 </div>
 
-<!-- LE MIE SCOMMESSE — barra fissa in cima -->
-<div id="my-bets-section" style="display:none;background:rgba(124,58,237,.06);border-bottom:1px solid rgba(124,58,237,.2)">
-  <div style="max-width:1200px;margin:0 auto;padding:14px 24px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+<!-- LE MIE SCOMMESSE -->
+<div class="my-bets-bar" id="my-bets-bar">
+  <div style="max-width:1200px;margin:0 auto;padding:12px 24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:6px;height:6px;border-radius:50%;background:var(--purple3);animation:pulse 2s infinite"></div>
-        <span style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--purple3);font-weight:700">LE MIE SCOMMESSE</span>
-        <span id="my-bets-count" style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:10px;padding:1px 8px;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--purple3)">—</span>
+        <span class="yield-dot"></span>
+        <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;font-weight:700;letter-spacing:.08em">LE MIE SCOMMESSE</span>
+        <span id="bets-count" style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:10px;padding:1px 8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#a855f7">0</span>
       </div>
-      <button onclick="loadMyBets()" style="background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">🔄 Aggiorna</button>
+      <button onclick="loadMyBets()" style="background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">↻ Aggiorna</button>
     </div>
-    <div id="my-bets-list" style="display:flex;flex-direction:row;gap:8px;overflow-x:auto;padding-bottom:4px"></div>
+    <div id="bets-list" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px"></div>
   </div>
 </div>
 
 <div class="page-wrap">
   <div class="page-header">
-    <span class="page-tag">// Tutti i mercati</span>
+    <span class="page-tag">// Tutti i mercati · Base Sepolia</span>
     <div class="page-title">Mercati di Predizione</div>
-    <div class="page-sub" id="mkt-sub">Caricamento mercati on-chain...</div>
+    <div class="page-sub" id="mkt-sub">Caricamento...</div>
   </div>
 
-  <!-- Yield banner -->
-  <div style="background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+  <!-- Stats bar -->
+  <div style="background:rgba(0,232,122,.05);border:1px solid rgba(0,232,122,.15);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,232,122,.15);border:1px solid rgba(0,232,122,.3);display:flex;align-items:center;justify-content:center">⚡</div>
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,232,122,.12);border:1px solid rgba(0,232,122,.25);display:flex;align-items:center;justify-content:center">⚡</div>
       <div>
-        <div style="font-size:.82rem;font-weight:700;color:#dde3f5;margin-bottom:2px">Capital Yield Attivo — Scommetti in 4 valute</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">ETH · USDC · USDT · CPRED · Il capitale nei pool genera 4.8% APY automatico</div>
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:1px">Capital Yield Attivo — 4 valute accettate</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">ETH · USDC · USDT · CPRED · 4.8% APY automatico sul capitale nei pool</div>
       </div>
     </div>
-    <div style="display:flex;gap:20px">
-      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a" id="banner-capital">—</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">CAPITALE ETH</div></div>
-      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a">4.8%</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">APY</div></div>
-      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:#00e87a" id="banner-mkts">—</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">MERCATI ATTIVI</div></div>
+    <div style="display:flex;gap:24px">
+      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.88rem;font-weight:700;color:#00e87a" id="stat-pool">—</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">POOL TOTALE</div></div>
+      <div style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.88rem;font-weight:700;color:#00e87a" id="stat-mkts">—</div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">MERCATI ATTIVI</div></div>
     </div>
   </div>
 
   <!-- Filters -->
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
-    <div style="display:flex;gap:5px" id="filter-btns">
-      <button class="btn btn-primary" style="font-size:.75rem;padding:5px 12px" onclick="filterCat('all',this)">Tutti</button>
-      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterCat('crypto',this)">Crypto</button>
-      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterCat('macro',this)">Macro</button>
-      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterCat('defi',this)">DeFi</button>
+    <div style="display:flex;gap:5px" id="filters">
+      <button class="btn btn-primary" style="font-size:.75rem;padding:5px 12px" onclick="filterBy('all',this)">Tutti</button>
+      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterBy('crypto',this)">Crypto</button>
+      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterBy('macro',this)">Macro</button>
+      <button class="btn btn-ghost"   style="font-size:.75rem;padding:5px 12px" onclick="filterBy('defi',this)">DeFi</button>
     </div>
     <div style="margin-left:auto">
       <a href="crea.html" class="btn btn-primary" style="font-size:.75rem;padding:5px 14px">+ Crea mercato</a>
     </div>
   </div>
 
-  <!-- Markets grid -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px" id="markets-grid">
+  <!-- Grid -->
+  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px">
     <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1">
       <span class="spin"></span>
-      <span style="margin-left:8px;color:var(--text3);font-size:.85rem">Caricamento mercati da Base Sepolia...</span>
+      <span style="margin-left:8px;color:var(--text3);font-size:.85rem">Caricamento mercati on-chain...</span>
     </div>
   </div>
 </div>
 
-<!-- TX Toast -->
-<div class="tx-toast" id="tx-toast">
+<!-- Toast -->
+<div class="toast-box" id="toast">
   <span id="toast-icon">✅</span>
-  <div style="flex:1">
-    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
-    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--purple3);display:none"></a>
-  </div>
-  <button onclick="document.getElementById('tx-toast').classList.remove('show')"
-    style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px">✕</button>
+  <div style="flex:1"><div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+  <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;display:none"></a></div>
+  <button onclick="document.getElementById('toast').classList.remove('on')" style="background:none;border:none;color:var(--text3);cursor:pointer">✕</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <script src="web3.js"></script>
 <script src="_shared.js"></script>
 <script>
-// ── CURRENCY CONFIG ───────────────────────────────────────────────
-const CURRENCIES = [
-  { id: 0, key: 'eth',  label: 'ETH',  symbol: 'ETH',  decimals: 18, min: 0.0001, step: 0.0001, color: '#00d4ff' },
-  { id: 1, key: 'usdc', label: 'USDC', symbol: 'USDC', decimals: 6,  min: 1,      step: 1,      color: '#2775ca' },
-  { id: 2, key: 'usdt', label: 'USDT', symbol: 'USDT', decimals: 6,  min: 1,      step: 1,      color: '#26a17b' },
-  { id: 3, key: 'cpred',label: 'CPRED',symbol: 'CPRED',decimals: 18, min: 1,      step: 1,      color: '#fbbf24' },
+/* =========================================================
+   MERCATI — tutto in un unico script, zero template literal
+   annidati, zero emoji in stringhe JS
+   ========================================================= */
+
+var MARKET_ABI = [
+  "function marketCount() view returns (uint256)",
+  "function getMarket(uint256 id) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver))",
+  "function getActiveMarkets(uint256 limit) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver)[])",
+  "function getPosition(uint256 marketId,address user) view returns (tuple(uint256 marketId,bool side,uint256 amount,bool claimed))",
+  "function getUserMarkets(address user) view returns (uint256[])",
+  "function placeBet(uint256 marketId,bool side) payable",
+  "function claimPayout(uint256 marketId)"
 ];
 
-// Prezzi mock per preview (USD)
-const PRICES = { eth: 2000, usdc: 1, usdt: 1, cpred: 0.05 };
+var CUR = [
+  {id:0,key:"eth",  label:"ETH",  symbol:"ETH",  dec:18, min:0.0001, steps:[0.001,0.005,0.01,0.05], color:"#00d4ff"},
+  {id:1,key:"usdc", label:"USDC", symbol:"USDC", dec:6,  min:1,      steps:[10,50,100,500],          color:"#2775ca"},
+  {id:2,key:"usdt", label:"USDT", symbol:"USDT", dec:6,  min:1,      steps:[10,50,100,500],          color:"#26a17b"},
+  {id:3,key:"cpred",label:"CPRED",symbol:"CPRED",dec:18, min:1,      steps:[100,500,1000,5000],      color:"#fbbf24"}
+];
+var PRICE = {eth:2000,usdc:1,usdt:1,cpred:0.05};
 
-// Stato pannelli aperti: marketId → { side, currency }
-const openPanels = {};
+var markets = [];
+var panels  = {};   // marketId -> {side, curId, amount}
+var cdTimers = [];
 
-let allMarkets = [];
+/* ---------- UTILS ---------- */
+function toNum(v) {
+  if (v === undefined || v === null) return 0;
+  try { return Number(v.toString()); } catch(e) { return 0; }
+}
+function fmtEth(v) {
+  try { return parseFloat(ethers.formatEther(v)); } catch(e) { return 0; }
+}
+function pad(n) { return String(n).padStart(2,"0"); }
 
-// ── LOAD ─────────────────────────────────────────────────────────
+function fmtCountdown(expiresAt) {
+  var diff = expiresAt * 1000 - Date.now();
+  if (diff <= 0) return {text:"Scaduto", color:"var(--red2)"};
+  var d  = Math.floor(diff / 86400000);
+  var h  = Math.floor(diff % 86400000 / 3600000);
+  var m  = Math.floor(diff % 3600000  / 60000);
+  var s  = Math.floor(diff % 60000    / 1000);
+  var text, color;
+  if (d >= 2)  { text = d+"g "+pad(h)+"h "+pad(m)+"m";    color = "var(--cyan2)"; }
+  else if (d >= 1) { text = d+"g "+pad(h)+"h "+pad(m)+"m"; color = "var(--gold2)"; }
+  else if (h >= 1) { text = pad(h)+":"+pad(m)+":"+pad(s);  color = "var(--gold2)"; }
+  else             { text = pad(m)+":"+pad(s);              color = "var(--red2)";  }
+  return {text:text, color:color};
+}
+
+/* ---------- LOAD MARKETS ---------- */
 async function loadMarkets() {
   try {
-    // ABI compatibile sia v1 che v2
-    const MARKET_ABI_COMPAT = [
-      "function marketCount() view returns (uint256)",
-      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver, uint256 participantCount))",
-      "function getActiveMarkets(uint256 limit) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver, uint256 participantCount)[])",
-      "function getYesPct(uint256 marketId) view returns (uint256)",
-      "function placeBet(uint256 marketId, bool side) payable",
-      "function claimPayout(uint256 marketId)",
-    ];
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
+    var raw = await c.getActiveMarkets(20);
 
-    const provider = await W3.getProvider();
-    const c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_COMPAT, provider);
-    const raw = await c.getActiveMarkets(20);
+    markets = [];
+    for (var i = 0; i < raw.length; i++) {
+      var m = raw[i];
+      var yesEth = fmtEth(m.yesPool);
+      var noEth  = fmtEth(m.noPool);
+      var total  = yesEth + noEth;
+      var yesPct = total > 0 ? Math.round(yesEth / total * 100) : 50;
+      var exp    = toNum(m.expiresAt);
+      markets.push({
+        id:       toNum(m.id),
+        question: m.question,
+        category: m.category,
+        asset:    m.assetSymbol,
+        yesPct:   yesPct,
+        noPct:    100 - yesPct,
+        poolEth:  total,
+        expiresAt: exp,
+        participants: toNum(m.participantCount),
+        yieldDay: (total * 0.048 / 365).toFixed(4)
+      });
+    }
 
-    allMarkets = raw.map(m => {
-      let yesEth, noEth;
-      if (Array.isArray(m.yesPool)) {
-        yesEth = parseFloat(ethers.formatEther(m.yesPool[0]));
-        noEth  = parseFloat(ethers.formatEther(m.noPool[0]));
-      } else {
-        yesEth = parseFloat(ethers.formatEther(m.yesPool));
-        noEth  = parseFloat(ethers.formatEther(m.noPool));
-      }
-      const total    = yesEth + noEth;
-      const yesPct   = total > 0 ? Math.round((yesEth / total) * 100) : 50;
-      // expiresAt: BigInt → Number (sicuro per timestamp Unix)
-      const expiresAt = m.expiresAt ? Number(m.expiresAt.toString()) : 0;
-      // participantCount: potrebbe non essere nell'ABI v1 — stima da pool
-      let participants = 0;
-      try { participants = m.participantCount ? Number(m.participantCount.toString()) : 0; } catch(e) {}
-      if (!participants && total > 0) participants = Math.max(1, Math.round(total / 0.005));
-      return {
-        id:           Number(m.id),
-        question:     m.question,
-        category:     m.category,
-        asset:        m.assetSymbol,
-        yesPct,
-        noPct:        100 - yesPct,
-        poolEth:      total,
-        expiresAt,
-        participants,
-        yieldDay:     (total * 0.048 / 365).toFixed(4),
-      };
-    });
+    renderGrid(markets);
 
-    renderMarkets(allMarkets);
-    setTimeout(startCountdowns, 200);
-    // Aggiorna partecipanti ogni 30 secondi
-    if (window._partsTimer) clearInterval(window._partsTimer);
-    window._partsTimer = setInterval(refreshParticipants, 30000);
+    var totalPool = markets.reduce(function(s,m){return s+m.poolEth;},0);
+    document.getElementById("stat-pool").textContent = totalPool.toFixed(3)+" ETH";
+    document.getElementById("stat-mkts").textContent = markets.length;
+    document.getElementById("mkt-sub").textContent =
+      markets.length+" mercati attivi · Scommetti in ETH, USDC, USDT o CPRED";
 
-    const totalEth = allMarkets.reduce((s,m) => s + m.poolEth, 0);
-    document.getElementById('banner-capital').textContent = totalEth.toFixed(3) + ' ETH';
-    document.getElementById('banner-mkts').textContent    = allMarkets.length;
-    document.getElementById('mkt-sub').textContent =
-      `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
+    startCountdowns();
 
-  } catch(e) {
-    console.warn('Load markets error:', e.message);
-    // Fallback: usa W3.loadMarketsOnChain
-    try {
-      const markets = await W3.loadMarketsOnChain();
-      if (markets && markets.length) {
-        allMarkets = markets.map(m => ({
-          id:           m.id,
-          question:     m.title,
-          category:     m.category,
-          asset:        m.asset_symbol,
-          yesPct:       m.yes_pct,
-          noPct:        m.no_pct,
-          poolEth:      m.pool_size,
-          daysLeft:     m.days_left,
-          participants: m.participant_count || 0,
-          yieldDay:     m.yield_info?.daily_yield || '0',
-        }));
-        renderMarkets(allMarkets);
-        setTimeout(startCountdowns, 200);
-        document.getElementById('banner-mkts').textContent = allMarkets.length;
-        document.getElementById('mkt-sub').textContent =
-          `${allMarkets.length} mercati attivi · Scommetti in ETH, USDC, USDT o CPRED`;
-        return;
-      }
-    } catch(e2) {}
-
-    document.getElementById('markets-grid').innerHTML = `
-      <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1">
-        <div style="font-size:24px;margin-bottom:10px">⚠️</div>
-        <div style="color:var(--text3);margin-bottom:14px">Errore caricamento mercati on-chain.</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3);margin-bottom:16px">
-          ${e.message}
-        </div>
-        <button onclick="loadMarkets()" class="btn btn-primary" style="font-size:.8rem">
-          🔄 Riprova
-        </button>
-        <div style="font-size:.72rem;color:var(--text3);margin-top:12px">
-          Assicurati di avere MetaMask su <strong>Base Sepolia</strong> (chain ID 84532)
-        </div>
-      </div>`;
+  } catch(err) {
+    console.error("loadMarkets:", err);
+    document.getElementById("grid").innerHTML =
+      '<div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">' +
+      '<div style="font-size:24px;margin-bottom:10px">⚠️</div>' +
+      '<div style="margin-bottom:14px">'+err.message+'</div>' +
+      '<button onclick="loadMarkets()" class="btn btn-primary" style="font-size:.8rem">Riprova</button>' +
+      '<div style="font-size:.72rem;margin-top:10px">Connetti MetaMask su Base Sepolia (chain 84532)</div>' +
+      '</div>';
   }
 }
 
-function renderMarkets(markets) {
-  const grid = document.getElementById('markets-grid');
-  grid.innerHTML = '';
-  if (!markets.length) {
-    grid.innerHTML = `<div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">Nessun mercato trovato.</div>`;
+/* ---------- RENDER GRID ---------- */
+function renderGrid(list) {
+  var grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = '<div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1;color:var(--text3)">Nessun mercato trovato.</div>';
     return;
   }
-  markets.forEach(m => {
-    const el = document.createElement('div');
-    el.className = 'mkt-card';
-    el.id = `card-${m.id}`;
-    el.innerHTML = buildCardHTML(m);
+  list.forEach(function(m) {
+    var el = document.createElement("div");
+    el.className = "mkt-card";
+    el.id = "card-"+m.id;
+    buildCard(el, m);
     grid.appendChild(el);
   });
 }
 
-// Avvia countdown per tutte le card visibili
-function startCountdowns() {
-  if (window._cdTimers) window._cdTimers.forEach(clearInterval);
-  window._cdTimers = [];
+function buildCard(el, m) {
+  var panel = panels[m.id];
+  var isYes = m.yesPct >= 50;
+  var tagCls = isYes ? "tag tag-green" : "tag tag-red";
+  var tagTxt = (isYes ? "YES " : "NO ") + m.yesPct + "%";
 
-  allMarkets.forEach(m => {
-    // Aspetta che il DOM sia aggiornato
-    const el = document.getElementById('cd-' + m.id);
-    if (!el) { console.warn('cd element not found for market', m.id); return; }
-    if (!m.expiresAt || m.expiresAt === 0) { el.textContent = 'Scadenza sconosciuta'; return; }
-    console.log('Starting countdown for market', m.id, 'expiresAt:', m.expiresAt, new Date(m.expiresAt * 1000).toISOString());
+  // Pannello scommessa HTML
+  var panelHTML = "";
+  if (panel) panelHTML = buildPanelHTML(m, panel);
 
-    function tick() {
-      const diff = m.expiresAt * 1000 - Date.now();
-      if (diff <= 0) {
-        el.textContent = 'Scaduto';
-        el.style.color = 'var(--red2)';
-        return;
-      }
-      const d = Math.floor(diff / 864e5);
-      const h = Math.floor(diff % 864e5 / 36e5);
-      const mm = Math.floor(diff % 36e5 / 6e4);
-      const s = Math.floor(diff % 6e4 / 1e3);
-      const pad = v => String(v).padStart(2, '0');
-      if (d > 0) {
-        el.textContent = d + 'g ' + pad(h) + 'h ' + pad(mm) + 'm';
-        el.style.color = d < 2 ? 'var(--gold2)' : 'var(--cyan2)';
-      } else {
-        el.textContent = pad(h) + ':' + pad(mm) + ':' + pad(s);
-        el.style.color = h < 1 ? 'var(--red2)' : 'var(--gold2)';
-      }
-    }
-    tick();
-    window._cdTimers.push(setInterval(tick, 1000));
-  });
+  // Metti tutto insieme via DOM
+  el.innerHTML = "";
+
+  // Body
+  var body = document.createElement("div");
+  body.style.padding = "16px";
+
+  // Header row
+  var hdr = document.createElement("div");
+  hdr.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:10px";
+  var assetEl = document.createElement("div");
+  assetEl.style.cssText = "font-weight:700;font-size:.78rem;color:var(--text3)";
+  assetEl.textContent = m.asset || m.category;
+  var tagEl = document.createElement("span");
+  tagEl.className = tagCls;
+  tagEl.textContent = tagTxt;
+  hdr.appendChild(assetEl);
+  hdr.appendChild(tagEl);
+  body.appendChild(hdr);
+
+  // Question
+  var q = document.createElement("div");
+  q.style.cssText = "font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4";
+  q.textContent = m.question;
+  body.appendChild(q);
+
+  // Bar
+  var barWrap = document.createElement("div");
+  barWrap.className = "cp-bar";
+  barWrap.style.marginBottom = "6px";
+  var barFill = document.createElement("div");
+  barFill.className = "cp-bar-fill up";
+  barFill.style.width = m.yesPct + "%";
+  barWrap.appendChild(barFill);
+  body.appendChild(barWrap);
+
+  // Pct labels
+  var pctRow = document.createElement("div");
+  pctRow.style.cssText = "display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px";
+  var yesLbl = document.createElement("span");
+  yesLbl.style.color = "var(--green2)";
+  yesLbl.textContent = "YES "+m.yesPct+"%";
+  var noLbl = document.createElement("span");
+  noLbl.style.color = "var(--red2)";
+  noLbl.textContent = "NO "+m.noPct+"%";
+  pctRow.appendChild(yesLbl);
+  pctRow.appendChild(noLbl);
+  body.appendChild(pctRow);
+
+  // Pool + buttons
+  var poolRow = document.createElement("div");
+  poolRow.style.cssText = "display:flex;align-items:center;justify-content:space-between";
+  var poolLbl = document.createElement("div");
+  poolLbl.style.cssText = "font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700";
+  poolLbl.textContent = "Pool: "+m.poolEth.toFixed(4)+" ETH";
+  var btns = document.createElement("div");
+  btns.style.cssText = "display:flex;gap:6px";
+
+  var btnYes = document.createElement("button");
+  btnYes.className = "btn btn-up";
+  btnYes.style.cssText = "font-size:.72rem;padding:5px 12px;font-weight:700";
+  btnYes.textContent = (panel && panel.side === true) ? "✕ YES" : "▲ YES";
+  btnYes.onclick = (function(id){return function(){togglePanel(id,true);};})(m.id);
+
+  var btnNo = document.createElement("button");
+  btnNo.className = "btn btn-dn";
+  btnNo.style.cssText = "font-size:.72rem;padding:5px 12px;font-weight:700";
+  btnNo.textContent = (panel && panel.side === false) ? "✕ NO" : "▼ NO";
+  btnNo.onclick = (function(id){return function(){togglePanel(id,false);};})(m.id);
+
+  btns.appendChild(btnYes);
+  btns.appendChild(btnNo);
+  poolRow.appendChild(poolLbl);
+  poolRow.appendChild(btns);
+  body.appendChild(poolRow);
+
+  // Meta: countdown + partecipanti
+  var meta = document.createElement("div");
+  meta.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-top:8px";
+
+  var cdEl = document.createElement("div");
+  cdEl.id = "cd-"+m.id;
+  cdEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;font-weight:700";
+  cdEl.textContent = "...";
+  meta.appendChild(cdEl);
+
+  var partsEl = document.createElement("div");
+  partsEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)";
+  var partsNum = document.createElement("span");
+  partsNum.id = "p-"+m.id;
+  partsNum.textContent = m.participants > 0 ? m.participants : "...";
+  partsEl.appendChild(partsNum);
+  partsEl.appendChild(document.createTextNode(" partecipanti"));
+  meta.appendChild(partsEl);
+  body.appendChild(meta);
+
+  // Yield bar
+  var ybar = document.createElement("div");
+  ybar.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:6px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)";
+  ybar.innerHTML =
+    '<div style="display:flex;align-items:center;gap:5px"><span class="yield-dot"></span>' +
+    '<span style="font-family:\'DM Mono\',monospace;font-size:.6rem;color:#00e87a;font-weight:700">YIELD</span></div>' +
+    '<span style="font-family:\'DM Mono\',monospace;font-size:.6rem;color:#00e87a;font-weight:700">+'+m.yieldDay+' ETH/g</span>' +
+    '<span style="font-family:\'DM Mono\',monospace;font-size:.58rem;color:var(--text3)">4.8% APY</span>';
+  body.appendChild(ybar);
+
+  el.appendChild(body);
+
+  // Pannello scommessa
+  if (panel) {
+    var pEl = buildPanelEl(m, panel);
+    el.appendChild(pEl);
+  }
 }
 
-// Aggiorna partecipanti live dal contratto
-async function refreshParticipants() {
-  if (!allMarkets.length) return;
+/* ---------- BET PANEL ---------- */
+function togglePanel(mid, side) {
+  if (panels[mid] && panels[mid].side === side) {
+    delete panels[mid];
+  } else {
+    panels[mid] = {side:side, curId:0, amount:""};
+  }
+  refreshCard(mid);
+  if (panels[mid]) { updateBal(mid); }
+}
+
+function refreshCard(mid) {
+  var m = markets.find(function(x){return x.id===mid;});
+  if (!m) return;
+  var card = document.getElementById("card-"+mid);
+  if (!card) return;
+  buildCard(card, m);
+  tickCard(m);  // aggiorna subito il countdown
+  if (panels[mid]) updateBal(mid);
+}
+
+function buildPanelEl(m, panel) {
+  var isYes = panel.side === true;
+  var cur   = CUR[panel.curId];
+  var pEl   = document.createElement("div");
+  pEl.className = "bet-panel " + (isYes ? "yes-mode" : "no-mode");
+
+  // Title + balance
+  var titleRow = document.createElement("div");
+  titleRow.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:10px";
+  var titleTxt = document.createElement("div");
+  titleTxt.style.cssText = "font-size:.8rem;font-weight:700;color:" + (isYes?"#10b981":"#ef4444");
+  titleTxt.textContent = isYes ? "▲ YES — Piazza Scommessa" : "▼ NO — Piazza Scommessa";
+  var balTxt = document.createElement("div");
+  balTxt.id = "bal-"+m.id;
+  balTxt.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--cyan2)";
+  balTxt.textContent = "...";
+  titleRow.appendChild(titleTxt);
+  titleRow.appendChild(balTxt);
+  pEl.appendChild(titleRow);
+
+  // Currency tabs
+  var tabs = document.createElement("div");
+  tabs.className = "cur-tabs";
+  CUR.forEach(function(c) {
+    var t = document.createElement("button");
+    t.className = "cur-tab " + c.key + (panel.curId === c.id ? " on" : "");
+    t.textContent = c.label;
+    t.onclick = (function(id,cid){return function(){setCur(id,cid);};})(m.id, c.id);
+    tabs.appendChild(t);
+  });
+  pEl.appendChild(tabs);
+
+  // Input
+  var inp = document.createElement("input");
+  inp.type = "number";
+  inp.className = "bet-inp";
+  inp.id = "amt-"+m.id;
+  inp.placeholder = String(cur.min);
+  inp.step = String(cur.min);
+  inp.min  = String(cur.min);
+  inp.value = panel.amount || "";
+  inp.style.marginBottom = "8px";
+  inp.oninput = (function(id){return function(){panels[id].amount=this.value;updatePreview(id);};})(m.id);
+  pEl.appendChild(inp);
+
+  // Quick buttons
+  var qs = document.createElement("div");
+  qs.style.cssText = "display:flex;gap:4px;margin-bottom:10px";
+  cur.steps.forEach(function(v) {
+    var b = document.createElement("button");
+    b.className = "q-btn";
+    b.textContent = v + " " + cur.symbol;
+    b.onclick = (function(id,val){return function(){setAmt(id,val);};})(m.id, v);
+    qs.appendChild(b);
+  });
+  // MAX button
+  var maxB = document.createElement("button");
+  maxB.className = "q-btn";
+  maxB.style.cssText = "background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.2);color:var(--cyan2)";
+  maxB.textContent = "MAX";
+  maxB.onclick = (function(id){return function(){setMax(id);};})(m.id);
+  qs.appendChild(maxB);
+  pEl.appendChild(qs);
+
+  // Preview
+  var prev = document.createElement("div");
+  prev.id = "prev-"+m.id;
+  prev.style.cssText = "display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3);margin-bottom:10px;padding:7px 10px;background:rgba(255,255,255,.03);border-radius:6px";
+  prev.innerHTML = '<span>USD: <strong id="usd-'+m.id+'">—</strong></span>' +
+                   '<span>Payout est: <strong id="pout-'+m.id+'" style="color:'+(isYes?"#10b981":"#ef4444")+'">—</strong></span>';
+  pEl.appendChild(prev);
+
+  // Faucet hint
+  if (panel.curId === 1 || panel.curId === 2) {
+    var fc = document.createElement("div");
+    fc.style.cssText = "font-size:.68rem;color:var(--text3);text-align:center;margin-bottom:6px";
+    var fcLink = document.createElement("a");
+    fcLink.href = "#";
+    fcLink.style.color = "#a855f7";
+    fcLink.textContent = "Claim 10,000 " + cur.symbol + " testnet gratuito";
+    fcLink.onclick = (function(id,cid){return function(e){e.preventDefault();claimFaucet(id,cid);};})(m.id, panel.curId);
+    fc.appendChild(fcLink);
+    pEl.appendChild(fc);
+  }
+  if (panel.curId === 3) {
+    var cpLink = document.createElement("div");
+    cpLink.style.cssText = "font-size:.68rem;color:var(--text3);text-align:center;margin-bottom:6px";
+    cpLink.innerHTML = 'Compra CPRED: <a href="presale.html" style="color:#a855f7">Presale →</a>';
+    pEl.appendChild(cpLink);
+  }
+
+  // Confirm
+  var cfm = document.createElement("button");
+  cfm.id = "cfm-"+m.id;
+  cfm.className = isYes ? "confirm-yes" : "confirm-no";
+  cfm.textContent = isYes ? "Conferma YES" : "Conferma NO";
+  cfm.onclick = (function(id){return function(){confirmBet(id);};})(m.id);
+  pEl.appendChild(cfm);
+
+  return pEl;
+}
+
+/* ---------- CURRENCY / AMOUNT ---------- */
+function setCur(mid, cid) {
+  if (!panels[mid]) return;
+  panels[mid].curId  = cid;
+  panels[mid].amount = "";
+  refreshCard(mid);
+}
+
+function setAmt(mid, val) {
+  if (!panels[mid]) return;
+  panels[mid].amount = val;
+  var inp = document.getElementById("amt-"+mid);
+  if (inp) inp.value = val;
+  updatePreview(mid);
+}
+
+function setMax(mid) {
+  if (!WALLET.address) { openModal("wallet-modal"); return; }
+  var balEl = document.getElementById("bal-"+mid);
+  if (!balEl) return;
+  var txt = balEl.textContent.split(" ")[0];
+  var v = parseFloat(txt);
+  if (v > 0) setAmt(mid, v);
+}
+
+function updatePreview(mid) {
+  var panel = panels[mid];
+  if (!panel) return;
+  var amt = parseFloat(panel.amount) || 0;
+  var cur = CUR[panel.curId];
+  var m   = markets.find(function(x){return x.id===mid;});
+  if (!m) return;
+
+  var usd = amt * PRICE[cur.key];
+  var ethEquiv = usd / PRICE.eth;
+  var winPool = panel.side
+    ? (m.poolEth * m.yesPct / 100 || 0.001)
+    : (m.poolEth * m.noPct  / 100 || 0.001);
+  var totalAfter = m.poolEth + ethEquiv;
+  var payoutEth  = amt > 0 ? totalAfter * ethEquiv / winPool * 0.98 : 0;
+  var payoutCur  = payoutEth * PRICE.eth / PRICE[cur.key];
+
+  var usdEl  = document.getElementById("usd-"+mid);
+  var poutEl = document.getElementById("pout-"+mid);
+  if (usdEl)  usdEl.textContent  = amt > 0 ? "$"+usd.toFixed(2) : "—";
+  if (poutEl) poutEl.textContent = amt > 0 ? "~"+payoutCur.toFixed(4)+" "+cur.symbol : "—";
+}
+
+async function updateBal(mid) {
+  var panel = panels[mid];
+  if (!panel || !WALLET.address) return;
+  var el = document.getElementById("bal-"+mid);
+  if (!el) return;
+  var cur = CUR[panel.curId];
   try {
-    const MINI_ABI = [
-      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
-    ];
-    const provider = await W3.getProvider();
-    const c = new ethers.Contract(W3.CONTRACTS.market, MINI_ABI, provider);
-    for (const m of allMarkets) {
+    var bal = 0;
+    if (panel.curId === 0) {
+      bal = await W3.getEthBalance(WALLET.address);
+    } else {
+      var addr = panel.curId === 1 ? W3.CONTRACTS.mockUsdc
+               : panel.curId === 2 ? W3.CONTRACTS.mockUsdt
+               : W3.CONTRACTS.token;
+      if (addr) {
+        var p = await W3.getProvider();
+        var tc = new ethers.Contract(addr, ["function balanceOf(address) view returns (uint256)"], p);
+        var raw = await tc.balanceOf(WALLET.address);
+        bal = parseFloat(ethers.formatUnits(raw, cur.dec));
+      }
+    }
+    el.textContent = bal.toFixed(cur.dec===6?2:4) + " " + cur.symbol;
+  } catch(e) {
+    el.textContent = "? " + cur.symbol;
+  }
+}
+
+/* ---------- BET CONFIRM ---------- */
+async function confirmBet(mid) {
+  if (!WALLET.address) { openModal("wallet-modal"); return; }
+  var panel = panels[mid];
+  if (!panel) return;
+  var amt = parseFloat(panel.amount) || 0;
+  if (!amt) { showToast("❌","Inserisci importo"); return; }
+
+  var cfm = document.getElementById("cfm-"+mid);
+  cfm.disabled = true;
+  cfm.innerHTML = '<span class="spin"></span>';
+
+  try {
+    var ok = await W3.ensureNetwork();
+    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+
+    var result;
+    if (panel.curId === 0) {
+      result = await W3.placeBetOnChain(mid, panel.side, amt);
+    } else {
+      result = await placeBetToken(mid, panel.side, panel.curId, amt);
+    }
+
+    var sideStr = panel.side ? "YES" : "NO";
+    var sym = CUR[panel.curId].symbol;
+    showToast("✅", sideStr+" · "+amt+" "+sym+" scommesso!", result.explorerUrl);
+    delete panels[mid];
+    await loadMarkets();
+    if (WALLET.address) loadMyBets();
+
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+    cfm.disabled = false;
+    cfm.textContent = panel.side ? "Conferma YES" : "Conferma NO";
+  }
+}
+
+async function placeBetToken(mid, side, curId, amount) {
+  var ok = await W3.ensureNetwork();
+  if (!ok) throw new Error("Cambia rete a Base Sepolia");
+  var cur   = CUR[curId];
+  var mAddr = W3.CONTRACTS.market;
+  var tAddr = curId===1 ? W3.CONTRACTS.mockUsdc : curId===2 ? W3.CONTRACTS.mockUsdt : W3.CONTRACTS.token;
+  if (!tAddr) throw new Error(cur.label+" non configurato");
+
+  var signer = await W3.getSigner();
+  var amt    = ethers.parseUnits(String(amount), cur.dec);
+
+  var token  = new ethers.Contract(tAddr, [
+    "function approve(address,uint256) returns (bool)",
+    "function allowance(address,address) view returns (uint256)"
+  ], signer);
+  var allow  = await token.allowance(WALLET.address, mAddr);
+  if (allow < amt) { var tx = await token.approve(mAddr, amt); await tx.wait(); }
+
+  var mktC = new ethers.Contract(mAddr, [
+    "function placeBetERC20(uint256,bool,uint8,uint256)"
+  ], signer);
+  var tx2 = await mktC.placeBetERC20(mid, side, curId, amt);
+  var rec = await tx2.wait();
+  return {txHash: rec.hash, explorerUrl: W3.CHAIN.explorer+"/tx/"+rec.hash};
+}
+
+async function claimFaucet(mid, curId) {
+  if (!WALLET.address) { openModal("wallet-modal"); return; }
+  var tAddr = curId===1 ? W3.CONTRACTS.mockUsdc : W3.CONTRACTS.mockUsdt;
+  if (!tAddr) { showToast("❌","Faucet non disponibile"); return; }
+  try {
+    var ok = await W3.ensureNetwork();
+    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+    var signer = await W3.getSigner();
+    var tc = new ethers.Contract(tAddr, ["function faucet()"], signer);
+    var tx = await tc.faucet();
+    await tx.wait();
+    showToast("✅","10,000 "+CUR[curId].symbol+" accreditati!");
+    updateBal(mid);
+  } catch(e) { showToast("❌", e.reason||e.message||"Errore"); }
+}
+
+/* ---------- COUNTDOWN ---------- */
+function startCountdowns() {
+  cdTimers.forEach(clearInterval);
+  cdTimers = [];
+  markets.forEach(function(m) { tickCard(m); });
+  var t = setInterval(function() {
+    markets.forEach(function(m) { tickCard(m); });
+  }, 1000);
+  cdTimers.push(t);
+}
+
+function tickCard(m) {
+  var el = document.getElementById("cd-"+m.id);
+  if (!el) return;
+  var cd = fmtCountdown(m.expiresAt);
+  el.textContent = cd.text;
+  el.style.color = cd.color;
+}
+
+/* ---------- PARTICIPANTS REFRESH ---------- */
+async function refreshParticipants() {
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
+    for (var i = 0; i < markets.length; i++) {
+      var m = markets[i];
       try {
-        const fresh = await c.getMarket(m.id);
-        let parts = 0;
-        try { parts = fresh.participantCount ? Number(fresh.participantCount.toString()) : 0; } catch(e) {}
-        if (!parts) {
-          // Stima da pool size
-          const yf = Array.isArray(fresh.yesPool) ? fresh.yesPool[0] : fresh.yesPool;
-          const nf = Array.isArray(fresh.noPool)  ? fresh.noPool[0]  : fresh.noPool;
-          const poolTotal = parseFloat(ethers.formatEther(yf)) + parseFloat(ethers.formatEther(nf));
-          if (poolTotal > 0) parts = Math.max(1, Math.round(poolTotal / 0.005));
+        var fresh = await c.getMarket(m.id);
+        // partecipanti
+        var pts = toNum(fresh.participantCount);
+        // fallback: stima da pool
+        if (!pts) {
+          var yf = fmtEth(fresh.yesPool);
+          var nf = fmtEth(fresh.noPool);
+          var tot = yf + nf;
+          if (tot > 0) pts = Math.max(1, Math.round(tot / 0.005));
         }
-        m.participants = parts;
-        const el = document.getElementById('parts-' + m.id);
-        if (el) el.textContent = parts;
-        // Aggiorna anche pool
-        const yesEth = Array.isArray(fresh.yesPool)
-          ? parseFloat(ethers.formatEther(fresh.yesPool[0]))
-          : parseFloat(ethers.formatEther(fresh.yesPool));
-        const noEth = Array.isArray(fresh.noPool)
-          ? parseFloat(ethers.formatEther(fresh.noPool[0]))
-          : parseFloat(ethers.formatEther(fresh.noPool));
-        m.poolEth = yesEth + noEth;
-        const yesPct = m.poolEth > 0 ? Math.round(yesEth / m.poolEth * 100) : 50;
-        m.yesPct = yesPct;
-        m.noPct  = 100 - yesPct;
-      } catch(e) {}
+        m.participants = pts;
+        var el = document.getElementById("p-"+m.id);
+        if (el) el.textContent = pts;
+
+        // aggiorna anche pool e probabilità
+        var ye = fmtEth(fresh.yesPool);
+        var ne = fmtEth(fresh.noPool);
+        var to = ye + ne;
+        if (to > 0) {
+          m.poolEth = to;
+          m.yesPct  = Math.round(ye/to*100);
+          m.noPct   = 100 - m.yesPct;
+        }
+      } catch(e2) {}
     }
   } catch(e) {}
 }
 
-function buildCardHTML(m) {
-  const isYes = m.yesPct >= 50;
-  const tagClass = isYes ? 'tag tag-green' : 'tag tag-red';
-  const panel = openPanels[m.id];
-
-  return `
-    <div class="mkt-body">
-      <!-- Header -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-weight:700;font-size:.78rem;color:var(--text3)">${m.asset || m.category}</div>
-        <span class="${tagClass}">${isYes?'YES':'NO'} ${m.yesPct}%</span>
-      </div>
-      <!-- Question -->
-      <div style="font-size:.9rem;font-weight:700;margin-bottom:10px;line-height:1.4">${m.question}</div>
-      <!-- Bar -->
-      <div class="cp-bar" style="margin-bottom:6px"><div class="cp-bar-fill up" style="width:${m.yesPct}%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px">
-        <span style="color:var(--green2)">YES ${m.yesPct}%</span>
-        <span style="color:var(--red2)">NO ${m.noPct}%</span>
-      </div>
-      <!-- Pool + bet buttons -->
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700">
-          Pool: ${m.poolEth.toFixed(3)} ETH
-        </div>
-        <div style="display:flex;gap:6px">
-          <button
-            class="btn btn-up${panel?.side === true ? ' btn-up-active' : ''}"
-            style="font-size:.72rem;padding:5px 12px;font-weight:700"
-            onclick="togglePanel(${m.id}, true)">
-            ${panel?.side === true ? '✕ YES' : '▲ YES'}
-          </button>
-          <button
-            class="btn btn-dn${panel?.side === false ? ' btn-dn-active' : ''}"
-            style="font-size:.72rem;padding:5px 12px;font-weight:700"
-            onclick="togglePanel(${m.id}, false)">
-            ${panel?.side === false ? '✕ NO' : '▼ NO'}
-          </button>
-        </div>
-      </div>
-      <!-- Meta: countdown + partecipanti -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
-        <div id="cd-${m.id}" style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--cyan2);font-weight:700">
-          ⏱ --
-        </div>
-        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">
-          👤 <span id="parts-${m.id}">${m.participants}</span> partecipanti
-        </div>
-      </div>
-      <!-- Yield -->
-      <div class="yield-bar">
-        <div style="display:flex;align-items:center;gap:5px">
-          <div style="width:5px;height:5px;border-radius:50%;background:#00e87a;animation:pulse 2s infinite"></div>
-          <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700">ON-CHAIN YIELD</span>
-        </div>
-        <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:#00e87a;font-weight:700">+${m.yieldDay} ETH/g</span>
-        <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)">4.8% APY</span>
-      </div>
-    </div>
-    ${panel ? buildBetPanel(m, panel) : ''}`;
-}
-
-function buildBetPanel(m, panel) {
-  const isYes = panel.side;
-  const cur   = CURRENCIES[panel.currency];
-  const cls   = isYes ? 'yes-panel' : 'no-panel';
-  const label = isYes ? '▲ YES' : '▼ NO';
-  const color = isYes ? '#10b981' : '#ef4444';
-  const val   = panel.amount || '';
-
-  return `
-    <div class="bet-panel ${cls}" id="panel-${m.id}">
-      <!-- Title -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-size:.8rem;font-weight:700;color:${color}">${label} — Piazza Scommessa</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">
-          Saldo: <span id="bal-${m.id}" style="color:var(--cyan2)">—</span>
-        </div>
-      </div>
-
-      <!-- Currency tabs -->
-      <div class="cur-tabs">
-        ${CURRENCIES.map(c => `
-          <button class="cur-tab ${c.key}${panel.currency === c.id ? ' active' : ''}"
-            onclick="setCurrency(${m.id}, ${c.id})">${c.label}</button>
-        `).join('')}
-      </div>
-
-      <!-- Amount input -->
-      <div class="bet-input-row">
-        <input type="number" class="bet-input" id="amt-${m.id}"
-          placeholder="${cur.min}" step="${cur.step}" min="${cur.min}"
-          value="${val}"
-          oninput="updatePreview(${m.id})">
-        <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3);flex-shrink:0">${cur.symbol}</span>
-        <button onclick="setMax(${m.id})" style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);border-radius:5px;padding:4px 8px;cursor:pointer;color:var(--cyan2);font-size:.65rem;font-family:'DM Mono',monospace;flex-shrink:0">MAX</button>
-      </div>
-
-      <!-- Quick amounts -->
-      <div class="bet-quick">
-        ${getQuickAmounts(cur).map(q => `
-          <button class="bet-quick-btn" onclick="setAmount(${m.id}, ${q})">${q} ${cur.symbol}</button>
-        `).join('')}
-      </div>
-
-      <!-- Preview -->
-      <div class="bet-preview" id="preview-${m.id}">
-        <span>Valore USD: <strong id="usd-${m.id}">—</strong></span>
-        <span>Payout est: <strong id="payout-${m.id}" style="color:${color}">—</strong></span>
-      </div>
-
-      <!-- Faucet notice for USDC/USDT/CPRED -->
-      ${panel.currency > 0 ? `
-        <div class="faucet-notice">
-          ${panel.currency < 3
-            ? `Hai bisogno di ${CURRENCIES[panel.currency].symbol} testnet?
-               <a href="#" onclick="claimFaucet(${m.id}, ${panel.currency}); return false">Claim faucet gratuito →</a>`
-            : `Hai bisogno di CPRED?
-               <a href="presale.html">Compra in presale →</a>`
-          }
-        </div>
-      ` : ''}
-
-      <!-- Confirm button -->
-      <button
-        id="confirm-${m.id}"
-        onclick="confirmBet(${m.id})"
-        class="bet-confirm-${isYes ? 'yes' : 'no'}"
-        style="margin-top:8px">
-        ${isYes ? '▲ Conferma YES' : '▼ Conferma NO'}
-      </button>
-    </div>`;
-}
-
-function getQuickAmounts(cur) {
-  if (cur.key === 'eth')  return [0.001, 0.005, 0.01, 0.05];
-  if (cur.key === 'cpred') return [100, 500, 1000, 5000];
-  return [10, 50, 100, 500]; // USDC/USDT
-}
-
-// ── PANEL LOGIC ───────────────────────────────────────────────────
-
-function togglePanel(marketId, side) {
-  const cur = openPanels[marketId];
-  // Chiudi se già aperto sullo stesso lato
-  if (cur && cur.side === side) {
-    delete openPanels[marketId];
-  } else {
-    openPanels[marketId] = { side, currency: 0, amount: '' };
-  }
-  refreshCard(marketId);
-  if (openPanels[marketId]) {
-    updateBalance(marketId);
-    updatePreview(marketId);
-  }
-}
-
-function setCurrency(marketId, currencyId) {
-  if (!openPanels[marketId]) return;
-  openPanels[marketId].currency = currencyId;
-  openPanels[marketId].amount = '';
-  refreshCard(marketId);
-  updateBalance(marketId);
-}
-
-function setAmount(marketId, val) {
-  if (!openPanels[marketId]) return;
-  document.getElementById(`amt-${marketId}`).value = val;
-  openPanels[marketId].amount = val;
-  updatePreview(marketId);
-}
-
-function setMax(marketId) {
-  if (!WALLET.address) { openModal('wallet-modal'); return; }
-  const panel = openPanels[marketId];
-  if (!panel) return;
-  // Prende il valore dal testo del saldo mostrato
-  const balEl = document.getElementById(`bal-${marketId}`);
-  const bal = parseFloat(balEl?.textContent) || 0;
-  if (bal > 0) setAmount(marketId, bal);
-}
-
-function updatePreview(marketId) {
-  const panel = openPanels[marketId];
-  if (!panel) return;
-  const amt = parseFloat(document.getElementById(`amt-${marketId}`)?.value) || 0;
-  panel.amount = amt;
-  const cur = CURRENCIES[panel.currency];
-  const usd = amt * PRICES[cur.key];
-  const m   = allMarkets.find(x => x.id === marketId);
-  if (!m) return;
-
-  // Stima payout proporzionale
-  const winPool   = panel.side ? (m.poolEth || 0.001) : (m.poolEth || 0.001) * m.noPct / 100;
-  const totalPool = m.poolEth + (usd / PRICES['eth']);
-  const payout    = winPool > 0 ? (totalPool * (usd / PRICES['eth']) / winPool) * 0.98 : 0;
-  const payoutCur = payout * PRICES['eth'] / PRICES[cur.key];
-
-  const usdEl    = document.getElementById(`usd-${marketId}`);
-  const payoutEl = document.getElementById(`payout-${marketId}`);
-  if (usdEl)    usdEl.textContent    = '$' + usd.toFixed(2);
-  if (payoutEl) payoutEl.textContent = amt > 0 ? `~${payoutCur.toFixed(4)} ${cur.symbol}` : '—';
-}
-
-async function updateBalance(marketId) {
-  const panel = openPanels[marketId];
-  if (!panel || !WALLET.address || !window.W3) return;
-  const balEl = document.getElementById(`bal-${marketId}`);
-  if (!balEl) return;
-
-  try {
-    let bal = 0;
-    const cur = CURRENCIES[panel.currency];
-    if (panel.currency === 0) {
-      bal = await W3.getEthBalance(WALLET.address);
-    } else {
-      const addr = W3.CONTRACTS[cur.key === 'usdc' ? 'mockUsdc' : cur.key === 'usdt' ? 'mockUsdt' : 'token'];
-      if (addr) {
-        const c = await W3.getProvider().then(p => new ethers.Contract(addr,
-          ['function balanceOf(address) view returns (uint256)'], p));
-        const raw = await c.balanceOf(WALLET.address);
-        bal = parseFloat(ethers.formatUnits(raw, cur.decimals));
-      }
-    }
-    balEl.textContent = bal.toFixed(cur.decimals === 6 ? 2 : 4) + ' ' + cur.symbol;
-  } catch(e) {
-    balEl.textContent = '— ' + CURRENCIES[panel.currency].symbol;
-  }
-}
-
-function refreshCard(marketId) {
-  const m = allMarkets.find(x => x.id === marketId);
-  if (!m) return;
-  const card = document.getElementById(`card-${marketId}`);
-  if (!card) return;
-  card.innerHTML = buildCardHTML(m);
-  if (openPanels[marketId]) {
-    updateBalance(marketId);
-    updatePreview(marketId);
-  }
-}
-
-// ── BET EXECUTION ─────────────────────────────────────────────────
-
-async function confirmBet(marketId) {
-  if (!WALLET.address) { openModal('wallet-modal'); return; }
-
-  const panel = openPanels[marketId];
-  if (!panel) return;
-  const amt = parseFloat(document.getElementById(`amt-${marketId}`)?.value) || 0;
-  if (!amt || amt <= 0) { toast('❌', 'Inserisci un importo valido'); return; }
-
-  const btn = document.getElementById(`confirm-${marketId}`);
-  const origText = btn.textContent;
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> Transazione...';
-
-  try {
-    const ok = await W3.ensureNetwork();
-    if (!ok) throw new Error('Cambia rete a Base Sepolia');
-
-    let result;
-    if (panel.currency === 0) {
-      // ETH
-      result = await W3.placeBetOnChain(marketId, panel.side, amt);
-    } else {
-      // ERC20
-      result = await placeBetERC20(marketId, panel.side, panel.currency, amt);
-    }
-
-    const cur = CURRENCIES[panel.currency];
-    const side = panel.side ? 'YES ▲' : 'NO ▼';
-    toast('✅', `Scommessa ${side} · ${amt} ${cur.symbol}`, result.explorerUrl);
-
-    delete openPanels[marketId];
-    await loadMarkets(); // ricarica dati aggiornati
-  } catch(e) {
-    toast('❌', e.reason || e.message || 'Transazione fallita');
-    btn.disabled = false;
-    btn.textContent = origText;
-  }
-}
-
-async function placeBetERC20(marketId, side, currencyId, amount) {
-  const ok = await W3.ensureNetwork();
-  if (!ok) throw new Error('Cambia rete a Base Sepolia');
-
-  const cur = CURRENCIES[currencyId];
-  const contractAddr = W3.CONTRACTS.market;
-  const tokenAddr    = W3.CONTRACTS[cur.key === 'usdc' ? 'mockUsdc' : cur.key === 'usdt' ? 'mockUsdt' : 'token'];
-  if (!tokenAddr) throw new Error(`Contratto ${cur.label} non configurato`);
-
-  const signer = await W3.getSigner();
-  const amt    = ethers.parseUnits(amount.toString(), cur.decimals);
-
-  // Approve
-  const token = new ethers.Contract(tokenAddr,
-    ['function approve(address,uint256) returns (bool)',
-     'function allowance(address,address) view returns (uint256)'], signer);
-
-  const allowance = await token.allowance(WALLET.address, contractAddr);
-  if (allowance < amt) {
-    const approveTx = await token.approve(contractAddr, amt);
-    await approveTx.wait();
-  }
-
-  // PlaceBetERC20
-  const market = new ethers.Contract(contractAddr,
-    ['function placeBetERC20(uint256 marketId, bool side, uint8 currency, uint256 amount)'],
-    signer);
-  const tx = await market.placeBetERC20(marketId, side, currencyId, amt);
-  const receipt = await tx.wait();
-  return {
-    txHash: receipt.hash,
-    explorerUrl: `${W3.CHAIN.explorer}/tx/${receipt.hash}`
-  };
-}
-
-async function claimFaucet(marketId, currencyId) {
-  if (!WALLET.address) { openModal('wallet-modal'); return; }
-  const cur = CURRENCIES[currencyId];
-  const tokenAddr = W3.CONTRACTS[cur.key === 'usdc' ? 'mockUsdc' : 'mockUsdt'];
-  if (!tokenAddr) { toast('❌', 'Contratto faucet non disponibile'); return; }
-  try {
-    const ok = await W3.ensureNetwork();
-    if (!ok) throw new Error('Cambia rete a Base Sepolia');
-    const signer = await W3.getSigner();
-    const token  = new ethers.Contract(tokenAddr,
-      ['function faucet()'], signer);
-    const tx = await token.faucet();
-    await tx.wait();
-    toast('✅', `10,000 ${cur.symbol} testnet accreditati!`);
-    updateBalance(marketId);
-  } catch(e) {
-    toast('❌', e.reason || e.message || 'Faucet failed');
-  }
-}
-
-// ── FILTER ───────────────────────────────────────────────────────
-function filterCat(cat, btn) {
-  document.querySelectorAll('#filter-btns .btn').forEach(b => {
-    b.className = 'btn btn-ghost';
-    b.style.fontSize = '.75rem';
-    b.style.padding  = '5px 12px';
-  });
-  btn.className = 'btn btn-primary';
-  btn.style.fontSize = '.75rem';
-  btn.style.padding  = '5px 12px';
-
-  const filtered = cat === 'all'
-    ? allMarkets
-    : allMarkets.filter(m => m.category.toLowerCase() === cat);
-  renderMarkets(filtered);
-  setTimeout(startCountdowns, 200);
-}
-
-// ── TOAST ─────────────────────────────────────────────────────────
-function toast(icon, msg, link) {
-  document.getElementById('toast-icon').textContent = icon;
-  document.getElementById('toast-msg').textContent  = msg;
-  const l = document.getElementById('toast-link');
-  if (link) { l.href = link; l.textContent = 'Vedi su BaseScan →'; l.style.display = 'block'; }
-  else l.style.display = 'none';
-  const t = document.getElementById('tx-toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 7000);
-}
-
-// ── LE MIE SCOMMESSE ─────────────────────────────────────────────
+/* ---------- LE MIE SCOMMESSE ---------- */
 async function loadMyBets() {
   if (!WALLET.address) return;
-  const section = document.getElementById('my-bets-section');
-  const list    = document.getElementById('my-bets-list');
-  section.style.display = 'block';
-  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem;padding:4px 0"><span class="spin"></span> Caricamento...</div>';
+  var bar  = document.getElementById("my-bets-bar");
+  var list = document.getElementById("bets-list");
+  bar.classList.add("on");
+  list.innerHTML = '<div style="color:var(--text3);font-size:.8rem"><span class="spin"></span> Caricamento...</div>';
 
   try {
-    const MARKET_ABI_BETS = [
-      "function marketCount() view returns (uint256)",
-      "function getUserMarkets(address user) view returns (uint256[])",
-      "function getPosition(uint256 marketId, address user) view returns (tuple(uint256 marketId, bool side, uint256 amount, bool claimed))",
-      "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
-    ];
-    const provider = await W3.getProvider();
-    const c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI_BETS, provider);
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
+    var count = toNum(await c.marketCount());
+    var bets  = [];
 
-    // Prova prima getUserMarkets (più efficiente)
-    let marketIds = [];
-    try {
-      const ids = await c.getUserMarkets(WALLET.address);
-      // Deduplica — userMarkets può avere duplicati
-      marketIds = [...new Set(ids.map(id => Number(id)))];
-      console.log('getUserMarkets:', marketIds);
-    } catch(e) {
-      // Fallback: scan tutti i mercati
-      console.log('getUserMarkets failed, scanning all:', e.message);
-      const count = Number(await c.marketCount());
-      marketIds = Array.from({length: count}, (_, i) => i);
-    }
-
-    const bets = [];
-    for (const id of marketIds) {
+    for (var i = 0; i < count; i++) {
       try {
-        const pos = await c.getPosition(id, WALLET.address);
-        // Gestisce sia bigint che number (ethers v6 variabile)
-        const rawAmt = pos.amount;
-        const amtBig = typeof rawAmt === 'bigint' ? rawAmt : BigInt(rawAmt.toString());
-        console.log(`Market ${id}: amount=${amtBig.toString()}, side=${pos.side}, claimed=${pos.claimed}`);
-        if (amtBig > 0n) {
-          const mkt = await c.getMarket(id);
-          bets.push({ pos, mkt, id, amtBig });
+        var pos = await c.getPosition(i, WALLET.address);
+        var rawAmt = pos.amount;
+        var bigAmt = typeof rawAmt === "bigint" ? rawAmt : BigInt(rawAmt.toString());
+        if (bigAmt > 0n) {
+          var mkt = await c.getMarket(i);
+          bets.push({id:i, pos:pos, mkt:mkt, bigAmt:bigAmt});
         }
-      } catch(e) { console.warn(`Market ${id} error:`, e.message); }
+      } catch(e2) {}
     }
 
-    console.log('Total bets found:', bets.length);
+    if (!bets.length) { bar.classList.remove("on"); return; }
 
-    if (!bets.length) {
-      section.style.display = 'none';
-      return;
-    }
+    document.getElementById("bets-count").textContent = bets.length;
+    list.innerHTML = "";
 
-    document.getElementById('my-bets-count').textContent = bets.length;
-    list.innerHTML = '';
+    bets.forEach(function(b) {
+      var stake    = fmtEth(b.bigAmt);
+      var side     = b.pos.side === true || b.pos.side === 1;
+      var claimed  = b.pos.claimed === true;
+      var statusN  = toNum(b.mkt.status);
+      var outcomeN = toNum(b.mkt.outcome);
+      var won  = statusN===2 && ((outcomeN===1&&side)||(outcomeN===2&&!side));
+      var lost = statusN===2 && !won;
 
-    bets.forEach(({ pos, mkt, id, amtBig }) => {
-      const stake   = parseFloat(ethers.formatEther(amtBig));
-      const side    = pos.side === true || pos.side === 1 || String(pos.side) === 'true';
-      const claimed = pos.claimed === true || String(pos.claimed) === 'true';
-      const statusN  = Number(mkt.status);
-      const outcomeN = Number(mkt.outcome);
-      const statusLabels  = ['Aperta','Chiusa','Risolta','Cancellata'];
-      const outcomeLabels = ['—','YES','NO'];
-      const won  = statusN === 2 && ((outcomeN === 1 && side) || (outcomeN === 2 && !side));
-      const lost = statusN === 2 && !won;
+      var ye = fmtEth(b.mkt.yesPool);
+      var ne = fmtEth(b.mkt.noPool);
+      var tot = ye + ne;
+      var wp  = side ? ye : ne;
+      var payout = wp > 0 ? (tot * stake / wp * 0.98) : stake * 1.5;
+      var daysLeft = Math.max(0, Math.ceil((toNum(b.mkt.expiresAt) - Date.now()/1000) / 86400));
+      var q = b.mkt.question.length > 50 ? b.mkt.question.slice(0,50)+"..." : b.mkt.question;
 
-      let yesEth = 0, noEth = 0;
-      try {
-        yesEth = Array.isArray(mkt.yesPool)
-          ? parseFloat(ethers.formatEther(mkt.yesPool[0]))
-          : parseFloat(ethers.formatEther(mkt.yesPool));
-        noEth = Array.isArray(mkt.noPool)
-          ? parseFloat(ethers.formatEther(mkt.noPool[0]))
-          : parseFloat(ethers.formatEther(mkt.noPool));
-      } catch(e) {}
+      var chip = document.createElement("div");
+      chip.className = "bet-chip" + (won&&!claimed?" won":lost?" lost":"");
 
-      const total   = yesEth + noEth;
-      const winPool = side ? yesEth : noEth;
-      const payout  = winPool > 0 ? (total * stake / winPool * 0.98) : stake * 2 * 0.98;
-      const daysLeft = Math.max(0, Math.ceil((Number(mkt.expiresAt) - Date.now()/1000) / 86400));
-      const borderColor = won && !claimed ? 'rgba(16,185,129,.4)' : lost ? 'rgba(239,68,68,.3)' : 'rgba(124,58,237,.25)';
+      // Status label
+      var statTxt   = won&&!claimed ? "Hai vinto!"
+                    : won&&claimed  ? "Ritirato"
+                    : lost ? "Persa"
+                    : statusN===0 ? daysLeft+"g rimasti" : ["Aperta","Chiusa","Risolta","Cancellata"][statusN]||"";
+      var statColor = won ? "#10b981" : lost ? "#ef4444" : "var(--purple3)";
+      var sideCls   = side ? "tag tag-green" : "tag tag-red";
 
-      const el = document.createElement('div');
-      el.style.cssText = 'flex-shrink:0;width:280px;background:rgba(255,255,255,.04);border:1px solid ' + borderColor + ';border-radius:10px;padding:12px 14px';
-      el.innerHTML =
-        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">' +
-          '<span class="' + (side ? 'tag tag-green' : 'tag tag-red') + '" style="font-size:.62rem">' + (side ? '▲ YES' : '▼ NO') + '</span>' +
-          '<span style="font-size:.65rem;color:' + (won ? '#10b981' : lost ? '#ef4444' : 'var(--purple3)') + '">' +
-            (won && !claimed ? '🎉 Hai vinto!' : won && claimed ? '✅ Ritirato' : lost ? '❌ Persa' : ('⏱ ' + (statusN === 0 ? daysLeft + 'g rimasti' : statusLabels[statusN]))) +
-          '</span>' +
-        '</div>' +
-        '<div style="font-size:.78rem;font-weight:700;line-height:1.3;margin-bottom:8px;color:var(--text)">' +
-          (mkt.question.length > 52 ? mkt.question.slice(0,52) + '…' : mkt.question) +
-        '</div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--text3);margin-bottom:8px">' +
-          '<span>Stake: ' + stake.toFixed(4) + ' ETH</span>' +
-          '<span style="color:var(--green2)">Est: ' + payout.toFixed(4) + ' ETH</span>' +
-        '</div>' +
-        (won && !claimed
-          ? '<button onclick="claimWin(' + id + ', this)" class="btn btn-up" style="width:100%;justify-content:center;font-size:.72rem;padding:5px">🎉 Ritira Vincita</button>'
-          : claimed ? '<div style="text-align:center;font-size:.65rem;color:var(--green2)">✅ Payout ritirato</div>'
-          : lost    ? '<div style="text-align:center;font-size:.65rem;color:var(--red2)">❌ Posizione persa</div>'
-          : '<div style="text-align:center;font-size:.65rem;color:var(--text3)">⏱ In attesa di risoluzione</div>');
+      var hdrDiv = document.createElement("div");
+      hdrDiv.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:7px";
+      var sideTag = document.createElement("span");
+      sideTag.className = sideCls;
+      sideTag.style.fontSize = ".62rem";
+      sideTag.textContent = side ? "YES" : "NO";
+      var statEl = document.createElement("span");
+      statEl.style.cssText = "font-size:.65rem;color:"+statColor;
+      statEl.textContent = statTxt;
+      hdrDiv.appendChild(sideTag);
+      hdrDiv.appendChild(statEl);
+      chip.appendChild(hdrDiv);
 
-      list.appendChild(el);
+      var qEl = document.createElement("div");
+      qEl.style.cssText = "font-size:.78rem;font-weight:700;line-height:1.3;margin-bottom:8px";
+      qEl.textContent = q;
+      chip.appendChild(qEl);
+
+      var numRow = document.createElement("div");
+      numRow.style.cssText = "display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:8px";
+      var s1 = document.createElement("span"); s1.textContent = "Stake: "+stake.toFixed(4)+" ETH";
+      var s2 = document.createElement("span"); s2.style.color="var(--green2)"; s2.textContent = "Est: "+payout.toFixed(4)+" ETH";
+      numRow.appendChild(s1); numRow.appendChild(s2);
+      chip.appendChild(numRow);
+
+      var actEl = document.createElement("div");
+      actEl.style.cssText = "text-align:center;font-size:.65rem";
+      if (won && !claimed) {
+        var rBtn = document.createElement("button");
+        rBtn.className = "btn btn-up";
+        rBtn.style.cssText = "width:100%;justify-content:center;font-size:.72rem;padding:5px";
+        rBtn.textContent = "Ritira Vincita";
+        rBtn.onclick = (function(id,btn){return function(){claimWin(id,btn);};})(b.id, rBtn);
+        actEl.appendChild(rBtn);
+      } else if (claimed) {
+        actEl.style.color = "#10b981";
+        actEl.textContent = "Payout ritirato";
+      } else if (lost) {
+        actEl.style.color = "#ef4444";
+        actEl.textContent = "Posizione persa";
+      } else {
+        actEl.style.color = "var(--text3)";
+        actEl.textContent = "In attesa di risoluzione";
+      }
+      chip.appendChild(actEl);
+      list.appendChild(chip);
     });
 
-  } catch(e) {
-    console.error('loadMyBets error:', e);
-    section.style.display = 'block';
-    list.innerHTML = '<div style="color:var(--red2);font-size:.75rem;padding:4px 0">Errore: ' + e.message + '</div>';
+  } catch(err) {
+    console.error("loadMyBets:", err);
+    document.getElementById("bets-list").innerHTML =
+      '<div style="color:#ef4444;font-size:.75rem">Errore: '+err.message+'</div>';
   }
 }
 
-
-async function claimWin(marketId, btn) {
-  btn.disabled = true; btn.textContent = '...';
+async function claimWin(mid, btn) {
+  btn.disabled = true;
+  btn.textContent = "...";
   try {
-    const result = await W3.claimPayoutOnChain(marketId);
-    toast('✅', 'Vincita ritirata!', result.explorerUrl);
+    var result = await W3.claimPayoutOnChain(mid);
+    showToast("✅","Vincita ritirata!", result.explorerUrl);
     await loadMyBets();
   } catch(e) {
-    toast('❌', e.reason || e.message || 'Errore');
-    btn.disabled = false; btn.textContent = '🎉 Ritira';
+    showToast("❌", e.reason||e.message||"Errore");
+    btn.disabled = false;
+    btn.textContent = "Ritira Vincita";
   }
 }
 
-// ── INIT ─────────────────────────────────────────────────────────
-CP.ready.then(async (state) => {
-  const orig = CP.refreshWalletData.bind(CP);
+/* ---------- FILTER ---------- */
+function filterBy(cat, btn) {
+  document.querySelectorAll("#filters .btn").forEach(function(b) {
+    b.className = "btn btn-ghost";
+    b.style.cssText = "font-size:.75rem;padding:5px 12px";
+  });
+  btn.className = "btn btn-primary";
+  btn.style.cssText = "font-size:.75rem;padding:5px 12px";
+  var list = cat === "all" ? markets : markets.filter(function(m){return m.category.toLowerCase()===cat;});
+  renderGrid(list);
+  startCountdowns();
+  refreshParticipants();
+}
+
+/* ---------- TOAST ---------- */
+function showToast(icon, msg, link) {
+  document.getElementById("toast-icon").textContent = icon;
+  document.getElementById("toast-msg").textContent  = msg;
+  var lEl = document.getElementById("toast-link");
+  if (link) { lEl.href=link; lEl.textContent="Vedi su BaseScan →"; lEl.style.display="block"; }
+  else lEl.style.display="none";
+  var t = document.getElementById("toast");
+  t.classList.add("on");
+  setTimeout(function(){t.classList.remove("on");}, 7000);
+}
+
+/* ---------- INIT ---------- */
+CP.ready.then(async function(state) {
+  var orig = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() {
     await orig();
     if (WALLET.address) loadMyBets();
   };
   await loadMarkets();
   if (state.address) loadMyBets();
+  // Refresh partecipanti ogni 30s
+  setInterval(refreshParticipants, 30000);
 });
 </script>
 </body></html>
