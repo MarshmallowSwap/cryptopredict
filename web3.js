@@ -34,6 +34,9 @@ const MARKET_ABI = [
 const TOKEN_ABI = [
   "function balanceOf(address) view returns (uint256)",
   "function totalSupply() view returns (uint256)",
+  "function approve(address spender, uint256 amount) returns (bool)",
+  "function allowance(address owner, address spender) view returns (uint256)",
+  "function transfer(address to, uint256 amount) returns (bool)",
   "function stakedBalance(address) view returns (uint256)",
   "function pendingReward(address) view returns (uint256)",
   "function stake(uint256 amount)",
