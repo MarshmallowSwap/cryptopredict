@@ -94,6 +94,7 @@ const CP = {
       await this.refreshWalletData();
     }
     this.updateNav();
+    this.updatePresaleBanner();
     // Risolvi la promise CP.ready — le pagine aspettano questa
     _cpReadyResolve({ address: WALLET.address, connected: !!WALLET.address });
     // Emetti anche evento per compatibilità
