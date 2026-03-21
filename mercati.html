@@ -692,32 +692,24 @@ function tickCard(m) {
 /* ---------- PARTICIPANTS REFRESH ---------- */
 async function refreshParticipants() {
   try {
-    var provider = await W3.getProvider();
-    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
+    var c = await W3.getContract("market");
     for (var i = 0; i < markets.length; i++) {
       var m = markets[i];
       try {
         var fresh = await c.getMarket(m.id);
-        // partecipanti
-        var pts = toNum(fresh.participantCount);
-        // fallback: stima da pool
-        if (!pts) {
-          var yf = fmtEth(fresh.yesPool);
-          var nf = fmtEth(fresh.noPool);
-          var tot = yf + nf;
-          if (tot > 0) pts = Math.max(1, Math.round(tot / 0.005));
-        }
-        m.participants = pts;
-        var el = document.getElementById("p-"+m.id);
-        if (el) el.textContent = pts;
-
-        // aggiorna anche pool e probabilità
         var ye = fmtEth(fresh.yesPool);
         var ne = fmtEth(fresh.noPool);
         var to = ye + ne;
+        // Stima partecipanti: ogni scommessa media ~0.005 ETH
+        var pts = toNum(fresh.participantCount);
+        if (!pts && to > 0) pts = Math.max(1, Math.round(to / 0.005));
+        m.participants = pts;
+        var pel = document.getElementById("p-"+m.id);
+        if (pel) pel.textContent = pts;
+        // Aggiorna pool live
         if (to > 0) {
           m.poolEth = to;
-          m.yesPct  = Math.round(ye/to*100);
+          m.yesPct  = Math.round(ye / to * 100);
           m.noPct   = 100 - m.yesPct;
         }
       } catch(e2) {}
@@ -734,8 +726,7 @@ async function loadMyBets() {
   list.innerHTML = '<div style="color:var(--text3);font-size:.8rem"><span class="spin"></span> Caricamento...</div>';
 
   try {
-    var provider = await W3.getProvider();
-    var c = new ethers.Contract(W3.CONTRACTS.market, MARKET_ABI, provider);
+    var c = await W3.getContract("market");
     var count = toNum(await c.marketCount());
     var bets  = [];
 
