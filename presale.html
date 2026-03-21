@@ -351,28 +351,31 @@ async function loadPresalePage() {
   }
 }
 
-// Calcola preview CPRED in tempo reale
-async function calcCpred(ethVal) {
+// Calcola preview CPRED in tempo reale — calcolo locale istantaneo
+function calcCpred(ethVal) {
   const eth = parseFloat(ethVal) || 0;
-  if (!eth) {
+  if (!eth || eth <= 0) {
     document.getElementById('cpred-out').textContent = '—';
     document.getElementById('listing-val').textContent = '—';
     return;
   }
-  let cpred = 0;
-  try {
-    if (window.W3) {
-      const c = await W3.getContract('presale');
-      const raw = await c.getCpredForEth(ethers.parseEther(eth.toString()));
-      cpred = parseFloat(ethers.formatEther(raw));
-    }
-  } catch(e) {
-    // fallback: calcolo locale
-    const price = presaleInfo ? presaleInfo.priceUsd : 0.05;
-    cpred = (eth * ETH_PRICE) / price;
-  }
+  // Usa priceUsd da presaleInfo se disponibile, altrimenti fallback a Stage 1 ($0.05)
+  const priceUsd = (presaleInfo && presaleInfo.priceUsd) ? presaleInfo.priceUsd : 0.05;
+  const cpred = (eth * ETH_PRICE) / priceUsd;
   document.getElementById('cpred-out').textContent = cpred.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
   document.getElementById('listing-val').textContent = '$' + (cpred * 0.15).toFixed(2) + ' (+200%)';
+  // Prova anche a raffinare con il contratto in background (non blocca UI)
+  if (window.W3 && window.ethers) {
+    W3.getContract('presale').then(c =>
+      c.getCpredForEth(ethers.parseEther(eth.toString()))
+    ).then(raw => {
+      const onchain = parseFloat(ethers.formatEther(raw));
+      if (onchain > 0) {
+        document.getElementById('cpred-out').textContent = onchain.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
+        document.getElementById('listing-val').textContent = '$' + (onchain * 0.15).toFixed(2) + ' (+200%)';
+      }
+    }).catch(() => {});
+  }
 }
 
 function setEth(v) {
