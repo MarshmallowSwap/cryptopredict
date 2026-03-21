@@ -118,7 +118,7 @@
         <div class="g2">
           <div>
             <label class="cp-label">Categoria</label>
-            <select class="cp-input" id="category" onchange="updatePreview()">
+            <select class="cp-input" id="category" onchange="updatePreview(); toggleAssetField();">
               <option value="crypto">₿ Crypto — prezzi, ETF, halving</option>
               <option value="defi">⚡ DeFi — TVL, protocol, yield</option>
               <option value="sport">⚽ Sport — calcio, NBA, MMA, F1, Esport</option>
@@ -132,15 +132,15 @@
               <option value="altro">🔮 Altro</option>
             </select>
           </div>
-          <div>
-            <label class="cp-label">Asset di riferimento</label>
+          <div id="asset-wrap">
+            <label class="cp-label">Asset di riferimento <span style="font-size:.65rem;color:var(--text3)">(crypto/macro)</span></label>
             <select class="cp-input" id="asset">
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="ETH">Ethereum (ETH)</option>
               <option value="SOL">Solana (SOL)</option>
               <option value="BNB">BNB</option>
               <option value="XRP">XRP</option>
-              <option value="OTHER">Altro</option>
+              <option value="OTHER">—</option>
             </select>
           </div>
         </div>
@@ -163,15 +163,25 @@
 
       <!-- Liquidità -->
       <div class="cp-card cp-card-gold">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// LIQUIDITA' INIZIALE</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// VALUTA E LIQUIDITA' INIZIALE</div>
+        <label class="cp-label">Valuta del mercato</label>
+        <div style="display:flex;gap:8px;margin-bottom:14px" id="currency-selector">
+          <button type="button" class="btn btn-primary" id="cur-eth"  onclick="selectCurrency('ETH')"  style="flex:1;justify-content:center;font-size:.8rem">ETH</button>
+          <button type="button" class="btn btn-ghost"   id="cur-usdc" onclick="selectCurrency('USDC')" style="flex:1;justify-content:center;font-size:.8rem">USDC</button>
+          <button type="button" class="btn btn-ghost"   id="cur-usdt" onclick="selectCurrency('USDT')" style="flex:1;justify-content:center;font-size:.8rem">USDT</button>
+          <button type="button" class="btn btn-ghost"   id="cur-cpred" onclick="selectCurrency('CPRED')" style="flex:1;justify-content:center;font-size:.8rem;color:#fbbf24">CPRED ✦</button>
+        </div>
+        <div id="cur-info" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:10px;padding:7px 10px;background:rgba(255,255,255,.03);border-radius:6px">
+          ETH — valuta nativa Base · fee normali · scommesse e vincite in ETH
+        </div>
         <label class="cp-label">ETH da depositare *</label>
         <div style="position:relative">
-          <input type="number" class="cp-input" id="liquidity" placeholder="0.001" min="0.001" step="0.001"
-                 style="padding-right:50px" oninput="updateFeePreview()">
-          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">ETH</span>
+          <input type="number" class="cp-input" id="liquidity" placeholder="0.0025" min="0.0025" step="0.001" id="liquidity"
+                 style="padding-right:60px" oninput="updateFeePreview()">
+          <span id="liq-symbol" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">ETH</span>
         </div>
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">
-          Minimo 0.001 ETH · Liquidità 100% rimborsata alla chiusura
+          Minimo 0.0025 ETH (~$5) · Liquidità 100% rimborsata alla chiusura
         </div>
         <div id="fee-preview" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:.72rem">
           <div style="display:flex;justify-content:space-between;margin-bottom:4px">
@@ -394,7 +404,7 @@ async function createMarket() {
 
   if (!question) { showToast("❌","Inserisci la domanda del mercato"); return; }
   if (!expDate)  { showToast("❌","Scegli una data di scadenza"); return; }
-  if (liquidity < 0.001) { showToast("❌","Liquidità minima: 0.001 ETH"); return; }
+  if (liquidity < 0.0025) { showToast("❌","Liquidità minima: 0.0025 ETH"); return; }
 
   var expiresAt = Math.floor(new Date(expDate + "T" + expTime + ":00Z").getTime() / 1000);
   if (expiresAt <= Date.now() / 1000 + 3600) {
@@ -416,10 +426,28 @@ async function createMarket() {
       "function createMarket(string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt) payable returns (uint256)"
     ];
     var mktC  = new ethers.Contract(W3.CONTRACTS.market, CREA_ABI, signer);
-    var liqWei = ethers.parseEther(liquidity.toString());
+    // Valuta unica per mercato — v.A
+    var liqWei, txOpts;
+    if (selectedCurrency === "ETH") {
+      liqWei = ethers.parseEther(liquidity.toString());
+      txOpts = {value: liqWei};
+    } else {
+      // ERC20: approve prima, poi createMarket con value=0
+      var tokenAddr = selectedCurrency === "USDC" ? W3.CONTRACTS.mockUsdc
+                    : selectedCurrency === "USDT" ? W3.CONTRACTS.mockUsdt
+                    : W3.CONTRACTS.token;
+      var decimals  = (selectedCurrency === "USDC" || selectedCurrency === "USDT") ? 6 : 18;
+      liqWei = ethers.parseUnits(liquidity.toString(), decimals);
+      var tokenC = new ethers.Contract(tokenAddr,
+        ["function approve(address,uint256) returns (bool)"], signer);
+      btn.innerHTML = '<span class="spin"></span> Approvazione ' + selectedCurrency + '...';
+      var appTx = await tokenC.approve(W3.CONTRACTS.market, liqWei);
+      await appTx.wait();
+      txOpts = {value: 0n};
+    }
     var tx    = await mktC.createMarket(
       question, category, asset, 0n, true, BigInt(expiresAt),
-      {value: liqWei}
+      txOpts
     );
     btn.innerHTML = '<span class="spin"></span> Conferma in corso...';
     var receipt = await tx.wait();
@@ -525,6 +553,52 @@ function showToast(icon, msg, link) {
   var t = document.getElementById("tx-toast");
   t.classList.add("show");
   setTimeout(function(){t.classList.remove("show");}, 7000);
+}
+
+// ── CURRENCY SELECTOR ────────────────────────────────────────────
+var selectedCurrency = "ETH";
+
+var CUR_INFO = {
+  ETH:  "ETH — valuta nativa Base · fee normali · scommesse e vincite in ETH",
+  USDC: "USDC — stablecoin $1 · fee normali · scommesse e vincite in USDC",
+  USDT: "USDT — stablecoin $1 · fee normali · scommesse e vincite in USDT",
+  CPRED:"CPRED — token nativo · fee AZZERATE (0%) · incentivo per holder · scommesse e vincite in CPRED"
+};
+
+var CUR_MIN = {ETH: 0.0025, USDC: 5, USDT: 5, CPRED: 100};
+var CUR_STEP = {ETH: 0.001, USDC: 1, USDT: 1, CPRED: 10};
+var CUR_PLACEHOLDER = {ETH: "0.0025", USDC: "5", USDT: "5", CPRED: "100"};
+
+function selectCurrency(cur) {
+  selectedCurrency = cur;
+  ["ETH","USDC","USDT","CPRED"].forEach(function(c) {
+    var btn = document.getElementById("cur-" + c.toLowerCase());
+    if (btn) btn.className = c === cur ? "btn btn-primary" : "btn btn-ghost";
+    if (c === "CPRED" && btn) btn.style.color = c === cur ? "" : "#fbbf24";
+  });
+  var info = document.getElementById("cur-info");
+  if (info) info.textContent = CUR_INFO[cur];
+  var sym = document.getElementById("liq-symbol");
+  if (sym) sym.textContent = cur;
+  var inp = document.getElementById("liquidity");
+  if (inp) {
+    inp.min = CUR_MIN[cur];
+    inp.step = CUR_STEP[cur];
+    inp.placeholder = CUR_PLACEHOLDER[cur];
+    inp.value = "";
+  }
+  updateFeePreview();
+}
+
+// Mostra/nascondi asset in base a categoria
+function toggleAssetField() {
+  var cat = document.getElementById("category").value;
+  var wrap = document.getElementById("asset-wrap");
+  if (wrap) {
+    var show = ["crypto","macro","defi"].includes(cat);
+    wrap.style.display = show ? "" : "none";
+    if (!show) document.getElementById("asset").value = "OTHER";
+  }
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
