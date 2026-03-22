@@ -79,7 +79,7 @@
   <div class="page-title" id="ps-title">
     <span class="ps-loading"><span class="ps-spin"></span>Caricamento dati on-chain...</span>
   </div>
-  <div class="page-sub" id="ps-sub">Connesso a Base Sepolia · Contratto: <a href="https://sepolia.basescan.org/address/0x892e088bB1aB86F0B7fbE0f2e70429C57419a425" target="_blank" style="color:var(--purple3);font-size:.75rem">0x320A...e69</a></div>
+  <div class="page-sub" id="ps-sub">Connesso a Base Sepolia · Contratto: <a href="https://sepolia.basescan.org/address/0x4cad365c6927b237338878EF686f2608f005c5db" target="_blank" style="color:var(--purple3);font-size:.75rem">0x320A...e69</a></div>
 </div>
 
 <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start" id="buy">
@@ -166,7 +166,7 @@
       </button>
       <div style="font-size:.7rem;color:var(--text3);text-align:center;margin-top:10px">
         On-chain · Base Sepolia · Contratto auditato ·
-        <a href="https://sepolia.basescan.org/address/0x892e088bB1aB86F0B7fbE0f2e70429C57419a425#code"
+        <a href="https://sepolia.basescan.org/address/0x4cad365c6927b237338878EF686f2608f005c5db#code"
            target="_blank" style="color:var(--purple3)">Vedi codice</a>
       </div>
     </div>
@@ -223,7 +223,7 @@
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <div style="display:flex;justify-content:space-between;font-size:.83rem">
           <span style="color:var(--text3)">Contratto token</span>
-          <a href="https://sepolia.basescan.org/address/0xdA65d2571D3166dC31F7F019D8b27cb525b262A2"
+          <a href="https://sepolia.basescan.org/address/0x9a8Ba5175654E5145B1c50d31F967E653c16b421"
              target="_blank" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--purple3)">0x6993...2cA0</a>
         </div>
       </div>
@@ -245,15 +245,15 @@
     <div class="cp-card" style="background:rgba(124,58,237,.04);border-color:rgba(124,58,237,.2)">
       <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// CONTRATTI VERIFICABILI</div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:.78rem">
-        <a href="https://sepolia.basescan.org/address/0xdA65d2571D3166dC31F7F019D8b27cb525b262A2"
+        <a href="https://sepolia.basescan.org/address/0x9a8Ba5175654E5145B1c50d31F967E653c16b421"
            target="_blank" style="display:flex;justify-content:space-between;color:var(--text);text-decoration:none;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:7px;border:1px solid var(--border)">
           <span>🔮 CPRED Token</span><span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--purple3)">BaseScan →</span>
         </a>
-        <a href="https://sepolia.basescan.org/address/0x892e088bB1aB86F0B7fbE0f2e70429C57419a425"
+        <a href="https://sepolia.basescan.org/address/0x4cad365c6927b237338878EF686f2608f005c5db"
            target="_blank" style="display:flex;justify-content:space-between;color:var(--text);text-decoration:none;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:7px;border:1px solid var(--border)">
           <span>💎 Presale Contract</span><span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--purple3)">BaseScan →</span>
         </a>
-        <a href="https://sepolia.basescan.org/address/0x121668978cdf98672B1F60C2c1d64ce71A1CEFD9"
+        <a href="https://sepolia.basescan.org/address/0x15444c1cA73F4f53B6BD060531BDc4dA1570AeE2"
            target="_blank" style="display:flex;justify-content:space-between;color:var(--text);text-decoration:none;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:7px;border:1px solid var(--border)">
           <span>📊 PredictionMarket</span><span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--purple3)">BaseScan →</span>
         </a>
@@ -297,7 +297,7 @@ async function loadPresalePage() {
     document.getElementById('ps-title').textContent =
       active ? `Presale in corso — Stage ${currentStage}` : 'Presale terminata';
     document.getElementById('ps-sub').innerHTML =
-      `Dati live dal contratto · <a href="https://sepolia.basescan.org/address/0x892e088bB1aB86F0B7fbE0f2e70429C57419a425" target="_blank" style="color:var(--purple3);font-size:.75rem">0x320A...e69</a>`;
+      `Dati live dal contratto · <a href="https://sepolia.basescan.org/address/0x4cad365c6927b237338878EF686f2608f005c5db" target="_blank" style="color:var(--purple3);font-size:.75rem">0x320A...e69</a>`;
 
     // Price
     const ethPricePerCpred = priceUsd / ETH_PRICE;
