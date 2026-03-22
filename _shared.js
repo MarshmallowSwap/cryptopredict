@@ -548,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
     '#ai-inp:focus{border-color:rgba(124,58,237,.7);background:rgba(124,58,237,.08)}' +
     '#ai-inp::placeholder{color:rgba(255,255,255,.25)}' +
     '#ai-snd{padding:9px 18px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:24px;color:#fff;font-weight:800;font-size:.72rem;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.03em;box-shadow:0 2px 12px rgba(124,58,237,.4);}' +
-    '#ai-snd:hover{opacity:.85}#ai-snd:disabled{opacity:.5;cursor:default}';
+    '#ai-snd:hover{transform:scale(1.05);box-shadow:0 4px 20px rgba(124,58,237,.65)}#ai-snd:disabled{opacity:.4;cursor:default;transform:none}';
   document.head.appendChild(css);
 
   /* FAB */
