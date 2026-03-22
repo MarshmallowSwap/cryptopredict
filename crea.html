@@ -24,7 +24,7 @@
 <div class="ticker-bar"><div class="ticker-track">
   <span class="tick-live"><span class="tick-dot"></span>CREA MERCATO</span>
   <span class="tick-item">Creator fee: <strong style="color:var(--gold2)">on every payout</strong></span>
-  <span class="tick-item">Liquidità rimborsata al 100%</span>
+  <span class="tick-item">Liquidity refunded al 100%</span>
   <span class="tick-item"><span class="sym">CPRED</span> $0.050</span>
   <span class="tick-live"><span class="tick-dot"></span>CREA MERCATO</span>
   <span class="tick-item">Creator fee: <strong style="color:var(--gold2)">on every payout</strong></span>
@@ -79,7 +79,7 @@
 
       <!-- Immagine -->
       <div class="cp-card cp-card-accent">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// IMAGE DEL MERCATO</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// MARKET IMAGE</div>
 
         <!-- Drop zone / preview -->
         <div class="img-drop" id="img-drop" onclick="document.getElementById('img-file').click()">
@@ -90,7 +90,7 @@
             <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);line-height:1.8">
               JPG · PNG · WebP · GIF<br>
               <strong style="color:var(--text2)">1200 × 630 px</strong> — formato standard OpenGraph<br>
-              Max <strong style="color:var(--gold2)">1 MB</strong> · Caricata su cloud storage
+              Max <strong style="color:var(--gold2)">1 MB</strong> · Uploaded to cloud storage
             </div>
           </div>
           <div class="img-overlay" id="img-overlay" style="display:none">
@@ -100,7 +100,7 @@
         </div>
         <input type="file" id="img-file" accept="image/*" style="display:none" onchange="handleImageFile(this)">
 
-        <!-- Stato upload -->
+        <!-- Status upload -->
         <div id="upload-status" style="display:none;margin-top:10px;padding:8px 12px;border-radius:7px;font-family:'DM Mono',monospace;font-size:.68rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);color:var(--green2)">
           ✓ Immagine pronta · verrà caricata su cloud storage al salvataggio
         </div>
@@ -113,19 +113,19 @@
           placeholder="Es: BTC supererà $100,000 entro fine aprile 2025?"
           style="resize:vertical"
           oninput="updatePreview()"></textarea>
-        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">Deve avere risposta binaria YES/NO</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">Must have a binary YES/NO answer</div>
       </div>
 
       <!-- Category + Asset -->
       <div class="cp-card">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// DETTAGLI</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// DETAILS</div>
         <div class="g2">
           <div>
             <label class="cp-label">Category</label>
             <div class="select-wrap"><select class="cp-input" id="category" onchange="updatePreview(); toggleAssetField();">
-              <option value="crypto">₿ Crypto — prezzi, ETF, halving</option>
+              <option value="crypto">₿ Crypto — prices, ETF, halving</option>
               <option value="defi">⚡ DeFi — TVL, protocol, yield</option>
-              <option value="sport">⚽ Sport — calcio, NBA, MMA, F1, Esport</option>
+              <option value="sport">⚽ Sport — football, NBA, MMA, F1, Esports</option>
               <option value="politica">🗳️ Politica — elezioni, governi</option>
               <option value="macro">📈 Macro & Finance — Fed, tassi, PIL</option>
               <option value="tech">🤖 Tech & AI — release, IPO, AI</option>
@@ -150,25 +150,25 @@
         </div>
         <div class="g2" style="margin-top:12px">
           <div>
-            <label class="cp-label">Data scadenza</label>
+            <label class="cp-label">Expiry date</label>
             <input type="date" class="cp-input" id="exp-date">
           </div>
           <div>
-            <label class="cp-label">Ora UTC</label>
+            <label class="cp-label">UTC time</label>
             <input type="time" class="cp-input" id="exp-time" value="00:00">
           </div>
         </div>
         <div style="margin-top:12px">
-          <label class="cp-label">Descrizione (opzionale)</label>
+          <label class="cp-label">Description (optional)</label>
           <textarea class="cp-input" id="description" rows="2"
             placeholder="Aggiungi contesto o dettagli sulla risoluzione..."></textarea>
         </div>
       </div>
 
-      <!-- Liquidità -->
+      <!-- Liquidity -->
       <div class="cp-card cp-card-gold">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// VALUTA E LIQUIDITA' INIZIALE</div>
-        <label class="cp-label">Valuta del mercato</label>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// CURRENCY & INITIAL LIQUIDITY</div>
+        <label class="cp-label">Market currency</label>
         <div style="display:flex;gap:8px;margin-bottom:14px" id="currency-selector">
           <button type="button" class="btn btn-primary" id="cur-eth"  onclick="selectCurrency('ETH')"  style="flex:1;justify-content:center;font-size:.8rem">ETH</button>
           <button type="button" class="btn btn-ghost"   id="cur-usdc" onclick="selectCurrency('USDC')" style="flex:1;justify-content:center;font-size:.8rem">USDC</button>
@@ -176,16 +176,16 @@
           <button type="button" class="btn btn-ghost"   id="cur-cpred" onclick="selectCurrency('CPRED')" style="flex:1;justify-content:center;font-size:.8rem;color:#fbbf24">CPRED ✦</button>
         </div>
         <div id="cur-info" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:10px;padding:7px 10px;background:rgba(255,255,255,.03);border-radius:6px">
-          ETH — valuta nativa Base · fee normali · scommesse e vincite in ETH
+          ETH — native Base currency · standard fees · bets and payouts in ETH
         </div>
-        <label class="cp-label" id="liq-label">ETH da depositare *</label>
+        <label class="cp-label" id="liq-label">ETH to deposit *</label>
         <div style="position:relative">
           <input type="number" class="cp-input" id="liquidity" placeholder="0.0025" min="0.0025" step="0.001" id="liquidity"
                  style="padding-right:60px" oninput="updateFeePreview()">
           <span id="liq-symbol" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">ETH</span>
         </div>
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">
-          Minimo 0.0025 ETH / 5 USDC / 5 USDT / 100 CPRED · Liquidità 100% rimborsata
+          Minimum 0.0025 ETH / 5 USDC / 5 USDT / 100 CPRED · Liquidity 100% refunded
         </div>
         <div id="fee-preview" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:.72rem">
           <div style="display:flex;justify-content:space-between;margin-bottom:4px">
@@ -205,7 +205,7 @@
         🔮 Create On-Chain Market
       </button>
       <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center">
-        On-chain · Base Sepolia · Guadagni on every payout
+        On-chain · Base Sepolia · Earn on every payout
       </div>
     </div>
 
@@ -228,7 +228,7 @@
               <span class="tag tag-green">YES 50%</span>
             </div>
             <div style="font-size:.88rem;font-weight:700;margin-bottom:10px;line-height:1.4;min-height:40px" id="prev-q">
-              La tua domanda apparirà qui
+              Your question will appear here
             </div>
             <div class="cp-bar" style="margin-bottom:6px"><div class="cp-bar-fill up" style="width:50%"></div></div>
             <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:10px">
@@ -239,7 +239,7 @@
               <button class="btn btn-dn" style="flex:1;justify-content:center;font-size:.72rem;pointer-events:none">▼ NO</button>
             </div>
             <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);margin-top:8px;display:flex;justify-content:space-between">
-              <span id="prev-expiry">⏱ Scadenza: —</span>
+              <span id="prev-expiry">⏱ Expiry: —</span>
               <span>0 participants</span>
             </div>
           </div>
@@ -248,23 +248,23 @@
 
       <!-- Fee info -->
       <div class="cp-card cp-card-gold">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// LE TUE ENTRATE</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// YOUR EARNINGS</div>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:.83rem">
           <div style="display:flex;justify-content:space-between">
-            <span style="color:var(--text3)">Fee per trade</span>
+            <span style="color:var(--text3)">Fee per payout</span>
             <span style="color:var(--gold2);font-family:'DM Mono',monospace">1%</span>
           </div>
           <div style="display:flex;justify-content:space-between">
-            <span style="color:var(--text3)">Con $10K volume</span>
+            <span style="color:var(--text3)">With $10K volume</span>
             <span style="color:var(--green2);font-family:'DM Mono',monospace">$100</span>
           </div>
           <div style="display:flex;justify-content:space-between">
-            <span style="color:var(--text3)">Con $100K volume</span>
+            <span style="color:var(--text3)">With $100K volume</span>
             <span style="color:var(--green2);font-family:'DM Mono',monospace">$1,000</span>
           </div>
           <div style="height:1px;background:var(--border)"></div>
           <div style="display:flex;justify-content:space-between">
-            <span style="color:var(--text3)">Liquidità rimborsata</span>
+            <span style="color:var(--text3)">Liquidity refunded</span>
             <span style="color:var(--green2);font-family:'DM Mono',monospace">100%</span>
           </div>
         </div>
@@ -272,13 +272,13 @@
 
       <!-- Regole -->
       <div class="cp-card">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:10px">// REGOLE</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:10px">// RULES</div>
         <div style="display:flex;flex-direction:column;gap:7px;font-size:.78rem;color:var(--text3)">
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Domanda binaria YES/NO obbligatoria</div>
-          <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Scadenza min. 1 ora nel futuro</div>
+          <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Expiry min. 1 ora nel futuro</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Mercati irrisolvibili vengono annullati e rimborsati</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Immagine facoltativa — rende il mercato più riconoscibile</div>
-          <div style="display:flex;gap:8px"><span style="color:var(--gold2)">✦</span><strong style="color:var(--gold2)">Requisito: 1,000 CPRED</strong> in wallet o staking</div>
+          <div style="display:flex;gap:8px"><span style="color:var(--gold2)">✦</span><strong style="color:var(--gold2)">Requirement: 1,000 CPRED</strong> in wallet o staking</div>
         </div>
       </div>
     </div>
@@ -367,13 +367,13 @@ function clearImage(e) {
 // ── PREVIEW UPDATE ────────────────────────────────────────────────
 
 function updatePreview() {
-  var q   = document.getElementById("question").value || "La tua domanda apparirà qui";
+  var q   = document.getElementById("question").value || "Your question will appear here";
   var cat = document.getElementById("category").value.toUpperCase();
   var exp = document.getElementById("exp-date").value;
 
   document.getElementById("prev-q").textContent   = q;
   document.getElementById("prev-cat").textContent = cat;
-  document.getElementById("prev-expiry").textContent = exp ? "⏱ Scade il " + exp : "⏱ Scadenza: —";
+  document.getElementById("prev-expiry").textContent = exp ? "⏱ Expires " + exp : "⏱ Expiry: —";
 
   // Aggiorna icona categoria se no immagine
   if (!imageDataUrl) {
@@ -436,7 +436,7 @@ async function createMarket() {
   if (!question) { showToast("❌","Inserisci la domanda del mercato"); return; }
   if (!expDate)  { showToast("❌","Scegli una data di scadenza"); return; }
   var liqMin = CUR_MIN[selectedCurrency] || 0.0025;
-  if (liquidity < liqMin) { showToast("❌","Liquidità minima: " + liqMin + " " + selectedCurrency); return; }
+  if (liquidity < liqMin) { showToast("❌","Liquidity minima: " + liqMin + " " + selectedCurrency); return; }
 
   var expiresAt = Math.floor(new Date(expDate + "T" + expTime + ":00Z").getTime() / 1000);
   if (expiresAt <= Date.now() / 1000 + 3600) {
@@ -446,7 +446,7 @@ async function createMarket() {
 
   var btn = document.getElementById("create-btn");
   btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> Creazione on-chain...';
+  btn.innerHTML = '<span class="spin"></span> Creation on-chain...';
 
   try {
     var ok = await W3.ensureNetwork();
@@ -594,7 +594,7 @@ function showToast(icon, msg, link) {
 var selectedCurrency = "ETH";
 
 var CUR_INFO = {
-  ETH:  "ETH — valuta nativa Base · fee normali · scommesse e vincite in ETH",
+  ETH:  "ETH — native Base currency · standard fees · bets and payouts in ETH",
   USDC: "USDC — stablecoin $1 · fee normali · scommesse e vincite in USDC",
   USDT: "USDT — stablecoin $1 · fee normali · scommesse e vincite in USDT",
   CPRED:"CPRED — token nativo · fee AZZERATE (0%) · incentivo per holder · scommesse e vincite in CPRED"
@@ -690,7 +690,7 @@ async function checkCpredRequirement() {
       naDiv.appendChild(naWrap);
       var naBtn = document.createElement('a');
       naBtn.href = 'presale.html'; naBtn.className = 'btn btn-primary';
-      naBtn.style.fontSize = '.75rem'; naBtn.textContent = 'Compra CPRED';
+      naBtn.style.fontSize = '.75rem'; naBtn.textContent = 'Buy CPRED';
       banner.appendChild(naDiv); banner.appendChild(naBtn);
     } else {
       banner.innerHTML = '';
@@ -707,7 +707,7 @@ async function checkCpredRequirement() {
       errDiv.appendChild(errWrap);
       var btns = document.createElement('div');
       btns.style.cssText = 'display:flex;gap:8px;flex-shrink:0';
-      var b1 = document.createElement('a'); b1.href='presale.html'; b1.className='btn btn-primary'; b1.style.fontSize='.75rem'; b1.textContent='Compra CPRED';
+      var b1 = document.createElement('a'); b1.href='presale.html'; b1.className='btn btn-primary'; b1.style.fontSize='.75rem'; b1.textContent='Buy CPRED';
       var b2 = document.createElement('a'); b2.href='staking.html'; b2.className='btn btn-ghost'; b2.style.fontSize='.75rem'; b2.textContent='Staking';
       btns.appendChild(b1); btns.appendChild(b2);
       banner.appendChild(errDiv); banner.appendChild(btns);
