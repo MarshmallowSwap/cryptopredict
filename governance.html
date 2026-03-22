@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Governance — CryptoPredict</title>
+<meta name="description" content="CryptoPredict DAO — Community-driven governance for the prediction market protocol. Vote on proposals, control protocol parameters, allocate treasury funds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 20px rgba(124,58,237,.15)}50%{box-shadow:0 0 40px rgba(124,58,237,.3)}}
+.gov-hero{text-align:center;padding:70px 24px 52px;position:relative}
+.gov-hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,.12) 0%,transparent 65%);pointer-events:none}
+.proposal-card{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:12px;transition:border-color .2s,transform .2s;cursor:pointer}
+.proposal-card:hover{border-color:rgba(124,58,237,.4);transform:translateY(-1px)}
+.proposal-card.active{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)}
+.proposal-card.pending{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.03)}
+.proposal-card.closed{border-color:rgba(255,255,255,.06);opacity:.7}
+.vote-bar{height:8px;border-radius:4px;overflow:hidden;background:rgba(255,255,255,.07);display:flex;margin:10px 0 6px}
+.vote-yes{background:linear-gradient(90deg,#10b981,#34d399)}
+.vote-no{background:#ef4444}
+.vote-abstain{background:rgba(255,255,255,.2)}
+.power-card{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:20px 22px}
+.timeline-step{display:flex;gap:16px;padding:14px 0;position:relative}
+.timeline-step:not(:last-child)::after{content:'';position:absolute;left:15px;top:46px;bottom:0;width:2px;background:rgba(124,58,237,.2)}
+.step-circle{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;border:2px solid}
+.step-active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:#c4b5fd}
+.step-done{background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);color:#34d399}
+.step-future{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.15);color:var(--text3)}
+.param-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin-bottom:8px}
+</style>
+</head>
+<body data-page="governance">
+
+<div class="ticker-bar"><div class="ticker-track">
+  <span class="tick-live"><span class="tick-dot"></span>GOVERNANCE DAO</span>
+  <span class="tick-item">1 CPRED = 1 Vote · On-Chain · Base</span>
+  <span class="tick-item">Governance launches with mainnet</span>
+  <span class="tick-live"><span class="tick-dot"></span>GOVERNANCE DAO</span>
+  <span class="tick-item">1 CPRED = 1 Vote · On-Chain · Base</span>
+  <span class="tick-item">Treasury controlled by token holders</span>
+</div></div>
+
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">GOVERNANCE</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html"       class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="mercati.html"     class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Markets</span></a>
+    <a href="presale.html"     class="nav-link" data-page="presale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Presale</span><span class="badge"></span></a>
+    <a href="staking.html"     class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
+    <a href="governance.html"  class="nav-link active" data-page="governance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>Governance</span></a>
+    <a href="docs.html"        class="nav-link" data-page="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Docs</span></a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-balance" id="nav-balance" style="display:none"></span>
+    <span class="nav-wallet"  id="nav-wallet"  style="display:none"></span>
+    <div class="nav-avatar"   id="nav-avatar"  style="display:none">👤</div>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<div class="presale-banner">
+  <span class="pb-live"><span class="tick-dot"></span>BUY CPRED NOW</span>
+  <span class="pb-price">· Secure your voting power in presale</span>
+  <a href="presale.html" class="pb-btn">Buy CPRED →</a>
+</div>
+
+<!-- HERO -->
+<div class="gov-hero">
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:6px 16px;margin-bottom:20px">
+    <span style="font-size:.65rem;font-weight:700;color:#a855f7;letter-spacing:.12em">DAO GOVERNANCE</span>
+    <span style="background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:1px 8px;font-size:.6rem;font-weight:700;color:#fbbf24">MAINNET Q4 2025</span>
+  </div>
+  <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:16px">
+    <span style="background:linear-gradient(135deg,#fff 20%,rgba(167,139,250,.9));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Community-Owned.</span><br>
+    <span style="color:#e2e8f0">Protocol-Governed.</span>
+  </h1>
+  <p style="font-size:1rem;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto 32px;line-height:1.75;font-family:'DM Mono',monospace;font-size:.82rem">
+    Every $CPRED token = 1 vote. Shape the future of CryptoPredict — from market categories to fee rates to treasury allocation.
+  </p>
+
+  <!-- Stats row -->
+  <div style="display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:36px">
+    <div style="text-align:center">
+      <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:#a855f7">1 CPRED</div>
+      <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:3px">= 1 Vote</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:#06b6d4">2×</div>
+      <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:3px">Staked CPRED weight</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:#fbbf24">48h</div>
+      <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:3px">Voting window</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:900;color:#34d399">51%</div>
+      <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:3px">Quorum to pass</div>
+    </div>
+  </div>
+
+  <a href="presale.html" class="hero-btn-gold" style="padding:14px 32px;background:linear-gradient(135deg,#ffd700,#ff9500);border:none;border-radius:10px;color:#000;font-weight:900;font-size:.95rem;cursor:pointer;letter-spacing:.03em;font-family:'Syne',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(255,215,0,.3)">
+    💎 Buy CPRED — Secure Voting Power
+  </a>
+</div>
+
+<div class="page-wrap">
+
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start">
+
+    <!-- LEFT: Proposals + How it works -->
+    <div>
+
+      <!-- Coming Soon Notice -->
+      <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:18px 22px;margin-bottom:28px;display:flex;align-items:center;gap:16px">
+        <div style="font-size:1.6rem;flex-shrink:0">🏗️</div>
+        <div>
+          <div style="font-weight:700;font-size:.92rem;margin-bottom:4px">Governance launches with mainnet</div>
+          <div style="font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.6">On-chain voting is being built. The proposals below are examples of what the community will vote on at launch. Buy CPRED now to lock in your voting power at presale price.</div>
+        </div>
+      </div>
+
+      <!-- Sample Proposals -->
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:14px">// SAMPLE PROPOSALS — Preview of governance at launch</div>
+
+      <!-- Proposal 1 -->
+      <div class="proposal-card active">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="background:rgba(16,185,129,.15);color:#34d399;padding:2px 9px;border-radius:4px;font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace">● ACTIVE</span>
+          <span style="background:rgba(124,58,237,.12);color:#c4b5fd;padding:2px 9px;border-radius:4px;font-size:.62rem;font-family:'DM Mono',monospace">CIP-001</span>
+          <span style="font-size:.62rem;color:rgba(255,255,255,.4);margin-left:auto">Ends in 47h 22m</span>
+        </div>
+        <div style="font-size:.95rem;font-weight:700;margin-bottom:6px">Reduce creator fee from 1% to 0.75% to incentivize market creation</div>
+        <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:12px">Lowering the creator fee from 1% to 0.75% would make market creation more attractive, potentially increasing the number of active markets and overall platform volume.</div>
+        <div class="vote-bar">
+          <div class="vote-yes" style="width:67%"></div>
+          <div class="vote-no" style="width:24%"></div>
+          <div class="vote-abstain" style="width:9%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem">
+          <span style="color:#34d399">YES 67%</span>
+          <span style="color:#ef4444">NO 24%</span>
+          <span style="color:rgba(255,255,255,.35)">ABSTAIN 9%</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button style="flex:1;padding:8px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:8px;color:#34d399;font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Syne',sans-serif" onclick="showComingSoon()">▲ Vote YES</button>
+          <button style="flex:1;padding:8px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:8px;color:#f87171;font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Syne',sans-serif" onclick="showComingSoon()">▼ Vote NO</button>
+          <button style="padding:8px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.4);font-size:.78rem;cursor:pointer" onclick="showComingSoon()">Abstain</button>
+        </div>
+      </div>
+
+      <!-- Proposal 2 -->
+      <div class="proposal-card pending">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="background:rgba(245,158,11,.15);color:#fbbf24;padding:2px 9px;border-radius:4px;font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace">⏳ PENDING</span>
+          <span style="background:rgba(124,58,237,.12);color:#c4b5fd;padding:2px 9px;border-radius:4px;font-size:.62rem;font-family:'DM Mono',monospace">CIP-002</span>
+          <span style="font-size:.62rem;color:rgba(255,255,255,.4);margin-left:auto">Starts in 2d 14h</span>
+        </div>
+        <div style="font-size:.95rem;font-weight:700;margin-bottom:6px">Add "AI & Machine Learning" as a new market category</div>
+        <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:8px">Proposal to add an "AI & ML" category covering events like GPT-5 release, AI company valuations, model benchmarks, and autonomous agent milestones.</div>
+        <div style="font-size:.7rem;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace">Proposed by 0x109f...6281 · 2,500 CPRED required to vote</div>
+      </div>
+
+      <!-- Proposal 3 -->
+      <div class="proposal-card closed">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:2px 9px;border-radius:4px;font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace">✓ PASSED</span>
+          <span style="background:rgba(124,58,237,.08);color:rgba(167,139,250,.6);padding:2px 9px;border-radius:4px;font-size:.62rem;font-family:'DM Mono',monospace">CIP-000</span>
+          <span style="font-size:.62rem;color:rgba(255,255,255,.3);margin-left:auto">Closed · 7 days ago</span>
+        </div>
+        <div style="font-size:.95rem;font-weight:700;margin-bottom:6px;color:rgba(255,255,255,.6)">Set minimum CPRED requirement to create a market at 1,000 CPRED</div>
+        <div class="vote-bar" style="opacity:.5">
+          <div class="vote-yes" style="width:82%"></div>
+          <div class="vote-no" style="width:18%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;opacity:.5">
+          <span style="color:#34d399">YES 82%</span><span style="color:#ef4444">NO 18%</span>
+        </div>
+      </div>
+
+      <!-- How Governance Works -->
+      <div style="margin-top:32px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:20px">// HOW GOVERNANCE WORKS</div>
+
+        <div class="timeline-step">
+          <div class="step-circle step-done">1</div>
+          <div>
+            <div style="font-weight:700;font-size:.88rem;margin-bottom:4px">Anyone can propose</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Hold ≥2,500 CPRED to submit a governance proposal. Describe the change, the rationale, and the on-chain parameters it would modify.</div>
+          </div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="step-circle step-done">2</div>
+          <div>
+            <div style="font-weight:700;font-size:.88rem;margin-bottom:4px">24h discussion period</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">The community debates the proposal in the governance forum before voting opens. This prevents rushed decisions and allows all voices to be heard.</div>
+          </div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="step-circle step-active">3</div>
+          <div>
+            <div style="font-weight:700;font-size:.88rem;margin-bottom:4px">48h voting window</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">CPRED holders vote YES, NO, or ABSTAIN. Staked CPRED counts as 2× voting power to reward long-term holders. Minimum 51% quorum required.</div>
+          </div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="step-circle step-future">4</div>
+          <div>
+            <div style="font-weight:700;font-size:.88rem;margin-bottom:4px">24h timelock, then execute</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Passed proposals enter a 24h timelock before on-chain execution. This gives users time to exit positions if they disagree with major changes.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- What Can Be Governed -->
+      <div style="margin-top:32px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:16px">// GOVERNABLE PARAMETERS</div>
+        <div class="param-row">
+          <span style="font-size:.82rem">Protocol fee</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Current: 1% → Vote range: 0.5–2%</span>
+        </div>
+        <div class="param-row">
+          <span style="font-size:.82rem">Minimum CPRED to create market</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Current: 1,000 CPRED</span>
+        </div>
+        <div class="param-row">
+          <span style="font-size:.82rem">Treasury yield allocation</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Current: 20% → Vote range: 10–30%</span>
+        </div>
+        <div class="param-row">
+          <span style="font-size:.82rem">Market categories</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Add / remove categories</span>
+        </div>
+        <div class="param-row">
+          <span style="font-size:.82rem">Authorized resolvers</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Add / remove oracle sources</span>
+        </div>
+        <div class="param-row">
+          <span style="font-size:.82rem">Staking APY rates</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Flexible / 30d / 90d pools</span>
+        </div>
+        <div class="param-row" style="border-bottom:none">
+          <span style="font-size:.82rem">Treasury grants</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#06b6d4">Fund audits, development, marketing</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Sidebar -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <!-- Your Voting Power -->
+      <div class="power-card">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(167,139,250,.7);letter-spacing:.1em;margin-bottom:14px">// YOUR VOTING POWER</div>
+        <div id="gov-wallet-info">
+          <div style="text-align:center;padding:16px;color:rgba(255,255,255,.4);font-size:.82rem">
+            Connect wallet to see your voting power
+          </div>
+          <button onclick="connectWallet()" class="btn btn-primary" style="width:100%;justify-content:center;font-size:.82rem">Connect Wallet</button>
+        </div>
+      </div>
+
+      <!-- How to get voting power -->
+      <div style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 20px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:14px">// GET VOTING POWER</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);border-radius:10px">
+            <div style="font-size:1.2rem">💎</div>
+            <div>
+              <div style="font-size:.8rem;font-weight:700;margin-bottom:2px">Buy CPRED in Presale</div>
+              <div style="font-size:.68rem;color:rgba(255,255,255,.45)">Stage 1 · $0.050 · Best price</div>
+            </div>
+            <a href="presale.html" style="margin-left:auto;padding:5px 12px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.3);border-radius:6px;font-size:.65rem;color:#fbbf24;text-decoration:none;font-weight:700;white-space:nowrap">Buy →</a>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:10px">
+            <div style="font-size:1.2rem">🔒</div>
+            <div>
+              <div style="font-size:.8rem;font-weight:700;margin-bottom:2px">Stake CPRED</div>
+              <div style="font-size:.68rem;color:rgba(255,255,255,.45)">2× voting weight + APY</div>
+            </div>
+            <a href="staking.html" style="margin-left:auto;padding:5px 12px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:6px;font-size:.65rem;color:#c4b5fd;text-decoration:none;font-weight:700;white-space:nowrap">Stake →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Voting power formula -->
+      <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px 20px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:12px">// VOTING POWER FORMULA</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2.2;color:rgba(255,255,255,.6)">
+          VP = Wallet CPRED<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;+ (Staked CPRED × 2)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;+ (90d pool × 0.5 bonus)<br><br>
+          <span style="color:#a855f7">Example:</span><br>
+          1,000 wallet + 2,000 staked<br>
+          = <span style="color:#a855f7;font-weight:700">5,000 VP</span>
+        </div>
+      </div>
+
+      <!-- Governance Timeline -->
+      <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:14px;padding:18px 20px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(52,211,153,.7);letter-spacing:.1em;margin-bottom:14px">// LAUNCH TIMELINE</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:.78rem">
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:rgba(255,255,255,.6)">Presale + Staking</span>
+            <span style="color:#34d399;font-family:'DM Mono',monospace">✅ Live now</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:rgba(255,255,255,.6)">Testnet Markets</span>
+            <span style="color:#34d399;font-family:'DM Mono',monospace">✅ Live now</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:rgba(255,255,255,.6)">Smart Contract Audit</span>
+            <span style="color:#fbbf24;font-family:'DM Mono',monospace">Q3 2025</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:rgba(255,255,255,.6)">Mainnet Launch</span>
+            <span style="color:#fbbf24;font-family:'DM Mono',monospace">Q4 2025</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:rgba(255,255,255,.6)">DAO Governance Live</span>
+            <span style="color:#fbbf24;font-family:'DM Mono',monospace">Q4 2025</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:rgba(255,255,255,.6)">AMM + Trading v2</span>
+            <span style="color:rgba(255,255,255,.35);font-family:'DM Mono',monospace">2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+<script src="web3.js"></script>
+<script src="_shared.js"></script>
+<script>
+function showComingSoon() {
+  alert('Governance voting launches with mainnet. Buy CPRED now to secure your voting power!');
+}
+
+function updateGovWallet() {
+  if (!WALLET.address) return;
+  var el = document.getElementById('gov-wallet-info');
+  el.innerHTML = '';
+  var cpred = WALLET.cpredBalance || 0;
+  var vp = cpred * 1; // simplified — staked would be 2x
+  var card = document.createElement('div');
+  card.innerHTML =
+    '<div style="display:flex;justify-content:space-between;margin-bottom:10px">' +
+      '<span style="font-size:.72rem;color:rgba(255,255,255,.5)">CPRED Balance</span>' +
+      '<span style="font-family:monospace;font-size:.78rem;color:#fbbf24">' + cpred.toLocaleString() + ' CPRED</span>' +
+    '</div>' +
+    '<div style="display:flex;justify-content:space-between;margin-bottom:14px">' +
+      '<span style="font-size:.72rem;color:rgba(255,255,255,.5)">Voting Power</span>' +
+      '<span style="font-family:monospace;font-size:.78rem;font-weight:700;color:#a855f7">' + vp.toLocaleString() + ' VP</span>' +
+    '</div>' +
+    '<div style="font-size:.7rem;color:rgba(255,255,255,.4);text-align:center;padding:8px;background:rgba(124,58,237,.07);border-radius:8px">' +
+      'Stake CPRED for 2× voting weight' +
+    '</div>';
+  el.appendChild(card);
+}
+
+CP.ready.then(function(state) {
+  var orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() { await orig(); updateGovWallet(); };
+  if (state.address) updateGovWallet();
+});
+</script>
+</body></html>
