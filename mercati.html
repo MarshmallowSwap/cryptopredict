@@ -308,10 +308,7 @@ function buildCard(el, m) {
   var tagTxt = (isYes ? "YES " : "NO ") + m.yesPct + "%";
 
   // Pannello scommessa HTML
-  var panelHTML = "";
-  if (panel) panelHTML = buildPanelHTML(m, panel);
-
-  // Metti tutto insieme via DOM
+  // Pannello scommessa costruito dopo via buildPanelEl
   el.innerHTML = "";
 
   // Body
