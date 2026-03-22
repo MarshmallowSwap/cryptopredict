@@ -650,28 +650,55 @@ async function checkCpredRequirement() {
     banner.style.border = "1px solid " + (ok ? "rgba(16,185,129,.2)" : "rgba(245,158,11,.25)");
 
     if (ok) {
-      banner.innerHTML =
-        '<div style="display:flex;align-items:center;gap:10px">' +
-        '<span style="font-size:1.2rem">✅</span>' +
-        '<div><div style="font-weight:700;font-size:.85rem;color:var(--green2)">Requisito CPRED soddisfatto</div>' +
-        '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Hai ' + have.toFixed(0) + ' CPRED (wallet + staking) · Minimo richiesto: ' + needed.toLocaleString() + '</div></div></div>';
+      banner.innerHTML = '';
+      var okDiv = document.createElement('div');
+      okDiv.style.cssText = 'display:flex;align-items:center;gap:10px';
+      okDiv.innerHTML = '<span style="font-size:1.2rem">&#x2705;</span>';
+      var okTxt = document.createElement('div');
+      var okTitle = document.createElement('div');
+      okTitle.style.cssText = 'font-weight:700;font-size:.85rem;color:var(--green2)';
+      okTitle.textContent = 'Requisito CPRED soddisfatto';
+      var okSub = document.createElement('div');
+      okSub.style.cssText = 'font-size:.65rem;color:var(--text3)';
+      okSub.textContent = 'Hai ' + have.toFixed(0) + ' CPRED (wallet + staking) — minimo: ' + needed.toLocaleString();
+      okTxt.appendChild(okTitle); okTxt.appendChild(okSub);
+      okDiv.appendChild(okTxt); banner.appendChild(okDiv);
     } else if (!WALLET.address) {
-      banner.innerHTML =
-        '<div style="display:flex;align-items:center;gap:10px">' +
-        '<span style="font-size:1.2rem">🔐</span>' +
-        '<div><div style="font-weight:700;font-size:.85rem;color:var(--gold2)">Servono ' + needed.toLocaleString() + ' CPRED per creare mercati</div>' +
-        '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Detieni CPRED in wallet o staking — conta anche il CPRED in staking</div></div></div>' +
-        '<a href="presale.html" class="btn btn-primary" style="font-size:.75rem;flex-shrink:0">Compra CPRED →</a>';
+      banner.innerHTML = '';
+      var naDiv = document.createElement('div');
+      naDiv.style.cssText = 'display:flex;align-items:center;gap:10px;flex:1';
+      var naTitle = document.createElement('div');
+      naTitle.style.cssText = 'font-weight:700;font-size:.85rem;color:var(--gold2)';
+      naTitle.textContent = 'Servono ' + needed.toLocaleString() + ' CPRED per creare mercati';
+      var naSub = document.createElement('div');
+      naSub.style.cssText = 'font-size:.65rem;color:var(--text3)';
+      naSub.textContent = 'Detieni CPRED in wallet o staking — conta anche il CPRED in staking';
+      var naWrap = document.createElement('div');
+      naWrap.appendChild(naTitle); naWrap.appendChild(naSub);
+      naDiv.appendChild(naWrap);
+      var naBtn = document.createElement('a');
+      naBtn.href = 'presale.html'; naBtn.className = 'btn btn-primary';
+      naBtn.style.fontSize = '.75rem'; naBtn.textContent = 'Compra CPRED';
+      banner.appendChild(naDiv); banner.appendChild(naBtn);
     } else {
-      banner.innerHTML =
-        '<div style="display:flex;align-items:center;gap:10px">' +
-        '<span style="font-size:1.2rem">⚠️</span>' +
-        '<div><div style="font-weight:700;font-size:.85rem;color:var(--gold2)">CPRED insufficienti — hai ' + have.toFixed(0) + ' / ' + needed.toLocaleString() + '</div>' +
-        '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Compra altri CPRED in presale o metti in staking quelli che hai</div></div></div>' +
-        '<div style="display:flex;gap:8px;flex-shrink:0">' +
-        '<a href="presale.html" class="btn btn-primary" style="font-size:.75rem">Compra CPRED</a>' +
-        '<a href="staking.html" class="btn btn-ghost" style="font-size:.75rem">Staking →</a>' +
-        '</div>';
+      banner.innerHTML = '';
+      var errDiv = document.createElement('div');
+      errDiv.style.cssText = 'display:flex;align-items:center;gap:10px;flex:1';
+      var errTitle = document.createElement('div');
+      errTitle.style.cssText = 'font-weight:700;font-size:.85rem;color:var(--gold2)';
+      errTitle.textContent = 'CPRED insufficienti — hai ' + have.toFixed(0) + ' / ' + needed.toLocaleString();
+      var errSub = document.createElement('div');
+      errSub.style.cssText = 'font-size:.65rem;color:var(--text3)';
+      errSub.textContent = 'Compra altri CPRED in presale o metti in staking quelli che hai';
+      var errWrap = document.createElement('div');
+      errWrap.appendChild(errTitle); errWrap.appendChild(errSub);
+      errDiv.appendChild(errWrap);
+      var btns = document.createElement('div');
+      btns.style.cssText = 'display:flex;gap:8px;flex-shrink:0';
+      var b1 = document.createElement('a'); b1.href='presale.html'; b1.className='btn btn-primary'; b1.style.fontSize='.75rem'; b1.textContent='Compra CPRED';
+      var b2 = document.createElement('a'); b2.href='staking.html'; b2.className='btn btn-ghost'; b2.style.fontSize='.75rem'; b2.textContent='Staking';
+      btns.appendChild(b1); btns.appendChild(b2);
+      banner.appendChild(errDiv); banner.appendChild(btns);
     }
   } catch(e) { console.warn("CPRED banner error:", e); }
 }
