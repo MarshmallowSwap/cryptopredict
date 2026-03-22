@@ -286,13 +286,13 @@ function buildRow(m) {
   var titleRow = document.createElement("div");
   titleRow.style.cssText = "display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap";
   var idBadge = document.createElement("span");
-  idBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);background:rgba(255,255,255,.05);padding:1px 7px;border-radius:4px";
+  idBadge.style.cssText = "font-size:.62rem;color:var(--text3);background:rgba(255,255,255,.05);padding:1px 7px;border-radius:4px";
   idBadge.textContent = "#" + m.id;
   var catBadge = document.createElement("span");
-  catBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;color:var(--purple3);background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:1px 7px;border-radius:4px";
+  catBadge.style.cssText = "font-size:.6rem;color:var(--purple3);background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:1px 7px;border-radius:4px";
   catBadge.textContent = m.category.toUpperCase();
   var statusBadge = document.createElement("span");
-  statusBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:4px";
+  statusBadge.style.cssText = "font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:4px";
   statusBadge.style.color = statusColors[m.status];
   statusBadge.style.background = "rgba(255,255,255,.04)";
   statusBadge.textContent = isExpired ? "⏰ SCADUTO" : statusLabels[m.status];
@@ -318,10 +318,10 @@ function buildRow(m) {
     var d = document.createElement("div");
     d.style.textAlign = "right";
     var v = document.createElement("div");
-    v.style.cssText = "font-family:'DM Mono',monospace;font-size:.82rem;font-weight:700;color:" + color;
+    v.style.cssText = "font-size:.82rem;font-weight:700;color:" + color;
     v.textContent = val;
     var l = document.createElement("div");
-    l.style.cssText = "font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3)";
+    l.style.cssText = "font-size:.58rem;color:var(--text3)";
     l.textContent = label;
     d.appendChild(v); d.appendChild(l);
     return d;
@@ -358,7 +358,7 @@ function buildRow(m) {
     actions.style.cssText = "display:flex;align-items:center;gap:10px;flex-wrap:wrap";
 
     var hint = document.createElement("div");
-    hint.style.cssText = "font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3);flex:1";
+    hint.style.cssText = "font-size:.68rem;color:var(--text3);flex:1";
     hint.textContent = m.asset && m.targetPrice > 0
       ? "Price target: " + m.asset + " " + (m.targetAbove ? ">" : "<") + " $" + m.targetPrice.toLocaleString() + " — controlla su Binance"
       : "Risoluzione manuale — controlla il risultato reale";
@@ -388,7 +388,7 @@ function buildRow(m) {
     var openRow = document.createElement("div");
     openRow.style.cssText = "display:flex;align-items:center;justify-content:space-between";
     var cdEl = document.createElement("div");
-    cdEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.68rem;color:var(--cyan2)";
+    cdEl.style.cssText = "font-size:.68rem;color:var(--cyan2)";
     cdEl.textContent = daysLeft > 0 ? "⏱ Scade tra " + daysLeft + " giorni" : "⏱ Scade oggi";
     var forceBtn = document.createElement("button");
     forceBtn.className = "resolve-btn-cancel";
@@ -400,7 +400,7 @@ function buildRow(m) {
   } else if (m.status === 2) {
     // Risolto — mostra chi ha risolto
     var resolvedRow = document.createElement("div");
-    resolvedRow.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)";
+    resolvedRow.style.cssText = "font-size:.65rem;color:var(--text3)";
     resolvedRow.textContent = "Risolto da: " + (m.resolver === "0x0000000000000000000000000000000000000000" ? "auto" : m.resolver.slice(0,10) + "...");
     div.appendChild(resolvedRow);
   }
