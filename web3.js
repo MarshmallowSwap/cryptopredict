@@ -145,8 +145,11 @@ async function loadMarketsOnChain() {
     const markets = await c.getActiveMarkets(20);
 
     return markets.map(m => {
-      const yesPool = parseFloat(ethers.formatEther(m.yesPool));
-      const noPool  = parseFloat(ethers.formatEther(m.noPool));
+      // Decimali corretti per valuta: USDC/USDT=6, ETH/CPRED=18
+      const curIdx = Number(m.currency || 0);
+      const decimals = (curIdx === 1 || curIdx === 2) ? 6 : 18;
+      const yesPool = parseFloat(ethers.formatUnits(m.yesPool, decimals));
+      const noPool  = parseFloat(ethers.formatUnits(m.noPool,  decimals));
       const total   = yesPool + noPool;
       const yesPct  = total > 0 ? Math.round((yesPool / total) * 100) : 50;
       const yieldA  = parseFloat(ethers.formatEther(m.yieldAccrued));
