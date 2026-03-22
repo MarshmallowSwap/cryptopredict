@@ -477,7 +477,10 @@ async function createMarket() {
       await appTx.wait();
       txOpts = {value: 0n};
     }
-    var tx    = await mktC.createMarket(
+    var liqAmount = selectedCurrency === "ETH" ? 0n : liqWei;
+    var tx = await mktC.createMarket(
+      question, category, asset, 0n, true, BigInt(expiresAt),
+      curIdx, liqAmount,
       question, category, asset, 0n, true, BigInt(expiresAt),
       txOpts
     );
