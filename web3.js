@@ -10,12 +10,12 @@ const CHAIN = {
 };
 
 const CONTRACTS = {
-  token:          "0x699304A362E41539d918E44188E1033999202cA0",
-  market:         "0x60D2893e04767C9cC1c7395dEA241302b96FAf2D",  // v2
-  presale:        "0x320Af9D3a57863aC3A3a715121a5216Ac26eDe69",
-  stakingPresale: "0x5dB131b4e81297c7e200017dA54eC28820454491",
-  mockUsdc:       "0x53142fD0C5Ad28b07CBC85215dB9219b58314D36",
-  mockUsdt:       "0x3cfd2e869d4b2ddF4E4D62e5749b510f718fecee",
+  token:          "0x964037302F0DDEba0d5CCc05D0AadC9072441537",
+  market:         "0x87B5060d985550a88aa43461a77D17335102ae46",  // v2
+  presale:        "0x5aadc00ef73dC4f1F0906225F6805E2697Cde506",
+  stakingPresale: "0x7a13e7eFC571A8ab2A4128E48fAff798164F4451",
+  mockUsdc:       "0x5D9dce17290B38774D3cc4706C8f20c689C47419",
+  mockUsdt:       "0x431096b64586c5b73f50d94D9FddF29ad9564E25",
 };
 
 // ABI minimali (solo le funzioni usate dal frontend)
