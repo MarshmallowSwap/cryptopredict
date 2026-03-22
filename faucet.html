@@ -265,16 +265,27 @@ async function addToMetaMask(token) {
   if (!window.ethereum) { showToast("❌", "MetaMask non trovato"); return; }
   var meta = TOKEN_META[token];
   try {
-    await window.ethereum.request({
+    var result = await window.ethereum.request({
       method: "wallet_watchAsset",
-      params: { type: "ERC20", options: {
-        address: meta.addr,
-        symbol:  meta.symbol,
-        decimals: meta.dec,
-      }}
+      params: {
+        type: "ERC20",
+        options: {
+          address:  meta.addr,
+          symbol:   meta.symbol,
+          decimals: meta.dec,
+          image:    ""
+        }
+      }
     });
-    showToast("✅", meta.symbol + " aggiunto a MetaMask!");
-  } catch(e) { showToast("❌", e.message); }
+    if (result) {
+      showToast("✅", meta.symbol + " aggiunto a MetaMask!");
+    } else {
+      showToast("⚠️", "Operazione annullata");
+    }
+  } catch(e) {
+    console.error("addToMetaMask error:", e);
+    showToast("❌", e.message || "Errore MetaMask");
+  }
 }
 
 function showToast(icon, msg, link) {
