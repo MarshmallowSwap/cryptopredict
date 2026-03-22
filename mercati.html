@@ -231,6 +231,7 @@ async function loadMarkets() {
         poolEth:      m.pool_size,
         expiresAt:    exp,
         participants: m.participant_count || 0,
+        currency:     m.currency || "ETH",
         yieldDay:     (function() {
         var raw = m.yield_info ? parseFloat(m.yield_info.daily_yield) : 0;
         if (raw === 0) { return "~0"; }
