@@ -278,7 +278,7 @@
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Expiry min. 1 ora nel futuro</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Mercati irrisolvibili vengono annullati e rimborsati</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Immagine facoltativa — rende il mercato più riconoscibile</div>
-          <div style="display:flex;gap:8px"><span style="color:var(--gold2)">✦</span><strong style="color:var(--gold2)">Requirement: 1,000 CPRED</strong> in wallet o staking</div>
+          <div style="display:flex;gap:8px"><span style="color:var(--gold2)">✦</span><strong style="color:var(--gold2)">Requirement: 1,000 CPRED</strong> in wallet or staking</div>
         </div>
       </div>
     </div>
@@ -405,7 +405,7 @@ function updateFeePreview() {
 async function createMarket() {
   if (!WALLET.address) { openModal("wallet-modal"); return; }
 
-  // Check CPRED requirement (1000 CPRED in wallet o staking)
+  // Check CPRED requirement (1000 CPRED in wallet or staking)
   try {
     var provider = await W3.getProvider();
     var MKT_CHECK_ABI = ["function minCpredToCreate() view returns (uint256)",
@@ -684,7 +684,7 @@ async function checkCpredRequirement() {
       naTitle.textContent = 'Servono ' + needed.toLocaleString() + ' CPRED per creare mercati';
       var naSub = document.createElement('div');
       naSub.style.cssText = 'font-size:.65rem;color:var(--text3)';
-      naSub.textContent = 'Detieni CPRED in wallet o staking — conta anche il CPRED in staking';
+      naSub.textContent = 'Detieni CPRED in wallet or staking — conta anche il CPRED in staking';
       var naWrap = document.createElement('div');
       naWrap.appendChild(naTitle); naWrap.appendChild(naSub);
       naDiv.appendChild(naWrap);
