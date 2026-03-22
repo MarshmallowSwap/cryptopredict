@@ -429,18 +429,29 @@ async function loadPriceChart() {
     // Leggi eventi BetPlaced per questo mercato
     var filter = c.filters.BetPlaced(currentMarketId);
     var latestBlock = await provider.getBlockNumber();
-    // Max 2000 blocchi per chiamata per evitare HTTP 413
+    // Pagina a ritroso in chunk da 2000 blocchi finché non trova eventi o arriva a 50k blocchi fa
     var events = [];
-    var batchSize = 2000;
-    var from = Math.max(0, latestBlock - 2000);
-    try {
-      events = await c.queryFilter(filter, from, "latest");
-    } catch(e2) {
-      // Se ancora troppo, prova con 500 blocchi
+    var CHUNK   = 2000;
+    var MAX_BACK = 50000;
+    var toBlock  = latestBlock;
+    var searched = 0;
+    while (events.length === 0 && searched < MAX_BACK) {
+      var fromBlock = Math.max(0, toBlock - CHUNK);
       try {
-        from = Math.max(0, latestBlock - 500);
-        events = await c.queryFilter(filter, from, "latest");
-      } catch(e3) { events = []; }
+        var chunk = await c.queryFilter(filter, fromBlock, toBlock);
+        events = chunk.concat(events);
+      } catch(e2) {
+        // chunk troppo grande, prova con 500
+        try {
+          fromBlock = Math.max(0, toBlock - 500);
+          var chunk = await c.queryFilter(filter, fromBlock, toBlock);
+          events = chunk.concat(events);
+        } catch(e3) {}
+      }
+      if (events.length > 0) break;
+      toBlock   = fromBlock - 1;
+      searched += CHUNK;
+      if (fromBlock === 0) break;
     }
 
     if (!events.length) {
@@ -576,12 +587,17 @@ async function loadRecentTrades() {
     var filter  = c.filters.BetPlaced(currentMarketId);
     var latest  = await provider.getBlockNumber();
     var events = [];
-    try {
-      events = await c.queryFilter(filter, Math.max(0, latest - 2000), "latest");
-    } catch(e2) {
-      try {
-        events = await c.queryFilter(filter, Math.max(0, latest - 500), "latest");
-      } catch(e3) { events = []; }
+    var toB = latest;
+    for (var attempt = 0; attempt < 10 && events.length === 0; attempt++) {
+      var fromB = Math.max(0, toB - 2000);
+      try { events = (await c.queryFilter(filter, fromB, toB)).concat(events); }
+      catch(e2) {
+        try { events = (await c.queryFilter(filter, Math.max(0,toB-500), toB)).concat(events); }
+        catch(e3) {}
+      }
+      if (events.length > 0) break;
+      toB = fromB - 1;
+      if (fromB === 0) break;
     }
     var last10  = events.slice(-10).reverse();
 
