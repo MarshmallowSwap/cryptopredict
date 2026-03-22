@@ -455,7 +455,7 @@ async function createMarket() {
     // 1. Crea il mercato on-chain
     var signer = await W3.getSigner();
     var CREA_ABI = [
-      "function createMarket(string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt) payable returns (uint256)"
+      "function createMarket(string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint8 currency, uint256 liquidityAmount) payable returns (uint256)"
     ];
     var mktC  = new ethers.Contract(W3.CONTRACTS.market, CREA_ABI, signer);
     // Valuta unica per mercato — v.A
