@@ -48,7 +48,7 @@ const TOKEN_ABI = [
 
 const PRESALE_ABI = [
   "function currentStage() view returns (uint256)",
-  "function stages(uint256) view returns (uint256 priceUsdCents, uint256 allocation, uint256 sold, bool active)",
+  "function stages(uint256) view returns (uint256 priceUsdCents, uint256 allocation, uint256 sold, uint256 startTime, bool active)",
   "function purchased(address) view returns (uint256)",
   "function totalRaised() view returns (uint256)",
   "function presaleActive() view returns (bool)",
