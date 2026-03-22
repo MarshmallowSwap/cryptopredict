@@ -405,248 +405,44 @@ const CP = {
 function connectWallet() { openModal('wallet-modal'); }
 document.addEventListener('DOMContentLoaded', () => CP.init());
 
-/* ── AI ADVISOR FLOATING WIDGET ──────────────────────────────── */
-document.addEventListener('DOMContentLoaded', function() {
-  // Inject styles
-  var style = document.createElement('style');
-  style.textContent = `
-    @keyframes ai-pop{from{opacity:0;transform:scale(.8) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
-    @keyframes ai-dot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
-    #ai-fab{
-      position:fixed;bottom:28px;right:28px;z-index:9000;
-      width:52px;height:52px;border-radius:50%;
-      background:linear-gradient(135deg,#7c3aed,#a855f7);
-      border:none;cursor:pointer;
-      box-shadow:0 4px 24px rgba(124,58,237,.45);
-      display:flex;align-items:center;justify-content:center;
-      font-size:22px;transition:transform .2s,box-shadow .2s;
-      color:#fff;
-    }
-    #ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(124,58,237,.6)}
-    #ai-fab .ai-badge{
-      position:absolute;top:-3px;right:-3px;
-      width:16px;height:16px;border-radius:50%;
-      background:#10b981;border:2px solid #080810;
-      animation:pulse 2s infinite;
-    }
-    #ai-drawer{
-      position:fixed;bottom:90px;right:28px;z-index:9001;
-      width:340px;max-width:calc(100vw - 40px);
-      background:#0f0f1a;
-      border:1px solid rgba(124,58,237,.3);
-      border-radius:16px;overflow:hidden;
-      box-shadow:0 8px 48px rgba(124,58,237,.2),0 2px 16px rgba(0,0,0,.6);
-      display:none;flex-direction:column;
-      animation:ai-pop .2s ease;
-    }
-    #ai-drawer.open{display:flex}
-    #ai-drawer-head{
-      padding:12px 14px;
-      background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(124,58,237,.06));
-      border-bottom:1px solid rgba(124,58,237,.2);
-      display:flex;align-items:center;gap:10px;
-    }
-    #ai-drawer-msgs{
-      padding:12px 14px;
-      height:240px;overflow-y:auto;
-      display:flex;flex-direction:column;gap:10px;
-      scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.3) transparent;
-    }
-    #ai-drawer-msgs::-webkit-scrollbar{width:4px}
-    #ai-drawer-msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:2px}
-    .ai-msg-user{
-      align-self:flex-end;
-      background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);
-      border-radius:12px 2px 12px 12px;
-      padding:8px 12px;font-size:.78rem;color:#e2e8f0;
-      line-height:1.5;max-width:85%;
-    }
-    .ai-msg-bot{
-      align-self:flex-start;display:flex;gap:8px;align-items:flex-start;max-width:90%;
-    }
-    .ai-msg-bot-bubble{
-      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
-      border-radius:2px 12px 12px 12px;
-      padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.5;
-    }
-    .ai-avatar-sm{
-      width:24px;height:24px;border-radius:50%;flex-shrink:0;
-      background:linear-gradient(135deg,#7c3aed,#a855f7);
-      display:flex;align-items:center;justify-content:center;font-size:11px;
-    }
-    .ai-typing-dot{
-      width:5px;height:5px;border-radius:50%;background:#a855f7;
-      animation:ai-dot .6s ease infinite;display:inline-block;margin:0 1px;
-    }
-    #ai-drawer-sugg{
-      padding:0 14px 8px;display:flex;gap:5px;flex-wrap:wrap;
-    }
-    .ai-sugg-btn{
-      padding:3px 10px;background:rgba(124,58,237,.08);
-      border:1px solid rgba(124,58,237,.25);border-radius:20px;
-      font-size:.62rem;color:#c4b5fd;cursor:pointer;
-      font-family:'DM Mono',monospace;transition:background .15s;
-    }
-    .ai-sugg-btn:hover{background:rgba(124,58,237,.2)}
-    #ai-drawer-inp-row{
-      padding:10px 12px;border-top:1px solid rgba(255,255,255,.06);
-      display:flex;gap:8px;
-    }
-    #ai-drawer-inp{
-      flex:1;background:rgba(255,255,255,.05);
-      border:1px solid rgba(124,58,237,.2);border-radius:8px;
-      padding:7px 10px;font-size:.75rem;color:#e2e8f0;
-      outline:none;font-family:'DM Mono',monospace;
-      transition:border-color .2s;
-    }
-    #ai-drawer-inp:focus{border-color:rgba(124,58,237,.5)}
-    #ai-drawer-inp::placeholder{color:rgba(255,255,255,.3)}
-    #ai-drawer-send{
-      padding:7px 12px;background:linear-gradient(135deg,#7c3aed,#a855f7);
-      border:none;border-radius:8px;color:#fff;
-      font-weight:700;font-size:.72rem;cursor:pointer;
-      font-family:'Syne',sans-serif;white-space:nowrap;
-      transition:opacity .2s;
-    }
-    #ai-drawer-send:hover{opacity:.85}
-    #ai-drawer-send:disabled{opacity:.5;cursor:default}
-  `;
-  document.head.appendChild(style);
 
-  // FAB Button
-  var fab = document.createElement('button');
-  fab.id = 'ai-fab';
-  fab.title = 'AI Advisor';
-  fab.innerHTML = '🔮<span class="ai-badge"></span>';
-  document.body.appendChild(fab);
+/* ── AI ADVISOR ─────────────────────────────────────────────────── */
 
-  // Drawer
-  var drawer = document.createElement('div');
-  drawer.id = 'ai-drawer';
-  drawer.innerHTML = `
-    <div id="ai-drawer-head">
-      <div class="ai-avatar-sm">🔮</div>
-      <div style="flex:1">
-        <div style="font-size:.78rem;font-weight:700;color:#e2e8f0">CryptoPredict AI</div>
-        <div style="font-size:.6rem;color:#a855f7;font-family:'DM Mono',monospace">Powered by Claude</div>
-      </div>
-      <button onclick="document.getElementById('ai-drawer').classList.remove('open')"
-        style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1">✕</button>
-    </div>
-    <div id="ai-drawer-msgs"></div>
-    <div id="ai-drawer-sugg">
-      <button class="ai-sugg-btn" onclick="aiWidget.ask('How does yield work?')">Yield?</button>
-      <button class="ai-sugg-btn" onclick="aiWidget.ask('How to buy CPRED?')">Buy CPRED?</button>
-      <button class="ai-sugg-btn" onclick="aiWidget.ask('What staking APY can I earn?')">Staking APY?</button>
-      <button class="ai-sugg-btn" onclick="aiWidget.ask('How does governance work?')">Governance?</button>
-    </div>
-    <div id="ai-drawer-inp-row">
-      <input id="ai-drawer-inp" placeholder="Ask anything..." type="text">
-      <button id="ai-drawer-send" onclick="aiWidget.send()">Send ↗</button>
-    </div>
-  `;
-  document.body.appendChild(drawer);
-
-  // Initial bot message
-  var msgs = document.getElementById('ai-drawer-msgs');
-  aiWidget.addBot("Hi! I'm the CryptoPredict AI. Ask me anything about prediction markets, $CPRED, staking, or governance! 🚀");
-
-  // Input enter key
-  document.getElementById('ai-drawer-inp').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') aiWidget.send();
-  });
-
-  // Toggle
-  fab.addEventListener('click', function() {
-    var d = document.getElementById('ai-drawer');
-    d.classList.toggle('open');
-    if (d.classList.contains('open')) {
-      setTimeout(function(){ document.getElementById('ai-drawer-inp').focus(); }, 100);
-    }
-  });
-});
-
-/* ── AI WIDGET LOGIC ── */
+// 1. FAQ engine — definito per primo
 var aiWidget = (function() {
-  var history = [];
-  var SYSTEM = 'You are the CryptoPredict AI advisor. CryptoPredict is a 100% crypto-native prediction market on Base Sepolia. Key facts: Token $CPRED (100M supply), presale Stage 1 $0.050, listing target $0.150. Markets: bet YES/NO on events using ETH, USDC, USDT or CPRED. Yield: 4.8% APY automatic on pools (simulated testnet, real DeFi on mainnet via Aave). Staking: Flexible 12%, 30-day 20%, 90-day 28% APY in CPRED + ETH from protocol fees. Fees: 2% on payout (1% creator + 1% stakers), 0% CPRED markets. Need 1,000 CPRED to create markets. Governance: 1 CPRED = 1 vote, launches mainnet Q4 2025. Secondary market: sell positions before expiry, 0.5% fee. Be concise and helpful. Answer in the same language the user writes in.';
-
-  function addBot(text) {
-    var msgs = document.getElementById('ai-drawer-msgs');
-    if (!msgs) return;
-    var row = document.createElement('div');
-    row.className = 'ai-msg-bot';
-    row.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble">' + escHtml(text) + '</div>';
-    msgs.appendChild(row);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function addUser(text) {
-    var msgs = document.getElementById('ai-drawer-msgs');
-    if (!msgs) return;
-    var el = document.createElement('div');
-    el.className = 'ai-msg-user';
-    el.textContent = text;
-    msgs.appendChild(el);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function addTyping() {
-    var msgs = document.getElementById('ai-drawer-msgs');
-    var el = document.createElement('div');
-    el.id = 'ai-typing-indicator';
-    el.className = 'ai-msg-bot';
-    el.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble"><span class="ai-typing-dot"></span><span class="ai-typing-dot" style="animation-delay:.15s"></span><span class="ai-typing-dot" style="animation-delay:.3s"></span></div>';
-    msgs.appendChild(el);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function removeTyping() {
-    var el = document.getElementById('ai-typing-indicator');
-    if (el) el.remove();
-  }
-
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-  }
-
-  function hideSugg() {
-    var s = document.getElementById('ai-drawer-sugg');
-    if (s) s.style.display = 'none';
-  }
-
-  // FAQ knowledge base
   var FAQ = [
     { k:['yield','apy','interest','return','earn','capital'],
-      a:'Every pool generates automatic 4.8% APY yield on deposited capital while waiting for market resolution. On testnet this is simulated; on mainnet it will come from real DeFi protocols like Aave. 50% boosts winners, 30% goes to CPRED stakers, 20% to the treasury.' },
-    { k:['buy cpred','purchase cpred','get cpred','cpred presale','presale'],
-      a:'Buy $CPRED in presale at $0.050 (Stage 1). Go to /presale.html, connect MetaMask on Base Sepolia, enter the ETH amount and confirm. The listing target is $0.150 — that's +200% from Stage 1 price.' },
-    { k:['stake','staking','pool','lock','apy','12%','20%','28%'],
-      a:'3 staking pools: Flexible (12% APY, unstake anytime), 30-day lock (20% APY), 90-day lock (28% APY). You earn CPRED rewards + ETH from protocol fees. Staked CPRED also counts for market creation requirements.' },
-    { k:['fee','fees','cost','charge','2%','1%'],
-      a:'2% fee on winning payouts only (1% to market creator + 1% to CPRED stakers). Losers pay nothing. CPRED markets: 0% fee. If you hold CPRED in your wallet: only 1% fee.' },
+      a:'Every pool generates 4.8% APY automatic yield on deposited capital. On testnet this is simulated; on mainnet it comes from real DeFi (Aave). 50% boosts winners, 30% goes to CPRED stakers, 20% to treasury.' },
+    { k:['buy cpred','purchase cpred','get cpred','presale','token price'],
+      a:'Buy $CPRED in presale at $0.050 (Stage 1). Go to /presale.html, connect MetaMask on Base Sepolia and confirm. Listing target is $0.150 — +200% from Stage 1 price.' },
+    { k:['stake','staking','pool','lock','12%','20%','28%'],
+      a:'3 staking pools: Flexible (12% APY, unstake anytime), 30-day lock (20% APY), 90-day lock (28% APY). You earn CPRED rewards + ETH from protocol fees. Go to /staking.html.' },
+    { k:['fee','fees','cost','charge','2%','1%','0%'],
+      a:'2% fee on winning payouts only (1% creator + 1% stakers). Losers pay nothing. CPRED markets: 0% fee. If you hold CPRED in wallet: only 1% fee.' },
     { k:['polymarket','kalshi','compare','vs','difference','better'],
-      a:'Unlike Polymarket and Kalshi, CryptoPredict: (1) generates automatic yield on idle capital, (2) supports 4 currencies (ETH/USDC/USDT/CPRED), (3) has permissionless market creation, (4) shares protocol revenue with CPRED stakers, (5) is available in Europe.' },
-    { k:['create market','make market','new market','start market'],
-      a:'To create a market you need 1,000 CPRED (wallet + staking combined). Go to /crea.html, write your YES/NO question, choose category, currency, expiry date and deposit initial liquidity. You earn 1% of every payout from your market automatically.' },
-    { k:['governance','vote','dao','proposal','voting'],
-      a:'1 CPRED = 1 vote. Staked CPRED counts as 2× voting power. Governance launches with mainnet (Q4 2025). You can vote on fee rates, market categories, treasury allocation, and protocol parameters. Buy CPRED now to secure your voting power.' },
-    { k:['sell','secondary','vendi','position','exit early','cash out'],
-      a:'You can sell your open position to other users before market resolution via the Sell Shares page (/vendi.html). The PositionMarket contract (deploying next redeploy) handles this on-chain. Fee: 0.5% on the sale price.' },
-    { k:['trading','chart','price','orderbook','limit order'],
-      a:'The Trading page (/trading.html) shows a real-time price chart built from on-chain BetPlaced events — the implied YES probability (0-1) per bet. You can also place limit orders that execute automatically when the price reaches your target.' },
-    { k:['faucet','testnet','free','usdc','usdt','test token'],
-      a:'Get free testnet tokens at /faucet.html — claim 10,000 USDC and 10,000 USDT for free. For testnet ETH, use QuickNode or Coinbase faucet (you need a small account there).' },
-    { k:['mainnet','launch','when','roadmap','audit'],
-      a:'Current status: Base Sepolia testnet. Roadmap: Smart contract audit (Q3 2025) → Mainnet launch (Q4 2025) → DAO Governance live (Q4 2025) → AMM v2.0 (2026). Testnet tokens have no real value.' },
-    { k:['cpred','token','supply','tokenomics','100m'],
-      a:'$CPRED: 100M total supply. Presale 45% (3 stages: $0.050/$0.080/$0.100), Liquidity 30%, Team 15% (12-month lock), Ecosystem 10%. Listing target: $0.150 (+200% from Stage 1). Utility: fee discount, staking, governance, market creation.' },
-    { k:['how','what is','explain','works','tell me'],
-      a:'CryptoPredict is a 100% crypto-native prediction market on Base Sepolia. You bet YES or NO on future events (crypto, macro, sport, politics). Your capital generates 4.8% APY while waiting. Winners receive proportional payouts. Check /docs.html for the full documentation.' },
-    { k:['wallet','metamask','connect','network','base sepolia'],
-      a:'Connect MetaMask and switch to Base Sepolia (chainId 84532). Add it at chainlist.org or it will be added automatically. For testnet ETH, use the QuickNode faucet. The 🔮 button in the nav connects your wallet.' },
+      a:'Unlike Polymarket/Kalshi: CryptoPredict generates automatic yield on idle capital, supports 4 currencies, has permissionless market creation, shares revenue with CPRED stakers, and is available in Europe.' },
+    { k:['create market','make market','new market','how to create'],
+      a:'You need 1,000 CPRED (wallet + staking). Go to /crea.html, write your YES/NO question, choose category and currency. You earn 1% of every payout from your market automatically.' },
+    { k:['governance','vote','dao','proposal','voting power'],
+      a:'1 CPRED = 1 vote. Staked CPRED = 2x voting power. Governance launches with mainnet Q4 2025. Vote on fees, categories, treasury. Go to /governance.html.' },
+    { k:['sell','secondary','position','exit','cash out','vendi'],
+      a:'Sell your open positions before resolution via /vendi.html. The PositionMarket contract handles this on-chain. Fee: 0.5% on sale price.' },
+    { k:['trading','chart','price chart','orderbook','limit order'],
+      a:'Trading page (/trading.html) shows a real-time price chart from on-chain BetPlaced events. Place limit orders that auto-execute when the price hits your target.' },
+    { k:['faucet','testnet','free','usdc','usdt','test token','get eth'],
+      a:'Get free testnet tokens at /faucet.html — claim 10,000 USDC and USDT. For testnet ETH use the QuickNode faucet at faucet.quicknode.com/base/sepolia.' },
+    { k:['mainnet','launch','when','roadmap','audit','timeline'],
+      a:'Testnet now → Audit Q3 2025 → Mainnet Q4 2025 → DAO live Q4 2025 → AMM v2 2026. Current testnet tokens have no real value.' },
+    { k:['cpred','tokenomics','supply','100m','allocation'],
+      a:'$CPRED: 100M supply. Presale 45% ($0.050→$0.080→$0.100), Liquidity 30%, Team 15% (12mo lock), Ecosystem 10%. Listing target $0.150 (+200% from Stage 1).' },
+    { k:['wallet','metamask','connect','network','base sepolia','chainid'],
+      a:'Connect MetaMask and switch to Base Sepolia (chainId 84532). Click "Connect Wallet" in the nav or it will prompt you automatically when you try to bet.' },
     { k:['reward','eth reward','claim','protocol fee'],
-      a:'CPRED stakers receive ETH rewards: 1% of every winning payout goes to the ETH reward pool. The more market volume, the more ETH stakers earn. Claim anytime from /staking.html.' },
+      a:'CPRED stakers receive ETH: 1% of every winning payout goes to the ETH reward pool. More volume = more ETH. Claim from /staking.html anytime.' },
+    { k:['payout','win','winning','claim payout','collect'],
+      a:'When a market resolves and you won, click "Claim Winnings" in the Markets page or Portfolio. Your ETH/USDC/USDT arrives in your wallet within seconds.' },
+    { k:['market','predict','bet','yes','no','how'],
+      a:'Choose a market on /mercati.html, click YES or NO, enter amount, confirm in MetaMask. Winners share the total pool proportionally. Yield is added on top. Check /docs.html for full details.' },
   ];
 
   function faqAnswer(q) {
@@ -660,10 +456,54 @@ var aiWidget = (function() {
       if (score > bestScore) { bestScore = score; best = FAQ[i]; }
     }
     if (best && bestScore > 0) return best.a;
-    return 'Great question! I'm best at answering questions about CryptoPredict markets, $CPRED token, yield, staking, fees, governance, and how to get started. Try asking something specific, or check our full docs at /docs.html 📖';
+    return "I'm best at answering questions about CryptoPredict markets, $CPRED, yield, staking, fees and governance. Try something specific, or check /docs.html for full documentation! 📖";
   }
 
-  async function send() {
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+
+  function getMsgs() { return document.getElementById('ai-drawer-msgs'); }
+
+  function addBot(text) {
+    var msgs = getMsgs(); if (!msgs) return;
+    var row = document.createElement('div');
+    row.className = 'ai-msg-bot';
+    row.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble">' + escHtml(text) + '</div>';
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addUser(text) {
+    var msgs = getMsgs(); if (!msgs) return;
+    var el = document.createElement('div');
+    el.className = 'ai-msg-user';
+    el.textContent = text;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    var msgs = getMsgs(); if (!msgs) return;
+    var el = document.createElement('div');
+    el.id = 'ai-typing-indicator';
+    el.className = 'ai-msg-bot';
+    el.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble"><span class="ai-typing-dot"></span><span class="ai-typing-dot" style="animation-delay:.15s"></span><span class="ai-typing-dot" style="animation-delay:.3s"></span></div>';
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    var el = document.getElementById('ai-typing-indicator');
+    if (el) el.remove();
+  }
+
+  function hideSugg() {
+    var s = document.getElementById('ai-drawer-sugg');
+    if (s) s.style.display = 'none';
+  }
+
+  function send() {
     var inp = document.getElementById('ai-drawer-inp');
     var btn = document.getElementById('ai-drawer-send');
     if (!inp) return;
@@ -674,20 +514,105 @@ var aiWidget = (function() {
     addUser(q);
     addTyping();
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
-    // Simulate thinking delay
     setTimeout(function() {
       removeTyping();
       addBot(faqAnswer(q));
       if (btn) { btn.disabled = false; btn.textContent = 'Send ↗'; }
-    }, 600 + Math.random() * 400);
+    }, 500 + Math.random() * 400);
   }
 
-  async function ask(q) {
-    document.getElementById('ai-drawer').classList.add('open');
-    document.getElementById('ai-drawer-inp').value = q;
-    await send();
+  function ask(q) {
+    var drawer = document.getElementById('ai-drawer');
+    if (drawer) drawer.classList.add('open');
+    var inp = document.getElementById('ai-drawer-inp');
+    if (inp) inp.value = q;
+    send();
   }
 
   return { addBot:addBot, send:send, ask:ask };
 })();
 
+// 2. DOM injection — dopo che aiWidget è pronto
+document.addEventListener('DOMContentLoaded', function() {
+
+  var style = document.createElement('style');
+  style.textContent = [
+    '@keyframes ai-pop{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}',
+    '@keyframes ai-dot{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-4px);opacity:1}}',
+    '#ai-fab{position:fixed;bottom:28px;right:28px;z-index:9000;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;cursor:pointer;box-shadow:0 4px 24px rgba(124,58,237,.45);display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .2s,box-shadow .2s;}',
+    '#ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(124,58,237,.6)}',
+    '#ai-fab .ai-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#10b981;border:2px solid #080810;animation:pulse 2s infinite;}',
+    '#ai-drawer{position:fixed;bottom:90px;right:28px;z-index:9001;width:340px;max-width:calc(100vw - 40px);background:#0f0f1a;border:1px solid rgba(124,58,237,.35);border-radius:16px;overflow:hidden;box-shadow:0 8px 48px rgba(124,58,237,.2),0 2px 16px rgba(0,0,0,.6);flex-direction:column;display:none;}',
+    '#ai-drawer.open{display:flex;animation:ai-pop .2s ease;}',
+    '#ai-drawer-head{padding:12px 14px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(124,58,237,.06));border-bottom:1px solid rgba(124,58,237,.2);display:flex;align-items:center;gap:10px;}',
+    '#ai-drawer-msgs{padding:12px 14px;height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.3) transparent;}',
+    '#ai-drawer-msgs::-webkit-scrollbar{width:4px}',
+    '#ai-drawer-msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:2px}',
+    '.ai-msg-user{align-self:flex-end;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:12px 2px 12px 12px;padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.5;max-width:85%;}',
+    '.ai-msg-bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-start;max-width:92%;}',
+    '.ai-msg-bot-bubble{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:2px 12px 12px 12px;padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.55;}',
+    '.ai-avatar-sm{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:11px;}',
+    '.ai-typing-dot{width:5px;height:5px;border-radius:50%;background:#a855f7;animation:ai-dot .6s ease infinite;display:inline-block;margin:0 2px;}',
+    '#ai-drawer-sugg{padding:0 14px 8px;display:flex;gap:5px;flex-wrap:wrap;}',
+    '.ai-sugg-btn{padding:3px 10px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.25);border-radius:20px;font-size:.62rem;color:#c4b5fd;cursor:pointer;font-family:"DM Mono",monospace;transition:background .15s;}',
+    '.ai-sugg-btn:hover{background:rgba(124,58,237,.2)}',
+    '#ai-drawer-inp-row{padding:10px 12px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px;}',
+    '#ai-drawer-inp{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:7px 10px;font-size:.75rem;color:#e2e8f0;outline:none;font-family:"DM Mono",monospace;transition:border-color .2s;}',
+    '#ai-drawer-inp:focus{border-color:rgba(124,58,237,.5)}',
+    '#ai-drawer-inp::placeholder{color:rgba(255,255,255,.3)}',
+    '#ai-drawer-send{padding:7px 12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:.72rem;cursor:pointer;font-family:"Syne",sans-serif;white-space:nowrap;transition:opacity .2s;}',
+    '#ai-drawer-send:hover{opacity:.85}',
+    '#ai-drawer-send:disabled{opacity:.5;cursor:default}',
+  ].join('');
+  document.head.appendChild(style);
+
+  // FAB
+  var fab = document.createElement('button');
+  fab.id = 'ai-fab';
+  fab.title = 'AI Advisor';
+  fab.innerHTML = '🔮<span class="ai-badge"></span>';
+  document.body.appendChild(fab);
+
+  // Drawer HTML
+  var drawer = document.createElement('div');
+  drawer.id = 'ai-drawer';
+  drawer.innerHTML =
+    '<div id="ai-drawer-head">' +
+      '<div class="ai-avatar-sm">🔮</div>' +
+      '<div style="flex:1"><div style="font-size:.78rem;font-weight:700;color:#e2e8f0">CryptoPredict AI</div>' +
+      '<div style="font-size:.6rem;color:#a855f7;font-family:'DM Mono',monospace">Ask me anything</div></div>' +
+      '<button id="ai-close-btn" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0">✕</button>' +
+    '</div>' +
+    '<div id="ai-drawer-msgs"></div>' +
+    '<div id="ai-drawer-sugg">' +
+      '<button class="ai-sugg-btn" onclick="aiWidget.ask('How does yield work?')">Yield?</button>' +
+      '<button class="ai-sugg-btn" onclick="aiWidget.ask('How to buy CPRED?')">Buy CPRED?</button>' +
+      '<button class="ai-sugg-btn" onclick="aiWidget.ask('What staking APY can I earn?')">Staking APY?</button>' +
+      '<button class="ai-sugg-btn" onclick="aiWidget.ask('How does governance work?')">Governance?</button>' +
+    '</div>' +
+    '<div id="ai-drawer-inp-row">' +
+      '<input id="ai-drawer-inp" placeholder="Ask anything..." type="text">' +
+      '<button id="ai-drawer-send" onclick="aiWidget.send()">Send ↗</button>' +
+    '</div>';
+  document.body.appendChild(drawer);
+
+  // Welcome message
+  aiWidget.addBot("Hi! I'm the CryptoPredict AI. Ask me about prediction markets, $CPRED, staking, yield or governance! 🚀");
+
+  // Events
+  fab.addEventListener('click', function() {
+    var d = document.getElementById('ai-drawer');
+    d.classList.toggle('open');
+    if (d.classList.contains('open')) {
+      setTimeout(function(){ var i = document.getElementById('ai-drawer-inp'); if(i) i.focus(); }, 150);
+    }
+  });
+
+  document.getElementById('ai-close-btn').addEventListener('click', function() {
+    document.getElementById('ai-drawer').classList.remove('open');
+  });
+
+  document.getElementById('ai-drawer-inp').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') aiWidget.send();
+  });
+});
