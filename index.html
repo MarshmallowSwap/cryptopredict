@@ -126,7 +126,7 @@
 /* ── EARN SECTION ── */
 .earn-section{padding:80px 24px;
   background:linear-gradient(180deg,var(--black),rgba(7,9,26,.7),var(--black));position:relative}
-.earn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1100px;margin:52px auto 0}
+.earn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:52px auto 0}
 .earn-card{background:var(--bg2);border:1px solid var(--brd);border-radius:18px;
   padding:28px 24px;transition:all .5s ease-out;opacity:0;transform:translateY(32px)}
 .earn-card.visible{opacity:1;transform:translateY(0)}
@@ -226,7 +226,8 @@
 
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
-  .how-grid,.earn-grid,.why-grid{grid-template-columns:1fr 1fr}
+  .how-grid,.why-grid{grid-template-columns:1fr 1fr}
+  .earn-grid{grid-template-columns:1fr 1fr}
   .stats-grid{grid-template-columns:1fr 1fr}
   .stat-block:nth-child(2){border-right:none}
   .footer-grid{grid-template-columns:1fr 1fr}
@@ -436,7 +437,7 @@
   <div style="text-align:center">
     <div class="section-eyebrow" style="color:var(--grn)">COME SI GUADAGNA</div>
     <div class="section-title">
-      <span style="background:linear-gradient(135deg,var(--grn),var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent">3 Fonti di Reddito</span><br>in un solo posto.
+      <span style="background:linear-gradient(135deg,var(--grn),var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent">4 Fonti di Reddito</span><br>in un solo posto.
     </div>
   </div>
 
@@ -510,6 +511,30 @@
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:5px"><div class="earn-steps-num" style="background:rgba(255,215,0,.18);border:1px solid rgba(255,215,0,.35);color:var(--gld)">2</div><span style="font-size:12px;color:var(--dim)">Staka al listing</span></div>
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:5px"><div class="earn-steps-num" style="background:rgba(255,215,0,.18);border:1px solid rgba(255,215,0,.35);color:var(--gld)">3</div><span style="font-size:12px;color:var(--dim)">Ricevi USDC ogni settimana</span></div>
         <div style="display:flex;gap:8px;align-items:center"><div class="earn-steps-num" style="background:rgba(255,215,0,.18);border:1px solid rgba(255,215,0,.35);color:var(--gld)">4</div><span style="font-size:12px;color:var(--dim)">Compounding automatico</span></div>
+      </div>
+    </div>
+
+    <!-- AMM -->
+    <div class="earn-card" id="earn4" style="transition-delay:.45s">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
+        <div style="width:56px;height:56px;border-radius:16px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;font-size:26px">🔄</div>
+        <span class="lp-badge" style="background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3)">AMM · v2.0</span>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#dde3f5;margin-bottom:10px">Liquidity Provider</div>
+      <p style="font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:14px">Deposita liquidità nei pool AMM dei mercati e guadagna le fee di ogni swap — senza dover prendere posizione.</p>
+      <div class="earn-example" style="border:1px solid rgba(167,139,250,.2)">
+        <div style="font-size:10px;color:#a78bfa;letter-spacing:.1em;font-weight:700;margin-bottom:8px">ESEMPIO PRATICO</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--muted2)">Fee swap</span><span style="font-size:12px;font-weight:700;color:#a78bfa">0.3%</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--muted2)">Monthly (pool $100K)</span><span style="font-size:12px;font-weight:700;color:#a78bfa">~$900</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--muted2)">APY stimato</span><span style="font-size:12px;font-weight:700;color:#a78bfa">~10-15%</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted2);line-height:1.6;margin-bottom:14px">Con l'AMM puoi comprare e vendere quote YES/NO come su un DEX — prezzi continui, uscita in qualsiasi momento, no attesa risoluzione.</p>
+      <div style="border-top:1px solid var(--brd);padding-top:14px">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <div style="width:18px;height:18px;border-radius:50%;background:rgba(167,139,250,.2);border:1px solid rgba(167,139,250,.35);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#a78bfa;flex-shrink:0">!</div>
+          <span style="font-size:11px;color:#a78bfa;font-weight:700">Roadmap v2.0 — In sviluppo</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted2);line-height:1.6">Richiede nuovo contratto CPMM (x·y=k). Trading su prezzi continui, LP token, swap istantanei. Arrivo previsto dopo il mainnet.</div>
       </div>
     </div>
   </div>
@@ -1125,7 +1150,7 @@
 
 /* ── EARN CARDS REVEAL ── */
 (function(){
-  ['earn1','earn2','earn3'].forEach((id,i)=>{
+  ['earn1','earn2','earn3','earn4'].forEach((id,i)=>{
     const el=document.getElementById(id);
     if(!el)return;
     const obs=new IntersectionObserver(entries=>{
