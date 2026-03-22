@@ -39,7 +39,7 @@
   </a>
   <div class="nav-links">
     <a href="index.html"     class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
-    <a href="mercati.html"   class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="mercati.html"   class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Markets</span></a>
     <a href="vendi.html"     class="nav-link" data-page="vendi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><span>Sell Shares</span></a>
     <a href="portfolio.html" class="nav-link" data-page="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
     <a href="staking.html"   class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
@@ -92,10 +92,10 @@
       <div style="text-align:center;padding:40px;color:var(--text3)">
         <div style="font-size:2rem;margin-bottom:12px">🔄</div>
         <div style="font-size:.9rem;font-weight:700;margin-bottom:8px">Contratto in deploy</div>
-        <div style="font-size:.8rem;margin-bottom:20px">Il PositionMarket sarà disponibile dopo il prossimo redeploy</div>
+        <div style="font-size:.8rem;margin-bottom:20px">PositionMarket will be available after the next contract redeploy</div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
           <a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Go to Markets</a>
-          <a href="portfolio.html" class="btn btn-ghost" style="font-size:.8rem">Vedi Portfolio</a>
+          <a href="portfolio.html" class="btn btn-ghost" style="font-size:.8rem">View Portfolio</a>
         </div>
       </div>
     </div>
@@ -252,7 +252,7 @@ async function loadActiveListings() {
 async function loadMyListings() {
   var el = document.getElementById("mine-list");
   if (!WALLET.address) {
-    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3)">Connetti il wallet</div>';
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3)">Connect wallet</div>';
     return;
   }
   if (!W3.CONTRACTS.positionMarket) {
@@ -282,7 +282,7 @@ async function loadMyListings() {
 async function loadMyPositions() {
   var el = document.getElementById("my-positions-list");
   if (!WALLET.address) {
-    el.innerHTML = '<div style="color:var(--text3);font-size:.82rem">Connetti il wallet per vedere le tue posizioni.<button onclick="connectWallet()" class="btn btn-ghost" style="margin-left:10px;font-size:.75rem">Connetti</button></div>';
+    el.innerHTML = '<div style="color:var(--text3);font-size:.82rem">Connect wallet to see your posizioni.<button onclick="connectWallet()" class="btn btn-ghost" style="margin-left:10px;font-size:.75rem">Connetti</button></div>';
     return;
   }
   el.innerHTML = '<div style="text-align:center;padding:16px"><span class="spin"></span></div>';
