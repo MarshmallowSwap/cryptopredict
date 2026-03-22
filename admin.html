@@ -649,7 +649,11 @@ async function loadAnalytics() {
       var row = document.createElement("div");
       row.style.cssText = "display:flex;align-items:center;gap:12px;margin-bottom:8px";
       var label = document.createElement("div");
-      label.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);width:120px;flex-shrink:0";
+      label.style.fontFamily = 'DM Mono, monospace';
+      label.style.fontSize = '.65rem';
+      label.style.color = 'var(--text3)';
+      label.style.width = '120px';
+      label.style.flexShrink = '0';
       label.textContent = p.name;
       var barWrap = document.createElement("div");
       barWrap.className = "an-bar-wrap";
@@ -659,7 +663,12 @@ async function loadAnalytics() {
       bar.style.cssText = "width:"+(p.val/maxTvl*100).toFixed(1)+"%;background:"+p.color;
       barWrap.appendChild(bar);
       var val = document.createElement("div");
-      val.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:"+p.color+";width:100px;text-align:right;flex-shrink:0";
+      val.style.fontFamily = 'DM Mono, monospace';
+      val.style.fontSize = '.65rem';
+      val.style.color = p.color;
+      val.style.width = '100px';
+      val.style.textAlign = 'right';
+      val.style.flexShrink = '0';
       val.textContent = p.val.toLocaleString(undefined,{maximumFractionDigits:0})+" / 10M";
       row.appendChild(label); row.appendChild(barWrap); row.appendChild(val);
       s2El.appendChild(row);
@@ -730,11 +739,11 @@ async function loadAnalytics() {
       var statusColor = ["var(--green2)","var(--text3)","var(--cyan2)","var(--red2)"][Number(m.status)];
       var q = m.question.length > 45 ? m.question.slice(0,45)+"..." : m.question;
       return '<tr>' +
-        '<td style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">#'+Number(m.id)+'</td>' +
+        '<td style="font-size:.65rem;color:var(--text3)">#'+Number(m.id)+'</td>' +
         '<td style="font-size:.75rem">'+q+'</td>' +
-        '<td><span style="color:'+curColor+';font-family:'DM Mono',monospace;font-size:.7rem;font-weight:700">'+curName+'</span></td>' +
-        '<td style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2)">'+total.toFixed(curIdx===1||curIdx===2?2:4)+'</td>' +
-        '<td style="font-family:'DM Mono',monospace;font-size:.65rem;color:'+statusColor+'">'+status+'</td>' +
+        '<td><span style="color:'+curColor+';font-size:.7rem;font-weight:700">'+curName+'</span></td>' +
+        '<td style="font-size:.72rem;color:var(--gold2)">'+total.toFixed(curIdx===1||curIdx===2?2:4)+'</td>' +
+        '<td style="font-size:.65rem;color:'+statusColor+'">'+status+'</td>' +
         '</tr>';
     }).join("");
 
