@@ -22,6 +22,19 @@
 .tx-toast.show{opacity:1;pointer-events:all}
 .tab-btn{padding:7px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text3);font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;transition:all .15s}
 .tab-btn.active{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.4);color:var(--purple3)}
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.an-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px}
+.an-label{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.08em;margin-bottom:6px}
+.an-value{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:700;margin-bottom:2px}
+.an-sub{font-size:.65rem;color:var(--text3)}
+.an-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.an-table th{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.an-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.an-table tr:last-child td{border-bottom:none}
+.an-section{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px}
+.an-section-title{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.1em;margin-bottom:14px}
+.an-bar-wrap{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:5px}
+.an-bar{height:100%;border-radius:3px}
 </style>
 </head>
 <body>
@@ -92,7 +105,15 @@
     <button class="tab-btn" id="tab-open"    onclick="switchTab('open')">📊 Aperti</button>
     <button class="tab-btn" id="tab-resolved" onclick="switchTab('resolved')">✅ Risolti</button>
     <button class="tab-btn" id="tab-all"     onclick="switchTab('all')">🔮 Tutti</button>
+    <button class="tab-btn" id="tab-analytics" onclick="switchTab('analytics')">📊 Analytics</button>
     <button onclick="loadMarkets()" class="btn btn-ghost" style="margin-left:auto;font-size:.75rem">🔄 Aggiorna</button>
+  </div>
+
+  <!-- Analytics panel -->
+  <div id="analytics-panel" style="display:none">
+    <div id="analytics-content">
+      <div style="text-align:center;padding:30px;color:var(--text3)"><span class="spin"></span> Caricamento dati on-chain...</div>
+    </div>
   </div>
 
   <!-- Markets list -->
@@ -202,11 +223,18 @@ async function loadMarkets() {
 // ── RENDER ────────────────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
-  ["pending","open","resolved","all"].forEach(function(t) {
+  ["pending","open","resolved","all","analytics"].forEach(function(t) {
     var btn = document.getElementById("tab-" + t);
     if (btn) btn.className = "tab-btn" + (t === tab ? " active" : "");
   });
-  renderTab(tab);
+  var isAnalytics = tab === "analytics";
+  document.getElementById("markets-list").style.display   = isAnalytics ? "none" : "block";
+  document.getElementById("analytics-panel").style.display = isAnalytics ? "block" : "none";
+  if (isAnalytics) {
+    loadAnalytics();
+  } else {
+    renderTab(tab);
+  }
 }
 
 function renderTab(tab) {
@@ -465,6 +493,269 @@ function showToast(icon, msg, link) {
   var t = document.getElementById("tx-toast");
   t.classList.add("show");
   setTimeout(function(){ t.classList.remove("show"); }, 8000);
+}
+
+// ── ANALYTICS ────────────────────────────────────────────────────
+async function loadAnalytics() {
+  var el = document.getElementById("analytics-content");
+  el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)"><span class="spin"></span> Lettura blockchain...</div>';
+
+  try {
+    var provider = await W3.getProvider();
+    var ERC20_ABI = ["function balanceOf(address) view returns (uint256)", "function totalSupply() view returns (uint256)"];
+    var STAKING_ABI = [
+      "function getPoolStats(uint8 poolId) view returns (uint256 maxCapacity, uint256 totalStaked, uint256 available)",
+      "function getTotalStaked(address) view returns (uint256)"
+    ];
+    var PRESALE_ABI = [
+      "function totalRaised() view returns (uint256)",
+      "function purchased(address) view returns (uint256)",
+      "function currentStage() view returns (uint8)"
+    ];
+    var TOKEN_ABI = [
+      "function totalStaked() view returns (uint256)",
+      "function rewardPool() view returns (uint256)",
+      "function totalSupply() view returns (uint256)"
+    ];
+
+    var mktC     = new ethers.Contract(W3.CONTRACTS.market,       ["function marketCount() view returns (uint256)", "function getMarket(uint256) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver,uint8 currency))"], provider);
+    var stakingC = new ethers.Contract(W3.CONTRACTS.stakingPresale, STAKING_ABI, provider);
+    var presaleC = new ethers.Contract(W3.CONTRACTS.presale,       PRESALE_ABI, provider);
+    var tokenC   = new ethers.Contract(W3.CONTRACTS.token,         TOKEN_ABI,   provider);
+    var usdcC    = new ethers.Contract(W3.CONTRACTS.mockUsdc,      ERC20_ABI,   provider);
+    var usdtC    = new ethers.Contract(W3.CONTRACTS.mockUsdt,      ERC20_ABI,   provider);
+
+    // Leggi tutto in parallelo
+    var [
+      marketCount, pool0, pool1, pool2,
+      ethRewardPool, totalCpredStaked,
+      usdcInMarket, usdtInMarket
+    ] = await Promise.all([
+      mktC.marketCount(),
+      stakingC.getPoolStats(0).catch(() => null),
+      stakingC.getPoolStats(1).catch(() => null),
+      stakingC.getPoolStats(2).catch(() => null),
+      tokenC.rewardPool().catch(() => 0n),
+      tokenC.totalStaked().catch(() => 0n),
+      usdcC.balanceOf(W3.CONTRACTS.market).catch(() => 0n),
+      usdtC.balanceOf(W3.CONTRACTS.market).catch(() => 0n),
+    ]);
+
+    // Leggi tutti i mercati
+    var count = Number(marketCount);
+    var markets = [];
+    for (var i = 0; i < count; i++) {
+      try { markets.push(await mktC.getMarket(i)); } catch(e) {}
+    }
+
+    // Calcola TVL per valuta nei mercati
+    var tvl = {ETH: 0, USDC: 0, USDT: 0, CPRED: 0};
+    var uniqueCreators = new Set();
+    var uniqueBettors  = new Set(); // approssimato dai creator per ora
+    var totalVolEth = 0;
+    var openCount = 0, resolvedCount = 0, cancelledCount = 0;
+    var feesEth = 0;
+
+    markets.forEach(function(m) {
+      var curIdx = Number(m.currency || 0);
+      var curName = ["ETH","USDC","USDT","CPRED"][curIdx] || "ETH";
+      var decimals = (curIdx === 1 || curIdx === 2) ? 6 : 18;
+      var yes = parseFloat(ethers.formatUnits(m.yesPool, decimals));
+      var no  = parseFloat(ethers.formatUnits(m.noPool,  decimals));
+      tvl[curName] += yes + no;
+      uniqueCreators.add(m.creator);
+      if (Number(m.status) === 0) openCount++;
+      else if (Number(m.status) === 2) resolvedCount++;
+      else if (Number(m.status) === 3) cancelledCount++;
+    });
+
+    var usdcMktBal = parseFloat(ethers.formatUnits(usdcInMarket, 6));
+    var usdtMktBal = parseFloat(ethers.formatUnits(usdtInMarket, 6));
+    var ethMktBal  = tvl.ETH;
+    var cpredMktBal = tvl.CPRED;
+
+    // Staking
+    var s0 = pool0 ? parseFloat(ethers.formatEther(pool0[1])) : 0;
+    var s1 = pool1 ? parseFloat(ethers.formatEther(pool1[1])) : 0;
+    var s2 = pool2 ? parseFloat(ethers.formatEther(pool2[1])) : 0;
+    var totalStakingTvl = s0 + s1 + s2;
+
+    var ethPool = parseFloat(ethers.formatEther(ethRewardPool));
+    var cpredStaked = parseFloat(ethers.formatEther(totalCpredStaked));
+
+    // Leggi presale
+    var totalRaisedEth = 0;
+    var presaleStage = 1;
+    try {
+      var tr = await presaleC.totalRaised();
+      totalRaisedEth = parseFloat(ethers.formatEther(tr));
+      presaleStage = Number(await presaleC.currentStage()) + 1;
+    } catch(e) {}
+
+    // Render
+    el.innerHTML = "";
+
+    // ── SEZIONE 1: TVL Overview ──
+    var s1El = document.createElement("div");
+    s1El.className = "an-section";
+    s1El.innerHTML = '<div class="an-section-title">// TVL — FONDI NEI MERCATI PER VALUTA</div>';
+    var tvlGrid = document.createElement("div");
+    tvlGrid.className = "analytics-grid";
+
+    function anCard(label, value, sub, color) {
+      var c = document.createElement("div");
+      c.className = "an-card";
+      c.innerHTML = '<div class="an-label">'+label+'</div>' +
+        '<div class="an-value" style="color:'+color+'">'+value+'</div>' +
+        '<div class="an-sub">'+sub+'</div>';
+      return c;
+    }
+
+    tvlGrid.appendChild(anCard("ETH NEI MERCATI",   ethMktBal.toFixed(4)+" ETH",   "~$"+(ethMktBal*2000).toFixed(0),            "var(--cyan2)"));
+    tvlGrid.appendChild(anCard("USDC NEI MERCATI",  usdcMktBal.toFixed(2)+" USDC", "~$"+usdcMktBal.toFixed(2),                  "#2775ca"));
+    tvlGrid.appendChild(anCard("USDT NEI MERCATI",  usdtMktBal.toFixed(2)+" USDT", "~$"+usdtMktBal.toFixed(2),                  "#26a17b"));
+    tvlGrid.appendChild(anCard("CPRED NEI MERCATI", cpredMktBal.toFixed(0)+" CPRED","~$"+(cpredMktBal*0.05).toFixed(2),          "#fbbf24"));
+    s1El.appendChild(tvlGrid);
+
+    // TVL totale in USD
+    var tvlTotalUsd = ethMktBal*2000 + usdcMktBal + usdtMktBal + cpredMktBal*0.05;
+    var tvlSummary = document.createElement("div");
+    tvlSummary.style.cssText = "background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between";
+    tvlSummary.innerHTML = '<div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3)">TVL TOTALE NEI MERCATI (USD)</div>' +
+      '<div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:800;color:var(--cyan2)">$'+tvlTotalUsd.toFixed(2)+'</div>';
+    s1El.appendChild(tvlSummary);
+    el.appendChild(s1El);
+
+    // ── SEZIONE 2: Staking ──
+    var s2El = document.createElement("div");
+    s2El.className = "an-section";
+    s2El.innerHTML = '<div class="an-section-title">// CPRED IN STAKING PER POOL</div>';
+    var stakeGrid = document.createElement("div");
+    stakeGrid.className = "analytics-grid";
+    stakeGrid.appendChild(anCard("POOL FLESSIBILE (12%)", s0.toLocaleString(undefined,{maximumFractionDigits:0})+" CPRED", "~$"+(s0*0.05).toFixed(2), "#a855f7"));
+    stakeGrid.appendChild(anCard("POOL 30 GIORNI (20%)",  s1.toLocaleString(undefined,{maximumFractionDigits:0})+" CPRED", "~$"+(s1*0.05).toFixed(2), "#06b6d4"));
+    stakeGrid.appendChild(anCard("POOL 90 GIORNI (28%)",  s2.toLocaleString(undefined,{maximumFractionDigits:0})+" CPRED", "~$"+(s2*0.05).toFixed(2), "#fbbf24"));
+    stakeGrid.appendChild(anCard("STAKING TOKEN CPRED",   cpredStaked.toLocaleString(undefined,{maximumFractionDigits:0})+" CPRED", "via token.stake()", "#f59e0b"));
+    s2El.appendChild(stakeGrid);
+
+    // Barre pool
+    var maxTvl = 10000000;
+    var poolsData = [
+      {name:"Flessibile 12%", val:s0, color:"#a855f7"},
+      {name:"30 Giorni 20%",  val:s1, color:"#06b6d4"},
+      {name:"90 Giorni 28%",  val:s2, color:"#fbbf24"},
+    ];
+    poolsData.forEach(function(p) {
+      var row = document.createElement("div");
+      row.style.cssText = "display:flex;align-items:center;gap:12px;margin-bottom:8px";
+      var label = document.createElement("div");
+      label.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);width:120px;flex-shrink:0";
+      label.textContent = p.name;
+      var barWrap = document.createElement("div");
+      barWrap.className = "an-bar-wrap";
+      barWrap.style.flex = "1";
+      var bar = document.createElement("div");
+      bar.className = "an-bar";
+      bar.style.cssText = "width:"+(p.val/maxTvl*100).toFixed(1)+"%;background:"+p.color;
+      barWrap.appendChild(bar);
+      var val = document.createElement("div");
+      val.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:"+p.color+";width:100px;text-align:right;flex-shrink:0";
+      val.textContent = p.val.toLocaleString(undefined,{maximumFractionDigits:0})+" / 10M";
+      row.appendChild(label); row.appendChild(barWrap); row.appendChild(val);
+      s2El.appendChild(row);
+    });
+
+    var totalStakingUsd = totalStakingTvl * 0.05;
+    var stakeSummary = document.createElement("div");
+    stakeSummary.style.cssText = "background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:10px";
+    stakeSummary.innerHTML = '<div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3)">CPRED TOTALE IN STAKING PRESALE</div>' +
+      '<div style="font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:800;color:#a855f7">'+totalStakingTvl.toLocaleString(undefined,{maximumFractionDigits:0})+" CPRED (~$"+totalStakingUsd.toFixed(2)+")"+'</div>';
+    s2El.appendChild(stakeSummary);
+    el.appendChild(s2El);
+
+    // ── SEZIONE 3: Fee e Revenue ──
+    var s3El = document.createElement("div");
+    s3El.className = "an-section";
+    s3El.innerHTML = '<div class="an-section-title">// FEE E REVENUE</div>';
+    var feeGrid = document.createElement("div");
+    feeGrid.className = "analytics-grid";
+    feeGrid.appendChild(anCard("ETH REWARD POOL", ethPool.toFixed(6)+" ETH", "protocol fee accumulate per staker", "#10b981"));
+    feeGrid.appendChild(anCard("MERCATI APERTI",   openCount+" mercati",      "con fondi bloccati attivi",          "var(--green2)"));
+    feeGrid.appendChild(anCard("MERCATI RISOLTI",  resolvedCount+" mercati",  "fee distribuite ai vincitori",       "var(--cyan2)"));
+    feeGrid.appendChild(anCard("CREATORI UNICI",   uniqueCreators.size+" wallet", "hanno creato almeno 1 mercato", "var(--purple3)"));
+    s3El.appendChild(feeGrid);
+
+    // Tabella fee breakdown
+    var feeNote = document.createElement("div");
+    feeNote.style.cssText = "margin-top:12px;overflow-x:auto";
+    feeNote.innerHTML = '<table class="an-table">' +
+      '<tr><th>Fonte fee</th><th>%</th><th>Destinazione</th><th>Stato</th></tr>' +
+      '<tr><td>Protocol fee su payout</td><td style="color:var(--green2)">1%</td><td>Staker CPRED via depositRewards()</td><td style="color:var(--green2)">✅ Attivo on-chain</td></tr>' +
+      '<tr><td>Creator fee su payout</td><td style="color:#a855f7">1%</td><td>Wallet creatore del mercato</td><td style="color:var(--green2)">✅ Attivo on-chain</td></tr>' +
+      '<tr><td>Yield APY 4.8%</td><td style="color:var(--gold2)">—</td><td>50% vincitori · 30% staker · 20% treasury</td><td style="color:var(--gold2)">⚠️ Simulato testnet</td></tr>' +
+      '<tr><td>Fee ridotta CPRED holder</td><td style="color:#06b6d4">1%</td><td>Solo creator fee (protocol fee = 0)</td><td style="color:var(--green2)">✅ Attivo on-chain</td></tr>' +
+      '</table>';
+    s3El.appendChild(feeNote);
+    el.appendChild(s3El);
+
+    // ── SEZIONE 4: Presale ──
+    var s4El = document.createElement("div");
+    s4El.className = "an-section";
+    s4El.innerHTML = '<div class="an-section-title">// PRESALE $CPRED</div>';
+    var presaleGrid = document.createElement("div");
+    presaleGrid.className = "analytics-grid";
+    presaleGrid.appendChild(anCard("STAGE CORRENTE",    "Stage "+presaleStage,          "di 3 stage totali",          "var(--gold2)"));
+    presaleGrid.appendChild(anCard("ETH RACCOLTO",      totalRaisedEth.toFixed(4)+" ETH","~$"+(totalRaisedEth*2000).toFixed(0)+" raccolti", "#fbbf24"));
+    presaleGrid.appendChild(anCard("CPRED NEL PRESALE", "45,000,000 CPRED",             "allocazione Stage 1+2+3",    "var(--purple3)"));
+    presaleGrid.appendChild(anCard("PREZZO STAGE 1",    "$0.050 / CPRED",              "listing target: $0.150",     "var(--green2)"));
+    s4El.appendChild(presaleGrid);
+    el.appendChild(s4El);
+
+    // ── SEZIONE 5: Mercati dettaglio ──
+    var s5El = document.createElement("div");
+    s5El.className = "an-section";
+    s5El.innerHTML = '<div class="an-section-title">// MERCATI — DETTAGLIO TVL PER VALUTA</div>';
+    var mktTable = document.createElement("div");
+    mktTable.style.overflowX = "auto";
+
+    var tableRows = markets.map(function(m) {
+      var curIdx  = Number(m.currency || 0);
+      var curName = ["ETH","USDC","USDT","CPRED"][curIdx] || "ETH";
+      var curColor = {ETH:"#00d4ff",USDC:"#2775ca",USDT:"#26a17b",CPRED:"#fbbf24"}[curName];
+      var decimals = (curIdx === 1 || curIdx === 2) ? 6 : 18;
+      var yes = parseFloat(ethers.formatUnits(m.yesPool, decimals));
+      var no  = parseFloat(ethers.formatUnits(m.noPool,  decimals));
+      var total = yes + no;
+      var status = ["Aperto","Chiuso","Risolto","Cancellato"][Number(m.status)];
+      var statusColor = ["var(--green2)","var(--text3)","var(--cyan2)","var(--red2)"][Number(m.status)];
+      var q = m.question.length > 45 ? m.question.slice(0,45)+"..." : m.question;
+      return '<tr>' +
+        '<td style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">#'+Number(m.id)+'</td>' +
+        '<td style="font-size:.75rem">'+q+'</td>' +
+        '<td><span style="color:'+curColor+';font-family:'DM Mono',monospace;font-size:.7rem;font-weight:700">'+curName+'</span></td>' +
+        '<td style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2)">'+total.toFixed(curIdx===1||curIdx===2?2:4)+'</td>' +
+        '<td style="font-family:'DM Mono',monospace;font-size:.65rem;color:'+statusColor+'">'+status+'</td>' +
+        '</tr>';
+    }).join("");
+
+    mktTable.innerHTML = '<table class="an-table">' +
+      '<tr><th>#</th><th>Mercato</th><th>Valuta</th><th>Pool</th><th>Stato</th></tr>' +
+      tableRows + '</table>';
+    s5El.appendChild(mktTable);
+    el.appendChild(s5El);
+
+    // ── Pulsante aggiorna ──
+    var refreshBtn = document.createElement("div");
+    refreshBtn.style.cssText = "text-align:center;padding:16px";
+    refreshBtn.innerHTML = '<button onclick="loadAnalytics()" class="btn btn-ghost" style="font-size:.75rem">🔄 Aggiorna dati on-chain</button>' +
+      '<div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);margin-top:8px">Dati letti direttamente dalla blockchain · Base Sepolia</div>';
+    el.appendChild(refreshBtn);
+
+  } catch(e) {
+    console.error("Analytics error:", e);
+    document.getElementById("analytics-content").innerHTML =
+      '<div style="color:var(--red2);padding:20px">Errore: '+e.message+'<br><button onclick="loadAnalytics()" class="btn btn-ghost" style="margin-top:10px">Riprova</button></div>';
+  }
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
