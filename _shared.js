@@ -14,7 +14,7 @@ const WALLET = {
     try {
       if (type === 'metamask') {
         if (!window.ethereum) {
-          alert('MetaMask non trovato. Installalo da metamask.io');
+          alert('MetaMask not found. Install it from metamask.io');
           return false;
         }
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -214,7 +214,7 @@ const CP = {
           </div>
         </div>
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">
-          ⏱ Ends in ${daysLeft}g · ${m.participant_count||0} partecipanti
+          ⏱ ${daysLeft}d left · ${m.participant_count||0} participants
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:7px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)">
           <div style="display:flex;align-items:center;gap:6px">
@@ -230,7 +230,7 @@ const CP = {
 
   async placeBet(marketId, side, btn) {
     if (!WALLET.address) { openModal('wallet-modal'); return; }
-    if (!window.W3) { alert('Web3 non disponibile'); return; }
+    if (!window.W3) { alert('Web3 not available'); return; }
 
     const ethAmt = parseFloat(prompt(`Importo ETH da scommettere su ${side?'YES ▲':'NO ▼'}:\n(min 0.0001 ETH)`)||'0');
     if (!ethAmt || ethAmt < 0.0001) return;
@@ -241,10 +241,10 @@ const CP = {
     try {
       const result = await W3.placeBetOnChain(marketId, side, ethAmt);
       await this.refreshWalletData();
-      alert(`✅ Scommessa on-chain!\n${side?'YES ▲':'NO ▼'} · ${ethAmt} ETH\nVincita est: ${result.potentialPayout.toFixed(4)} ETH\n\nTx: ${result.explorerUrl}`);
+      alert(`✅ Bet placed on-chain!\n${side?'YES ▲':'NO ▼'} · ${ethAmt} ETH\nEst. payout: ${result.potentialPayout.toFixed(4)} ETH\n\nTx: ${result.explorerUrl}`);
       this.loadMarkets();
     } catch(e) {
-      alert(`Errore: ${e.message||'Transazione fallita'}`);
+      alert(`Error: ${e.message||'Transaction failed'}`);
     } finally {
       btn.disabled = false;
       btn.textContent = side ? '▲ YES' : '▼ NO';
@@ -313,12 +313,12 @@ const CP = {
       if (el && endsAt > Date.now()) {
         const tick = () => {
           const diff = endsAt - Date.now();
-          if (diff <= 0) { el.textContent = 'PRESALE TERMINATA'; return; }
+          if (diff <= 0) { el.textContent = 'PRESALE ENDED'; return; }
           const dd = Math.floor(diff/864e5);
           const hh = Math.floor(diff%864e5/36e5);
           const mm = Math.floor(diff%36e5/6e4);
           const ss = Math.floor(diff%6e4/1e3);
-          el.textContent = `CLOSES IN ${dd}G ${hh}H ${mm}M ${String(ss).padStart(2,'0')}S`;
+          el.textContent = `CLOSES IN ${dd}d ${hh}h ${mm}m ${String(ss).padStart(2,'0')}S`;
         };
         tick(); setInterval(tick, 1000);
       }
@@ -340,7 +340,7 @@ const CP = {
           <div style="font-size:1.1rem;font-weight:800;color:#f0ecff;margin-bottom:6px">Connect Wallet</div>
           <div style="font-size:.8rem;color:#7a738f;margin-bottom:6px">Network: <strong style="color:#00d4ff">Base Sepolia</strong> (testnet)</div>
           <div style="font-size:.73rem;color:#7a738f;margin-bottom:22px;padding:8px 10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:8px">
-            🔗 I contratti sono live su Base Sepolia. Ti servirà ETH testnet gratuito da <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" style="color:#00d4ff">faucet.quicknode.com</a>
+            🔗 Contracts are live on Base Sepolia. You'll need free testnet ETH from <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" style="color:#00d4ff">faucet.quicknode.com</a>
           </div>
 
           <button onclick="CP.connectWallet('metamask')" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;cursor:pointer;margin-bottom:10px;color:#f0ecff;" onmouseover="this.style.borderColor='rgba(124,58,237,.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
@@ -351,7 +351,7 @@ const CP = {
 
           <button onclick="CP.connectWallet('demo')" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;cursor:pointer;color:#f0ecff;" onmouseover="this.style.borderColor='rgba(0,232,122,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
             <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,232,122,.15);border:1px solid rgba(0,232,122,.3);display:flex;align-items:center;justify-content:center;font-size:20px">🧪</div>
-            <div style="text-align:left"><div style="font-weight:700;font-size:.9rem">Demo mode</div><div style="font-size:.75rem;color:#7a738f">Esplora senza wallet</div></div>
+            <div style="text-align:left"><div style="font-weight:700;font-size:.9rem">Demo mode</div><div style="font-size:.75rem;color:#7a738f">Explore without wallet</div></div>
             <span style="margin-left:auto;color:#7a738f">→</span>
           </button>
         </div>
@@ -373,7 +373,7 @@ const CP = {
             </div>
           </div>
           <div style="font-size:.7rem;color:#3d3856;margin-bottom:14px;text-align:center">
-            <a href="https://sepolia.basescan.org/address/" id="wm-explorer" target="_blank" style="color:#7a738f">Vedi su BaseScan →</a>
+            <a href="https://sepolia.basescan.org/address/" id="wm-explorer" target="_blank" style="color:#7a738f">View on BaseScan →</a>
           </div>
           <div style="display:flex;gap:8px">
             <a href="portfolio.html" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-size:.82rem;font-weight:700;text-decoration:none;text-align:center">Portfolio</a>
@@ -405,44 +405,40 @@ const CP = {
 function connectWallet() { openModal('wallet-modal'); }
 document.addEventListener('DOMContentLoaded', () => CP.init());
 
-
 /* ── AI ADVISOR ─────────────────────────────────────────────────── */
 
-// 1. FAQ engine — definito per primo
 var aiWidget = (function() {
   var FAQ = [
-    { k:['yield','apy','interest','return','earn','capital'],
-      a:'Every pool generates 4.8% APY automatic yield on deposited capital. On testnet this is simulated; on mainnet it comes from real DeFi (Aave). 50% boosts winners, 30% goes to CPRED stakers, 20% to treasury.' },
-    { k:['buy cpred','purchase cpred','get cpred','presale','token price'],
-      a:'Buy $CPRED in presale at $0.050 (Stage 1). Go to /presale.html, connect MetaMask on Base Sepolia and confirm. Listing target is $0.150 — +200% from Stage 1 price.' },
-    { k:['stake','staking','pool','lock','12%','20%','28%'],
-      a:'3 staking pools: Flexible (12% APY, unstake anytime), 30-day lock (20% APY), 90-day lock (28% APY). You earn CPRED rewards + ETH from protocol fees. Go to /staking.html.' },
-    { k:['fee','fees','cost','charge','2%','1%','0%'],
-      a:'2% fee on winning payouts only (1% creator + 1% stakers). Losers pay nothing. CPRED markets: 0% fee. If you hold CPRED in wallet: only 1% fee.' },
-    { k:['polymarket','kalshi','compare','vs','difference','better'],
-      a:'Unlike Polymarket/Kalshi: CryptoPredict generates automatic yield on idle capital, supports 4 currencies, has permissionless market creation, shares revenue with CPRED stakers, and is available in Europe.' },
+    { k:['yield','apy','return','earn','capital','interest'],
+      a:'Every pool generates 4.8% APY automatic yield on deposited capital. On testnet it is simulated; on mainnet it comes from real DeFi (Aave). 50% boosts winners, 30% goes to CPRED stakers, 20% to treasury.' },
+    { k:['buy cpred','purchase cpred','get cpred','presale','token price','stage 1'],
+      a:'Buy $CPRED in presale at $0.050 (Stage 1). Go to /presale.html, connect MetaMask on Base Sepolia and confirm. Listing target is $0.150 — that\'s +200% from Stage 1 price.' },
+    { k:['stake','staking','pool','lock','28%','20%','12%'],
+      a:'3 staking pools: Flexible (12% APY, unstake anytime), 30-day lock (20% APY), 90-day lock (28% APY). Earn CPRED rewards + ETH from protocol fees. Go to /staking.html.' },
+    { k:['fee','fees','cost','2%','1%','0%'],
+      a:'2% fee on winning payouts only — 1% to market creator, 1% to CPRED stakers. Losers pay nothing. CPRED markets: 0% fee. Hold CPRED in wallet: only 1% fee.' },
+    { k:['polymarket','kalshi','compare','vs','difference'],
+      a:'Unlike Polymarket/Kalshi: CryptoPredict generates automatic yield on idle capital, supports 4 currencies, has permissionless markets, shares revenue with CPRED stakers, and is available in Europe.' },
     { k:['create market','make market','new market','how to create'],
-      a:'You need 1,000 CPRED (wallet + staking). Go to /crea.html, write your YES/NO question, choose category and currency. You earn 1% of every payout from your market automatically.' },
-    { k:['governance','vote','dao','proposal','voting power'],
-      a:'1 CPRED = 1 vote. Staked CPRED = 2x voting power. Governance launches with mainnet Q4 2025. Vote on fees, categories, treasury. Go to /governance.html.' },
-    { k:['sell','secondary','position','exit','cash out','vendi'],
-      a:'Sell your open positions before resolution via /vendi.html. The PositionMarket contract handles this on-chain. Fee: 0.5% on sale price.' },
-    { k:['trading','chart','price chart','orderbook','limit order'],
-      a:'Trading page (/trading.html) shows a real-time price chart from on-chain BetPlaced events. Place limit orders that auto-execute when the price hits your target.' },
-    { k:['faucet','testnet','free','usdc','usdt','test token','get eth'],
+      a:'Need 1,000 CPRED (wallet + staking combined). Go to /crea.html, write your YES/NO question, choose category and currency. You earn 1% of every payout automatically.' },
+    { k:['governance','vote','dao','proposal','voting'],
+      a:'1 CPRED = 1 vote. Staked CPRED = 2x voting power. Governance launches with mainnet Q4 2025. Vote on fees, categories, treasury. See /governance.html.' },
+    { k:['sell','secondary','position','exit','cash out'],
+      a:'Sell open positions before resolution via /vendi.html. PositionMarket contract handles it on-chain. Fee: 0.5% on the sale price.' },
+    { k:['trading','chart','price','orderbook','limit order'],
+      a:'Trading page (/trading.html) shows a real-time price chart from on-chain events. Place limit orders that auto-execute when the price hits your target.' },
+    { k:['faucet','testnet','free token','usdc','usdt','get eth'],
       a:'Get free testnet tokens at /faucet.html — claim 10,000 USDC and USDT. For testnet ETH use the QuickNode faucet at faucet.quicknode.com/base/sepolia.' },
-    { k:['mainnet','launch','when','roadmap','audit','timeline'],
-      a:'Testnet now → Audit Q3 2025 → Mainnet Q4 2025 → DAO live Q4 2025 → AMM v2 2026. Current testnet tokens have no real value.' },
-    { k:['cpred','tokenomics','supply','100m','allocation'],
-      a:'$CPRED: 100M supply. Presale 45% ($0.050→$0.080→$0.100), Liquidity 30%, Team 15% (12mo lock), Ecosystem 10%. Listing target $0.150 (+200% from Stage 1).' },
-    { k:['wallet','metamask','connect','network','base sepolia','chainid'],
-      a:'Connect MetaMask and switch to Base Sepolia (chainId 84532). Click "Connect Wallet" in the nav or it will prompt you automatically when you try to bet.' },
-    { k:['reward','eth reward','claim','protocol fee'],
-      a:'CPRED stakers receive ETH: 1% of every winning payout goes to the ETH reward pool. More volume = more ETH. Claim from /staking.html anytime.' },
-    { k:['payout','win','winning','claim payout','collect'],
-      a:'When a market resolves and you won, click "Claim Winnings" in the Markets page or Portfolio. Your ETH/USDC/USDT arrives in your wallet within seconds.' },
-    { k:['market','predict','bet','yes','no','how'],
-      a:'Choose a market on /mercati.html, click YES or NO, enter amount, confirm in MetaMask. Winners share the total pool proportionally. Yield is added on top. Check /docs.html for full details.' },
+    { k:['mainnet','launch','when','roadmap','audit'],
+      a:'Testnet now → Audit Q3 2025 → Mainnet Q4 2025 → DAO Governance Q4 2025 → AMM v2 2026. Current testnet tokens have no real value.' },
+    { k:['cpred','tokenomics','supply','100m'],
+      a:'$CPRED: 100M supply. Presale 45% ($0.050 / $0.080 / $0.100), Liquidity 30%, Team 15% (12-month lock), Ecosystem 10%. Listing target $0.150.' },
+    { k:['wallet','metamask','connect','network','base sepolia'],
+      a:'Connect MetaMask and switch to Base Sepolia (chainId 84532). Add it at chainlist.org. Click Connect Wallet in the nav bar.' },
+    { k:['reward','eth reward','claim','payout'],
+      a:'CPRED stakers receive ETH: 1% of every winning payout goes to the reward pool. More volume = more ETH for stakers. Claim from /staking.html anytime.' },
+    { k:['how','what is','explain','works','start','begin'],
+      a:'CryptoPredict is a crypto-native prediction market on Base Sepolia. Bet YES or NO on future events, earn 4.8% APY while waiting, and collect your payout if you are right. Read /docs.html for the full guide.' },
   ];
 
   function faqAnswer(q) {
@@ -456,163 +452,177 @@ var aiWidget = (function() {
       if (score > bestScore) { bestScore = score; best = FAQ[i]; }
     }
     if (best && bestScore > 0) return best.a;
-    return "I'm best at answering questions about CryptoPredict markets, $CPRED, yield, staking, fees and governance. Try something specific, or check /docs.html for full documentation! 📖";
-  }
-
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    return "I can answer questions about CryptoPredict markets, $CPRED, staking, yield, fees and governance. Try something more specific, or check /docs.html for full documentation!";
   }
 
   function getMsgs() { return document.getElementById('ai-drawer-msgs'); }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
 
   function addBot(text) {
     var msgs = getMsgs(); if (!msgs) return;
     var row = document.createElement('div');
     row.className = 'ai-msg-bot';
-    row.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble">' + escHtml(text) + '</div>';
-    msgs.appendChild(row);
-    msgs.scrollTop = msgs.scrollHeight;
+    var av = document.createElement('div'); av.className = 'ai-avatar-sm'; av.textContent = '🔮';
+    var bub = document.createElement('div'); bub.className = 'ai-msg-bot-bubble'; bub.innerHTML = escHtml(text);
+    row.appendChild(av); row.appendChild(bub);
+    msgs.appendChild(row); msgs.scrollTop = msgs.scrollHeight;
   }
 
   function addUser(text) {
     var msgs = getMsgs(); if (!msgs) return;
     var el = document.createElement('div');
-    el.className = 'ai-msg-user';
-    el.textContent = text;
-    msgs.appendChild(el);
-    msgs.scrollTop = msgs.scrollHeight;
+    el.className = 'ai-msg-user'; el.textContent = text;
+    msgs.appendChild(el); msgs.scrollTop = msgs.scrollHeight;
   }
 
   function addTyping() {
     var msgs = getMsgs(); if (!msgs) return;
-    var el = document.createElement('div');
-    el.id = 'ai-typing-indicator';
-    el.className = 'ai-msg-bot';
-    el.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble"><span class="ai-typing-dot"></span><span class="ai-typing-dot" style="animation-delay:.15s"></span><span class="ai-typing-dot" style="animation-delay:.3s"></span></div>';
-    msgs.appendChild(el);
-    msgs.scrollTop = msgs.scrollHeight;
+    var row = document.createElement('div');
+    row.id = 'ai-typing-indicator'; row.className = 'ai-msg-bot';
+    var av = document.createElement('div'); av.className = 'ai-avatar-sm'; av.textContent = '🔮';
+    var bub = document.createElement('div'); bub.className = 'ai-msg-bot-bubble';
+    for (var i = 0; i < 3; i++) {
+      var dot = document.createElement('span'); dot.className = 'ai-typing-dot';
+      if (i > 0) dot.style.animationDelay = (i * 0.15) + 's';
+      bub.appendChild(dot);
+    }
+    row.appendChild(av); row.appendChild(bub);
+    msgs.appendChild(row); msgs.scrollTop = msgs.scrollHeight;
   }
 
   function removeTyping() {
-    var el = document.getElementById('ai-typing-indicator');
-    if (el) el.remove();
-  }
-
-  function hideSugg() {
-    var s = document.getElementById('ai-drawer-sugg');
-    if (s) s.style.display = 'none';
+    var el = document.getElementById('ai-typing-indicator'); if (el) el.remove();
   }
 
   function send() {
     var inp = document.getElementById('ai-drawer-inp');
     var btn = document.getElementById('ai-drawer-send');
     if (!inp) return;
-    var q = inp.value.trim();
-    if (!q) return;
+    var q = inp.value.trim(); if (!q) return;
     inp.value = '';
-    hideSugg();
-    addUser(q);
-    addTyping();
+    var sugg = document.getElementById('ai-drawer-sugg'); if (sugg) sugg.style.display = 'none';
+    addUser(q); addTyping();
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
     setTimeout(function() {
-      removeTyping();
-      addBot(faqAnswer(q));
-      if (btn) { btn.disabled = false; btn.textContent = 'Send ↗'; }
+      removeTyping(); addBot(faqAnswer(q));
+      if (btn) { btn.disabled = false; btn.textContent = 'Send'; }
     }, 500 + Math.random() * 400);
   }
 
   function ask(q) {
-    var drawer = document.getElementById('ai-drawer');
-    if (drawer) drawer.classList.add('open');
-    var inp = document.getElementById('ai-drawer-inp');
-    if (inp) inp.value = q;
+    var d = document.getElementById('ai-drawer'); if (d) d.classList.add('open');
+    var inp = document.getElementById('ai-drawer-inp'); if (inp) inp.value = q;
     send();
   }
 
-  return { addBot:addBot, send:send, ask:ask };
+  return { addBot: addBot, send: send, ask: ask };
 })();
 
-// 2. DOM injection — dopo che aiWidget è pronto
 document.addEventListener('DOMContentLoaded', function() {
+  /* styles */
+  var css = document.createElement('style');
+  css.textContent =
+    '@keyframes ai-pop{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}' +
+    '@keyframes ai-dot{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-4px);opacity:1}}' +
+    '#ai-fab{position:fixed;bottom:28px;right:28px;z-index:9000;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;cursor:pointer;box-shadow:0 4px 24px rgba(124,58,237,.5);display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .2s,box-shadow .2s;}' +
+    '#ai-fab:hover{transform:scale(1.1);box-shadow:0 6px 32px rgba(124,58,237,.7)}' +
+    '.ai-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#10b981;border:2px solid #080810;animation:pulse 2s infinite;}' +
+    '#ai-drawer{position:fixed;bottom:90px;right:28px;z-index:9001;width:340px;max-width:calc(100vw - 40px);background:#0f0f1a;border:1px solid rgba(124,58,237,.35);border-radius:16px;overflow:hidden;box-shadow:0 8px 48px rgba(124,58,237,.2),0 2px 16px rgba(0,0,0,.6);flex-direction:column;display:none;}' +
+    '#ai-drawer.open{display:flex;animation:ai-pop .2s ease;}' +
+    '#ai-dh{padding:12px 14px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(124,58,237,.06));border-bottom:1px solid rgba(124,58,237,.2);display:flex;align-items:center;gap:10px;}' +
+    '#ai-dm{padding:12px 14px;height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.3) transparent;}' +
+    '#ai-dm::-webkit-scrollbar{width:4px}#ai-dm::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:2px}' +
+    '.ai-msg-user{align-self:flex-end;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:12px 2px 12px 12px;padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.5;max-width:85%;}' +
+    '.ai-msg-bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-start;max-width:92%;}' +
+    '.ai-msg-bot-bubble{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:2px 12px 12px 12px;padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.55;}' +
+    '.ai-avatar-sm{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:11px;}' +
+    '.ai-typing-dot{width:5px;height:5px;border-radius:50%;background:#a855f7;animation:ai-dot .6s ease infinite;display:inline-block;margin:0 2px;}' +
+    '#ai-ds{padding:0 14px 8px;display:flex;gap:5px;flex-wrap:wrap;}' +
+    '.ai-sb{padding:3px 10px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.25);border-radius:20px;font-size:.62rem;color:#c4b5fd;cursor:pointer;font-family:monospace;transition:background .15s;}' +
+    '.ai-sb:hover{background:rgba(124,58,237,.2)}' +
+    '#ai-di{padding:10px 12px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px;}' +
+    '#ai-inp{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:7px 10px;font-size:.75rem;color:#e2e8f0;outline:none;font-family:monospace;transition:border-color .2s;}' +
+    '#ai-inp:focus{border-color:rgba(124,58,237,.5)}' +
+    '#ai-inp::placeholder{color:rgba(255,255,255,.3)}' +
+    '#ai-snd{padding:7px 14px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:.72rem;cursor:pointer;white-space:nowrap;transition:opacity .2s;}' +
+    '#ai-snd:hover{opacity:.85}#ai-snd:disabled{opacity:.5;cursor:default}';
+  document.head.appendChild(css);
 
-  var style = document.createElement('style');
-  style.textContent = [
-    '@keyframes ai-pop{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}',
-    '@keyframes ai-dot{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-4px);opacity:1}}',
-    '#ai-fab{position:fixed;bottom:28px;right:28px;z-index:9000;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;cursor:pointer;box-shadow:0 4px 24px rgba(124,58,237,.45);display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .2s,box-shadow .2s;}',
-    '#ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(124,58,237,.6)}',
-    '#ai-fab .ai-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#10b981;border:2px solid #080810;animation:pulse 2s infinite;}',
-    '#ai-drawer{position:fixed;bottom:90px;right:28px;z-index:9001;width:340px;max-width:calc(100vw - 40px);background:#0f0f1a;border:1px solid rgba(124,58,237,.35);border-radius:16px;overflow:hidden;box-shadow:0 8px 48px rgba(124,58,237,.2),0 2px 16px rgba(0,0,0,.6);flex-direction:column;display:none;}',
-    '#ai-drawer.open{display:flex;animation:ai-pop .2s ease;}',
-    '#ai-drawer-head{padding:12px 14px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(124,58,237,.06));border-bottom:1px solid rgba(124,58,237,.2);display:flex;align-items:center;gap:10px;}',
-    '#ai-drawer-msgs{padding:12px 14px;height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.3) transparent;}',
-    '#ai-drawer-msgs::-webkit-scrollbar{width:4px}',
-    '#ai-drawer-msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:2px}',
-    '.ai-msg-user{align-self:flex-end;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:12px 2px 12px 12px;padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.5;max-width:85%;}',
-    '.ai-msg-bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-start;max-width:92%;}',
-    '.ai-msg-bot-bubble{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:2px 12px 12px 12px;padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.55;}',
-    '.ai-avatar-sm{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:11px;}',
-    '.ai-typing-dot{width:5px;height:5px;border-radius:50%;background:#a855f7;animation:ai-dot .6s ease infinite;display:inline-block;margin:0 2px;}',
-    '#ai-drawer-sugg{padding:0 14px 8px;display:flex;gap:5px;flex-wrap:wrap;}',
-    '.ai-sugg-btn{padding:3px 10px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.25);border-radius:20px;font-size:.62rem;color:#c4b5fd;cursor:pointer;font-family:"DM Mono",monospace;transition:background .15s;}',
-    '.ai-sugg-btn:hover{background:rgba(124,58,237,.2)}',
-    '#ai-drawer-inp-row{padding:10px 12px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px;}',
-    '#ai-drawer-inp{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:7px 10px;font-size:.75rem;color:#e2e8f0;outline:none;font-family:"DM Mono",monospace;transition:border-color .2s;}',
-    '#ai-drawer-inp:focus{border-color:rgba(124,58,237,.5)}',
-    '#ai-drawer-inp::placeholder{color:rgba(255,255,255,.3)}',
-    '#ai-drawer-send{padding:7px 12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:.72rem;cursor:pointer;font-family:"Syne",sans-serif;white-space:nowrap;transition:opacity .2s;}',
-    '#ai-drawer-send:hover{opacity:.85}',
-    '#ai-drawer-send:disabled{opacity:.5;cursor:default}',
-  ].join('');
-  document.head.appendChild(style);
-
-  // FAB
+  /* FAB */
   var fab = document.createElement('button');
-  fab.id = 'ai-fab';
-  fab.title = 'AI Advisor';
-  fab.innerHTML = '🔮<span class="ai-badge"></span>';
+  fab.id = 'ai-fab'; fab.title = 'AI Advisor';
+  var badge = document.createElement('span'); badge.className = 'ai-badge';
+  fab.textContent = '🔮'; fab.appendChild(badge);
   document.body.appendChild(fab);
 
-  // Drawer HTML
+  /* Drawer — built with DOM, zero quote conflicts */
   var drawer = document.createElement('div');
   drawer.id = 'ai-drawer';
-  drawer.innerHTML =
-    '<div id="ai-drawer-head">' +
-      '<div class="ai-avatar-sm">🔮</div>' +
-      '<div style="flex:1"><div style="font-size:.78rem;font-weight:700;color:#e2e8f0">CryptoPredict AI</div>' +
-      '<div style="font-size:.6rem;color:#a855f7;font-family:'DM Mono',monospace">Ask me anything</div></div>' +
-      '<button id="ai-close-btn" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0">✕</button>' +
-    '</div>' +
-    '<div id="ai-drawer-msgs"></div>' +
-    '<div id="ai-drawer-sugg">' +
-      '<button class="ai-sugg-btn" onclick="aiWidget.ask('How does yield work?')">Yield?</button>' +
-      '<button class="ai-sugg-btn" onclick="aiWidget.ask('How to buy CPRED?')">Buy CPRED?</button>' +
-      '<button class="ai-sugg-btn" onclick="aiWidget.ask('What staking APY can I earn?')">Staking APY?</button>' +
-      '<button class="ai-sugg-btn" onclick="aiWidget.ask('How does governance work?')">Governance?</button>' +
-    '</div>' +
-    '<div id="ai-drawer-inp-row">' +
-      '<input id="ai-drawer-inp" placeholder="Ask anything..." type="text">' +
-      '<button id="ai-drawer-send" onclick="aiWidget.send()">Send ↗</button>' +
-    '</div>';
+
+  /* header */
+  var head = document.createElement('div'); head.id = 'ai-dh';
+  var hAv = document.createElement('div'); hAv.className = 'ai-avatar-sm'; hAv.textContent = '🔮';
+  var hTxt = document.createElement('div'); hTxt.style.flex = '1';
+  var hT1 = document.createElement('div'); hT1.style.cssText = 'font-size:.78rem;font-weight:700;color:#e2e8f0'; hT1.textContent = 'CryptoPredict AI';
+  var hT2 = document.createElement('div'); hT2.style.cssText = 'font-size:.6rem;color:#a855f7;font-family:monospace'; hT2.textContent = 'Ask me anything';
+  hTxt.appendChild(hT1); hTxt.appendChild(hT2);
+  var hClose = document.createElement('button'); hClose.id = 'ai-close-btn';
+  hClose.style.cssText = 'background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0';
+  hClose.textContent = '✕';
+  head.appendChild(hAv); head.appendChild(hTxt); head.appendChild(hClose);
+
+  /* messages */
+  var msgs = document.createElement('div'); msgs.id = 'ai-dm'; msgs.id = 'ai-drawer-msgs';
+
+  /* suggestions */
+  var sugg = document.createElement('div'); sugg.id = 'ai-drawer-sugg'; sugg.id = 'ai-ds';
+  sugg.id = 'ai-drawer-sugg';
+  var suggItems = [
+    ['How does yield work?', 'Yield?'],
+    ['How to buy CPRED?', 'Buy CPRED?'],
+    ['What staking APY can I earn?', 'Staking APY?'],
+    ['How does governance work?', 'Governance?'],
+  ];
+  suggItems.forEach(function(item) {
+    var btn = document.createElement('button');
+    btn.className = 'ai-sb';
+    btn.textContent = item[1];
+    btn.setAttribute('data-q', item[0]);
+    btn.addEventListener('click', function() { aiWidget.ask(this.getAttribute('data-q')); });
+    sugg.appendChild(btn);
+  });
+
+  /* input row */
+  var inpRow = document.createElement('div'); inpRow.id = 'ai-di';
+  var inp = document.createElement('input'); inp.id = 'ai-drawer-inp'; inp.id = 'ai-inp';
+  inp.id = 'ai-drawer-inp';
+  inp.type = 'text'; inp.placeholder = 'Ask anything...';
+  var snd = document.createElement('button'); snd.id = 'ai-drawer-send'; snd.id = 'ai-snd';
+  snd.id = 'ai-drawer-send';
+  snd.textContent = 'Send';
+  inpRow.appendChild(inp); inpRow.appendChild(snd);
+
+  drawer.appendChild(head); drawer.appendChild(msgs); drawer.appendChild(sugg); drawer.appendChild(inpRow);
   document.body.appendChild(drawer);
 
-  // Welcome message
-  aiWidget.addBot("Hi! I'm the CryptoPredict AI. Ask me about prediction markets, $CPRED, staking, yield or governance! 🚀");
+  /* welcome */
+  aiWidget.addBot("Hi! I'm the CryptoPredict AI. Ask me about prediction markets, $CPRED, staking, yield or governance!");
 
-  // Events
+  /* events */
   fab.addEventListener('click', function() {
     var d = document.getElementById('ai-drawer');
     d.classList.toggle('open');
     if (d.classList.contains('open')) {
-      setTimeout(function(){ var i = document.getElementById('ai-drawer-inp'); if(i) i.focus(); }, 150);
+      setTimeout(function() { document.getElementById('ai-drawer-inp').focus(); }, 120);
     }
   });
-
-  document.getElementById('ai-close-btn').addEventListener('click', function() {
+  hClose.addEventListener('click', function() {
     document.getElementById('ai-drawer').classList.remove('open');
   });
-
-  document.getElementById('ai-drawer-inp').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') aiWidget.send();
-  });
+  snd.addEventListener('click', function() { aiWidget.send(); });
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') aiWidget.send(); });
 });
+
