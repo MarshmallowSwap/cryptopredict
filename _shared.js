@@ -128,7 +128,14 @@ const CP = {
     const a = document.getElementById('nav-avatar');
     const c = document.getElementById('nav-connect-btn');
     if (WALLET.address) {
-      if (b) { b.textContent = fmtEth(WALLET.ethBalance, 3); b.style.display='block'; }
+      if (b) {
+        // Mostra ETH con abbastanza decimali + CPRED se presente
+        var ethStr  = WALLET.ethBalance > 0 ? fmtEth(WALLET.ethBalance, 4)+' ETH' : '0 ETH';
+        var cpred   = WALLET.cpredBalance || 0;
+        var cpredStr = cpred > 0 ? ' · ' + (cpred >= 1000 ? (cpred/1000).toFixed(1)+'K' : cpred.toFixed(0)) + ' CPRED' : '';
+        b.textContent = ethStr + cpredStr;
+        b.style.display = 'block';
+      }
       if (w) { w.textContent = WALLET.shortAddress; w.style.display='block'; }
       if (a) { a.style.display='flex'; a.onclick=()=>openModal('wallet-modal'); }
       if (c) c.style.display='none';
