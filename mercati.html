@@ -535,26 +535,23 @@ function buildPanelEl(m, panel) {
   titleRow.appendChild(balTxt);
   pEl.appendChild(titleRow);
 
-  // Currency tabs
-  var tabs = document.createElement("div");
-  tabs.className = "cur-tabs";
-  CUR.forEach(function(c) {
-    var t = document.createElement("button");
-    t.className = "cur-tab " + c.key + (panel.curId === c.id ? " on" : "");
-    t.textContent = c.label;
-    t.onclick = (function(id,cid){return function(){setCur(id,cid);};})(m.id, c.id);
-    tabs.appendChild(t);
-  });
-  pEl.appendChild(tabs);
+  // Valuta del mercato — nessun tab, solo badge fisso
+  var curBadge = document.createElement("div");
+  curBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:10px;padding:4px 10px;border-radius:6px;display:inline-block;background:rgba(255,255,255,.05)";
+  var curColors = {ETH:"#00d4ff",USDC:"#2775ca",USDT:"#26a17b",CPRED:"#fbbf24"};
+  curBadge.style.color = curColors[m.currency||"ETH"] || "#00d4ff";
+  curBadge.textContent = "Scommessa in: " + (m.currency || "ETH");
+  pEl.appendChild(curBadge);
 
   // Input
   var inp = document.createElement("input");
   inp.type = "number";
   inp.className = "bet-inp";
   inp.id = "amt-"+m.id;
-  inp.placeholder = String(cur.min);
-  inp.step = String(cur.min);
-  inp.min  = String(cur.min);
+  var mktMin = (m.currency === "USDC" || m.currency === "USDT") ? "1" : "0.0001";
+  inp.placeholder = mktMin;
+  inp.step = mktMin;
+  inp.min  = mktMin;
   inp.value = panel.amount || "";
   inp.style.marginBottom = "8px";
   inp.oninput = (function(id){return function(){panels[id].amount=this.value;updatePreview(id);};})(m.id);
@@ -563,10 +560,14 @@ function buildPanelEl(m, panel) {
   // Quick buttons
   var qs = document.createElement("div");
   qs.style.cssText = "display:flex;gap:4px;margin-bottom:10px";
-  cur.steps.forEach(function(v) {
+  var mktCur2   = m.currency || "ETH";
+  var mktSteps  = (mktCur2==="USDC"||mktCur2==="USDT") ? [10,50,100,500]
+                : mktCur2==="CPRED" ? [100,500,1000,5000]
+                : [0.001,0.005,0.01,0.05];
+  mktSteps.forEach(function(v) {
     var b = document.createElement("button");
     b.className = "q-btn";
-    b.textContent = v + " " + cur.symbol;
+    b.textContent = v + " " + mktCur2;
     b.onclick = (function(id,val){return function(){setAmt(id,val);};})(m.id, v);
     qs.appendChild(b);
   });
@@ -587,23 +588,26 @@ function buildPanelEl(m, panel) {
                    '<span>Payout est: <strong id="pout-'+m.id+'" style="color:'+(isYes?"#10b981":"#ef4444")+'">—</strong></span>';
   pEl.appendChild(prev);
 
-  // Faucet hint
-  if (panel.curId === 1 || panel.curId === 2) {
+  // Link faucet basato sulla valuta del mercato
+  var mktCur5 = m.currency || "ETH";
+  if (mktCur5 === "USDC" || mktCur5 === "USDT") {
     var fc = document.createElement("div");
     fc.style.cssText = "font-size:.68rem;color:var(--text3);text-align:center;margin-bottom:6px";
     var fcLink = document.createElement("a");
-    fcLink.href = "#";
+    fcLink.href = "faucet.html";
     fcLink.style.color = "#a855f7";
-    fcLink.textContent = "Claim 10,000 " + cur.symbol + " testnet gratuito";
-    fcLink.onclick = (function(id,cid){return function(e){e.preventDefault();claimFaucet(id,cid);};})(m.id, panel.curId);
+    fcLink.textContent = "Claim 10,000 " + mktCur5 + " testnet gratuito";
     fc.appendChild(fcLink);
     pEl.appendChild(fc);
-  }
-  if (panel.curId === 3) {
-    var cpLink = document.createElement("div");
-    cpLink.style.cssText = "font-size:.68rem;color:var(--text3);text-align:center;margin-bottom:6px";
-    cpLink.innerHTML = 'Compra CPRED: <a href="presale.html" style="color:#a855f7">Presale →</a>';
-    pEl.appendChild(cpLink);
+  } else if (mktCur5 === "CPRED") {
+    var cpDiv = document.createElement("div");
+    cpDiv.style.cssText = "font-size:.68rem;color:var(--text3);text-align:center;margin-bottom:6px";
+    var cpA = document.createElement("a");
+    cpA.href = "presale.html";
+    cpA.style.color = "#a855f7";
+    cpA.textContent = "Compra CPRED in Presale";
+    cpDiv.appendChild(cpA);
+    pEl.appendChild(cpDiv);
   }
 
   // Confirm
@@ -650,19 +654,19 @@ function updatePreview(mid) {
   var m   = markets.find(function(x){return x.id===mid;});
   if (!m) return;
 
-  var usd = amt * PRICE[cur.key];
-  var ethEquiv = usd / PRICE.eth;
-  var winPool = panel.side
+  // Payout nella stessa valuta del mercato — nessuna conversione
+  var mktCur   = m.currency || "ETH";
+  var winPool  = panel.side
     ? (m.poolEth * m.yesPct / 100 || 0.001)
     : (m.poolEth * m.noPct  / 100 || 0.001);
-  var totalAfter = m.poolEth + ethEquiv;
-  var payoutEth  = amt > 0 ? totalAfter * ethEquiv / winPool * 0.98 : 0;
-  var payoutCur  = payoutEth * PRICE.eth / PRICE[cur.key];
+  var totalAfter = m.poolEth + amt;
+  var payout     = amt > 0 ? (totalAfter * (amt / (winPool + amt))) * 0.98 : 0;
+  var usdVal     = amt * (PRICE[mktCur.toLowerCase()] || 1);
 
   var usdEl  = document.getElementById("usd-"+mid);
   var poutEl = document.getElementById("pout-"+mid);
-  if (usdEl)  usdEl.textContent  = amt > 0 ? "$"+usd.toFixed(2) : "—";
-  if (poutEl) poutEl.textContent = amt > 0 ? "~"+payoutCur.toFixed(4)+" "+cur.symbol : "—";
+  if (usdEl)  usdEl.textContent  = amt > 0 ? "~$"+usdVal.toFixed(2) : "—";
+  if (poutEl) poutEl.textContent = amt > 0 ? "~"+payout.toFixed(4)+" "+mktCur : "—";
 }
 
 async function updateBal(mid) {
@@ -709,15 +713,19 @@ async function confirmBet(mid) {
     if (!ok) throw new Error("Cambia rete a Base Sepolia");
 
     var result;
-    if (panel.curId === 0) {
+    var mktCur3 = markets.find(function(x){return x.id===mid;});
+    mktCur3 = mktCur3 ? (mktCur3.currency || "ETH") : "ETH";
+    if (mktCur3 === "ETH") {
       result = await W3.placeBetOnChain(mid, panel.side, amt);
     } else {
-      result = await placeBetToken(mid, panel.side, panel.curId, amt);
+      var curIdx = {USDC:1,USDT:2,CPRED:3}[mktCur3] || 0;
+      result = await placeBetToken(mid, panel.side, curIdx, amt);
     }
 
-    var sideStr = panel.side ? "YES" : "NO";
-    var sym = CUR[panel.curId].symbol;
-    showToast("✅", sideStr+" · "+amt+" "+sym+" scommesso!", result.explorerUrl);
+    var sideStr  = panel.side ? "YES" : "NO";
+    var mktCur4  = markets.find(function(x){return x.id===mid;});
+    var symStr   = mktCur4 ? (mktCur4.currency || "ETH") : "ETH";
+    showToast("OK", sideStr+" · "+amt+" "+symStr+" scommesso!", result.explorerUrl);
     delete panels[mid];
     await loadMarkets();
     if (WALLET.address) loadMyBets();
