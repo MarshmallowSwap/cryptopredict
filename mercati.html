@@ -369,7 +369,8 @@ function buildCard(el, m) {
   poolRow.style.cssText = "display:flex;align-items:center;justify-content:space-between";
   var poolLbl = document.createElement("div");
   poolLbl.style.cssText = "font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700";
-  poolLbl.textContent = "Pool: "+m.poolEth.toFixed(4)+" ETH";
+  var mktCurLabel = m.currency || "ETH";
+  poolLbl.textContent = "Pool: "+m.poolEth.toFixed(4)+" "+mktCurLabel;
   var btns = document.createElement("div");
   btns.style.cssText = "display:flex;gap:6px";
 
