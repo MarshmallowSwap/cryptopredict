@@ -531,6 +531,31 @@ CP.ready.then(async function(state) {
   // Carica pool anche senza wallet (read-only)
   try {
     const info = await W3.getPresaleStakingInfo();
+
+    // Carica ETH reward pool dal token
+    try {
+      const tokenC = await W3.getContract('token');
+      const ethPool = await tokenC.totalRewardPool();
+      const ethPoolVal = parseFloat(ethers.formatEther(ethPool));
+      const statEthPool = document.getElementById('stat-eth-pool');
+      if (statEthPool) statEthPool.textContent = ethPoolVal.toFixed(6) + ' ETH';
+
+      // Estimated ETH reward per l'utente
+      if (WALLET.address) {
+        const estReward = await tokenC.estimatedReward(WALLET.address);
+        const estVal = parseFloat(ethers.formatEther(estReward));
+        if (estVal > 0) {
+          const rewardEl = document.getElementById('stat-reward');
+          if (rewardEl) {
+            rewardEl.textContent = estVal.toFixed(6) + ' ETH';
+            rewardEl.style.color = 'var(--green2)';
+          }
+          // Abilita il pulsante claim ETH rewards
+          const claimEthBtn = document.getElementById('claim-eth-btn');
+          if (claimEthBtn) claimEthBtn.style.display = 'block';
+        }
+      }
+    } catch(e) { console.warn('ETH pool load:', e); }
     if (info) { stakingInfo = info; renderPools(info); }
   } catch(e) {}
   if (state.address) await loadStaking();
