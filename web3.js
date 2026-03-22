@@ -16,6 +16,7 @@ const CONTRACTS = {
   stakingPresale: "0x6e9FE398C06E479Cd69663737415375e095c3454",
   mockUsdc:       "0x8A54f0e841CFCA5fA654912AF33cCD121D182311",
   mockUsdt:       "0xaBB48e1693Df04fb894843e52B239D5C5d0ab871",
+  positionMarket: "",  // deployato nel prossimo redeploy
 };
 
 // ABI minimali (solo le funzioni usate dal frontend)
