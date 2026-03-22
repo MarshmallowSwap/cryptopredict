@@ -21,7 +21,7 @@ const CONTRACTS = {
 // ABI minimali (solo le funzioni usate dal frontend)
 const MARKET_ABI = [
   "function marketCount() view returns (uint256)",
-  "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver))",
+  "function getMarket(uint256 id) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver, uint8 currency))",
   "function getActiveMarkets(uint256 limit) view returns (tuple(uint256 id, address creator, string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint256 yesPool, uint256 noPool, uint256 yieldAccrued, uint8 status, uint8 outcome, address resolver)[])",
   "function getYesPct(uint256 marketId) view returns (uint256)",
   "function getPotentialPayout(uint256 marketId, bool side, uint256 amount) view returns (uint256 gross, uint256 net)",
