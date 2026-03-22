@@ -68,6 +68,10 @@
     <div class="page-sub">Scrivi la domanda, imposta i parametri e guadagna il <strong>1% su ogni trade</strong> nel tuo mercato</div>
   </div>
 
+  <!-- CPRED requirement banner -->
+  <div id="cpred-req-banner" style="display:none;margin-bottom:20px;padding:14px 18px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+  </div>
+
   <div class="g2" style="align-items:start">
 
     <!-- FORM -->
@@ -274,6 +278,7 @@
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Scadenza min. 1 ora nel futuro</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Mercati irrisolvibili vengono annullati e rimborsati</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Immagine facoltativa — rende il mercato più riconoscibile</div>
+          <div style="display:flex;gap:8px"><span style="color:var(--gold2)">✦</span><strong style="color:var(--gold2)">Requisito: 1,000 CPRED</strong> in wallet o staking</div>
         </div>
       </div>
     </div>
@@ -393,6 +398,26 @@ function updateFeePreview() {
 
 async function createMarket() {
   if (!WALLET.address) { openModal("wallet-modal"); return; }
+
+  // Check CPRED requirement (1000 CPRED in wallet o staking)
+  try {
+    var provider = await W3.getProvider();
+    var MKT_CHECK_ABI = ["function minCpredToCreate() view returns (uint256)",
+                         "function cpredBalanceOf(address) view returns (uint256)"];
+    var mktC = new ethers.Contract(W3.CONTRACTS.market, MKT_CHECK_ABI, provider);
+    var minReq = await mktC.minCpredToCreate();
+    if (minReq > 0n) {
+      var cpredBal = await mktC.cpredBalanceOf(WALLET.address);
+      if (cpredBal < minReq) {
+        var needed = parseFloat(ethers.formatEther(minReq));
+        var have   = parseFloat(ethers.formatEther(cpredBal));
+        showToast("❌",
+          "Servono " + needed.toLocaleString() + " CPRED per creare mercati. " +
+          "Hai: " + have.toFixed(0) + " CPRED (wallet + staking)");
+        return;
+      }
+    }
+  } catch(e) { console.warn("CPRED check failed:", e); }
 
   var question = document.getElementById("question").value.trim();
   var category = document.getElementById("category").value;
@@ -599,6 +624,56 @@ function toggleAssetField() {
     wrap.style.display = show ? "" : "none";
     if (!show) document.getElementById("asset").value = "OTHER";
   }
+}
+
+// ── CPRED BANNER ─────────────────────────────────────────────────
+async function checkCpredRequirement() {
+  var banner = document.getElementById("cpred-req-banner");
+  if (!banner) return;
+  try {
+    var provider = await W3.getProvider();
+    var MKT_CHECK_ABI = ["function minCpredToCreate() view returns (uint256)",
+                         "function cpredBalanceOf(address) view returns (uint256)"];
+    var mktC = new ethers.Contract(W3.CONTRACTS.market, MKT_CHECK_ABI, provider);
+    var minReq = await mktC.minCpredToCreate();
+    var needed = parseFloat(ethers.formatEther(minReq));
+
+    var have = 0;
+    if (WALLET.address) {
+      var cpredBal = await mktC.cpredBalanceOf(WALLET.address);
+      have = parseFloat(ethers.formatEther(cpredBal));
+    }
+
+    var ok = WALLET.address && have >= needed;
+    banner.style.display = "flex";
+    banner.style.background = ok ? "rgba(16,185,129,.06)" : "rgba(245,158,11,.06)";
+    banner.style.border = "1px solid " + (ok ? "rgba(16,185,129,.2)" : "rgba(245,158,11,.25)");
+
+    if (ok) {
+      banner.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px">' +
+        '<span style="font-size:1.2rem">✅</span>' +
+        '<div><div style="font-weight:700;font-size:.85rem;color:var(--green2)">Requisito CPRED soddisfatto</div>' +
+        '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Hai ' + have.toFixed(0) + ' CPRED (wallet + staking) · Minimo richiesto: ' + needed.toLocaleString() + '</div></div></div>';
+    } else if (!WALLET.address) {
+      banner.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px">' +
+        '<span style="font-size:1.2rem">🔐</span>' +
+        '<div><div style="font-weight:700;font-size:.85rem;color:var(--gold2)">Servono ' + needed.toLocaleString() + ' CPRED per creare mercati</div>' +
+        '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Detieni CPRED in wallet o staking — conta anche il CPRED in staking</div></div></div>' +
+        '<a href="presale.html" class="btn btn-primary" style="font-size:.75rem;flex-shrink:0">Compra CPRED →</a>';
+    } else {
+      banner.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px">' +
+        '<span style="font-size:1.2rem">⚠️</span>' +
+        '<div><div style="font-weight:700;font-size:.85rem;color:var(--gold2)">CPRED insufficienti — hai ' + have.toFixed(0) + ' / ' + needed.toLocaleString() + '</div>' +
+        '<div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Compra altri CPRED in presale o metti in staking quelli che hai</div></div></div>' +
+        '<div style="display:flex;gap:8px;flex-shrink:0">' +
+        '<a href="presale.html" class="btn btn-primary" style="font-size:.75rem">Compra CPRED</a>' +
+        '<a href="staking.html" class="btn btn-ghost" style="font-size:.75rem">Staking →</a>' +
+        '</div>';
+    }
+  } catch(e) { console.warn("CPRED banner error:", e); }
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
