@@ -231,7 +231,13 @@ async function loadMarkets() {
         poolEth:      m.pool_size,
         expiresAt:    exp,
         participants: m.participant_count || 0,
-        yieldDay:     m.yield_info ? m.yield_info.daily_yield : "0"
+        yieldDay:     (function() {
+        var raw = m.yield_info ? parseFloat(m.yield_info.daily_yield) : 0;
+        if (raw === 0) { return "~0"; }
+        if (raw < 0.000001) { return raw.toExponential(2); }
+        if (raw < 0.0001)   { return raw.toFixed(8); }
+        return raw.toFixed(6);
+      })()
       };
     });
 
