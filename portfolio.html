@@ -436,7 +436,7 @@ function toast(icon, msg, link) {
   document.getElementById('toast-icon').textContent = icon;
   document.getElementById('toast-msg').textContent = msg;
   const l = document.getElementById('toast-link');
-  if (link) { l.href = link; l.textContent = 'Vedi su BaseScan →'; l.style.display = 'block'; }
+  if (link) { l.href = link; l.textContent = 'View on BaseScan →'; l.style.display = 'block'; }
   else l.style.display = 'none';
   document.getElementById('tx-toast').classList.add('show');
   setTimeout(() => document.getElementById('tx-toast').classList.remove('show'), 7000);
