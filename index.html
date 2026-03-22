@@ -998,72 +998,6 @@
   </div>
 </section>
 
-<div class="section-line"></div>
-
-<!-- ═══ AI ADVISOR ═══ -->
-<section style="padding:80px 24px;background:var(--black);position:relative" id="ai-advisor">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(124,58,237,.04),transparent)"></div>
-  <div style="max-width:800px;margin:0 auto;position:relative">
-    <div style="text-align:center;margin-bottom:40px">
-      <div class="section-eyebrow" style="color:var(--purp)">AI ADVISOR</div>
-      <div class="section-title">Ask the CryptoPredict AI.<br><span style="-webkit-text-fill-color:transparent;-webkit-text-stroke:1px var(--purp)">Get Instant Answers.</span></div>
-      <p style="font-size:15px;color:var(--dim);margin-top:14px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7">Ask anything about prediction markets, $CPRED, yield, staking, or how the protocol works.</p>
-    </div>
-
-    <!-- Chat widget -->
-    <div id="ai-chat" style="background:var(--bg2);border:1px solid rgba(124,58,237,.25);border-radius:18px;overflow:hidden;box-shadow:0 4px 32px rgba(124,58,237,.1)">
-      <!-- Header -->
-      <div style="padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🔮</div>
-        <div>
-          <div style="font-size:.82rem;font-weight:700;color:#dde3f5">CryptoPredict AI</div>
-          <div style="font-size:.65rem;color:#a855f7;font-family:'DM Mono',monospace">Powered by Claude · Always available</div>
-        </div>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:5px">
-          <div style="width:6px;height:6px;border-radius:50%;background:#00e87a;animation:pulse2 2s infinite"></div>
-          <span style="font-size:.65rem;color:#00e87a;font-family:'DM Mono',monospace">Online</span>
-        </div>
-      </div>
-
-      <!-- Messages -->
-      <div id="ai-messages" style="padding:16px 20px;min-height:200px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
-        <!-- Welcome -->
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🔮</div>
-          <div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:0 12px 12px 12px;padding:10px 14px;font-size:.82rem;color:#dde3f5;line-height:1.6;max-width:85%">
-            Hi! I'm the CryptoPredict AI. Ask me anything about our prediction markets, $CPRED token, yield mechanics, or how to get started. 🚀
-          </div>
-        </div>
-      </div>
-
-      <!-- Suggested questions -->
-      <div id="ai-suggestions" style="padding:0 20px 12px;display:flex;gap:6px;flex-wrap:wrap">
-        <button onclick="aiAsk('How does yield on pools work?')" style="padding:5px 12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:20px;font-size:.7rem;color:#c4b5fd;cursor:pointer;font-family:'DM Mono',monospace;transition:background .15s" onmouseover="this.style.background='rgba(124,58,237,.2)'" onmouseout="this.style.background='rgba(124,58,237,.1)'">How does yield work?</button>
-        <button onclick="aiAsk('How do I buy CPRED in presale?')" style="padding:5px 12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:20px;font-size:.7rem;color:#c4b5fd;cursor:pointer;font-family:'DM Mono',monospace;transition:background .15s" onmouseover="this.style.background='rgba(124,58,237,.2)'" onmouseout="this.style.background='rgba(124,58,237,.1)'">How to buy CPRED?</button>
-        <button onclick="aiAsk('What is the difference between CryptoPredict and Polymarket?')" style="padding:5px 12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:20px;font-size:.7rem;color:#c4b5fd;cursor:pointer;font-family:'DM Mono',monospace;transition:background .15s" onmouseover="this.style.background='rgba(124,58,237,.2)'" onmouseout="this.style.background='rgba(124,58,237,.1)'">vs Polymarket?</button>
-        <button onclick="aiAsk('What staking APY can I earn?')" style="padding:5px 12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:20px;font-size:.7rem;color:#c4b5fd;cursor:pointer;font-family:'DM Mono',monospace;transition:background .15s" onmouseover="this.style.background='rgba(124,58,237,.2)'" onmouseout="this.style.background='rgba(124,58,237,.1)'">Staking APY?</button>
-      </div>
-
-      <!-- Input -->
-      <div style="padding:12px 20px 16px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:10px">
-        <input type="text" id="ai-input" placeholder="Ask anything about CryptoPredict..."
-          style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.25);border-radius:10px;padding:10px 14px;font-size:.82rem;color:#dde3f5;outline:none;font-family:'DM Mono',monospace;transition:border-color .2s"
-          onfocus="this.style.borderColor='rgba(124,58,237,.6)'"
-          onblur="this.style.borderColor='rgba(124,58,237,.25)'"
-          onkeydown="if(event.key==='Enter')aiSend()">
-        <button onclick="aiSend()" id="ai-send-btn"
-          style="padding:10px 18px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:10px;color:#fff;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Syne',sans-serif;transition:opacity .2s;white-space:nowrap"
-          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-          Send ↗
-        </button>
-      </div>
-    </div>
-
-    <div style="text-align:center;font-size:.72rem;color:var(--muted2);margin-top:12px">
-      AI responses are for informational purposes only. Always DYOR before investing.
-    </div>
-  </div>
-</section>
 
 <!-- ═══ PRESALE CTA ═══ -->
 <section class="cta-section">
@@ -1334,3 +1268,4 @@ CP.ready.then(async function() {
 </script>
 </body>
 </html>
+</body></html>
