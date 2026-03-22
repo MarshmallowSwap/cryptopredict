@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Faucet Testnet — CryptoPredict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+.faucet-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s}
+.faucet-card:hover{border-color:var(--border2)}
+.claim-btn{width:100%;padding:12px;border:none;border-radius:9px;cursor:pointer;font-family:"Syne",sans-serif;font-size:.9rem;font-weight:800;transition:all .2s;margin-top:14px}
+.claim-btn:disabled{opacity:.5;cursor:not-allowed}
+.bal-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.bal-row:last-child{border-bottom:none}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 20px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:300px;opacity:0;transition:opacity .3s;display:flex;gap:10px;align-items:center}
+.toast.show{opacity:1}
+</style>
+</head>
+<body data-page="faucet">
+
+<div class="ticker-bar"><div class="ticker-track">
+  <span class="tick-live"><span class="tick-dot"></span>TESTNET FAUCET</span>
+  <span class="tick-item">Base Sepolia · Token gratuiti per il test</span>
+  <span class="tick-item"><span class="sym">USDC</span> 10,000 gratis</span>
+  <span class="tick-item"><span class="sym">USDT</span> 10,000 gratis</span>
+  <span class="tick-live"><span class="tick-dot"></span>TESTNET FAUCET</span>
+  <span class="tick-item">Base Sepolia · Token gratuiti per il test</span>
+</div></div>
+
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">TESTNET FAUCET</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="mercati.html"  class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="presale.html"  class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Presale</span></a>
+    <a href="staking.html"  class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
+    <a href="portfolio.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-wallet" id="nav-wallet" style="display:none"></span>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<div class="page-wrap" style="max-width:700px">
+  <div class="page-header">
+    <span class="page-tag">// Testnet · Base Sepolia</span>
+    <div class="page-title">Faucet Token</div>
+    <div class="page-sub">Ottieni token testnet gratuiti per provare la piattaforma</div>
+  </div>
+
+  <!-- ETH Sepolia link -->
+  <div class="cp-card" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem">Ξ</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:2px">ETH Testnet</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Necessario per le fee · Faucet esterno</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" class="btn btn-ghost" style="font-size:.75rem">QuickNode →</a>
+      <a href="https://www.coinbase.com/faucets/base-ethereum-goerli-faucet" target="_blank" class="btn btn-ghost" style="font-size:.75rem">Coinbase →</a>
+    </div>
+  </div>
+
+  <!-- Faucet cards grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+
+    <!-- USDC -->
+    <div class="faucet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(39,117,202,.12);border:1px solid rgba(39,117,202,.25);display:flex;align-items:center;justify-content:center;font-weight:900;color:#2775ca;font-size:1rem">$</div>
+        <div>
+          <div style="font-weight:700">Mock USDC</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Testnet · 6 decimali</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;margin-bottom:4px">
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem;margin-bottom:4px">
+          <span style="color:var(--text3)">Il tuo saldo</span>
+          <span id="usdc-bal" style="color:#2775ca">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem">
+          <span style="color:var(--text3)">Riceverai</span>
+          <span style="color:var(--green2)">10,000 USDC</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:2px;padding:0 2px">
+        <span id="usdc-addr" style="word-break:break-all"></span>
+      </div>
+      <button id="btn-usdc" class="claim-btn" onclick="claimFaucet('usdc')"
+        style="background:linear-gradient(135deg,#2775ca,#1a5ca8);color:#fff">
+        Claim 10,000 USDC
+      </button>
+    </div>
+
+    <!-- USDT -->
+    <div class="faucet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(38,161,123,.12);border:1px solid rgba(38,161,123,.25);display:flex;align-items:center;justify-content:center;font-weight:900;color:#26a17b;font-size:1rem">₮</div>
+        <div>
+          <div style="font-weight:700">Mock USDT</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">Testnet · 6 decimali</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;margin-bottom:4px">
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem;margin-bottom:4px">
+          <span style="color:var(--text3)">Il tuo saldo</span>
+          <span id="usdt-bal" style="color:#26a17b">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.7rem">
+          <span style="color:var(--text3)">Riceverai</span>
+          <span style="color:var(--green2)">10,000 USDT</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:2px;padding:0 2px">
+        <span id="usdt-addr" style="word-break:break-all"></span>
+      </div>
+      <button id="btn-usdt" class="claim-btn" onclick="claimFaucet('usdt')"
+        style="background:linear-gradient(135deg,#26a17b,#1a7a5e);color:#fff">
+        Claim 10,000 USDT
+      </button>
+    </div>
+  </div>
+
+  <!-- CPRED info -->
+  <div class="cp-card cp-card-gold" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:40px;height:40px;border-radius:10px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fbbf24;font-size:1rem">◈</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:2px">CPRED Token</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">Acquistabile in presale · <span id="cpred-bal-row">—</span> nel tuo wallet</div>
+      </div>
+    </div>
+    <a href="presale.html" class="btn btn-primary" style="font-size:.78rem">Compra in Presale →</a>
+  </div>
+
+  <!-- I tuoi saldi -->
+  <div class="cp-card cp-card-cyan" style="margin-top:16px" id="balances-card">
+    <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:14px">// I TUOI SALDI — TESTNET</div>
+    <div id="balances-list">
+      <div style="color:var(--text3);font-size:.82rem">Connetti il wallet per vedere i saldi</div>
+    </div>
+  </div>
+
+  <!-- Aggiunta token a MetaMask -->
+  <div class="cp-card" style="margin-top:14px">
+    <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// AGGIUNGI A METAMASK</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <button onclick="addToMetaMask('cpred')" class="btn btn-ghost" style="font-size:.75rem">+ CPRED</button>
+      <button onclick="addToMetaMask('usdc')"  class="btn btn-ghost" style="font-size:.75rem">+ USDC</button>
+      <button onclick="addToMetaMask('usdt')"  class="btn btn-ghost" style="font-size:.75rem">+ USDT</button>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:8px">
+      Aggiungi i token testnet al tuo MetaMask per vederli nel wallet
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <div style="flex:1">
+    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;display:none"></a>
+  </div>
+  <button onclick="document.getElementById('toast').classList.remove('show')"
+    style="background:none;border:none;color:var(--text3);cursor:pointer">✕</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+<script src="web3.js"></script>
+<script src="_shared.js"></script>
+<script>
+var TOKEN_META = {
+  cpred: { addr: W3.CONTRACTS.token,    symbol: "CPRED", dec: 18, color: "#fbbf24" },
+  usdc:  { addr: W3.CONTRACTS.mockUsdc, symbol: "USDC",  dec: 6,  color: "#2775ca" },
+  usdt:  { addr: W3.CONTRACTS.mockUsdt, symbol: "USDT",  dec: 6,  color: "#26a17b" },
+};
+
+var ERC20_ABI = [
+  "function balanceOf(address) view returns (uint256)",
+  "function faucet()"
+];
+
+// Mostra indirizzi contratti
+document.getElementById("usdc-addr").textContent = W3.CONTRACTS.mockUsdc.slice(0,10) + "..." + W3.CONTRACTS.mockUsdc.slice(-6);
+document.getElementById("usdt-addr").textContent = W3.CONTRACTS.mockUsdt.slice(0,10) + "..." + W3.CONTRACTS.mockUsdt.slice(-6);
+
+async function loadBalances() {
+  if (!WALLET.address) return;
+  try {
+    var provider = await W3.getProvider();
+    var eth   = await W3.getEthBalance(WALLET.address);
+    var cpred = await W3.getCpredBalance(WALLET.address);
+
+    var usdcC = new ethers.Contract(W3.CONTRACTS.mockUsdc, ERC20_ABI, provider);
+    var usdtC = new ethers.Contract(W3.CONTRACTS.mockUsdt, ERC20_ABI, provider);
+    var usdcBal = parseFloat(ethers.formatUnits(await usdcC.balanceOf(WALLET.address), 6));
+    var usdtBal = parseFloat(ethers.formatUnits(await usdtC.balanceOf(WALLET.address), 6));
+
+    // Aggiorna badge inline
+    document.getElementById("usdc-bal").textContent = usdcBal.toLocaleString() + " USDC";
+    document.getElementById("usdt-bal").textContent = usdtBal.toLocaleString() + " USDT";
+    document.getElementById("cpred-bal-row").textContent = cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0}) + " CPRED";
+
+    // Aggiorna lista saldi
+    var list = document.getElementById("balances-list");
+    list.innerHTML = "";
+    var items = [
+      {sym:"ETH",   val:eth.toFixed(4),                                              color:"var(--cyan2)"},
+      {sym:"CPRED", val:cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0}), color:"#fbbf24"},
+      {sym:"USDC",  val:usdcBal.toLocaleString(),                                    color:"#2775ca"},
+      {sym:"USDT",  val:usdtBal.toLocaleString(),                                    color:"#26a17b"},
+    ];
+    items.forEach(function(item) {
+      var row = document.createElement("div");
+      row.className = "bal-row";
+      row.innerHTML = '<span style="font-weight:700;font-size:.85rem">' + item.sym + '</span>' +
+        '<span style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:' + item.color + '">' + item.val + '</span>';
+      list.appendChild(row);
+    });
+  } catch(e) { console.warn("loadBalances:", e); }
+}
+
+async function claimFaucet(token) {
+  if (!WALLET.address) { openModal("wallet-modal"); return; }
+
+  var meta = TOKEN_META[token];
+  var btn  = document.getElementById("btn-" + token);
+  var orig = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Claim in corso...';
+
+  try {
+    var ok = await W3.ensureNetwork();
+    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+
+    var signer = await W3.getSigner();
+    var c  = new ethers.Contract(meta.addr, ERC20_ABI, signer);
+    var tx = await c.faucet();
+    btn.innerHTML = '<span class="spin"></span> Attesa conferma...';
+    var receipt = await tx.wait();
+
+    showToast("✅", "10,000 " + meta.symbol + " accreditati!",
+      "https://sepolia.basescan.org/tx/" + receipt.hash);
+    await loadBalances();
+    btn.disabled = false;
+    btn.textContent = "✅ Claimed!";
+    setTimeout(function() { btn.textContent = orig; }, 4000);
+
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+}
+
+async function addToMetaMask(token) {
+  if (!window.ethereum) { showToast("❌", "MetaMask non trovato"); return; }
+  var meta = TOKEN_META[token];
+  try {
+    await window.ethereum.request({
+      method: "wallet_watchAsset",
+      params: { type: "ERC20", options: {
+        address: meta.addr,
+        symbol:  meta.symbol,
+        decimals: meta.dec,
+      }}
+    });
+    showToast("✅", meta.symbol + " aggiunto a MetaMask!");
+  } catch(e) { showToast("❌", e.message); }
+}
+
+function showToast(icon, msg, link) {
+  document.getElementById("toast-icon").textContent = icon;
+  document.getElementById("toast-msg").textContent  = msg;
+  var l = document.getElementById("toast-link");
+  if (link) { l.href=link; l.textContent="Vedi su BaseScan →"; l.style.display="block"; }
+  else l.style.display = "none";
+  var t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 7000);
+}
+
+// Init
+CP.ready.then(function(state) {
+  if (state.address) loadBalances();
+  var orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() { await orig(); loadBalances(); };
+});
+</script>
+</body></html>
