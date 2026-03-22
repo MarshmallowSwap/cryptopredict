@@ -615,6 +615,54 @@ var aiWidget = (function() {
     if (s) s.style.display = 'none';
   }
 
+  // FAQ knowledge base
+  var FAQ = [
+    { k:['yield','apy','interest','return','earn','capital'],
+      a:'Every pool generates automatic 4.8% APY yield on deposited capital while waiting for market resolution. On testnet this is simulated; on mainnet it will come from real DeFi protocols like Aave. 50% boosts winners, 30% goes to CPRED stakers, 20% to the treasury.' },
+    { k:['buy cpred','purchase cpred','get cpred','cpred presale','presale'],
+      a:'Buy $CPRED in presale at $0.050 (Stage 1). Go to /presale.html, connect MetaMask on Base Sepolia, enter the ETH amount and confirm. The listing target is $0.150 — that's +200% from Stage 1 price.' },
+    { k:['stake','staking','pool','lock','apy','12%','20%','28%'],
+      a:'3 staking pools: Flexible (12% APY, unstake anytime), 30-day lock (20% APY), 90-day lock (28% APY). You earn CPRED rewards + ETH from protocol fees. Staked CPRED also counts for market creation requirements.' },
+    { k:['fee','fees','cost','charge','2%','1%'],
+      a:'2% fee on winning payouts only (1% to market creator + 1% to CPRED stakers). Losers pay nothing. CPRED markets: 0% fee. If you hold CPRED in your wallet: only 1% fee.' },
+    { k:['polymarket','kalshi','compare','vs','difference','better'],
+      a:'Unlike Polymarket and Kalshi, CryptoPredict: (1) generates automatic yield on idle capital, (2) supports 4 currencies (ETH/USDC/USDT/CPRED), (3) has permissionless market creation, (4) shares protocol revenue with CPRED stakers, (5) is available in Europe.' },
+    { k:['create market','make market','new market','start market'],
+      a:'To create a market you need 1,000 CPRED (wallet + staking combined). Go to /crea.html, write your YES/NO question, choose category, currency, expiry date and deposit initial liquidity. You earn 1% of every payout from your market automatically.' },
+    { k:['governance','vote','dao','proposal','voting'],
+      a:'1 CPRED = 1 vote. Staked CPRED counts as 2× voting power. Governance launches with mainnet (Q4 2025). You can vote on fee rates, market categories, treasury allocation, and protocol parameters. Buy CPRED now to secure your voting power.' },
+    { k:['sell','secondary','vendi','position','exit early','cash out'],
+      a:'You can sell your open position to other users before market resolution via the Sell Shares page (/vendi.html). The PositionMarket contract (deploying next redeploy) handles this on-chain. Fee: 0.5% on the sale price.' },
+    { k:['trading','chart','price','orderbook','limit order'],
+      a:'The Trading page (/trading.html) shows a real-time price chart built from on-chain BetPlaced events — the implied YES probability (0-1) per bet. You can also place limit orders that execute automatically when the price reaches your target.' },
+    { k:['faucet','testnet','free','usdc','usdt','test token'],
+      a:'Get free testnet tokens at /faucet.html — claim 10,000 USDC and 10,000 USDT for free. For testnet ETH, use QuickNode or Coinbase faucet (you need a small account there).' },
+    { k:['mainnet','launch','when','roadmap','audit'],
+      a:'Current status: Base Sepolia testnet. Roadmap: Smart contract audit (Q3 2025) → Mainnet launch (Q4 2025) → DAO Governance live (Q4 2025) → AMM v2.0 (2026). Testnet tokens have no real value.' },
+    { k:['cpred','token','supply','tokenomics','100m'],
+      a:'$CPRED: 100M total supply. Presale 45% (3 stages: $0.050/$0.080/$0.100), Liquidity 30%, Team 15% (12-month lock), Ecosystem 10%. Listing target: $0.150 (+200% from Stage 1). Utility: fee discount, staking, governance, market creation.' },
+    { k:['how','what is','explain','works','tell me'],
+      a:'CryptoPredict is a 100% crypto-native prediction market on Base Sepolia. You bet YES or NO on future events (crypto, macro, sport, politics). Your capital generates 4.8% APY while waiting. Winners receive proportional payouts. Check /docs.html for the full documentation.' },
+    { k:['wallet','metamask','connect','network','base sepolia'],
+      a:'Connect MetaMask and switch to Base Sepolia (chainId 84532). Add it at chainlist.org or it will be added automatically. For testnet ETH, use the QuickNode faucet. The 🔮 button in the nav connects your wallet.' },
+    { k:['reward','eth reward','claim','protocol fee'],
+      a:'CPRED stakers receive ETH rewards: 1% of every winning payout goes to the ETH reward pool. The more market volume, the more ETH stakers earn. Claim anytime from /staking.html.' },
+  ];
+
+  function faqAnswer(q) {
+    var ql = q.toLowerCase();
+    var best = null, bestScore = 0;
+    for (var i = 0; i < FAQ.length; i++) {
+      var score = 0;
+      for (var j = 0; j < FAQ[i].k.length; j++) {
+        if (ql.indexOf(FAQ[i].k[j]) !== -1) score++;
+      }
+      if (score > bestScore) { bestScore = score; best = FAQ[i]; }
+    }
+    if (best && bestScore > 0) return best.a;
+    return 'Great question! I'm best at answering questions about CryptoPredict markets, $CPRED token, yield, staking, fees, governance, and how to get started. Try asking something specific, or check our full docs at /docs.html 📖';
+  }
+
   async function send() {
     var inp = document.getElementById('ai-drawer-inp');
     var btn = document.getElementById('ai-drawer-send');
@@ -624,27 +672,14 @@ var aiWidget = (function() {
     inp.value = '';
     hideSugg();
     addUser(q);
-    history.push({role:'user', content:q});
     addTyping();
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
-    try {
-      var res = await fetch('/api/v1/ai/chat', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({messages:history})
-      });
-      if (!res.ok) throw new Error('API error ' + res.status);
-      var data = await res.json();
-      var reply = data.reply || 'Sorry, I could not process your request right now.';
-      history.push({role:'assistant', content:reply});
+    // Simulate thinking delay
+    setTimeout(function() {
       removeTyping();
-      addBot(reply);
-    } catch(e) {
-      removeTyping();
-      addBot('Sorry, the AI is temporarily unavailable. Check our docs for more info!');
-    } finally {
+      addBot(faqAnswer(q));
       if (btn) { btn.disabled = false; btn.textContent = 'Send ↗'; }
-    }
+    }, 600 + Math.random() * 400);
   }
 
   async function ask(q) {
