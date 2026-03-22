@@ -252,22 +252,18 @@
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
     <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
     <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:#c4bde0">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:#c4bde0">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag tag-green" style="font-size:.55rem">YES</span></span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag tag-green" style="font-size:.55rem">YES</span></span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:#c4bde0" id="tick-markets">—</strong></span>
+    <span class="tick-item">Testnet: <strong style="color:var(--gold2)">Base Sepolia</strong></span>
+    <span class="tick-item">CPRED Presale: <strong style="color:#c4bde0" id="tick-stage">Stage 1 · $0.050</strong></span>
+    <span class="tick-item"><span class="sym">CPRED</span> <span id="tick-pct">—</span>% venduto</span>
     <!-- duplicate -->
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
     <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.050 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:#c4bde0">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:#c4bde0">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
+    <span class="tick-item"><span class="sym">CPRED</span> $0.050 · Presale Live</span>
+    <span class="tick-item">Mercati Attivi: <strong style="color:#c4bde0" id="tick-markets2">—</strong></span>
+    <span class="tick-item">Testnet: <strong style="color:var(--gold2)">Base Sepolia</strong></span>
   </div>
 </div>
 
@@ -312,7 +308,7 @@
     <div class="hero-live-badge">
       <span class="hero-live-dot"></span>
       <span style="font-size:11px;font-weight:700;color:#ff3a5c;letter-spacing:.12em">PRESALE LIVE — STAGE 1 · $0.05</span>
-      <span style="font-size:11px;color:var(--muted2);letter-spacing:.06em" id="hero-countdown">CHIUDE TRA 21G 04H 48M</span>
+      <span style="font-size:11px;color:var(--muted2);letter-spacing:.06em" id="hero-countdown">STAGE 1 ATTIVO</span>
     </div>
 
     <!-- Headline -->
@@ -335,9 +331,9 @@
 
     <!-- Social proof -->
     <div class="hero-social-proof">
-      <div style="text-align:center"><div class="hero-stat-val">$8.4M</div><div class="hero-stat-lbl">Volume 24h</div></div>
-      <div style="text-align:center"><div class="hero-stat-val">3,204</div><div class="hero-stat-lbl">Utenti attivi</div></div>
-      <div style="text-align:center"><div class="hero-stat-val">847</div><div class="hero-stat-lbl">Mercati live</div></div>
+      <div style="text-align:center"><div class="hero-stat-val" id="hero-markets">—</div><div class="hero-stat-lbl">Mercati attivi</div></div>
+      <div style="text-align:center"><div class="hero-stat-val" id="hero-eth-raised">—</div><div class="hero-stat-lbl">ETH raccolti in presale</div></div>
+      <div style="text-align:center"><div class="hero-stat-val" id="hero-cpred-sold">—</div><div class="hero-stat-lbl">CPRED venduti</div></div>
     </div>
   </div>
 
@@ -396,7 +392,7 @@
       <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#ff3a5c;margin-right:6px;animation:pulse2 2s infinite;vertical-align:middle"></span>
       MERCATI IN TEMPO REALE
     </div>
-    <div class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.4rem)">847 Mercati Attivi Ora</div>
+    <div class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.4rem)"><span id="mscroll-count">—</span> Mercati Attivi Ora</div>
   </div>
   <div style="overflow:hidden">
     <div class="mscroll-track" id="mscroll">
@@ -636,7 +632,7 @@
         </div>
         <div style="background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:20px">
           <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--dim);margin-bottom:8px">STAGE 2</div>
-          <div style="font-size:1.8rem;font-weight:900;color:var(--dim);margin-bottom:4px">$0.075</div>
+          <div style="font-size:1.8rem;font-weight:900;color:var(--dim);margin-bottom:4px">$0.080</div>
           <div style="font-size:.78rem;color:var(--dim);margin-bottom:12px">15,000,000 CPRED</div>
           <div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-bottom:6px"></div>
           <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--dim)">In arrivo</div>
@@ -937,13 +933,13 @@
   <div class="cta-inner">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,58,92,.1);border:1px solid rgba(255,58,92,.35);border-radius:20px;padding:6px 18px;margin-bottom:24px;animation:pulse2 2s infinite">
       <span style="width:7px;height:7px;border-radius:50%;background:#ff3a5c;display:inline-block"></span>
-      <span style="font-size:11px;font-weight:700;color:#ff3a5c;letter-spacing:.12em">STAGE 1 LIVE · 63% VENDUTO</span>
+      <span style="font-size:11px;font-weight:700;color:#ff3a5c;letter-spacing:.12em" id="cta-badge">STAGE 1 LIVE · PRESALE IN CORSO</span>
     </div>
 
     <div class="cta-h2">Entra Adesso.<br><span class="cta-grad">Prima che il Prezzo Salga.</span></div>
 
     <p style="font-size:15px;color:var(--dim);line-height:1.7;margin-bottom:32px">
-      Stage 1 a <strong style="color:var(--gld)">$0.05</strong>. Stage 2 a <strong style="color:#f5c518">$0.075</strong>. Listing a <strong style="color:var(--grn)">$0.15</strong>.<br>
+      Stage 1 a <strong style="color:var(--gld)">$0.05</strong>. Stage 2 a <strong style="color:#f5c518">$0.080</strong>. Listing a <strong style="color:var(--grn)">$0.15</strong>.<br>
       Ogni stage che passa, il prezzo sale. Non aspettare.
     </p>
 
@@ -964,7 +960,7 @@
     </div>
 
     <div style="margin-top:24px;font-size:12px;color:var(--muted2);line-height:1.7">
-      Non-custodial · Smart contract auditato · KYC non richiesto sotto $10K<br>
+      Non-custodial · KYC non richiesto · Base Sepolia Testnet<br>
       <span style="color:var(--acc);cursor:pointer">Termini di Servizio</span> · <span style="color:var(--acc);cursor:pointer">Privacy Policy</span>
     </div>
   </div>
@@ -982,7 +978,7 @@
             <div style="font-size:8px;color:var(--muted2);letter-spacing:.12em">PREDICTION MARKET</div>
           </div>
         </div>
-        <p style="font-size:13px;color:var(--muted2);line-height:1.7;max-width:260px">Il primo prediction market decentralizzato 100% crypto-native. Costruito su Base, powered by Pyth Oracle.</p>
+        <p style="font-size:13px;color:var(--muted2);line-height:1.7;max-width:260px">Il primo prediction market decentralizzato 100% crypto-native. Costruito su Base, su Base L2.</p>
         <div class="footer-socials">
           <a class="footer-social-btn" href="#">𝕏</a>
           <a class="footer-social-btn" href="#">📱</a>
@@ -1017,7 +1013,7 @@
     </div>
     <div class="footer-bottom">
       <div style="font-size:12px;color:var(--muted2)">© 2026 CryptoPredict. Tutti i diritti riservati.</div>
-      <div style="font-size:11px;color:var(--muted2)">Built on Base · Powered by Pyth · Audited by Certik</div>
+      <div style="font-size:11px;color:var(--muted2)">Built on Base · Base Sepolia Testnet</div>
       <div style="display:flex;gap:16px">
         <span class="footer-link" style="display:inline">Terms</span>
         <span class="footer-link" style="display:inline">Privacy</span>
@@ -1139,15 +1135,62 @@
   });
 })();
 
-/* ── TOKENOMICS — carica dati presale live ── */
+/* ── DATI REALI DA BLOCKCHAIN ── */
 CP.ready.then(async function() {
   try {
+    // Presale
     const info = await W3.getPresaleInfo();
-    if (!info) return;
-    const bar = document.getElementById('tok-stage1-bar');
-    const lbl = document.getElementById('tok-stage1-pct');
-    if (bar) bar.style.width = info.pctSold + '%';
-    if (lbl) lbl.textContent = info.pctSold + '% venduto · $' + info.priceUsd.toFixed(3);
+    if (info) {
+      const pct  = info.pctSold || 0;
+      const sold = info.sold   || 0;
+      const eth  = info.totalRaisedEth || 0;
+
+      // Barra tokenomics
+      const bar = document.getElementById('tok-stage1-bar');
+      const lbl = document.getElementById('tok-stage1-pct');
+      if (bar) bar.style.width = pct + '%';
+      if (lbl) lbl.textContent = pct + '% venduto';
+
+      // Hero stats
+      const ehr = document.getElementById('hero-eth-raised');
+      const ecs = document.getElementById('hero-cpred-sold');
+      if (ehr) ehr.textContent = eth.toFixed(3) + ' ETH';
+      if (ecs) ecs.textContent = sold.toLocaleString() + ' CPRED';
+
+      // Ticker
+      const tp = document.getElementById('tick-pct');
+      if (tp) tp.textContent = pct;
+
+      // CTA badge
+      const cb = document.getElementById('cta-badge');
+      if (cb) cb.textContent = 'STAGE ' + info.currentStage + ' LIVE · ' + pct + '% VENDUTO';
+    }
+  } catch(e) {}
+
+  // Mercati attivi da contratto
+  try {
+    const provider = await W3.getProvider();
+    const c = new ethers.Contract(W3.CONTRACTS.market,
+      ['function marketCount() view returns (uint256)',
+       'function getMarket(uint256) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver,uint8 currency))'],
+      provider);
+    const count = Number(await c.marketCount());
+    // conta mercati aperti
+    let open = 0;
+    for (let i = 0; i < count; i++) {
+      try {
+        const m = await c.getMarket(i);
+        if (Number(m.status) === 0) open++;
+      } catch(e2) {}
+    }
+    // Aggiorna tutti i placeholder
+    ['hero-markets','tick-markets','tick-markets2','mscroll-count'].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = open;
+    });
+    // Anche stats counter target
+    // riaggiorna s3 con valore reale
+    document.getElementById('s3').textContent = open;
   } catch(e) {}
 });
 </script>
