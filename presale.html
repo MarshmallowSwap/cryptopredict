@@ -95,7 +95,7 @@
           <div style="font-size:2.2rem;font-weight:800;color:var(--gold2)" id="ps-price">
             <span class="ps-loading"><span class="ps-spin"></span></span>
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:3px">in testnet ETH · 1 ETH = $2,000</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:3px">USD price · testnet ETH at $2,000</div>
         </div>
         <div style="text-align:right">
           <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:4px">LISTING PRICE</div>
@@ -302,8 +302,8 @@ async function loadPresalePage() {
     // Price
     const ethPricePerCpred = priceUsd / ETH_PRICE;
     document.getElementById('ps-price').innerHTML =
-      `<span style="color:var(--gold2)">${ethPricePerCpred.toFixed(5)} ETH</span>
-       <span style="font-size:.85rem;color:var(--text3);font-weight:400"> = $${priceUsd.toFixed(3)}</span>`;
+      `<span style="color:var(--gold2)">$${priceUsd.toFixed(3)}</span>
+       <span style="font-size:.85rem;color:var(--text3);font-weight:400"> (${ethPricePerCpred.toFixed(5)} ETH)</span>`;
 
     // Stage num
     document.getElementById('ps-stage-num').textContent = currentStage;
