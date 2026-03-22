@@ -649,7 +649,7 @@ async function loadAnalytics() {
       var row = document.createElement("div");
       row.style.cssText = "display:flex;align-items:center;gap:12px;margin-bottom:8px";
       var label = document.createElement("div");
-      label.style.fontFamily = 'DM Mono, monospace';
+      label.style.fontFamily = 'monospace';
       label.style.fontSize = '.65rem';
       label.style.color = 'var(--text3)';
       label.style.width = '120px';
@@ -663,7 +663,7 @@ async function loadAnalytics() {
       bar.style.cssText = "width:"+(p.val/maxTvl*100).toFixed(1)+"%;background:"+p.color;
       barWrap.appendChild(bar);
       var val = document.createElement("div");
-      val.style.fontFamily = 'DM Mono, monospace';
+      val.style.fontFamily = 'monospace';
       val.style.fontSize = '.65rem';
       val.style.color = p.color;
       val.style.width = '100px';
