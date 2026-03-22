@@ -102,6 +102,35 @@ body{background:var(--black);color:var(--text);font-family:'Syne',sans-serif;lin
 .cp-input{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:.82rem;outline:none;width:100%;transition:border-color .2s}
 .cp-input:focus{border-color:rgba(124,58,237,.5)}
 .cp-input::placeholder{color:var(--text3)}
+
+/* ── SELECT / DROPDOWN DARK ── */
+select,.cp-input[type="date"],.cp-input[type="datetime-local"]{
+  background:#0d0b1a;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  cursor:pointer;
+  color:var(--text);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:10px 36px 10px 14px;
+  font-family:'DM Mono',monospace;
+  font-size:.82rem;
+  outline:none;
+  width:100%;
+  transition:border-color .2s;
+  color-scheme:dark;
+}
+select:focus,.cp-input[type="date"]:focus{border-color:rgba(124,58,237,.5)}
+select option{background:#0d0b1a;color:var(--text);padding:8px 12px}
+select option:hover,select option:checked{background:rgba(124,58,237,.25)}
+
+/* ── DATE INPUT DARK ── */
+input[type="date"],input[type="datetime-local"],input[type="number"],input[type="text"],input[type="password"],textarea{color-scheme:dark}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(0.5);cursor:pointer}
 .cp-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:6px}
 
 /* ── CARD ── */
