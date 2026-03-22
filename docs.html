@@ -151,34 +151,80 @@
         <div class="doc-p">I capitali nel pool <strong>non rimangono fermi</strong> — generano yield automatico del 4.8% APY (vedi sezione Yield). La liquidità iniziale del creatore viene rimborsata integralmente alla chiusura del mercato.</div>
       </div>
 
+
       <!-- 4. Yield -->
       <div class="doc-section" id="yield">
         <div class="doc-h2">4. Yield Automatico sui Pool</div>
+
         <div class="doc-box doc-box-green">
-          <div style="font-weight:700;color:var(--green2);margin-bottom:6px;font-size:.88rem">Il capitale nei pool non è fermo</div>
-          <div class="doc-p" style="margin:0">Ogni euro/ETH/USDC scommesso in un mercato genera yield automatico al <strong>4.8% APY</strong> mentre attende la risoluzione. Questo yield aumenta il pool totale disponibile per i vincitori.</div>
+          <div style="font-weight:700;color:var(--green2);margin-bottom:6px;font-size:.88rem">Il capitale nei pool non rimane fermo</div>
+          <div class="doc-p" style="margin:0">Ogni importo scommesso su un mercato genera yield automatico al <strong>4.8% APY</strong> mentre attende la risoluzione. Questo yield viene aggiunto al pool totale e aumenta il payout finale dei vincitori.</div>
+        </div>
+
+        <div class="doc-h3">Da dove viene il 4.8% APY</div>
+        <div class="doc-p">Il rendimento non viene inventato — proviene da tre fonti reali che l'infrastruttura CryptoPredict aggrega automaticamente:</div>
+
+        <div class="doc-box">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
+            <div class="flow-title">Protocol fee reinvestite (principale fonte)</div>
+            <div class="flow-desc">L'1% di protocol fee raccolta su ogni payout viene parzialmente reinvestita nel reward pool. Con volumi significativi questa fee genera un flusso costante di ETH che alimenta il rendimento degli staker e dei pool.</div>
+          </div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
+            <div class="flow-title">Liquidità deployata su protocolli DeFi (roadmap v3)</div>
+            <div class="flow-desc">In v3, il capitale nei pool verrà deployato su Aave o Compound su Base mentre aspetta la risoluzione del mercato. Il rendimento ottenuto (tipicamente 3-6% APY sulle stablecoin) viene accumulato e aggiunto al pool. Questo rende il capitale produttivo senza rischio aggiuntivo per gli utenti.</div>
+          </div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
+            <div class="flow-title">Treasury yield (corrente su testnet)</div>
+            <div class="flow-desc">Attualmente su testnet il 4.8% APY viene accumulato dal backend ogni 24 ore come <span class="doc-code">yieldAccrued</span> nel contratto. Sul mainnet questo sarà sostituito dal rendimento DeFi reale.</div>
+          </div></div>
+        </div>
+
+        <div class="doc-h3">Stack infrastrutturale</div>
+        <table class="doc-table">
+          <tr><th>Layer</th><th>Tecnologia</th><th>Funzione</th></tr>
+          <tr><td>Blockchain</td><td>Base Sepolia (L2 Ethereum)</td><td>Contratti immutabili, custodia fondi, payout automatici</td></tr>
+          <tr><td>Backend API</td><td>FastAPI + Python su VPS (Hetzner)</td><td>Auto-resolver prezzi, cron yield, endpoint REST</td></tr>
+          <tr><td>Database</td><td>Supabase (PostgreSQL)</td><td>Metadata mercati, immagini, stato off-chain</td></tr>
+          <tr><td>Price feeds</td><td>Binance API + CoinGecko</td><td>Prezzi real-time per auto-risoluzione mercati crypto</td></tr>
+          <tr><td>Frontend</td><td>Static HTML/JS su Vercel</td><td>UI, lettura diretta blockchain via ethers.js v6</td></tr>
+          <tr><td>Scheduler</td><td>APScheduler (Python)</td><td>Auto-resolve ogni 5 min, yield cron ogni 24h</td></tr>
+        </table>
+
+        <div class="doc-h3">Flusso yield on-chain</div>
+        <div class="doc-box doc-box-cyan">
+          <div style="font-family:'DM Mono',monospace;font-size:.75rem;line-height:2.2;color:var(--text2)">
+            Utente vince e chiama <strong>claimPayout(marketId)</strong><br>
+            &nbsp;&nbsp;&nbsp;↓<br>
+            PredictionMarket calcola gross payout<br>
+            &nbsp;&nbsp;&nbsp;↓<br>
+            <strong>1%</strong> → creator fee → pagata direttamente al creatore del mercato (ETH)<br>
+            <strong>1%</strong> → protocol fee → <span style="color:var(--cyan2)">CryptoPredictToken.depositRewards()</span><br>
+            <strong>98%</strong> → payout netto → vincitore<br>
+            &nbsp;&nbsp;&nbsp;↓<br>
+            ETH accumulato in <span style="color:var(--cyan2)">rewardPool</span> nel token contract<br>
+            &nbsp;&nbsp;&nbsp;↓<br>
+            Staker CPRED chiamano <span style="color:var(--cyan2)">claimRewards()</span> e ricevono ETH<br>
+            proporzionale al loro CPRED stakato
+          </div>
         </div>
 
         <div class="doc-h3">Calcolo yield giornaliero</div>
         <div class="doc-box">
           <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2">
             Yield giornaliero = Pool totale × 4.8% / 365<br><br>
-            Esempio — Pool $10,000 per 30 giorni:<br>
-            Yield = $10,000 × 0.048 / 365 × 30 = <strong style="color:var(--green2)">$39.45</strong> extra per i vincitori
+            Esempio — Pool $10,000 · Mercato attivo 30 giorni:<br>
+            Yield totale = $10,000 × 0.048 / 365 × 30 = <strong style="color:var(--green2)">$39.45</strong><br><br>
+            Di cui:<br>
+            → 50% ($19.72) aumenta il payout dei vincitori<br>
+            → 30% ($11.84) va agli staker CPRED in ETH<br>
+            → 20% ($7.89)  va alla treasury del protocollo
           </div>
         </div>
 
-        <div class="doc-h3">Distribuzione del yield</div>
-        <table class="doc-table">
-          <tr><th>Destinatario</th><th>Quota</th><th>Meccanismo</th></tr>
-          <tr><td>Vincitori scommesse</td><td style="color:var(--green2)">50%</td><td>Incluso nel payout automaticamente</td></tr>
-          <tr><td>Staker CPRED</td><td style="color:var(--cyan2)">30%</td><td>Via depositRewards() → claimRewards()</td></tr>
-          <tr><td>Treasury protocollo</td><td style="color:var(--gold2)">20%</td><td>Accumulato nel contratto</td></tr>
-        </table>
-
         <div class="doc-h3">Yield sulla card mercato</div>
-        <div class="doc-p">Ogni card mercato mostra il rendimento giornaliero stimato in USD: <span class="doc-code">+$0.13/g</span> significa che il pool genera $0.13 al giorno per i partecipanti. Più grande è il pool, più alto è lo yield visibile.</div>
+        <div class="doc-p">Ogni card mostra <span class="doc-code">+$X.XX/g</span> — il rendimento giornaliero stimato in USD basato sul pool corrente. Con pool piccoli (testnet) il numero è basso ma la formula è identica: su pool da $100K vedresti <span class="doc-code">+$13.15/g</span>.</div>
       </div>
+
 
       <!-- 5. Fee -->
       <div class="doc-section" id="fee">
