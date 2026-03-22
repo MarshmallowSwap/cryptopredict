@@ -122,7 +122,7 @@
         <div class="g2">
           <div>
             <label class="cp-label">Categoria</label>
-            <select class="cp-input" id="category" onchange="updatePreview(); toggleAssetField();">
+            <div class="select-wrap"><select class="cp-input" id="category" onchange="updatePreview(); toggleAssetField();">
               <option value="crypto">₿ Crypto — prezzi, ETF, halving</option>
               <option value="defi">⚡ DeFi — TVL, protocol, yield</option>
               <option value="sport">⚽ Sport — calcio, NBA, MMA, F1, Esport</option>
@@ -134,18 +134,18 @@
               <option value="nft">🎮 NFT & Gaming — NFT, metaverso</option>
               <option value="geopolitica">🌍 Geopolitica — conflitti, accordi</option>
               <option value="altro">🔮 Altro</option>
-            </select>
+            </select></div>
           </div>
           <div id="asset-wrap">
             <label class="cp-label">Asset di riferimento <span style="font-size:.65rem;color:var(--text3)">(crypto/macro)</span></label>
-            <select class="cp-input" id="asset">
+            <div class="select-wrap"><select class="cp-input" id="asset">
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="ETH">Ethereum (ETH)</option>
               <option value="SOL">Solana (SOL)</option>
               <option value="BNB">BNB</option>
               <option value="XRP">XRP</option>
               <option value="OTHER">—</option>
-            </select>
+            </select></div>
           </div>
         </div>
         <div class="g2" style="margin-top:12px">
