@@ -178,14 +178,14 @@
         <div id="cur-info" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:10px;padding:7px 10px;background:rgba(255,255,255,.03);border-radius:6px">
           ETH — valuta nativa Base · fee normali · scommesse e vincite in ETH
         </div>
-        <label class="cp-label">ETH da depositare *</label>
+        <label class="cp-label" id="liq-label">ETH da depositare *</label>
         <div style="position:relative">
           <input type="number" class="cp-input" id="liquidity" placeholder="0.0025" min="0.0025" step="0.001" id="liquidity"
                  style="padding-right:60px" oninput="updateFeePreview()">
           <span id="liq-symbol" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">ETH</span>
         </div>
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">
-          Minimo 0.0025 ETH (~$5) · Liquidità 100% rimborsata alla chiusura
+          Minimo 0.0025 ETH / 5 USDC / 5 USDT / 100 CPRED · Liquidità 100% rimborsata
         </div>
         <div id="fee-preview" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:.72rem">
           <div style="display:flex;justify-content:space-between;margin-bottom:4px">
@@ -390,8 +390,14 @@ function updateFeePreview() {
   var prev = document.getElementById("fee-preview");
   if (!liq) { prev.style.display = "none"; return; }
   prev.style.display = "block";
-  var earnEth = liq * 2 * 0.01; // 1% fee su 1x volume (2x liq)
-  document.getElementById("earn-est").textContent = (earnEth * 2000).toFixed(2) + " USD (stima)";
+
+  // Converti in USD in base alla valuta del mercato
+  var USD_PRICE = {ETH: 2000, USDC: 1, USDT: 1, CPRED: 0.05};
+  var usdPrice  = USD_PRICE[selectedCurrency] || 1;
+  var liqUsd    = liq * usdPrice;
+  // Stima guadagno: 1% fee su volume pari a 1x la liquidità iniziale
+  var earnUsd   = liqUsd * 1 * 0.01;
+  document.getElementById("earn-est").textContent = "$" + earnUsd.toFixed(2) + " (stima 1x vol)";
 }
 
 // ── CREATE MARKET ─────────────────────────────────────────────────
@@ -429,7 +435,8 @@ async function createMarket() {
 
   if (!question) { showToast("❌","Inserisci la domanda del mercato"); return; }
   if (!expDate)  { showToast("❌","Scegli una data di scadenza"); return; }
-  if (liquidity < 0.0025) { showToast("❌","Liquidità minima: 0.0025 ETH"); return; }
+  var liqMin = CUR_MIN[selectedCurrency] || 0.0025;
+  if (liquidity < liqMin) { showToast("❌","Liquidità minima: " + liqMin + " " + selectedCurrency); return; }
 
   var expiresAt = Math.floor(new Date(expDate + "T" + expTime + ":00Z").getTime() / 1000);
   if (expiresAt <= Date.now() / 1000 + 3600) {
@@ -605,6 +612,8 @@ function selectCurrency(cur) {
   if (info) info.textContent = CUR_INFO[cur];
   var sym = document.getElementById("liq-symbol");
   if (sym) sym.textContent = cur;
+  var lbl = document.getElementById("liq-label");
+  if (lbl) lbl.textContent = cur + " da depositare *";
   var inp = document.getElementById("liquidity");
   if (inp) {
     inp.min = CUR_MIN[cur];
