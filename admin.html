@@ -504,8 +504,9 @@ async function loadAnalytics() {
     var provider = await W3.getProvider();
     var ERC20_ABI = ["function balanceOf(address) view returns (uint256)", "function totalSupply() view returns (uint256)"];
     var STAKING_ABI = [
-      "function getPoolStats(uint8 poolId) view returns (uint256 maxCapacity, uint256 totalStaked, uint256 available)",
-      "function getTotalStaked(address) view returns (uint256)"
+      "function getPoolInfo(uint256 poolId) view returns (uint256 apyBps, uint256 lockDays, uint256 maxCapacity, uint256 totalStaked, uint256 available)",
+      "function getTotalStaked(address) view returns (uint256)",
+      "function rewardPoolBalance() view returns (uint256)"
     ];
     var PRESALE_ABI = [
       "function totalRaised() view returns (uint256)",
@@ -532,9 +533,9 @@ async function loadAnalytics() {
       usdcInMarket, usdtInMarket
     ] = await Promise.all([
       mktC.marketCount(),
-      stakingC.getPoolStats(0).catch(() => null),
-      stakingC.getPoolStats(1).catch(() => null),
-      stakingC.getPoolStats(2).catch(() => null),
+      stakingC.getPoolInfo(0).catch(() => null),
+      stakingC.getPoolInfo(1).catch(() => null),
+      stakingC.getPoolInfo(2).catch(() => null),
       tokenC.rewardPool().catch(() => 0n),
       tokenC.totalStaked().catch(() => 0n),
       usdcC.balanceOf(W3.CONTRACTS.market).catch(() => 0n),
@@ -575,9 +576,9 @@ async function loadAnalytics() {
     var cpredMktBal = tvl.CPRED;
 
     // Staking
-    var s0 = pool0 ? parseFloat(ethers.formatEther(pool0[1])) : 0;
-    var s1 = pool1 ? parseFloat(ethers.formatEther(pool1[1])) : 0;
-    var s2 = pool2 ? parseFloat(ethers.formatEther(pool2[1])) : 0;
+    var s0 = pool0 ? parseFloat(ethers.formatEther(pool0[3])) : 0;
+    var s1 = pool1 ? parseFloat(ethers.formatEther(pool1[3])) : 0;
+    var s2 = pool2 ? parseFloat(ethers.formatEther(pool2[3])) : 0;
     var totalStakingTvl = s0 + s1 + s2;
 
     var ethPool = parseFloat(ethers.formatEther(ethRewardPool));
