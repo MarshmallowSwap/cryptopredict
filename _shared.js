@@ -628,18 +628,14 @@ var aiWidget = (function() {
     addTyping();
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
     try {
-      var res = await fetch('https://api.anthropic.com/v1/messages', {
+      var res = await fetch('/api/v1/ai/chat', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:350,
-          system:SYSTEM,
-          messages:history
-        })
+        body:JSON.stringify({messages:history})
       });
+      if (!res.ok) throw new Error('API error ' + res.status);
       var data = await res.json();
-      var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Sorry, I could not process your request right now.';
+      var reply = data.reply || 'Sorry, I could not process your request right now.';
       history.push({role:'assistant', content:reply});
       removeTyping();
       addBot(reply);
