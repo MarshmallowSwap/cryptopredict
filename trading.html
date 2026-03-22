@@ -52,8 +52,8 @@
 
 <div class="ticker-bar"><div class="ticker-track">
   <span class="tick-live"><span class="tick-dot"></span>TRADING</span>
-  <span class="tick-item">Grafico prezzo · Orderbook · Ordini Limite</span>
-  <span class="tick-item">Base Sepolia · Dati live da blockchain</span>
+  <span class="tick-item">Price chart · Orderbook · Limit Orders</span>
+  <span class="tick-item">Base Sepolia · Live blockchain data</span>
   <span class="tick-live"><span class="tick-dot"></span>TRADING</span>
 </div></div>
 
@@ -78,7 +78,7 @@
 </nav>
 
 <div class="presale-banner">
-  <span class="pb-live"><span class="tick-dot"></span>TRADING · Ordini Limite</span>
+  <span class="pb-live"><span class="tick-dot"></span>TRADING · Orders Limit</span>
   <span class="pb-price">· Dati live blockchain</span>
   <a href="mercati.html" class="pb-btn">Scommetti ora →</a>
 </div>
@@ -115,17 +115,17 @@
       <!-- Price Chart -->
       <div class="chart-panel">
         <div class="chart-header">
-          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">// PREZZO IMPLICITO — DA EVENTI BLOCKCHAIN</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">// IMPLIED PRICE — FROM BLOCKCHAIN EVENTS</div>
           <div style="margin-left:auto;display:flex;gap:6px">
-            <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(50)"  id="r50">50 eventi</button>
+            <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(50)"  id="r50">50 events</button>
             <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(100)" id="r100">100</button>
             <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(200)" id="r200">200</button>
           </div>
         </div>
         <div class="chart-body">
           <div id="chart-loading" style="text-align:center;padding:60px;color:var(--text3)">
-            <div style="font-size:.85rem;margin-bottom:6px">Seleziona un mercato per vedere il grafico</div>
-            <div style="font-size:.72rem;color:var(--text3)">Il grafico mostra il prezzo implicito YES (0-1) ad ogni scommessa</div>
+            <div style="font-size:.85rem;margin-bottom:6px">Select a market to view the chart</div>
+            <div style="font-size:.72rem;color:var(--text3)">Chart shows the implied YES price (0-1) per bet</div>
           </div>
           <canvas id="price-chart" style="display:none;max-height:280px"></canvas>
         </div>
@@ -134,22 +134,22 @@
       <!-- Trades recenti (eventi BetPlaced) -->
       <div class="cp-card">
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-          <span>// SCOMMESSE RECENTI — LIVE BLOCKCHAIN</span>
+          <span>// RECENT BETS — LIVE BLOCKCHAIN</span>
           <button onclick="loadRecentTrades()" class="btn btn-ghost" style="font-size:.65rem;padding:2px 8px">↻</button>
         </div>
         <div id="trades-list">
-          <div style="text-align:center;padding:16px;color:var(--text3);font-size:.78rem">Seleziona un mercato</div>
+          <div style="text-align:center;padding:16px;color:var(--text3);font-size:.78rem">Select a market</div>
         </div>
       </div>
 
       <!-- I miei ordini -->
       <div class="cp-card" id="my-orders-card">
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-          <span>// I MIEI ORDINI APERTI</span>
+          <span>// MY OPEN ORDERS</span>
           <button onclick="loadMyOrders()" class="btn btn-ghost" style="font-size:.65rem;padding:2px 8px">↻</button>
         </div>
         <div id="my-orders-list">
-          <div style="text-align:center;padding:12px;color:var(--text3);font-size:.78rem">Connetti il wallet</div>
+          <div style="text-align:center;padding:12px;color:var(--text3);font-size:.78rem">Connect wallet</div>
         </div>
       </div>
     </div>
@@ -159,11 +159,11 @@
 
       <!-- Orderbook -->
       <div class="ob-card">
-        <div class="ob-header">// ORDERBOOK — ORDINI LIMITE</div>
+        <div class="ob-header">// ORDERBOOK — LIMIT ORDERS</div>
         <div class="ob-body">
           <!-- Ask (NO) -->
           <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);margin-bottom:4px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
-            <span>Prezzo NO</span><span style="text-align:center">Importo</span><span style="text-align:right">Ordini</span>
+            <span>NO Price</span><span style="text-align:center">Amount</span><span style="text-align:right">Orders</span>
           </div>
           <div id="ob-asks" style="margin-bottom:8px">
             <div style="text-align:center;padding:8px;color:var(--text3);font-size:.7rem">—</div>
@@ -176,7 +176,7 @@
 
           <!-- Bids (YES) -->
           <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);margin-bottom:4px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
-            <span>Prezzo YES</span><span style="text-align:center">Importo</span><span style="text-align:right">Ordini</span>
+            <span>YES Price</span><span style="text-align:center">Amount</span><span style="text-align:right">Orders</span>
           </div>
           <div id="ob-bids">
             <div style="text-align:center;padding:8px;color:var(--text3);font-size:.7rem">—</div>
@@ -193,17 +193,17 @@
         <div style="padding:14px">
 
           <div class="order-type-tabs">
-            <button class="ot-btn active" id="ot-limit"  onclick="setOrderType('limit')">Limite</button>
+            <button class="ot-btn active" id="ot-limit"  onclick="setOrderType('limit')">Limit</button>
             <button class="ot-btn"        id="ot-market" onclick="setOrderType('market')">Market</button>
           </div>
 
           <!-- Prezzo corrente -->
           <div class="price-display">
-            <span style="font-size:.7rem;color:var(--text3)">Prezzo corrente YES</span>
+            <span style="font-size:.7rem;color:var(--text3)">Current YES price</span>
             <span style="font-family:'DM Mono',monospace;font-weight:700;color:#34d399" id="form-cur-price">—</span>
           </div>
 
-          <!-- Limite prezzo -->
+          <!-- Limit prezzo -->
           <div id="limit-price-row" style="margin-bottom:10px">
             <label class="cp-label">Prezzo limite YES (0–1)</label>
             <div style="position:relative">
@@ -218,8 +218,8 @@
             </div>
           </div>
 
-          <!-- Importo -->
-          <label class="cp-label" id="amount-label">Importo (ETH)</label>
+          <!-- Amount -->
+          <label class="cp-label" id="amount-label">Amount (ETH)</label>
           <div style="position:relative;margin-bottom:6px">
             <input type="number" class="cp-input" id="order-amount" placeholder="0.001" min="0.0001" step="0.001" oninput="updateOrderPreview()">
             <span id="order-cur-unit" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3)">ETH</span>
@@ -234,58 +234,58 @@
           <!-- Preview -->
           <div style="background:rgba(255,255,255,.03);border-radius:7px;padding:9px 12px;margin-bottom:12px;font-size:.72rem" id="order-preview">
             <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-              <span style="color:var(--text3)">Tipo</span>
-              <span id="prev-type" style="font-family:'DM Mono',monospace">Limite YES</span>
+              <span style="color:var(--text3)">Type</span>
+              <span id="prev-type" style="font-family:'DM Mono',monospace">Limit YES</span>
             </div>
             <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-              <span style="color:var(--text3)">Esegue se prezzo YES</span>
+              <span style="color:var(--text3)">Executes if YES price</span>
               <span id="prev-condition" style="font-family:'DM Mono',monospace;color:var(--cyan2)">≤ —</span>
             </div>
             <div style="display:flex;justify-content:space-between">
-              <span style="color:var(--text3)">Importo</span>
+              <span style="color:var(--text3)">Amount</span>
               <span id="prev-amount" style="font-family:'DM Mono',monospace;color:var(--gold2)">—</span>
             </div>
           </div>
 
-          <!-- Scadenza -->
+          <!-- Expiry -->
           <div style="display:flex;gap:6px;margin-bottom:12px">
             <button class="ot-btn active" id="exp-24" onclick="setExpiry(24)">24h</button>
             <button class="ot-btn" id="exp-48" onclick="setExpiry(48)">48h</button>
-            <button class="ot-btn" id="exp-7d" onclick="setExpiry(168)">7 giorni</button>
+            <button class="ot-btn" id="exp-7d" onclick="setExpiry(168)">7 days</button>
           </div>
 
           <button id="btn-order" onclick="placeOrder()" class="btn btn-primary" style="width:100%;justify-content:center;font-size:.88rem;padding:11px">
-            Piazza Ordine
+            Place Order
           </button>
 
           <div style="font-size:.62rem;color:var(--text3);text-align:center;margin-top:8px">
-            Ordini limite: eseguiti automaticamente dal backend quando il prezzo on-chain raggiunge il tuo limite
+            Orders limite: eseguiti automaticamente dal backend quando il prezzo on-chain raggiunge il tuo limite
           </div>
         </div>
       </div>
 
       <!-- Statistiche mercato -->
       <div class="ob-card" id="market-stats" style="display:none">
-        <div class="ob-header">// STATISTICHE MERCATO</div>
+        <div class="ob-header">// MARKET STATISTICS</div>
         <div class="ob-body" style="font-size:.75rem">
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="color:var(--text3)">Pool YES</span>
+            <span style="color:var(--text3)">YES Pool</span>
             <span id="stat-yes-pool" style="font-family:'DM Mono',monospace;color:#34d399">—</span>
           </div>
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="color:var(--text3)">Pool NO</span>
+            <span style="color:var(--text3)">NO Pool</span>
             <span id="stat-no-pool" style="font-family:'DM Mono',monospace;color:#f87171">—</span>
           </div>
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="color:var(--text3)">Pool totale</span>
+            <span style="color:var(--text3)">Total pool</span>
             <span id="stat-total-pool" style="font-family:'DM Mono',monospace;color:var(--gold2)">—</span>
           </div>
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="color:var(--text3)">Yield giornaliero</span>
+            <span style="color:var(--text3)">Daily yield</span>
             <span id="stat-yield" style="font-family:'DM Mono',monospace;color:var(--green2)">—</span>
           </div>
           <div style="display:flex;justify-content:space-between">
-            <span style="color:var(--text3)">Scadenza</span>
+            <span style="color:var(--text3)">Expiry</span>
             <span id="stat-expiry" style="font-family:'DM Mono',monospace;color:var(--text3)">—</span>
           </div>
         </div>
@@ -410,7 +410,7 @@ async function loadMarketData() {
 
     // Aggiorna label valuta nel form
     document.getElementById("order-cur-unit").textContent = curName;
-    document.getElementById("amount-label").textContent = "Importo ("+curName+")";
+    document.getElementById("amount-label").textContent = "Amount ("+curName+")";
 
     // Quick amounts per valuta
     var steps = curIdx===1||curIdx===2 ? [1,5,10,50] : curIdx===3 ? [100,500,1000] : [0.001,0.005,0.01,0.05];
@@ -458,7 +458,7 @@ async function loadPriceChart() {
 
     if (!events.length) {
       document.getElementById("chart-loading").innerHTML =
-        '<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:1.5rem;margin-bottom:8px">📊</div><div>Nessuna scommessa ancora — il grafico apparirà dopo la prima scommessa</div></div>';
+        '<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:1.5rem;margin-bottom:8px">📊</div><div>No bets yet — il grafico apparirà dopo la prima scommessa</div></div>';
       return;
     }
 
@@ -507,7 +507,7 @@ function renderChart(points) {
     data: {
       labels: labels,
       datasets: [{
-        label: "Prezzo YES",
+        label: "YES Price",
         data: data,
         borderColor: "#a855f7",
         borderWidth: 2,
@@ -604,7 +604,7 @@ async function loadRecentTrades() {
     var last10  = events.slice(-10).reverse();
 
     if (!last10.length) {
-      el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Nessuna scommessa ancora</div>';
+      el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">No bets yet</div>';
       return;
     }
     var curIdx   = Number(currentMarket ? currentMarket.currency : 0);
@@ -614,7 +614,7 @@ async function loadRecentTrades() {
     el.innerHTML = "";
     var header = document.createElement("div");
     header.style.cssText = "display:grid;grid-template-columns:60px 1fr 1fr 80px;gap:6px;font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);padding:4px 0;margin-bottom:4px;border-bottom:1px solid var(--border)";
-    header.innerHTML = "<span>Lato</span><span>Wallet</span><span>Importo</span><span style='text-align:right'>Blocco</span>";
+    header.innerHTML = "<span>Lato</span><span>Wallet</span><span>Amount</span><span style='text-align:right'>Blocco</span>";
     el.appendChild(header);
 
     last10.forEach(function(ev) {
@@ -659,14 +659,14 @@ async function loadOrderbook() {
   if (currentMarketId === null) return;
   try {
     var res = await fetch("/api/v1/trading/orderbook/"+currentMarketId);
-    if (!res.ok) throw new Error("API non disponibile");
+    if (!res.ok) throw new Error("API unavailable");
     var ob = await res.json();
 
     // Render asks (NO)
     var asksEl = document.getElementById("ob-asks");
     asksEl.innerHTML = "";
     if (!ob.asks || !ob.asks.length) {
-      asksEl.innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.7rem">Nessun ordine NO</div>';
+      asksEl.innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.7rem">No NO orders</div>';
     } else {
       var maxAmt = Math.max.apply(null, ob.asks.map(function(a){return a.amount;}));
       ob.asks.slice(0,6).forEach(function(a) {
@@ -690,7 +690,7 @@ async function loadOrderbook() {
     var bidsEl = document.getElementById("ob-bids");
     bidsEl.innerHTML = "";
     if (!ob.bids || !ob.bids.length) {
-      bidsEl.innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.7rem">Nessun ordine YES</div>';
+      bidsEl.innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.7rem">No YES orders</div>';
     } else {
       var maxAmtB = Math.max.apply(null, ob.bids.map(function(b){return b.amount;}));
       ob.bids.slice(0,6).forEach(function(b) {
@@ -707,7 +707,7 @@ async function loadOrderbook() {
       });
     }
   } catch(e) {
-    document.getElementById("ob-bids").innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.65rem">Orderbook non disponibile</div>';
+    document.getElementById("ob-bids").innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.65rem">Orderbook unavailable</div>';
   }
 }
 
@@ -744,9 +744,9 @@ function updateOrderPreview() {
   var curName = CUR_NAMES[curIdx]||"ETH";
 
   document.getElementById("prev-type").textContent =
-    (orderType==="limit" ? "Limite " : "Market ") + (orderSide ? "YES" : "NO");
+    (orderType==="limit" ? "Limit " : "Market ") + (orderSide ? "YES" : "NO");
   document.getElementById("prev-condition").textContent =
-    orderType==="limit" ? (orderSide ? "≤ "+price.toFixed(3) : "≥ "+(1-price).toFixed(3)) : "Immediato";
+    orderType==="limit" ? (orderSide ? "≤ "+price.toFixed(3) : "≥ "+(1-price).toFixed(3)) : "Immediate";
   document.getElementById("prev-amount").textContent =
     amount > 0 ? amount.toFixed(curIdx===1||curIdx===2?2:4)+" "+curName : "—";
 }
@@ -754,21 +754,21 @@ function updateOrderPreview() {
 // ── PLACE ORDER ───────────────────────────────────────────────────
 async function placeOrder() {
   if (!WALLET.address) { openModal("wallet-modal"); return; }
-  if (currentMarketId === null) { showToast("❌", "Seleziona un mercato"); return; }
+  if (currentMarketId === null) { showToast("❌", "Select a market"); return; }
 
   var price  = parseFloat(document.getElementById("order-price").value)  || 0;
   var amount = parseFloat(document.getElementById("order-amount").value) || 0;
 
   if (orderType === "limit" && (price <= 0 || price >= 1)) {
-    showToast("❌", "Prezzo limite deve essere tra 0 e 1"); return;
+    showToast("❌", "Limit price must be between 0 and 1"); return;
   }
-  if (amount <= 0) { showToast("❌", "Inserisci un importo valido"); return; }
+  if (amount <= 0) { showToast("❌", "Enter a valid amount"); return; }
 
   var curIdx  = currentMarket ? Number(currentMarket.currency||0) : 0;
   var curName = CUR_NAMES[curIdx] || "ETH";
 
   var btn = document.getElementById("btn-order");
-  btn.disabled = true; btn.textContent = "Invio...";
+  btn.disabled = true; btn.textContent = "Sending...";
 
   try {
     var body = {
@@ -790,11 +790,11 @@ async function placeOrder() {
 
     if (!res.ok) {
       var err = await res.json().catch(function(){return{detail:"Errore server"};});
-      throw new Error(err.detail || "Errore API");
+      throw new Error(err.detail || "API error");
     }
 
     var data = await res.json();
-    showToast("✅", "Ordine "+orderType+" "+( orderSide?"YES":"NO")+" registrato!");
+    showToast("✅", "Order "+orderType+" "+( orderSide?"YES":"NO")+" registered!");
     document.getElementById("order-price").value  = "";
     document.getElementById("order-amount").value = "";
     await loadMyOrders();
@@ -804,7 +804,7 @@ async function placeOrder() {
     showToast("❌", e.message || "Errore");
   } finally {
     btn.disabled = false;
-    btn.textContent = "Piazza Ordine";
+    btn.textContent = "Place Order";
   }
 }
 
@@ -812,17 +812,17 @@ async function placeOrder() {
 async function loadMyOrders() {
   var el = document.getElementById("my-orders-list");
   if (!WALLET.address) {
-    el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Connetti il wallet</div>';
+    el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Connect wallet</div>';
     return;
   }
   try {
     var res = await fetch("/api/v1/trading/orders/user/"+WALLET.address);
-    if (!res.ok) throw new Error("API non disponibile");
+    if (!res.ok) throw new Error("API unavailable");
     var orders = await res.json();
     var open   = orders.filter(function(o){ return o.status === "open"; });
 
     if (!open.length) {
-      el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Nessun ordine aperto</div>';
+      el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">No open orders</div>';
       return;
     }
     el.innerHTML = "";
@@ -845,7 +845,7 @@ async function loadMyOrders() {
       var cancelBtn = document.createElement("button");
       cancelBtn.className = "btn btn-ghost";
       cancelBtn.style.cssText = "font-size:.65rem;padding:2px 8px;flex-shrink:0";
-      cancelBtn.textContent = "Cancella";
+      cancelBtn.textContent = "Cancel";
       cancelBtn.onclick = (function(id){ return function(){ cancelOrder(id); }; })(o.id);
 
       row.appendChild(left);
@@ -853,7 +853,7 @@ async function loadMyOrders() {
       el.appendChild(row);
     });
   } catch(e) {
-    el.innerHTML = '<div style="font-size:.72rem;color:var(--text3);text-align:center;padding:8px">API non disponibile</div>';
+    el.innerHTML = '<div style="font-size:.72rem;color:var(--text3);text-align:center;padding:8px">API unavailable</div>';
   }
 }
 
@@ -861,7 +861,7 @@ async function cancelOrder(orderId) {
   try {
     var res = await fetch("/api/v1/trading/orders/"+orderId+"?wallet="+WALLET.address, {method:"DELETE"});
     if (!res.ok) throw new Error("Errore");
-    showToast("✅", "Ordine cancellato");
+    showToast("✅", "Order cancellato");
     await loadMyOrders();
     await loadOrderbook();
   } catch(e) {
