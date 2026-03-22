@@ -650,7 +650,7 @@ async function loadRecentTrades() {
       el.appendChild(row);
     });
   } catch(e) {
-    el.innerHTML = '<div style="color:var(--red2);font-size:.75rem">Errore: '+e.message+'</div>';
+    el.innerHTML = '<div style="color:var(--red2);font-size:.75rem">Error: '+e.message+'</div>';
   }
 }
 
