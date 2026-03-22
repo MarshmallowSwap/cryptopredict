@@ -397,7 +397,9 @@ async function loadMarketData() {
     document.getElementById("form-cur-price").textContent = yesPct.toFixed(3);
 
     // Aggiorna stats
-    var yieldDay = (total * 2000 * 0.048 / 365);
+    var CUR_USD = {ETH:2000, USDC:1, USDT:1, CPRED:0.05};
+    var curUsdPrice = CUR_USD[curName] || 1;
+    var yieldDay = (total * curUsdPrice * 0.048 / 365);
     document.getElementById("stat-yes-pool").textContent = yes.toFixed(decimals===6?2:4)+" "+curName;
     document.getElementById("stat-no-pool").textContent  = no.toFixed(decimals===6?2:4)+" "+curName;
     document.getElementById("stat-total-pool").textContent = total.toFixed(decimals===6?2:4)+" "+curName;
@@ -432,7 +434,7 @@ async function loadPriceChart() {
     // Pagina a ritroso in chunk da 2000 blocchi finché non trova eventi o arriva a 50k blocchi fa
     var events = [];
     var CHUNK   = 2000;
-    var MAX_BACK = 50000;
+    var MAX_BACK = 200000;
     var toBlock  = latestBlock;
     var searched = 0;
     while (events.length === 0 && searched < MAX_BACK) {
@@ -588,7 +590,7 @@ async function loadRecentTrades() {
     var latest  = await provider.getBlockNumber();
     var events = [];
     var toB = latest;
-    for (var attempt = 0; attempt < 10 && events.length === 0; attempt++) {
+    for (var attempt = 0; attempt < 25 && events.length === 0; attempt++) {
       var fromB = Math.max(0, toB - 2000);
       try { events = (await c.queryFilter(filter, fromB, toB)).concat(events); }
       catch(e2) {
