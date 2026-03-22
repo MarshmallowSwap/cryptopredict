@@ -458,7 +458,8 @@ async function createMarket() {
       "function createMarket(string question, string category, string assetSymbol, uint256 targetPrice, bool targetAbove, uint256 expiresAt, uint8 currency, uint256 liquidityAmount) payable returns (uint256)"
     ];
     var mktC  = new ethers.Contract(W3.CONTRACTS.market, CREA_ABI, signer);
-    // Valuta unica per mercato — v.A
+    var CURRENCY_IDX = {ETH:0, USDC:1, USDT:2, CPRED:3};
+    var curIdx = CURRENCY_IDX[selectedCurrency] || 0;
     var liqWei, txOpts;
     if (selectedCurrency === "ETH") {
       liqWei = ethers.parseEther(liquidity.toString());
