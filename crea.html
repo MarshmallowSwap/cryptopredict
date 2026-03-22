@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Crea Mercato — CryptoPredict</title>
+<title>Create Market — CryptoPredict</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css">
@@ -64,7 +64,7 @@
 <div class="page-wrap">
   <div class="page-header">
     <span class="page-tag">// Crea — On-Chain</span>
-    <div class="page-title">Crea un Mercato</div>
+    <div class="page-title">Create a Market</div>
     <div class="page-sub">Scrivi la domanda, imposta i parametri e guadagna il <strong>1% su ogni trade</strong> nel tuo mercato</div>
   </div>
 
@@ -79,14 +79,14 @@
 
       <!-- Immagine -->
       <div class="cp-card cp-card-accent">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// IMMAGINE DEL MERCATO</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// IMAGE DEL MERCATO</div>
 
         <!-- Drop zone / preview -->
         <div class="img-drop" id="img-drop" onclick="document.getElementById('img-file').click()">
           <img id="img-preview-el" class="img-preview" style="display:none">
           <div id="img-placeholder" style="text-align:center">
             <div style="font-size:2rem;margin-bottom:8px">🖼️</div>
-            <div style="font-size:.82rem;font-weight:700;margin-bottom:4px">Carica immagine</div>
+            <div style="font-size:.82rem;font-weight:700;margin-bottom:4px">Upload image</div>
             <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);line-height:1.8">
               JPG · PNG · WebP · GIF<br>
               <strong style="color:var(--text2)">1200 × 630 px</strong> — formato standard OpenGraph<br>
@@ -108,7 +108,7 @@
 
       <!-- Domanda -->
       <div class="cp-card">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// DOMANDA DEL MERCATO *</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// MARKET QUESTION *</div>
         <textarea class="cp-input" id="question" rows="3"
           placeholder="Es: BTC supererà $100,000 entro fine aprile 2025?"
           style="resize:vertical"
@@ -116,12 +116,12 @@
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:4px">Deve avere risposta binaria YES/NO</div>
       </div>
 
-      <!-- Categoria + Asset -->
+      <!-- Category + Asset -->
       <div class="cp-card">
         <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// DETTAGLI</div>
         <div class="g2">
           <div>
-            <label class="cp-label">Categoria</label>
+            <label class="cp-label">Category</label>
             <div class="select-wrap"><select class="cp-input" id="category" onchange="updatePreview(); toggleAssetField();">
               <option value="crypto">₿ Crypto — prezzi, ETF, halving</option>
               <option value="defi">⚡ DeFi — TVL, protocol, yield</option>
@@ -137,7 +137,7 @@
             </select></div>
           </div>
           <div id="asset-wrap">
-            <label class="cp-label">Asset di riferimento <span style="font-size:.65rem;color:var(--text3)">(crypto/macro)</span></label>
+            <label class="cp-label">Reference asset <span style="font-size:.65rem;color:var(--text3)">(crypto/macro)</span></label>
             <div class="select-wrap"><select class="cp-input" id="asset">
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="ETH">Ethereum (ETH)</option>
@@ -193,7 +193,7 @@
             <span id="gas-est">~0.0002 ETH</span>
           </div>
           <div style="display:flex;justify-content:space-between">
-            <span style="color:var(--text3)">Guadagno stimato (1x vol)</span>
+            <span style="color:var(--text3)">Estimated earnings (1x vol)</span>
             <span id="earn-est" style="color:var(--green2)">—</span>
           </div>
         </div>
@@ -202,7 +202,7 @@
       <!-- Submit -->
       <button id="create-btn" onclick="createMarket()" class="btn btn-primary"
         style="width:100%;justify-content:center;font-size:.95rem;padding:14px">
-        🔮 Crea Mercato On-Chain
+        🔮 Create On-Chain Market
       </button>
       <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center">
         On-chain · Base Sepolia · Guadagni 1% su ogni trade
@@ -214,7 +214,7 @@
 
       <!-- Preview card -->
       <div class="cp-card cp-card-cyan">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// ANTEPRIMA CARD</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// PREVIEW CARD</div>
         <div class="preview-card">
           <!-- Preview image -->
           <div class="preview-card-img" id="prev-img-wrap">
@@ -419,7 +419,7 @@ async function createMarket() {
         var have   = parseFloat(ethers.formatEther(cpredBal));
         showToast("❌",
           "Servono " + needed.toLocaleString() + " CPRED per creare mercati. " +
-          "Hai: " + have.toFixed(0) + " CPRED (wallet + staking)");
+          "You have: " + have.toFixed(0) + " CPRED (wallet + staking)");
         return;
       }
     }
@@ -450,7 +450,7 @@ async function createMarket() {
 
   try {
     var ok = await W3.ensureNetwork();
-    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+    if (!ok) throw new Error("Switch network a Base Sepolia");
 
     // 1. Crea il mercato on-chain
     var signer = await W3.getSigner();
@@ -574,7 +574,7 @@ async function createMarket() {
   } catch(err) {
     showToast("❌", err.reason || err.message || "Errore creazione mercato");
     btn.disabled = false;
-    btn.textContent = "🔮 Crea Mercato On-Chain";
+    btn.textContent = "🔮 Create On-Chain Market";
   }
 }
 
@@ -669,10 +669,10 @@ async function checkCpredRequirement() {
       var okTxt = document.createElement('div');
       var okTitle = document.createElement('div');
       okTitle.style.cssText = 'font-weight:700;font-size:.85rem;color:var(--green2)';
-      okTitle.textContent = 'Requisito CPRED soddisfatto';
+      okTitle.textContent = 'CPRED Requirement met';
       var okSub = document.createElement('div');
       okSub.style.cssText = 'font-size:.65rem;color:var(--text3)';
-      okSub.textContent = 'Hai ' + have.toFixed(0) + ' CPRED (wallet + staking) — minimo: ' + needed.toLocaleString();
+      okSub.textContent = 'You have ' + have.toFixed(0) + ' CPRED (wallet + staking) — minimo: ' + needed.toLocaleString();
       okTxt.appendChild(okTitle); okTxt.appendChild(okSub);
       okDiv.appendChild(okTxt); banner.appendChild(okDiv);
     } else if (!WALLET.address) {
