@@ -92,6 +92,9 @@
       <a href="#contratti"   class="toc-link">13. Smart Contracts</a>
       <a href="#sicurezza"   class="toc-link">14. Sicurezza</a>
       <a href="#roadmap"     class="toc-link">15. Roadmap</a>
+      <a href="#trading"     class="toc-link">16. Trading e Grafico</a>
+      <a href="#secondario"  class="toc-link">17. Mercato Secondario</a>
+      <a href="#amm"         class="toc-link">18. AMM (roadmap)</a>
     </div>
 
     <!-- Content -->
@@ -458,8 +461,105 @@
           <tr><td>Testnet v3</td><td><span class="badge-purple">PROSSIMO</span></td><td>Presale multi-currency, penalty unstake anticipato, token live staking, analytics dashboard</td></tr>
           <tr><td>Audit</td><td><span class="badge-purple">Q3 2025</span></td><td>Audit completo smart contracts, bug bounty</td></tr>
           <tr><td>Mainnet</td><td><span class="badge-purple">Q4 2025</span></td><td>Deploy Base mainnet, liquidità iniziale, marketing</td></tr>
-          <tr><td>v2.0</td><td><span class="badge-purple">2026</span></td><td>Trading secondario quote, AMM, governance on-chain, mobile app</td></tr>
+          <tr><td>Trading v1</td><td><span class="badge-green">COMPLETATO</span></td><td>Grafico prezzo da blockchain, orderbook off-chain, ordini limite via Supabase</td></tr>
+          <tr><td>Vendi Quote v1</td><td><span class="badge-green">COMPLETATO</span></td><td>UI mercato secondario pronta — PositionMarket.sol scritto, deploy al prossimo redeploy</td></tr>
+          <tr><td>v2.0</td><td><span class="badge-purple">2026</span></td><td>AMM on-chain (CPMM), governance, mobile app, notifiche telegram</td></tr>
         </table>
+      </div>
+
+
+      <!-- 16. Trading -->
+      <div class="doc-section" id="trading">
+        <div class="doc-h2">16. Trading e Grafico Prezzi</div>
+        <div class="doc-p">La pagina <span class="doc-code">/trading.html</span> offre strumenti di analisi e trading avanzati basati sui dati on-chain e su un orderbook off-chain via Supabase.</div>
+
+        <div class="doc-h3">Grafico Prezzo Implicito</div>
+        <div class="doc-p">Il grafico legge gli eventi <span class="doc-code">BetPlaced</span> direttamente dalla blockchain e ricostruisce il <strong>prezzo implicito YES</strong> (0–1) ad ogni scommessa. Ogni punto rappresenta quanto il mercato "pensa" che l'evento accada.</div>
+        <div class="doc-box">
+          <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2">
+            Prezzo YES = YES pool / (YES pool + NO pool)<br>
+            Prezzo NO  = 1 - Prezzo YES<br><br>
+            Esempio: YES pool = 75 ETH, NO pool = 25 ETH<br>
+            → Prezzo YES = 0.75 (75% probabilità che accada)<br>
+            → Prezzo NO  = 0.25
+          </div>
+        </div>
+        <div class="doc-p">I punti sul grafico sono colorati: <strong style="color:#34d399">verde = scommessa YES</strong>, <strong style="color:#f87171">rosso = scommessa NO</strong>. Il grafico si aggiorna ad ogni nuova scommessa on-chain.</div>
+
+        <div class="doc-h3">Orderbook Ordini Limite</div>
+        <div class="doc-p">Gli ordini limite sono salvati su Supabase e non bloccano fondi on-chain. Quando il backend rileva che il prezzo on-chain ha raggiunto il tuo limite, esegue automaticamente la scommessa via <span class="doc-code">placeBet()</span>.</div>
+
+        <table class="doc-table">
+          <tr><th>Tipo ordine</th><th>Funzionamento</th><th>Fondi bloccati</th></tr>
+          <tr><td><strong>Market</strong></td><td>Eseguito immediatamente al prezzo corrente</td><td>Al momento dell'esecuzione</td></tr>
+          <tr><td><strong>Limite YES</strong></td><td>Eseguito quando Prezzo YES ≤ tuo limite</td><td>No — solo salvato su Supabase</td></tr>
+          <tr><td><strong>Limite NO</strong></td><td>Eseguito quando Prezzo YES ≥ tuo limite (NO economico)</td><td>No — solo salvato su Supabase</td></tr>
+        </table>
+
+        <div class="doc-h3">Scommesse recenti</div>
+        <div class="doc-p">La sezione "Scommesse recenti" mostra gli ultimi 10 eventi <span class="doc-code">BetPlaced</span> letti dalla blockchain in tempo reale — wallet, importo, side, link BaseScan.</div>
+      </div>
+
+      <!-- 17. Mercato Secondario -->
+      <div class="doc-section" id="secondario">
+        <div class="doc-h2">17. Mercato Secondario — Vendi Quote</div>
+        <div class="doc-p">La pagina <span class="doc-code">/vendi.html</span> permette di vendere le proprie posizioni aperte ad altri utenti <strong>prima della scadenza del mercato</strong>, incassando subito senza aspettare la risoluzione.</div>
+
+        <div class="doc-h3">Come funziona</div>
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
+          <div class="flow-title">Venditore: metti in vendita</div>
+          <div class="flow-desc">Vai su /vendi.html → tab "Vendi una quota" → scegli la posizione → imposta il prezzo → "Metti in Vendita". Il contratto PositionMarket diventa custode della tua posizione.</div>
+        </div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
+          <div class="flow-title">Compratore: acquista la quota</div>
+          <div class="flow-desc">Tab "Listings attivi" → trova la quota → "Compra quota" → paga il prezzo richiesto. Il PositionMarket trasferisce la posizione al compratore e il pagamento al venditore.</div>
+        </div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
+          <div class="flow-title">Fee di vendita: 0.5%</div>
+          <div class="flow-desc">Sul prezzo di vendita viene applicata una fee dello 0.5% al protocollo. Il venditore riceve il 99.5% del prezzo richiesto.</div>
+        </div></div>
+
+        <div class="doc-box" style="border-color:rgba(245,158,11,.2);background:rgba(245,158,11,.04);margin-top:12px">
+          <div style="font-weight:700;color:var(--gold2);margin-bottom:4px;font-size:.85rem">Stato attuale</div>
+          <div class="doc-p" style="margin:0;font-size:.8rem">Il contratto <span class="doc-code">PositionMarket.sol</span> è scritto e testato. Sarà deployato nel prossimo redeploy insieme ad altre migliorie. La UI è già funzionante e pronta.</div>
+        </div>
+      </div>
+
+      <!-- 18. AMM -->
+      <div class="doc-section" id="amm">
+        <div class="doc-h2">18. AMM — Automated Market Maker (Roadmap)</div>
+        <div class="doc-p">L'AMM è la versione avanzata del trading su CryptoPredict — prezzi continui, swap istantanei, liquidità automatica. È nella roadmap v2.0 e richiede un nuovo contratto dedicato.</div>
+
+        <div class="doc-h3">Differenza tra modello attuale e AMM</div>
+        <table class="doc-table">
+          <tr><th></th><th>Attuale (Parimutuel)</th><th>AMM (v2.0)</th></tr>
+          <tr><td>Entrata</td><td>Fissi YES o NO, aspetti risoluzione</td><td>Compri/vendi quote in qualsiasi momento</td></tr>
+          <tr><td>Prezzo</td><td>Determinato dal pool al momento</td><td>Curva continua x×y=k</td></tr>
+          <tr><td>Uscita</td><td>Solo alla risoluzione del mercato</td><td>Vendi quando vuoi, prezzo di mercato</td></tr>
+          <tr><td>Liquidità</td><td>Scommesse degli utenti</td><td>LP depositano e guadagnano fee di swap</td></tr>
+          <tr><td>Slippage</td><td>Nessuno (pool unico)</td><td>Dipende dalla liquidità disponibile</td></tr>
+        </table>
+
+        <div class="doc-h3">Come funzionerà l'AMM</div>
+        <div class="doc-box">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
+            <div class="flow-title">Liquidity Provider (LP)</div>
+            <div class="flow-desc">Gli LP depositano fondi nel pool AMM del mercato. In cambio ricevono LP token e guadagnano le fee di swap (0.3%) su ogni trade. La liquidità viene ritirata alla risoluzione.</div>
+          </div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
+            <div class="flow-title">Trader</div>
+            <div class="flow-desc">I trader comprano e vendono quote YES/NO come su un DEX. Il prezzo si muove lungo la curva CPMM (x×y=k). Possono entrare e uscire in qualsiasi momento senza aspettare la risoluzione.</div>
+          </div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
+            <div class="flow-title">Risoluzione</div>
+            <div class="flow-desc">Alla risoluzione le quote vincenti valgono 1 (100% del pool) e quelle perdenti 0. Gli LP ritirano la loro quota di liquidità + fee accumulate.</div>
+          </div></div>
+        </div>
+
+        <div class="doc-box doc-box-purple">
+          <div style="font-weight:700;margin-bottom:6px;font-size:.85rem">Perché è in roadmap e non ora</div>
+          <div class="doc-p" style="margin:0">L'AMM richiede un contratto completamente nuovo (non modificabile sull'attuale PredictionMarket), un audit specifico per la curva di prezzo, e un sistema di LP token. È una feature fondamentale ma complessa — la priorità attuale è consolidare il modello parimutuel e il mercato secondario.</div>
+        </div>
       </div>
 
     </div>
