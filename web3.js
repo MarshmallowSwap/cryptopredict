@@ -166,6 +166,7 @@ async function loadMarketsOnChain() {
         days_left:    daysLeft,
         status:       ["open","closed","resolved","cancelled"][m.status] || "open",
         outcome:      ["unresolved","YES","NO"][m.outcome],
+        currency:     ["ETH","USDC","USDT","CPRED"][Number(m.currency)] || "ETH",
         yield_info: {
           daily_yield:             (total * 0.048 / 365).toFixed(4),
           total_yield_estimated:   (total * 0.048 / 365 * daysLeft).toFixed(4),
