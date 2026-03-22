@@ -214,7 +214,7 @@ const CP = {
           </div>
         </div>
         <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-top:6px">
-          ⏱ Scade tra ${daysLeft}g · ${m.participant_count||0} partecipanti
+          ⏱ Ends in ${daysLeft}g · ${m.participant_count||0} partecipanti
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:7px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)">
           <div style="display:flex;align-items:center;gap:6px">
@@ -234,7 +234,7 @@ const CP = {
 
     const ethAmt = parseFloat(prompt(`Importo ETH da scommettere su ${side?'YES ▲':'NO ▼'}:\n(min 0.0001 ETH)`)||'0');
     if (!ethAmt || ethAmt < 0.0001) return;
-    if (ethAmt > WALLET.ethBalance) { alert('Saldo ETH insufficiente'); return; }
+    if (ethAmt > WALLET.ethBalance) { alert('Insufficient ETH balance'); return; }
 
     btn.disabled = true;
     btn.textContent = '...';
@@ -337,7 +337,7 @@ const CP = {
         <button onclick="closeModal('wallet-modal')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:32px;height:32px;cursor:pointer;color:#7a738f;font-size:16px;">✕</button>
 
         <div id="wm-connect-view">
-          <div style="font-size:1.1rem;font-weight:800;color:#f0ecff;margin-bottom:6px">Connetti il wallet</div>
+          <div style="font-size:1.1rem;font-weight:800;color:#f0ecff;margin-bottom:6px">Connect wallet</div>
           <div style="font-size:.8rem;color:#7a738f;margin-bottom:6px">Rete: <strong style="color:#00d4ff">Base Sepolia</strong> (testnet)</div>
           <div style="font-size:.73rem;color:#7a738f;margin-bottom:22px;padding:8px 10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:8px">
             🔗 I contratti sono live su Base Sepolia. Ti servirà ETH testnet gratuito da <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" style="color:#00d4ff">faucet.quicknode.com</a>
