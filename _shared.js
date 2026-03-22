@@ -130,9 +130,13 @@ const CP = {
     if (WALLET.address) {
       if (b) {
         // Mostra ETH con abbastanza decimali + CPRED se presente
-        var ethStr  = WALLET.ethBalance > 0 ? fmtEth(WALLET.ethBalance, 4)+' ETH' : '0 ETH';
+        var ethVal  = WALLET.ethBalance || 0;
+        var ethStr  = ethVal.toFixed(4) + ' ETH';
         var cpred   = WALLET.cpredBalance || 0;
-        var cpredStr = cpred > 0 ? ' · ' + (cpred >= 1000 ? (cpred/1000).toFixed(1)+'K' : cpred.toFixed(0)) + ' CPRED' : '';
+        var cpredFmt = cpred >= 1000000 ? (cpred/1000000).toFixed(1)+'M'
+                     : cpred >= 1000    ? (cpred/1000).toFixed(1)+'K'
+                     : cpred.toFixed(0);
+        var cpredStr = cpred > 0 ? ' · ' + cpredFmt + ' CPRED' : '';
         b.textContent = ethStr + cpredStr;
         b.style.display = 'block';
       }
