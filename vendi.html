@@ -5,175 +5,647 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css">
-</head><body data-page="vendi"><!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-track" id="ticker">
-    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <!-- duplicate for seamless loop -->
-    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
-  </div>
-</div>
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+.listing-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:10px;transition:border-color .2s;animation:fadeIn .2s ease}
+.listing-card:hover{border-color:var(--border2)}
+.listing-card.mine{border-color:rgba(124,58,237,.25);background:rgba(124,58,237,.04)}
+.side-yes{background:rgba(16,185,129,.12);color:#34d399;padding:2px 9px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
+.side-no{background:rgba(239,68,68,.12);color:#f87171;padding:2px 9px;border-radius:4px;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace}
+.cur-badge{padding:2px 8px;border-radius:4px;font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace}
+.tab-btn{padding:7px 18px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text3);font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.4);color:var(--purple3)}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1;pointer-events:all}
+.sell-panel{background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:16px;margin-bottom:10px}
+.info-box{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:.82rem;line-height:1.6;color:var(--text2)}
+</style>
+</head>
+<body data-page="vendi">
 
-<!-- NAV -->
+<div class="ticker-bar"><div class="ticker-track">
+  <span class="tick-live"><span class="tick-dot"></span>MERCATO SECONDARIO</span>
+  <span class="tick-item">Vendi le tue quote prima della scadenza</span>
+  <span class="tick-item">Fee vendita: <strong style="color:var(--green2)">0.5%</strong></span>
+  <span class="tick-live"><span class="tick-dot"></span>MERCATO SECONDARIO</span>
+</div></div>
+
 <nav class="main-nav">
   <a href="index.html" class="nav-brand">
     <div class="nav-brand-icon">🔮</div>
-    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">MERCATO SECONDARIO</div></div>
   </a>
   <div class="nav-links">
-    <a href="index.html" class="nav-link" data-page="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-    <a href="presale.html" class="nav-link" data-page="presale">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      <span>Presale</span>
-      <span class="badge"></span>
-    </a>
-    <a href="mercati.html" class="nav-link" data-page="mercati">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span>Mercati</span>
-    </a>
-    <a href="trading.html" class="nav-link" data-page="trading">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
-      <span>Trading</span>
-    </a>
-    <a href="vendi.html" class="nav-link" data-page="vendi">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      <span>Vendi Quote</span>
-    </a>
-    <a href="portfolio.html" class="nav-link" data-page="portfolio">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
-      <span>Portfolio</span>
-    </a>
-    <a href="staking.html" class="nav-link" data-page="staking">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>Staking</span>
-    </a>
-    <a href="crea.html" class="nav-link" data-page="crea">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span>Crea</span>
-    </a>
-    <a href="docs.html" class="nav-link" data-page="docs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Docs</span>
-    </a>
+    <a href="index.html"     class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="mercati.html"   class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="vendi.html"     class="nav-link" data-page="vendi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><span>Vendi Quote</span></a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
+    <a href="staking.html"   class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
+    <a href="docs.html"      class="nav-link" data-page="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Docs</span></a>
   </div>
   <div class="nav-right">
-    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
-    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
-    <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
+    <span class="nav-balance" id="nav-balance" style="display:none"></span>
+    <span class="nav-wallet"  id="nav-wallet"  style="display:none"></span>
+    <div class="nav-avatar"   id="nav-avatar"  style="display:none">👤</div>
     <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </nav>
 
-<!-- PRESALE BANNER -->
 <div class="presale-banner">
-  <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
-  <span class="pb-price">· $0.080</span>
-  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
-  <a href="presale.html" class="pb-btn">Compra CPRED →</a>
+  <span class="pb-live"><span class="tick-dot"></span>MERCATO SECONDARIO · Base Sepolia</span>
+  <span class="pb-price">· Fee 0.5%</span>
+  <span class="pb-timer" id="pb-countdown">—</span>
+  <a href="mercati.html" class="pb-btn">Vai ai Mercati →</a>
 </div>
+
 <div class="page-wrap">
-<div class="page-header">
-  <span class="page-tag">// Mercato secondario</span>
-  <div class="page-title">Vendi le tue Quote</div>
-  <div class="page-sub">Esci da una posizione prima della scadenza — vendi le tue quote ad altri utenti</div>
-</div>
-<div class="g2">
-  <div style="display:flex;flex-direction:column;gap:16px">
-    <!-- Posizioni vendibili -->
-    <div class="cp-card cp-card-accent">
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// LE TUE POSIZIONI</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="padding:14px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);cursor:pointer" onclick="selectPos(this,'btc')">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div style="font-weight:700;font-size:.88rem">₿ BTC supererà $100K?</div>
-            <span class="tag tag-green">YES</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.72rem">
-            <span>Stake: <strong>$200</strong></span>
-            <span>Valore attuale: <strong style="color:var(--green2)">$312</strong></span>
-            <span>Scade: <strong>12g</strong></span>
-          </div>
-        </div>
-        <div style="padding:14px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);cursor:pointer" onclick="selectPos(this,'sol')">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div style="font-weight:700;font-size:.88rem">◎ SOL ETF approvato?</div>
-            <span class="tag tag-green">YES</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.72rem">
-            <span>Stake: <strong>$300</strong></span>
-            <span>Valore attuale: <strong style="color:var(--green2)">$366</strong></span>
-            <span>Scade: <strong>90g</strong></span>
-          </div>
-        </div>
-        <div style="padding:14px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);cursor:pointer" onclick="selectPos(this,'eth')">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div style="font-weight:700;font-size:.88rem">Ξ ETH recupererà $3K?</div>
-            <span class="tag tag-red">NO</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.72rem">
-            <span>Stake: <strong>$140</strong></span>
-            <span>Valore attuale: <strong style="color:var(--green2)">$237</strong></span>
-            <span>Scade: <strong>5g</strong></span>
-          </div>
+  <div class="page-header">
+    <span class="page-tag">// Mercato Secondario</span>
+    <div class="page-title">Vendi Quote</div>
+    <div class="page-sub">Vendi le tue posizioni aperte ad altri utenti prima della scadenza del mercato</div>
+  </div>
+
+  <!-- Info box -->
+  <div class="info-box">
+    <strong style="color:var(--gold2)">Come funziona il mercato secondario:</strong>
+    Hai scommesso YES o NO su un mercato e vuoi incassare subito senza aspettare la risoluzione?
+    Metti in vendita la tua quota al prezzo che vuoi. Un altro utente la compra e diventa il nuovo titolare della posizione.
+    Fee di vendita: <strong>0.5%</strong> · Il contratto <span style="color:var(--purple3);font-family:'DM Mono',monospace">PositionMarket</span> gestisce tutto on-chain.
+    <div style="margin-top:8px;padding:8px 12px;background:rgba(245,158,11,.08);border-radius:6px;font-size:.75rem;color:var(--gold2)">
+      ⚠️ <strong>Coming soon</strong> — Il contratto PositionMarket sarà deployato nel prossimo redeploy.
+      La UI è pronta, il contratto è scritto e testato.
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="tab-btn active" id="tab-market"  onclick="switchTab('market')">📋 Listings attivi</button>
+    <button class="tab-btn"        id="tab-mine"    onclick="switchTab('mine')">👤 Le mie vendite</button>
+    <button class="tab-btn"        id="tab-sell"    onclick="switchTab('sell')">+ Vendi una quota</button>
+  </div>
+
+  <!-- PANEL: Listings attivi -->
+  <div id="panel-market">
+    <div id="listings-list">
+      <div style="text-align:center;padding:40px;color:var(--text3)">
+        <div style="font-size:2rem;margin-bottom:12px">🔄</div>
+        <div style="font-size:.9rem;font-weight:700;margin-bottom:8px">Contratto in deploy</div>
+        <div style="font-size:.8rem;margin-bottom:20px">Il PositionMarket sarà disponibile dopo il prossimo redeploy</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Vai ai Mercati</a>
+          <a href="portfolio.html" class="btn btn-ghost" style="font-size:.8rem">Vedi Portfolio</a>
         </div>
       </div>
     </div>
   </div>
-  <!-- Form vendita -->
-  <div class="cp-card cp-card-cyan">
-    <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// CONFIGURA VENDITA</div>
-    <div id="sell-form">
-      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px">
-        <div style="font-size:.82rem;color:var(--text3);margin-bottom:6px">Posizione selezionata:</div>
-        <div style="font-weight:700" id="sel-market">Seleziona una posizione</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3);margin-top:4px" id="sel-detail">—</div>
+
+  <!-- PANEL: Le mie vendite -->
+  <div id="panel-mine" style="display:none">
+    <div id="mine-list">
+      <div style="text-align:center;padding:30px;color:var(--text3)">
+        <span class="spin"></span> Connetti il wallet per vedere le tue vendite
       </div>
-      <label class="cp-label">Prezzo di vendita (USDC)</label>
-      <input type="number" class="cp-input" placeholder="280" id="sell-price" style="margin-bottom:8px">
-      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3);margin-bottom:16px">Valore di mercato: <strong style="color:var(--gold2)">$312</strong> · Fee piattaforma: 2%</div>
-      <label class="cp-label">Quantità quote da vendere</label>
-      <input type="range" min="10" max="100" value="100" class="cp-input" style="padding:4px;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.72rem;margin-bottom:16px">
-        <span>10%</span><span style="color:var(--purple3)">100%</span>
-      </div>
-      <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:8px;padding:12px;margin-bottom:16px">
-        <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px"><span style="color:var(--text3)">Riceverai:</span><span style="color:var(--green2);font-family:'DM Mono',monospace;font-weight:700">$274.56 USDC</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:.75rem"><span style="color:var(--text3)">Fee (2%)</span><span style="font-family:'DM Mono',monospace;color:var(--text3)">-$5.60</span></div>
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center">Metti in vendita</button>
     </div>
   </div>
+
+  <!-- PANEL: Vendi quota -->
+  <div id="panel-sell" style="display:none">
+
+    <!-- Step 1: scegli mercato -->
+    <div class="cp-card cp-card-accent" style="margin-bottom:14px">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:14px">// STEP 1 — SCEGLI IL MERCATO</div>
+
+      <div id="my-positions-list">
+        <div style="text-align:center;padding:20px;color:var(--text3)">
+          <span class="spin"></span> Caricamento posizioni...
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: imposta prezzo (appare dopo aver selezionato) -->
+    <div class="sell-panel" id="sell-form" style="display:none">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:14px">// STEP 2 — IMPOSTA IL PREZZO DI VENDITA</div>
+
+      <div id="sell-position-info" style="margin-bottom:14px"></div>
+
+      <label class="cp-label">Prezzo richiesto <span id="sell-cur-label" style="color:var(--cyan2)">(ETH)</span></label>
+      <div style="position:relative;margin-bottom:8px">
+        <input type="number" class="cp-input" id="sell-price" placeholder="0.0050" step="0.0001" min="0"
+               oninput="updateSellPreview()">
+        <span id="sell-cur-unit" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">ETH</span>
+      </div>
+
+      <!-- Suggerimenti prezzo -->
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="price-suggestions"></div>
+
+      <!-- Preview -->
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;margin-bottom:14px" id="sell-preview">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:.72rem;color:var(--text3)">Prezzo richiesto</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.78rem" id="prev-ask">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:.72rem;color:var(--text3)">Fee (0.5%)</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--red2)" id="prev-fee">—</span>
+        </div>
+        <div style="height:1px;background:var(--border);margin:6px 0"></div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:.75rem;font-weight:700">Riceverai</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:var(--green2)" id="prev-net">—</span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <button id="btn-list" onclick="listPosition()" class="btn btn-primary" style="flex:1;justify-content:center">
+          Metti in Vendita
+        </button>
+        <button onclick="cancelSellForm()" class="btn btn-ghost" style="font-size:.8rem">Annulla</button>
+      </div>
+
+      <div style="font-size:.65rem;color:var(--text3);text-align:center;margin-top:8px">
+        Coming soon · Contratto PositionMarket in deploy
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <div style="flex:1">
+    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;display:none"></a>
+  </div>
+  <button onclick="document.getElementById('toast').classList.remove('show')"
+    style="background:none;border:none;color:var(--text3);cursor:pointer">✕</button>
 </div>
-<script>
-function selectPos(el,id){
-  document.querySelectorAll('[onclick*=selectPos]').forEach(e=>e.style.borderColor='var(--border)');
-  el.style.borderColor='rgba(124,58,237,.4)';
-  const markets={btc:['₿ BTC supererà $100K?','YES · Stake $200 · Valore $312'],sol:['◎ SOL ETF approvato?','YES · Stake $300 · Valore $366'],eth:['Ξ ETH recupererà $3K?','NO · Stake $140 · Valore $237']};
-  document.getElementById('sel-market').textContent=markets[id][0];
-  document.getElementById('sel-detail').textContent=markets[id][1];
-}
-</script>
-</div><script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <script src="web3.js"></script>
-<script src="_shared.js"></script></body></html>
+<script src="_shared.js"></script>
+<script>
+var POSITION_MARKET_ABI = [
+  "function listingCount() view returns (uint256)",
+  "function listings(uint256) view returns (uint256 listingId, address seller, uint256 marketId, bool side, uint256 amount, uint256 askPrice, uint8 currency, bool active, uint256 listedAt)",
+  "function getActiveListings(uint256 limit) view returns (tuple(uint256 listingId,address seller,uint256 marketId,bool side,uint256 amount,uint256 askPrice,uint8 currency,bool active,uint256 listedAt)[])",
+  "function getListingsBySeller(address seller) view returns (tuple(uint256 listingId,address seller,uint256 marketId,bool side,uint256 amount,uint256 askPrice,uint8 currency,bool active,uint256 listedAt)[])",
+  "function listPosition(uint256 marketId, uint256 askPrice) returns (uint256)",
+  "function buyPosition(uint256 listingId) payable",
+  "function cancelListing(uint256 listingId)"
+];
+
+var MKT_ABI_VENDI = [
+  "function marketCount() view returns (uint256)",
+  "function getMarket(uint256 id) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver,uint8 currency))",
+  "function getPosition(uint256 marketId,address user) view returns (tuple(uint256 marketId,bool side,uint256 amount,bool claimed))"
+];
+
+var CUR_NAMES   = ["ETH","USDC","USDT","CPRED"];
+var CUR_COLORS  = {ETH:"#00d4ff",USDC:"#2775ca",USDT:"#26a17b",CPRED:"#fbbf24"};
+var CUR_PRICES  = {ETH:2000,USDC:1,USDT:1,CPRED:0.05};
+var CUR_DEC     = [18,6,6,18];
+
+var selectedPosition = null; // {marketId, side, amount, currency, question}
+var currentTab = "market";
+
+// ── TABS ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ["market","mine","sell"].forEach(function(t) {
+    document.getElementById("tab-"+t).className   = "tab-btn" + (t===tab?" active":"");
+    document.getElementById("panel-"+t).style.display = t===tab ? "block" : "none";
+  });
+  if (tab === "sell" && WALLET.address) loadMyPositions();
+  if (tab === "mine" && WALLET.address) loadMyListings();
+  if (tab === "market") loadActiveListings();
+}
+
+// ── LOAD LISTINGS ATTIVI ─────────────────────────────────────────
+async function loadActiveListings() {
+  var el = document.getElementById("listings-list");
+  if (!W3.CONTRACTS.positionMarket) {
+    el.innerHTML = buildComingSoon();
+    return;
+  }
+  el.innerHTML = '<div style="text-align:center;padding:20px"><span class="spin"></span></div>';
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.positionMarket, POSITION_MARKET_ABI, provider);
+    var listings = await c.getActiveListings(50);
+    if (!listings.length) {
+      el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">Nessun listing attivo al momento</div>';
+      return;
+    }
+    el.innerHTML = "";
+    for (var i = 0; i < listings.length; i++) {
+      el.appendChild(await buildListingCard(listings[i], false));
+    }
+  } catch(e) {
+    el.innerHTML = buildComingSoon();
+  }
+}
+
+// ── LOAD LE MIE LISTINGS ──────────────────────────────────────────
+async function loadMyListings() {
+  var el = document.getElementById("mine-list");
+  if (!WALLET.address) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3)">Connetti il wallet</div>';
+    return;
+  }
+  if (!W3.CONTRACTS.positionMarket) {
+    el.innerHTML = buildComingSoon();
+    return;
+  }
+  el.innerHTML = '<div style="text-align:center;padding:20px"><span class="spin"></span></div>';
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.positionMarket, POSITION_MARKET_ABI, provider);
+    var listings = await c.getListingsBySeller(WALLET.address);
+    var active = listings.filter(function(l){ return l.active; });
+    if (!active.length) {
+      el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">Nessuna vendita attiva.<br><button onclick="switchTab(\'sell\')" class="btn btn-primary" style="margin-top:12px;font-size:.8rem">Vendi una quota</button></div>';
+      return;
+    }
+    el.innerHTML = "";
+    for (var i = 0; i < active.length; i++) {
+      el.appendChild(await buildListingCard(active[i], true));
+    }
+  } catch(e) {
+    el.innerHTML = buildComingSoon();
+  }
+}
+
+// ── LOAD LE MIE POSIZIONI (per vendita) ───────────────────────────
+async function loadMyPositions() {
+  var el = document.getElementById("my-positions-list");
+  if (!WALLET.address) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:.82rem">Connetti il wallet per vedere le tue posizioni.<button onclick="connectWallet()" class="btn btn-ghost" style="margin-left:10px;font-size:.75rem">Connetti</button></div>';
+    return;
+  }
+  el.innerHTML = '<div style="text-align:center;padding:16px"><span class="spin"></span></div>';
+  try {
+    var provider = await W3.getProvider();
+    var mktC = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_VENDI, provider);
+    var count = Number(await mktC.marketCount());
+    var positions = [];
+    for (var i = 0; i < count; i++) {
+      try {
+        var pos = await mktC.getPosition(i, WALLET.address);
+        if (pos.amount > 0n && !pos.claimed) {
+          var mkt = await mktC.getMarket(i);
+          if (Number(mkt.status) === 0) { // solo mercati aperti
+            positions.push({id:i, pos:pos, mkt:mkt});
+          }
+        }
+      } catch(e2) {}
+    }
+    if (!positions.length) {
+      el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3)">Nessuna posizione aperta su mercati attivi.<br><a href="mercati.html" class="btn btn-primary" style="margin-top:12px;font-size:.8rem">Vai ai Mercati</a></div>';
+      return;
+    }
+    el.innerHTML = "";
+    positions.forEach(function(p) {
+      var curIdx  = Number(p.mkt.currency || 0);
+      var curName = CUR_NAMES[curIdx] || "ETH";
+      var decimals = CUR_DEC[curIdx];
+      var amt = parseFloat(ethers.formatUnits(p.pos.amount, decimals));
+      var side = p.pos.side;
+      var daysLeft = Math.max(0, Math.ceil((Number(p.mkt.expiresAt) - Date.now()/1000) / 86400));
+      var usdVal = amt * (CUR_PRICES[curName] || 1);
+
+      var card = document.createElement("div");
+      card.className = "listing-card";
+      card.style.cursor = "pointer";
+
+      var row1 = document.createElement("div");
+      row1.style.cssText = "display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap";
+      var sideBadge = document.createElement("span");
+      sideBadge.className = side ? "side-yes" : "side-no";
+      sideBadge.textContent = side ? "YES" : "NO";
+      var curBadge = document.createElement("span");
+      curBadge.className = "cur-badge";
+      curBadge.style.background = "rgba(255,255,255,.06)";
+      curBadge.style.color = CUR_COLORS[curName] || "#fff";
+      curBadge.textContent = curName;
+      var timeEl = document.createElement("span");
+      timeEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-left:auto";
+      timeEl.textContent = daysLeft + "g rimasti";
+      row1.appendChild(sideBadge);
+      row1.appendChild(curBadge);
+      row1.appendChild(timeEl);
+      card.appendChild(row1);
+
+      var q = document.createElement("div");
+      q.style.cssText = "font-size:.88rem;font-weight:700;margin-bottom:8px;line-height:1.4";
+      q.textContent = p.mkt.question;
+      card.appendChild(q);
+
+      var row2 = document.createElement("div");
+      row2.style.cssText = "display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px";
+      var amtEl = document.createElement("div");
+      amtEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.78rem;color:var(--gold2)";
+      amtEl.textContent = "Stake: " + amt.toFixed(curIdx===1||curIdx===2?2:4) + " " + curName + " (~$" + usdVal.toFixed(2) + ")";
+      var sellBtn = document.createElement("button");
+      sellBtn.className = "btn btn-primary";
+      sellBtn.style.cssText = "font-size:.75rem;padding:6px 16px";
+      sellBtn.textContent = "Vendi questa quota →";
+      sellBtn.onclick = (function(posData){ return function(e){ e.stopPropagation(); selectPosition(posData); }; })({
+        marketId: p.id, side: side, amount: amt,
+        currency: curName, curIdx: curIdx, decimals: decimals,
+        question: p.mkt.question, daysLeft: daysLeft, usdVal: usdVal
+      });
+      row2.appendChild(amtEl);
+      row2.appendChild(sellBtn);
+      card.appendChild(row2);
+      el.appendChild(card);
+    });
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red2);font-size:.82rem">Errore: '+e.message+'</div>';
+  }
+}
+
+// ── SELECT POSITION ───────────────────────────────────────────────
+function selectPosition(pos) {
+  selectedPosition = pos;
+  var form = document.getElementById("sell-form");
+  form.style.display = "block";
+  form.scrollIntoView({behavior:"smooth",block:"nearest"});
+
+  // Aggiorna label valuta
+  document.getElementById("sell-cur-label").textContent = "("+pos.currency+")";
+  document.getElementById("sell-cur-unit").textContent   = pos.currency;
+  document.getElementById("sell-price").placeholder     = pos.curIdx===1||pos.curIdx===2 ? "10.00" : "0.005";
+
+  // Info posizione
+  var info = document.getElementById("sell-position-info");
+  info.innerHTML = "";
+  var infoCard = document.createElement("div");
+  infoCard.style.cssText = "background:rgba(255,255,255,.03);border-radius:8px;padding:10px 14px;margin-bottom:8px";
+  infoCard.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">' +
+    '<span class="'+(pos.side?"side-yes":"side-no")+'">'+(pos.side?"YES":"NO")+'</span>' +
+    '<span style="font-size:.82rem;font-weight:700">'+pos.question.slice(0,60)+(pos.question.length>60?"...":"")+'</span>' +
+    '</div>' +
+    '<div style="font-family:\'DM Mono\',monospace;font-size:.7rem;color:var(--text3)">' +
+    'Tuo stake: <strong style="color:var(--gold2)">'+pos.amount.toFixed(pos.curIdx===1||pos.curIdx===2?2:4)+' '+pos.currency+'</strong> · ' +
+    '~$'+pos.usdVal.toFixed(2)+' · '+pos.daysLeft+'g alla scadenza' +
+    '</div>';
+  info.appendChild(infoCard);
+
+  // Suggerimenti prezzo
+  var sugg = document.getElementById("price-suggestions");
+  sugg.innerHTML = "";
+  var pcts = [0.5, 0.75, 1.0, 1.25, 1.5];
+  var labels = ["-50%", "-25%", "Pari", "+25%", "+50%"];
+  pcts.forEach(function(p, i) {
+    var price = (pos.amount * p).toFixed(pos.curIdx===1||pos.curIdx===2?2:5);
+    var btn = document.createElement("button");
+    btn.className = "btn btn-ghost";
+    btn.style.cssText = "font-size:.65rem;padding:3px 10px";
+    btn.textContent = labels[i] + " (" + price + ")";
+    btn.onclick = (function(v){ return function(){ document.getElementById("sell-price").value=v; updateSellPreview(); }; })(price);
+    sugg.appendChild(btn);
+  });
+
+  updateSellPreview();
+}
+
+function cancelSellForm() {
+  selectedPosition = null;
+  document.getElementById("sell-form").style.display = "none";
+  document.getElementById("sell-price").value = "";
+}
+
+function updateSellPreview() {
+  if (!selectedPosition) return;
+  var price = parseFloat(document.getElementById("sell-price").value) || 0;
+  var cur   = selectedPosition.currency;
+  var fee   = price * 0.005;
+  var net   = price - fee;
+  document.getElementById("prev-ask").textContent = price > 0 ? price.toFixed(selectedPosition.curIdx===1||selectedPosition.curIdx===2?2:5)+" "+cur : "—";
+  document.getElementById("prev-fee").textContent = price > 0 ? fee.toFixed(selectedPosition.curIdx===1||selectedPosition.curIdx===2?4:6)+" "+cur : "—";
+  document.getElementById("prev-net").textContent = price > 0 ? net.toFixed(selectedPosition.curIdx===1||selectedPosition.curIdx===2?2:5)+" "+cur : "—";
+}
+
+// ── LIST POSITION ─────────────────────────────────────────────────
+async function listPosition() {
+  if (!W3.CONTRACTS.positionMarket) {
+    showToast("⚠️", "PositionMarket non ancora deployato — coming soon!");
+    return;
+  }
+  if (!selectedPosition) return;
+  var price = parseFloat(document.getElementById("sell-price").value) || 0;
+  if (price <= 0) { showToast("❌", "Inserisci un prezzo valido"); return; }
+
+  var btn = document.getElementById("btn-list");
+  btn.disabled = true; btn.textContent = "...";
+  try {
+    var ok = await W3.ensureNetwork();
+    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+    var signer = await W3.getSigner();
+    var c = new ethers.Contract(W3.CONTRACTS.positionMarket, POSITION_MARKET_ABI, signer);
+    var askWei = ethers.parseUnits(price.toString(), selectedPosition.decimals);
+    var tx = await c.listPosition(selectedPosition.marketId, askWei);
+    btn.textContent = "Attesa...";
+    var rec = await tx.wait();
+    showToast("✅", "Quota messa in vendita!", "https://sepolia.basescan.org/tx/"+rec.hash);
+    cancelSellForm();
+    await loadMyListings();
+    switchTab("mine");
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+    btn.disabled = false; btn.textContent = "Metti in Vendita";
+  }
+}
+
+// ── BUY POSITION ─────────────────────────────────────────────────
+async function buyListing(listingId, askPrice, currency, curIdx) {
+  if (!W3.CONTRACTS.positionMarket) {
+    showToast("⚠️", "PositionMarket non ancora deployato — coming soon!");
+    return;
+  }
+  if (!WALLET.address) { openModal("wallet-modal"); return; }
+  try {
+    var ok = await W3.ensureNetwork();
+    if (!ok) throw new Error("Cambia rete a Base Sepolia");
+    var signer = await W3.getSigner();
+    var c = new ethers.Contract(W3.CONTRACTS.positionMarket, POSITION_MARKET_ABI, signer);
+    var askWei = ethers.parseUnits(askPrice.toString(), CUR_DEC[curIdx]);
+
+    var tx;
+    if (curIdx === 0) {
+      tx = await c.buyPosition(listingId, {value: askWei});
+    } else {
+      // ERC20: approve prima
+      var tokenAddr = curIdx===1 ? W3.CONTRACTS.mockUsdc : curIdx===2 ? W3.CONTRACTS.mockUsdt : W3.CONTRACTS.token;
+      var tokenC = new ethers.Contract(tokenAddr, ["function approve(address,uint256) returns (bool)"], signer);
+      var appTx = await tokenC.approve(W3.CONTRACTS.positionMarket, askWei);
+      await appTx.wait();
+      tx = await c.buyPosition(listingId, {value: 0n});
+    }
+    var rec = await tx.wait();
+    showToast("✅", "Quota acquistata!", "https://sepolia.basescan.org/tx/"+rec.hash);
+    await loadActiveListings();
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+  }
+}
+
+// ── CANCEL LISTING ────────────────────────────────────────────────
+async function cancelListing(listingId, btn) {
+  if (!W3.CONTRACTS.positionMarket) {
+    showToast("⚠️", "PositionMarket non ancora deployato — coming soon!");
+    return;
+  }
+  btn.disabled = true; btn.textContent = "...";
+  try {
+    var signer = await W3.getSigner();
+    var c = new ethers.Contract(W3.CONTRACTS.positionMarket, POSITION_MARKET_ABI, signer);
+    var tx = await c.cancelListing(listingId);
+    await tx.wait();
+    showToast("✅", "Listing annullata — posizione restituita");
+    await loadMyListings();
+  } catch(e) {
+    showToast("❌", e.reason || e.message || "Errore");
+    btn.disabled = false; btn.textContent = "Annulla";
+  }
+}
+
+// ── BUILD LISTING CARD ────────────────────────────────────────────
+async function buildListingCard(l, isMine) {
+  var card = document.createElement("div");
+  card.className = "listing-card" + (isMine ? " mine" : "");
+
+  var curIdx  = Number(l.currency);
+  var curName = CUR_NAMES[curIdx] || "ETH";
+  var decimals = CUR_DEC[curIdx];
+  var askPrice = parseFloat(ethers.formatUnits(l.askPrice, decimals));
+  var amt      = parseFloat(ethers.formatUnits(l.amount,   decimals));
+  var fee      = askPrice * 0.005;
+  var usdVal   = askPrice * (CUR_PRICES[curName] || 1);
+  var listedAgo = Math.round((Date.now()/1000 - Number(l.listedAt)) / 60);
+
+  // Carica domanda del mercato
+  var question = "Mercato #"+Number(l.marketId);
+  try {
+    var provider = await W3.getProvider();
+    var mktC = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_VENDI, provider);
+    var mkt = await mktC.getMarket(Number(l.marketId));
+    question = mkt.question;
+  } catch(e) {}
+
+  var hdr = document.createElement("div");
+  hdr.style.cssText = "display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap";
+
+  var sideBadge = document.createElement("span");
+  sideBadge.className = l.side ? "side-yes" : "side-no";
+  sideBadge.textContent = l.side ? "YES" : "NO";
+
+  var curBadge = document.createElement("span");
+  curBadge.className = "cur-badge";
+  curBadge.style.background = "rgba(255,255,255,.06)";
+  curBadge.style.color = CUR_COLORS[curName] || "#fff";
+  curBadge.textContent = curName;
+
+  var idBadge = document.createElement("span");
+  idBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);background:rgba(255,255,255,.04);padding:1px 7px;border-radius:4px";
+  idBadge.textContent = "#"+Number(l.listingId);
+
+  var timeEl = document.createElement("span");
+  timeEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);margin-left:auto";
+  timeEl.textContent = listedAgo < 60 ? listedAgo+"min fa" : Math.round(listedAgo/60)+"h fa";
+
+  hdr.appendChild(sideBadge);
+  hdr.appendChild(curBadge);
+  hdr.appendChild(idBadge);
+  hdr.appendChild(timeEl);
+  card.appendChild(hdr);
+
+  var q = document.createElement("div");
+  q.style.cssText = "font-size:.88rem;font-weight:700;margin-bottom:10px;line-height:1.4";
+  q.textContent = question;
+  card.appendChild(q);
+
+  var stats = document.createElement("div");
+  stats.style.cssText = "display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap";
+
+  function statEl(label, val, color) {
+    var d = document.createElement("div");
+    d.innerHTML = '<div style="font-family:\'DM Mono\',monospace;font-size:.72rem;font-weight:700;color:'+color+'">'+val+'</div>' +
+                  '<div style="font-family:\'DM Mono\',monospace;font-size:.58rem;color:var(--text3)">'+label+'</div>';
+    return d;
+  }
+
+  stats.appendChild(statEl("Stake posizione", amt.toFixed(decimals===6?2:4)+" "+curName, "var(--text3)"));
+  stats.appendChild(statEl("Prezzo richiesto", askPrice.toFixed(decimals===6?2:5)+" "+curName, "var(--gold2)"));
+  stats.appendChild(statEl("Valore USD", "~$"+usdVal.toFixed(2), "var(--cyan2)"));
+  stats.appendChild(statEl("Seller", l.seller.slice(0,6)+"..."+l.seller.slice(-4), "var(--purple3)"));
+  card.appendChild(stats);
+
+  var actions = document.createElement("div");
+  actions.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+
+  if (isMine) {
+    var cancelBtn = document.createElement("button");
+    cancelBtn.className = "btn btn-ghost";
+    cancelBtn.style.fontSize = ".78rem";
+    cancelBtn.textContent = "Annulla listing";
+    cancelBtn.onclick = (function(id, b){ return function(){ cancelListing(id, b); }; })(Number(l.listingId), cancelBtn);
+    actions.appendChild(cancelBtn);
+    var info = document.createElement("span");
+    info.style.cssText = "font-size:.72rem;color:var(--text3);align-self:center;margin-left:4px";
+    info.textContent = "Riceverai: "+(askPrice-fee).toFixed(decimals===6?2:5)+" "+curName+" (dopo fee 0.5%)";
+    actions.appendChild(info);
+  } else if (!isMine && WALLET.address !== l.seller) {
+    var buyBtn = document.createElement("button");
+    buyBtn.className = "btn btn-primary";
+    buyBtn.style.cssText = "font-size:.78rem;padding:7px 18px";
+    buyBtn.textContent = "Compra quota · "+askPrice.toFixed(decimals===6?2:5)+" "+curName;
+    buyBtn.onclick = (function(id, price, cur, idx){ return function(){ buyListing(id, price, cur, idx); }; })(Number(l.listingId), askPrice, curName, curIdx);
+    actions.appendChild(buyBtn);
+    var feeEl = document.createElement("span");
+    feeEl.style.cssText = "font-size:.65rem;color:var(--text3);align-self:center";
+    feeEl.textContent = "Fee: "+fee.toFixed(decimals===6?4:6)+" "+curName;
+    actions.appendChild(feeEl);
+  }
+
+  card.appendChild(actions);
+  return card;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function buildComingSoon() {
+  return '<div style="text-align:center;padding:40px;color:var(--text3)">' +
+    '<div style="font-size:2rem;margin-bottom:12px">🔄</div>' +
+    '<div style="font-size:.9rem;font-weight:700;margin-bottom:8px">Contratto PositionMarket in deploy</div>' +
+    '<div style="font-size:.78rem;margin-bottom:20px">Disponibile dopo il prossimo redeploy dei contratti</div>' +
+    '<a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Vai ai Mercati</a>' +
+    '</div>';
+}
+
+function showToast(icon, msg, link) {
+  document.getElementById("toast-icon").textContent = icon;
+  document.getElementById("toast-msg").textContent  = msg;
+  var l = document.getElementById("toast-link");
+  if (link) { l.href=link; l.textContent="Vedi su BaseScan"; l.style.display="block"; }
+  else l.style.display="none";
+  var t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 7000);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+CP.ready.then(async function(state) {
+  loadActiveListings();
+  var orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() {
+    await orig();
+    if (currentTab === "sell")  loadMyPositions();
+    if (currentTab === "mine")  loadMyListings();
+  };
+  if (state.address && currentTab === "sell") loadMyPositions();
+});
+</script>
+</body></html>
