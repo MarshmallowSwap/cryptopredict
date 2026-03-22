@@ -30,8 +30,8 @@
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
     <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
     <span class="tick-item"><span class="sym">CPRED</span> <span id="tick-cpred-price">caricamento...</span></span>
-    <span class="tick-item">Presale: <strong id="tick-pct" style="color:var(--gold2)">—%</strong> venduto</span>
-    <span class="tick-item">Raccolto: <strong id="tick-raised" style="color:var(--green2)">— ETH</strong></span>
+    <span class="tick-item">Presale: <strong id="tick-pct" style="color:var(--gold2)">—%</strong> sold</span>
+    <span class="tick-item">Raised: <strong id="tick-raised" style="color:var(--green2)">— ETH</strong></span>
     <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
     <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
     <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
@@ -70,7 +70,7 @@
   <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE <span id="banner-stage">1</span></span>
   <span class="pb-price">· <span id="banner-price">caricamento...</span></span>
   <span class="pb-timer" id="pb-countdown">—</span>
-  <a href="#buy" class="pb-btn">Compra CPRED →</a>
+  <a href="#buy" class="pb-btn">Buy CPRED →</a>
 </div>
 
 <div class="page-wrap">
@@ -91,7 +91,7 @@
       <!-- Stage price header -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
         <div>
-          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:4px">STAGE <span id="ps-stage-num">—</span> · PREZZO ON-CHAIN</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:4px">STAGE <span id="ps-stage-num">—</span> · PRICE ON-CHAIN</div>
           <div style="font-size:2.2rem;font-weight:800;color:var(--gold2)" id="ps-price">
             <span class="ps-loading"><span class="ps-spin"></span></span>
           </div>
@@ -114,22 +114,22 @@
           <div class="cp-bar-fill gold" id="ps-bar" style="width:0%;transition:width 1s ease"></div>
         </div>
         <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:6px">
-          <span id="ps-pct-label">0% completato</span>
-          <span>Raccolto: <strong id="ps-raised" style="color:var(--green2)">— ETH</strong></span>
+          <span id="ps-pct-label">0% completed</span>
+          <span>Raised: <strong id="ps-raised" style="color:var(--green2)">— ETH</strong></span>
         </div>
       </div>
 
       <!-- Buy form -->
       <!-- Saldo ETH live -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <label class="cp-label" style="margin-bottom:0">Importo ETH</label>
+        <label class="cp-label" style="margin-bottom:0">ETH Amount</label>
         <div id="eth-balance-row" style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3)">
-          Saldo: <span id="eth-balance-val" style="color:var(--cyan2)">—</span>
+          Balance: <span id="eth-balance-val" style="color:var(--cyan2)">—</span>
           <button onclick="setEth(parseFloat(document.getElementById('eth-balance-val').textContent)||0)"
             style="margin-left:6px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);border-radius:4px;padding:1px 7px;cursor:pointer;color:var(--cyan2);font-size:.65rem;font-family:'DM Mono',monospace">MAX</button>
         </div>
       </div>
-      <label class="cp-label" style="display:none">Importo ETH</label>
+      <label class="cp-label" style="display:none">ETH Amount</label>
       <div style="position:relative;margin-bottom:10px">
         <input type="number" class="cp-input" placeholder="0.01" id="buy-eth" step="0.001" min="0.001"
           oninput="calcCpred(this.value)" style="padding-right:54px">
@@ -145,11 +145,11 @@
       <!-- Preview -->
       <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:16px">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">Riceverai</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">You will receive</span>
           <span style="font-family:'DM Mono',monospace;font-size:.88rem;font-weight:700;color:var(--gold2)" id="cpred-out">—</span>
         </div>
         <div style="display:flex;justify-content:space-between">
-          <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3)">Valore al listing</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3)">Value at listing</span>
           <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--green2)" id="listing-val">—</span>
         </div>
       </div>
@@ -162,7 +162,7 @@
 
       <button id="buy-btn" onclick="buyPresale()" class="btn btn-primary"
         style="width:100%;justify-content:center;font-size:1rem;padding:13px;background:linear-gradient(135deg,var(--gold2),#ff9500);color:#000">
-        💎 Compra CPRED
+        💎 Buy CPRED
       </button>
       <div style="font-size:.7rem;color:var(--text3);text-align:center;margin-top:10px">
         On-chain · Base Sepolia · Contratto auditato ·
@@ -314,7 +314,7 @@ async function loadPresalePage() {
     document.getElementById('ps-sold').textContent = sold.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
     document.getElementById('ps-alloc').textContent = allocation.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED';
     document.getElementById('ps-bar').style.width = pctSold + '%';
-    document.getElementById('ps-pct-label').textContent = `${pctSold}% completato`;
+    document.getElementById('ps-pct-label').textContent = `${pctSold}% completed`;
     document.getElementById('ps-raised').textContent = totalRaisedEth.toFixed(4) + ' ETH';
 
     // Ticker
@@ -344,7 +344,7 @@ async function loadPresalePage() {
           </div>
           <div style="text-align:right">
             <div style="color:${isCurrent?'var(--gold2)':'var(--text3)'};font-weight:700">$${price.toFixed(3)}</div>
-            <div style="font-size:.7rem;color:var(--text3)">${isCurrent ? pct+'% venduto' : (isDone ? '100%' : 'In arrivo')}</div>
+            <div style="font-size:.7rem;color:var(--text3)">${isCurrent ? pct+'% sold' : (isDone ? '100%' : 'Coming soon')}</div>
           </div>
         </div>`;
     }
@@ -412,7 +412,7 @@ async function buyPresale() {
 
   const btn = document.getElementById('buy-btn');
   btn.disabled = true;
-  btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px"></span>Transazione in corso...';
+  btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px"></span>Transaction in progress...';
 
   try {
     const result = await W3.buyPresaleTokens(eth);
@@ -426,7 +426,7 @@ async function buyPresale() {
     showToast('❌', e.message || 'Transazione fallita', null);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '💎 Compra CPRED';
+    btn.innerHTML = '💎 Buy CPRED';
   }
 }
 
