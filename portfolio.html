@@ -68,9 +68,9 @@
 
 <div class="page-wrap">
   <div class="page-header">
-    <span class="page-tag">// Il tuo conto — On-Chain</span>
+    <span class="page-tag">// Your Account — On-Chain</span>
     <div class="page-title">Portfolio</div>
-    <div class="page-sub">Dati live da Base Sepolia · <a id="basescan-link" href="https://sepolia.basescan.org" target="_blank" style="color:var(--purple3);font-size:.75rem">View on BaseScan →</a></div>
+    <div class="page-sub">Live data from Base Sepolia · <a id="basescan-link" href="https://sepolia.basescan.org" target="_blank" style="color:var(--purple3);font-size:.75rem">View on BaseScan →</a></div>
   </div>
 
   <!-- No wallet -->
@@ -94,19 +94,19 @@
         <span class="stat-change">Base Sepolia</span>
       </div>
       <div class="stat-card cp-card-gold">
-        <div class="stat-label">CPRED Totali</div>
+        <div class="stat-label">Total CPRED</div>
         <div class="stat-val" id="stat-cpred" style="color:var(--gold2)">—</div>
         <span class="stat-change up" id="stat-cpred-sub">—</span>
       </div>
       <div class="stat-card cp-card-accent">
-        <div class="stat-label">CPRED in Staking</div>
+        <div class="stat-label">Staked CPRED</div>
         <div class="stat-val" id="stat-staked" style="color:var(--purple3)">—</div>
         <span class="stat-change" id="stat-staked-sub">—</span>
       </div>
       <div class="stat-card cp-card-cyan">
         <div class="stat-label">Staking Rewards</div>
         <div class="stat-val" id="stat-reward" style="color:var(--cyan2)">—</div>
-        <span class="stat-change">CPRED accumulati</span>
+        <span class="stat-change">Accumulated CPRED</span>
       </div>
       <div class="stat-card">
         <div class="stat-label">USDC</div>
@@ -124,15 +124,15 @@
 
       <!-- Asset on-chain -->
       <div class="cp-card cp-card-accent">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// ASSET ON-CHAIN</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// ON-CHAIN ASSETS</div>
         <div id="assets-list">
           <div style="text-align:center;padding:20px"><span class="spin"></span></div>
         </div>
         <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
           <a href="https://faucet.quicknode.com/base/sepolia" target="_blank"
-             class="btn btn-ghost" style="font-size:.75rem">Faucet ETH</a>
-          <a href="presale.html" class="btn btn-gold" style="font-size:.75rem">Compra CPRED</a>
-          <a href="faucet.html" class="btn btn-ghost" style="font-size:.75rem">Faucet USDC/USDT</a>
+             class="btn btn-ghost" style="font-size:.75rem">ETH Faucet</a>
+          <a href="presale.html" class="btn btn-gold" style="font-size:.75rem">Buy CPRED</a>
+          <a href="faucet.html" class="btn btn-ghost" style="font-size:.75rem">USDC/USDT Faucet</a>
           <a href="staking.html" class="btn btn-ghost" style="font-size:.75rem">Staking</a>
         </div>
       </div>
@@ -142,29 +142,29 @@
 
         <!-- Staking rewards claim -->
         <div class="cp-card cp-card-cyan">
-          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// STAKING REWARDS PRESALE</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// PRESALE STAKING REWARDS</div>
           <div style="font-size:1.4rem;font-weight:800;color:var(--green2);margin-bottom:4px" id="reward-big">— CPRED</div>
-          <div style="font-size:.75rem;color:var(--text3);margin-bottom:12px">da tutti i pool attivi</div>
+          <div style="font-size:.75rem;color:var(--text3);margin-bottom:12px">from all active pools</div>
           <button id="claim-btn" onclick="doClaim()" class="btn btn-up" style="width:100%;justify-content:center;font-size:.85rem">
-            ⚡ Ritira Rewards
+            ⚡ Claim Rewards
           </button>
           <a href="staking.html" style="display:block;text-align:center;margin-top:8px;font-size:.72rem;color:var(--purple3)">
-            Gestisci staking →
+            Manage staking →
           </a>
         </div>
 
         <!-- Azioni rapide -->
         <div class="cp-card cp-card-gold">
-          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// AZIONI RAPIDE</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// QUICK ACTIONS</div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <a href="staking.html" class="btn btn-gold" style="justify-content:space-between">
               <span>🔒 Staking Presale</span><span style="font-size:.75rem;opacity:.7">→</span>
             </a>
             <a href="mercati.html" class="btn btn-up" style="justify-content:space-between">
-              <span>📊 Esplora Mercati</span><span style="font-size:.75rem;opacity:.7">→</span>
+              <span>📊 Explore Markets</span><span style="font-size:.75rem;opacity:.7">→</span>
             </a>
             <a href="presale.html" class="btn btn-ghost" style="justify-content:space-between">
-              <span>💎 Compra CPRED</span><span style="font-size:.75rem;opacity:.7">→</span>
+              <span>💎 Buy CPRED</span><span style="font-size:.75rem;opacity:.7">→</span>
             </a>
           </div>
         </div>
@@ -175,7 +175,7 @@
     <div class="cp-card cp-card-accent" style="margin-bottom:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3)">// MARKET POSITIONS — ON-CHAIN</div>
-        <a href="mercati.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 12px">+ Nuova →</a>
+        <a href="mercati.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 12px">+ New →</a>
       </div>
       <div id="positions-list">
         <div style="text-align:center;padding:20px"><span class="spin"></span></div>
@@ -184,7 +184,7 @@
 
     <!-- Staking presale posizioni -->
     <div class="cp-card" style="margin-bottom:20px">
-      <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// STAKING PRESALE — POSIZIONI ATTIVE</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// PRESALE STAKING — ACTIVE POSITIONS</div>
       <div id="staking-list">
         <div style="text-align:center;padding:16px"><span class="spin"></span></div>
       </div>
@@ -208,7 +208,7 @@
 <script src="web3.js"></script>
 <script src="_shared.js"></script>
 <script>
-const POOL_NAMES  = ['Flessibile', '30 Giorni', '90 Giorni'];
+const POOL_NAMES  = ['Flexible', '30 Days', '90 Days'];
 const POOL_COLORS = ['#a855f7', '#06b6d4', '#f59e0b'];
 const POOL_APY    = [12, 20, 28];
 
@@ -281,9 +281,9 @@ async function loadPortfolio() {
       { name: 'USDT', sub: 'Mock testnet', qty: usdtBal.toLocaleString(), val: '$'+usdtBal.toFixed(2),            note: 'stablecoin',  noteColor: '#26a17b' },
     ];
     if (totalStaked > 0)
-      assets.push({ name: 'CPRED', sub: 'In staking', qty: totalStaked.toLocaleString(undefined,{maximumFractionDigits:0}), val: `$${(totalStaked*0.05).toFixed(2)}`, note: 'genera rewards', noteColor: 'var(--cyan2)' });
+      assets.push({ name: 'CPRED', sub: 'Staked', qty: totalStaked.toLocaleString(undefined,{maximumFractionDigits:0}), val: `$${(totalStaked*0.05).toFixed(2)}`, note: 'earning rewards', noteColor: 'var(--cyan2)' });
     if (totalReward > 0)
-      assets.push({ name: 'CPRED', sub: 'Rewards', qty: totalReward.toFixed(4), val: '—', note: 'da ritirare', noteColor: 'var(--gold2)' });
+      assets.push({ name: 'CPRED', sub: 'Rewards', qty: totalReward.toFixed(4), val: '—', note: 'to claim', noteColor: 'var(--gold2)' });
 
     assets.forEach(a => {
       assetsList.innerHTML += `
@@ -354,7 +354,7 @@ async function loadMarketPositions(addr, marketC) {
         </div>
         <div style="display:flex;gap:16px;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text3)">
           <span>Stake: <strong style="color:var(--text)">${stake.toFixed(4)} ETH</strong></span>
-          <span>Payout est: <strong style="color:var(--green2)">${payout.toFixed(4)} ETH</strong></span>
+          <span>Est. payout: <strong style="color:var(--green2)">${payout.toFixed(4)} ETH</strong></span>
           <span>${mkt.status === 0n ? `⏱ ${daysLeft}g` : `${statusLabels[Number(mkt.status)]} · ${outcomeLabels[Number(mkt.outcome)]}`}</span>
         </div>
         ${won && !pos.claimed ? `
@@ -401,7 +401,7 @@ function renderStakingPositions(userStaking) {
               · Reward: <strong style="color:var(--green2)">${p.pending.toFixed(4)} CPRED</strong>
             </div>
           </div>
-          <a href="staking.html" class="btn btn-ghost" style="font-size:.72rem;padding:5px 12px">Gestisci →</a>
+          <a href="staking.html" class="btn btn-ghost" style="font-size:.72rem;padding:5px 12px">Manage →</a>
         </div>
       </div>`;
   });
@@ -428,7 +428,7 @@ async function doClaim() {
     await loadPortfolio();
   } catch(e) {
     toast('❌', e.reason || e.message || 'Nessun reward disponibile');
-    btn.disabled = false; btn.textContent = '⚡ Ritira Rewards';
+    btn.disabled = false; btn.textContent = '⚡ Claim Rewards';
   }
 }
 
