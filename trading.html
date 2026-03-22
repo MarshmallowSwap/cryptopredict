@@ -5,179 +5,844 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css">
-</head><body data-page="trading"><!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-track" id="ticker">
-    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% <span class="tag-green" style="font-size:.55rem">YES</span></span>
-    <!-- duplicate for seamless loop -->
-    <span class="tick-live"><span class="tick-dot"></span>LIVE PRESALE</span>
-    <span class="tick-item"><span class="sym">BTC</span> $94,210 <span class="up">▲2.1%</span></span>
-    <span class="tick-item"><span class="sym">ETH</span> $2,840 <span class="dn">▼0.8%</span></span>
-    <span class="tick-item"><span class="sym">SOL</span> $182 <span class="up">▲5.3%</span></span>
-    <span class="tick-item"><span class="sym">CPRED</span> $0.080 <span class="up">▲12%</span></span>
-    <span class="tick-item">Mercati Attivi: <strong style="color:var(--text2)">847</strong></span>
-    <span class="tick-item">Volume 24h: <strong style="color:var(--gold2)">$8.4M</strong></span>
-    <span class="tick-item">Utenti: <strong style="color:var(--text2)">3,204</strong></span>
-    <span class="tick-item"><span class="sym">ETF SOL</span> 82% YES</span>
-    <span class="tick-item"><span class="sym">BTC $150K</span> 68% YES</span>
-  </div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+.trading-layout{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start}
+.chart-panel{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.chart-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.chart-body{padding:16px;position:relative}
+.ob-panel{display:flex;flex-direction:column;gap:12px}
+.ob-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.ob-header{padding:12px 16px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.08em}
+.ob-body{padding:12px 16px}
+.ob-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;padding:4px 0;font-family:'DM Mono',monospace;font-size:.7rem;border-bottom:1px solid rgba(255,255,255,.03);position:relative}
+.ob-row:last-child{border-bottom:none}
+.ob-bar{position:absolute;top:0;bottom:0;border-radius:2px;opacity:.15;z-index:0}
+.ob-row > *{position:relative;z-index:1}
+.bid-bar{background:#10b981;right:0}
+.ask-bar{background:#ef4444;right:0}
+.ob-price-bid{color:#34d399;font-weight:700}
+.ob-price-ask{color:#f87171;font-weight:700}
+.ob-label{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);text-align:right}
+.order-form{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.order-tabs{display:flex}
+.order-tab{flex:1;padding:10px;text-align:center;font-family:'DM Mono',monospace;font-size:.72rem;font-weight:700;cursor:pointer;border:none;background:transparent;transition:all .15s}
+.order-tab.yes{color:#34d399}
+.order-tab.yes.active{background:rgba(16,185,129,.12);border-bottom:2px solid #10b981}
+.order-tab.no{color:#f87171}
+.order-tab.no.active{background:rgba(239,68,68,.1);border-bottom:2px solid #ef4444}
+.order-type-tabs{display:flex;gap:6px;margin-bottom:12px}
+.ot-btn{flex:1;padding:6px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text3);font-family:'DM Mono',monospace;font-size:.65rem;cursor:pointer}
+.ot-btn.active{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.4);color:var(--purple3)}
+.price-display{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.my-order-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.75rem;animation:fadeIn .2s}
+.my-order-row:last-child{border-bottom:none}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:280px;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1;pointer-events:all}
+.price-ticker{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-family:'DM Mono',monospace;font-size:.72rem}
+.price-up{color:#34d399}
+.price-dn{color:#f87171}
+@media(max-width:800px){.trading-layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="trading">
 
-<!-- NAV -->
+<div class="ticker-bar"><div class="ticker-track">
+  <span class="tick-live"><span class="tick-dot"></span>TRADING</span>
+  <span class="tick-item">Grafico prezzo · Orderbook · Ordini Limite</span>
+  <span class="tick-item">Base Sepolia · Dati live da blockchain</span>
+  <span class="tick-live"><span class="tick-dot"></span>TRADING</span>
+</div></div>
+
 <nav class="main-nav">
   <a href="index.html" class="nav-brand">
     <div class="nav-brand-icon">🔮</div>
-    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">PREDICTION MARKET</div></div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">TRADING</div></div>
   </a>
   <div class="nav-links">
-    <a href="index.html" class="nav-link" data-page="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-    <a href="presale.html" class="nav-link" data-page="presale">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      <span>Presale</span>
-      <span class="badge"></span>
-    </a>
-    <a href="mercati.html" class="nav-link" data-page="mercati">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span>Mercati</span>
-    </a>
-    <a href="trading.html" class="nav-link" data-page="trading">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
-      <span>Trading</span>
-    </a>
-    <a href="vendi.html" class="nav-link" data-page="vendi">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      <span>Vendi Quote</span>
-    </a>
-    <a href="portfolio.html" class="nav-link" data-page="portfolio">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
-      <span>Portfolio</span>
-    </a>
-    <a href="staking.html" class="nav-link" data-page="staking">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>Staking</span>
-    </a>
-    <a href="crea.html" class="nav-link" data-page="crea">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span>Crea</span>
-    </a>
-    <a href="docs.html" class="nav-link" data-page="docs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Docs</span>
-    </a>
+    <a href="index.html"     class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="mercati.html"   class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="trading.html"   class="nav-link" data-page="trading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg><span>Trading</span></a>
+    <a href="vendi.html"     class="nav-link" data-page="vendi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><span>Vendi Quote</span></a>
+    <a href="portfolio.html" class="nav-link" data-page="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
   </div>
   <div class="nav-right">
-    <span class="nav-balance" id="nav-balance" style="display:none">$4,280 USDC</span>
-    <span class="nav-wallet" id="nav-wallet" style="display:none">0x7f3...9e6c</span>
-    <div class="nav-avatar" id="nav-avatar" style="display:none">👤</div>
+    <span class="nav-balance" id="nav-balance" style="display:none"></span>
+    <span class="nav-wallet"  id="nav-wallet"  style="display:none"></span>
+    <div class="nav-avatar"   id="nav-avatar"  style="display:none">👤</div>
     <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </nav>
 
-<!-- PRESALE BANNER -->
 <div class="presale-banner">
-  <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
-  <span class="pb-price">· $0.080</span>
-  <span class="pb-timer" id="pb-countdown">CHIUDE TRA 21G 20H 48M</span>
-  <a href="presale.html" class="pb-btn">Compra CPRED →</a>
+  <span class="pb-live"><span class="tick-dot"></span>TRADING · Ordini Limite</span>
+  <span class="pb-price">· Dati live blockchain</span>
+  <a href="mercati.html" class="pb-btn">Scommetti ora →</a>
 </div>
+
 <div class="page-wrap">
-<div class="page-header">
-  <span class="page-tag">// Posizioni e trade</span>
-  <div class="page-title">Trading</div>
-  <div class="page-sub">Gestisci le tue posizioni aperte e la cronologia dei trade</div>
-</div>
-<div class="g-stats">
-  <div class="stat-card"><div class="stat-label">P&L Totale</div><div class="stat-val" style="color:var(--green2)">+$1,840</div><span class="stat-change up">▲ +12.4% questo mese</span></div>
-  <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" style="color:var(--purple3)">61%</div><span class="stat-change up">▲ +3% vs mese scorso</span></div>
-  <div class="stat-card"><div class="stat-label">Predizioni Totali</div><div class="stat-val">31</div><span class="stat-change up">▲ 19 vinte</span></div>
-  <div class="stat-card"><div class="stat-label">In Gioco</div><div class="stat-val" style="color:var(--gold2)">$640</div><span class="stat-change">3 posizioni aperte</span></div>
-</div>
-<div class="g2" style="margin-bottom:20px">
-  <!-- Posizioni aperte -->
-  <div class="cp-card cp-card-accent">
-    <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// POSIZIONI APERTE</div>
-    <table class="cp-table">
-      <thead><tr><th>Mercato</th><th>Posizione</th><th>Stake</th><th>Quota</th><th>P&L Est.</th><th></th></tr></thead>
-      <tbody>
-        <tr>
-          <td><div style="font-weight:700">₿ BTC $100K</div><div style="font-size:.7rem;color:var(--text3)">Scade 12g</div></td>
-          <td><span class="tag tag-green">YES</span></td>
-          <td style="font-family:'DM Mono',monospace">$200</td>
-          <td style="font-family:'DM Mono',monospace;color:var(--gold2)">1.56x</td>
-          <td style="font-family:'DM Mono',monospace;color:var(--green2)">+$112</td>
-          <td><a href="vendi.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 10px">Vendi</a></td>
-        </tr>
-        <tr>
-          <td><div style="font-weight:700">◎ SOL ETF</div><div style="font-size:.7rem;color:var(--text3)">Scade 90g</div></td>
-          <td><span class="tag tag-green">YES</span></td>
-          <td style="font-family:'DM Mono',monospace">$300</td>
-          <td style="font-family:'DM Mono',monospace;color:var(--gold2)">1.22x</td>
-          <td style="font-family:'DM Mono',monospace;color:var(--green2)">+$66</td>
-          <td><a href="vendi.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 10px">Vendi</a></td>
-        </tr>
-        <tr>
-          <td><div style="font-weight:700">Ξ ETH $3K</div><div style="font-size:.7rem;color:var(--text3)">Scade 5g</div></td>
-          <td><span class="tag tag-red">NO</span></td>
-          <td style="font-family:'DM Mono',monospace">$140</td>
-          <td style="font-family:'DM Mono',monospace;color:var(--gold2)">1.69x</td>
-          <td style="font-family:'DM Mono',monospace;color:var(--green2)">+$97</td>
-          <td><a href="vendi.html" class="btn btn-ghost" style="font-size:.7rem;padding:4px 10px">Vendi</a></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="page-header" style="margin-bottom:16px">
+    <span class="page-tag">// Trading · Analisi Mercati</span>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div class="page-title" style="margin:0">Trading</div>
+      <!-- Market selector -->
+      <div class="select-wrap" style="width:320px">
+        <select id="market-select" class="cp-input" style="font-size:.78rem" onchange="onMarketChange()">
+          <option value="">— Seleziona mercato —</option>
+        </select>
+      </div>
+      <div id="current-price-display" style="display:none">
+        <span class="price-ticker">
+          <span class="tick-dot"></span>
+          <span>YES</span>
+          <span id="price-yes" class="price-up">—</span>
+          <span style="color:var(--text3)">|</span>
+          <span>NO</span>
+          <span id="price-no" class="price-dn">—</span>
+        </span>
+      </div>
+    </div>
   </div>
-  <!-- Quick predict -->
-  <div class="cp-card cp-card-cyan">
-    <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// PREDIZIONE RAPIDA</div>
-    <div style="margin-bottom:14px">
-      <label class="cp-label">Mercato</label>
-      <select class="cp-input" style="margin-bottom:12px">
-        <option>₿ BTC supererà $100K?</option>
-        <option>Ξ ETH recupererà $3K?</option>
-        <option>◎ SOL ETF approvato?</option>
-        <option>🌊 Market cap $5T?</option>
-      </select>
-      <label class="cp-label">La tua previsione</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <button class="btn btn-up" style="justify-content:center;padding:12px" id="pred-yes" onclick="selectSide('yes')">▲ YES</button>
-        <button class="btn btn-dn" style="justify-content:center;padding:12px" id="pred-no" onclick="selectSide('no')">▼ NO</button>
+
+  <div class="trading-layout">
+
+    <!-- LEFT: Chart + Trades recenti -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- Price Chart -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)">// PREZZO IMPLICITO — DA EVENTI BLOCKCHAIN</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(50)"  id="r50">50 eventi</button>
+            <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(100)" id="r100">100</button>
+            <button class="btn btn-ghost" style="font-size:.65rem;padding:3px 9px" onclick="setRange(200)" id="r200">200</button>
+          </div>
+        </div>
+        <div class="chart-body">
+          <div id="chart-loading" style="text-align:center;padding:60px;color:var(--text3)">
+            <div style="font-size:.85rem;margin-bottom:6px">Seleziona un mercato per vedere il grafico</div>
+            <div style="font-size:.72rem;color:var(--text3)">Il grafico mostra il prezzo implicito YES (0-1) ad ogni scommessa</div>
+          </div>
+          <canvas id="price-chart" style="display:none;max-height:280px"></canvas>
+        </div>
       </div>
-      <label class="cp-label">Stake (USDC)</label>
-      <input type="number" class="cp-input" placeholder="50" style="margin-bottom:12px">
-      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:.78rem">
-        Vincita potenziale: <strong style="color:var(--green2)">$78.00</strong> (1.56x)
+
+      <!-- Trades recenti (eventi BetPlaced) -->
+      <div class="cp-card">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+          <span>// SCOMMESSE RECENTI — LIVE BLOCKCHAIN</span>
+          <button onclick="loadRecentTrades()" class="btn btn-ghost" style="font-size:.65rem;padding:2px 8px">↻</button>
+        </div>
+        <div id="trades-list">
+          <div style="text-align:center;padding:16px;color:var(--text3);font-size:.78rem">Seleziona un mercato</div>
+        </div>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center">Conferma Predizione</button>
+
+      <!-- I miei ordini -->
+      <div class="cp-card" id="my-orders-card">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+          <span>// I MIEI ORDINI APERTI</span>
+          <button onclick="loadMyOrders()" class="btn btn-ghost" style="font-size:.65rem;padding:2px 8px">↻</button>
+        </div>
+        <div id="my-orders-list">
+          <div style="text-align:center;padding:12px;color:var(--text3);font-size:.78rem">Connetti il wallet</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Orderbook + Form -->
+    <div class="ob-panel">
+
+      <!-- Orderbook -->
+      <div class="ob-card">
+        <div class="ob-header">// ORDERBOOK — ORDINI LIMITE</div>
+        <div class="ob-body">
+          <!-- Ask (NO) -->
+          <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);margin-bottom:4px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+            <span>Prezzo NO</span><span style="text-align:center">Importo</span><span style="text-align:right">Ordini</span>
+          </div>
+          <div id="ob-asks" style="margin-bottom:8px">
+            <div style="text-align:center;padding:8px;color:var(--text3);font-size:.7rem">—</div>
+          </div>
+
+          <!-- Spread -->
+          <div id="ob-spread" style="text-align:center;padding:5px;background:rgba(255,255,255,.03);border-radius:5px;margin:6px 0;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)">
+            spread: —
+          </div>
+
+          <!-- Bids (YES) -->
+          <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);margin-bottom:4px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+            <span>Prezzo YES</span><span style="text-align:center">Importo</span><span style="text-align:right">Ordini</span>
+          </div>
+          <div id="ob-bids">
+            <div style="text-align:center;padding:8px;color:var(--text3);font-size:.7rem">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Piazza ordine -->
+      <div class="order-form">
+        <div class="order-tabs">
+          <button class="order-tab yes active" id="otab-yes" onclick="setOrderSide(true)">▲ YES</button>
+          <button class="order-tab no"         id="otab-no"  onclick="setOrderSide(false)">▼ NO</button>
+        </div>
+        <div style="padding:14px">
+
+          <div class="order-type-tabs">
+            <button class="ot-btn active" id="ot-limit"  onclick="setOrderType('limit')">Limite</button>
+            <button class="ot-btn"        id="ot-market" onclick="setOrderType('market')">Market</button>
+          </div>
+
+          <!-- Prezzo corrente -->
+          <div class="price-display">
+            <span style="font-size:.7rem;color:var(--text3)">Prezzo corrente YES</span>
+            <span style="font-family:'DM Mono',monospace;font-weight:700;color:#34d399" id="form-cur-price">—</span>
+          </div>
+
+          <!-- Limite prezzo -->
+          <div id="limit-price-row" style="margin-bottom:10px">
+            <label class="cp-label">Prezzo limite YES (0–1)</label>
+            <div style="position:relative">
+              <input type="number" class="cp-input" id="order-price" placeholder="0.50" min="0.01" max="0.99" step="0.01" oninput="updateOrderPreview()">
+            </div>
+            <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap">
+              <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setPrice(0.25)">0.25</button>
+              <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setPrice(0.40)">0.40</button>
+              <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setPrice(0.50)">0.50</button>
+              <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setPrice(0.60)">0.60</button>
+              <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setPrice(0.75)">0.75</button>
+            </div>
+          </div>
+
+          <!-- Importo -->
+          <label class="cp-label" id="amount-label">Importo (ETH)</label>
+          <div style="position:relative;margin-bottom:6px">
+            <input type="number" class="cp-input" id="order-amount" placeholder="0.001" min="0.0001" step="0.001" oninput="updateOrderPreview()">
+            <span id="order-cur-unit" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3)">ETH</span>
+          </div>
+          <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setAmount(0.001)">0.001</button>
+            <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setAmount(0.005)">0.005</button>
+            <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setAmount(0.01)">0.01</button>
+            <button class="btn btn-ghost" style="font-size:.62rem;padding:2px 7px" onclick="setAmount(0.05)">0.05</button>
+          </div>
+
+          <!-- Preview -->
+          <div style="background:rgba(255,255,255,.03);border-radius:7px;padding:9px 12px;margin-bottom:12px;font-size:.72rem" id="order-preview">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:var(--text3)">Tipo</span>
+              <span id="prev-type" style="font-family:'DM Mono',monospace">Limite YES</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:var(--text3)">Esegue se prezzo YES</span>
+              <span id="prev-condition" style="font-family:'DM Mono',monospace;color:var(--cyan2)">≤ —</span>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span style="color:var(--text3)">Importo</span>
+              <span id="prev-amount" style="font-family:'DM Mono',monospace;color:var(--gold2)">—</span>
+            </div>
+          </div>
+
+          <!-- Scadenza -->
+          <div style="display:flex;gap:6px;margin-bottom:12px">
+            <button class="ot-btn active" id="exp-24" onclick="setExpiry(24)">24h</button>
+            <button class="ot-btn" id="exp-48" onclick="setExpiry(48)">48h</button>
+            <button class="ot-btn" id="exp-7d" onclick="setExpiry(168)">7 giorni</button>
+          </div>
+
+          <button id="btn-order" onclick="placeOrder()" class="btn btn-primary" style="width:100%;justify-content:center;font-size:.88rem;padding:11px">
+            Piazza Ordine
+          </button>
+
+          <div style="font-size:.62rem;color:var(--text3);text-align:center;margin-top:8px">
+            Ordini limite: eseguiti automaticamente dal backend quando il prezzo on-chain raggiunge il tuo limite
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistiche mercato -->
+      <div class="ob-card" id="market-stats" style="display:none">
+        <div class="ob-header">// STATISTICHE MERCATO</div>
+        <div class="ob-body" style="font-size:.75rem">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="color:var(--text3)">Pool YES</span>
+            <span id="stat-yes-pool" style="font-family:'DM Mono',monospace;color:#34d399">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="color:var(--text3)">Pool NO</span>
+            <span id="stat-no-pool" style="font-family:'DM Mono',monospace;color:#f87171">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="color:var(--text3)">Pool totale</span>
+            <span id="stat-total-pool" style="font-family:'DM Mono',monospace;color:var(--gold2)">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="color:var(--text3)">Yield giornaliero</span>
+            <span id="stat-yield" style="font-family:'DM Mono',monospace;color:var(--green2)">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="color:var(--text3)">Scadenza</span>
+            <span id="stat-expiry" style="font-family:'DM Mono',monospace;color:var(--text3)">—</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
-<!-- Cronologia -->
-<div class="cp-card">
-  <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--text3);margin-bottom:16px">// CRONOLOGIA TRADE</div>
-  <table class="cp-table">
-    <thead><tr><th>Data</th><th>Mercato</th><th>Posizione</th><th>Stake</th><th>Esito</th><th>P&L</th></tr></thead>
-    <tbody>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">18 Mar</td><td>₿ BTC $95K</td><td><span class="tag tag-green">YES</span></td><td style="font-family:'DM Mono',monospace">$150</td><td><span class="tag tag-green">VINTO</span></td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$84</td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">17 Mar</td><td>Ξ ETH $2.8K</td><td><span class="tag tag-red">NO</span></td><td style="font-family:'DM Mono',monospace">$100</td><td><span class="tag tag-red">PERSO</span></td><td style="color:var(--red2);font-family:'DM Mono',monospace">-$100</td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">16 Mar</td><td>🌊 MCap $4T</td><td><span class="tag tag-green">YES</span></td><td style="font-family:'DM Mono',monospace">$200</td><td><span class="tag tag-green">VINTO</span></td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$140</td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">15 Mar</td><td>◎ SOL $200</td><td><span class="tag tag-green">YES</span></td><td style="font-family:'DM Mono',monospace">$80</td><td><span class="tag tag-green">VINTO</span></td><td style="color:var(--green2);font-family:'DM Mono',monospace">+$56</td></tr>
-      <tr><td style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text3)">14 Mar</td><td>🔶 BNB +2%</td><td><span class="tag tag-red">NO</span></td><td style="font-family:'DM Mono',monospace">$50</td><td><span class="tag tag-red">PERSO</span></td><td style="color:var(--red2);font-family:'DM Mono',monospace">-$50</td></tr>
-    </tbody>
-  </table>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <div style="flex:1">
+    <div id="toast-msg" style="font-weight:700;margin-bottom:2px"></div>
+    <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;display:none"></a>
+  </div>
+  <button onclick="document.getElementById('toast').classList.remove('show')" style="background:none;border:none;color:var(--text3);cursor:pointer">✕</button>
 </div>
-<script>function selectSide(s){document.getElementById('pred-yes').style.opacity=s==='yes'?1:.4;document.getElementById('pred-no').style.opacity=s==='no'?1:.4;}</script>
-</div><script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <script src="web3.js"></script>
-<script src="_shared.js"></script></body></html>
+<script src="_shared.js"></script>
+<script>
+var MKT_ABI_T = [
+  "function marketCount() view returns (uint256)",
+  "function getMarket(uint256) view returns (tuple(uint256 id,address creator,string question,string category,string assetSymbol,uint256 targetPrice,bool targetAbove,uint256 expiresAt,uint256 yesPool,uint256 noPool,uint256 yieldAccrued,uint8 status,uint8 outcome,address resolver,uint8 currency))",
+  "event BetPlaced(uint256 indexed marketId, address indexed user, bool side, uint256 amount)"
+];
+
+var CUR_NAMES = ["ETH","USDC","USDT","CPRED"];
+var CUR_DEC   = [18,6,6,18];
+
+var currentMarketId  = null;
+var currentMarket    = null;
+var orderSide        = true;   // true=YES
+var orderType        = "limit";
+var expiryHours      = 24;
+var priceChart       = null;
+var chartRange       = 100;
+var priceHistory     = [];     // [{x: blockNum, y: price}]
+
+// ── INIT ─────────────────────────────────────────────────────────
+CP.ready.then(async function(state) {
+  await loadMarketList();
+  if (state.address) loadMyOrders();
+  var orig = CP.refreshWalletData.bind(CP);
+  CP.refreshWalletData = async function() {
+    await orig();
+    loadMyOrders();
+  };
+  setInterval(function() {
+    if (currentMarketId !== null) {
+      loadOrderbook();
+      loadRecentTrades();
+    }
+  }, 15000);
+});
+
+// ── MERCATI ───────────────────────────────────────────────────────
+async function loadMarketList() {
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_T, provider);
+    var count = Number(await c.marketCount());
+    var sel = document.getElementById("market-select");
+    for (var i = 0; i < count; i++) {
+      try {
+        var m = await c.getMarket(i);
+        if (Number(m.status) === 0) {
+          var opt = document.createElement("option");
+          opt.value = i;
+          var q = m.question.length > 50 ? m.question.slice(0,50)+"..." : m.question;
+          opt.textContent = "#"+i+" "+q;
+          sel.appendChild(opt);
+        }
+      } catch(e) {}
+    }
+  } catch(e) { console.warn("loadMarketList:", e); }
+}
+
+async function onMarketChange() {
+  var val = document.getElementById("market-select").value;
+  if (val === "") return;
+  currentMarketId = Number(val);
+  await loadMarketData();
+  await loadPriceChart();
+  await loadOrderbook();
+  await loadRecentTrades();
+}
+
+async function loadMarketData() {
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_T, provider);
+    currentMarket = await c.getMarket(currentMarketId);
+    var curIdx   = Number(currentMarket.currency || 0);
+    var curName  = CUR_NAMES[curIdx] || "ETH";
+    var decimals = CUR_DEC[curIdx];
+    var yes  = parseFloat(ethers.formatUnits(currentMarket.yesPool, decimals));
+    var no   = parseFloat(ethers.formatUnits(currentMarket.noPool,  decimals));
+    var total = yes + no;
+    var yesPct = total > 0 ? yes / total : 0.5;
+    var noPct  = 1 - yesPct;
+
+    // Aggiorna prezzi header
+    document.getElementById("current-price-display").style.display = "flex";
+    document.getElementById("price-yes").textContent = yesPct.toFixed(3);
+    document.getElementById("price-no").textContent  = noPct.toFixed(3);
+    document.getElementById("form-cur-price").textContent = yesPct.toFixed(3);
+
+    // Aggiorna stats
+    var yieldDay = (total * 2000 * 0.048 / 365);
+    document.getElementById("stat-yes-pool").textContent = yes.toFixed(decimals===6?2:4)+" "+curName;
+    document.getElementById("stat-no-pool").textContent  = no.toFixed(decimals===6?2:4)+" "+curName;
+    document.getElementById("stat-total-pool").textContent = total.toFixed(decimals===6?2:4)+" "+curName;
+    document.getElementById("stat-yield").textContent = "$"+yieldDay.toFixed(4)+"/g";
+    var exp = new Date(Number(currentMarket.expiresAt)*1000);
+    document.getElementById("stat-expiry").textContent = exp.toLocaleDateString("it-IT");
+    document.getElementById("market-stats").style.display = "block";
+
+    // Aggiorna label valuta nel form
+    document.getElementById("order-cur-unit").textContent = curName;
+    document.getElementById("amount-label").textContent = "Importo ("+curName+")";
+
+    // Quick amounts per valuta
+    var steps = curIdx===1||curIdx===2 ? [1,5,10,50] : curIdx===3 ? [100,500,1000] : [0.001,0.005,0.01,0.05];
+    var qbtns = document.querySelectorAll("#btn-order ~ div .btn");
+  } catch(e) { console.warn("loadMarketData:", e); }
+}
+
+// ── PRICE CHART ───────────────────────────────────────────────────
+async function loadPriceChart() {
+  if (currentMarketId === null) return;
+  document.getElementById("chart-loading").style.display = "block";
+  document.getElementById("price-chart").style.display   = "none";
+
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_T, provider);
+
+    // Leggi eventi BetPlaced per questo mercato
+    var filter = c.filters.BetPlaced(currentMarketId);
+    var latestBlock = await provider.getBlockNumber();
+    var fromBlock   = Math.max(0, latestBlock - 10000); // ultimi 10000 blocchi
+    var events      = await c.queryFilter(filter, fromBlock, "latest");
+
+    if (!events.length) {
+      document.getElementById("chart-loading").innerHTML =
+        '<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:1.5rem;margin-bottom:8px">📊</div><div>Nessuna scommessa ancora — il grafico apparirà dopo la prima scommessa</div></div>';
+      return;
+    }
+
+    // Ricostruisci pool cumulativo
+    var curIdx   = Number(currentMarket.currency || 0);
+    var decimals = CUR_DEC[curIdx];
+    var yesPool  = 0, noPool = 0;
+    var points   = [];
+
+    // Prendi ultimi N eventi
+    var slice = events.slice(-chartRange);
+    for (var i = 0; i < slice.length; i++) {
+      var ev  = slice[i];
+      var amt = parseFloat(ethers.formatUnits(ev.args.amount, decimals));
+      if (ev.args.side) yesPool += amt;
+      else              noPool  += amt;
+      var total  = yesPool + noPool;
+      var price  = total > 0 ? yesPool / total : 0.5;
+      points.push({x: i, price: parseFloat(price.toFixed(4)), block: Number(ev.blockNumber),
+        side: ev.args.side, amt: amt});
+    }
+    priceHistory = points;
+    renderChart(points);
+  } catch(e) {
+    console.warn("loadPriceChart:", e);
+    document.getElementById("chart-loading").innerHTML = '<div style="color:var(--red2);padding:20px;text-align:center;font-size:.8rem">Errore nel caricamento: '+e.message+'</div>';
+  }
+}
+
+function renderChart(points) {
+  document.getElementById("chart-loading").style.display = "none";
+  var canvas = document.getElementById("price-chart");
+  canvas.style.display = "block";
+
+  if (priceChart) priceChart.destroy();
+
+  var ctx = canvas.getContext("2d");
+  var labels = points.map(function(p){ return "#"+p.block; });
+  var data   = points.map(function(p){ return p.price; });
+
+  // Colori per punto (verde=YES, rosso=NO)
+  var pointColors = points.map(function(p){ return p.side ? "#34d399" : "#f87171"; });
+
+  priceChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Prezzo YES",
+        data: data,
+        borderColor: "#a855f7",
+        borderWidth: 2,
+        fill: true,
+        backgroundColor: function(ctx) {
+          var gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 280);
+          gradient.addColorStop(0, "rgba(168,85,247,.2)");
+          gradient.addColorStop(1, "rgba(168,85,247,.01)");
+          return gradient;
+        },
+        pointBackgroundColor: pointColors,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      animation: {duration: 400},
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var p = points[ctx.dataIndex];
+              return (p.side ? "YES" : "NO") + " · " + p.amt.toFixed(4) + " · Price: " + p.price;
+            }
+          },
+          backgroundColor: "rgba(13,11,28,.95)",
+          borderColor: "rgba(124,58,237,.3)",
+          borderWidth: 1,
+          titleColor: "#a78bfa",
+          bodyColor: "#e2e8f0"
+        }
+      },
+      scales: {
+        x: {
+          display: true,
+          ticks: {
+            maxTicksLimit: 8,
+            color: "rgba(255,255,255,.3)",
+            font: {family: "DM Mono", size: 9}
+          },
+          grid: {color: "rgba(255,255,255,.04)"}
+        },
+        y: {
+          display: true,
+          min: 0, max: 1,
+          ticks: {
+            color: "rgba(255,255,255,.4)",
+            font: {family: "DM Mono", size: 10},
+            callback: function(v){ return (v*100).toFixed(0)+"%"; }
+          },
+          grid: {color: "rgba(255,255,255,.05)"}
+        }
+      }
+    }
+  });
+}
+
+function setRange(n) {
+  chartRange = n;
+  ["50","100","200"].forEach(function(r){
+    document.getElementById("r"+r).className = "btn " + (r==n ? "btn-primary" : "btn-ghost");
+  });
+  document.getElementById("r"+n).style.fontSize = ".65rem";
+  document.getElementById("r"+n).style.padding  = "3px 9px";
+  if (currentMarketId !== null) loadPriceChart();
+}
+
+// ── RECENT TRADES ──────────────────────────────────────────────────
+async function loadRecentTrades() {
+  if (currentMarketId === null) return;
+  var el = document.getElementById("trades-list");
+  try {
+    var provider = await W3.getProvider();
+    var c = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_T, provider);
+    var filter  = c.filters.BetPlaced(currentMarketId);
+    var latest  = await provider.getBlockNumber();
+    var events  = await c.queryFilter(filter, Math.max(0, latest - 5000), "latest");
+    var last10  = events.slice(-10).reverse();
+
+    if (!last10.length) {
+      el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Nessuna scommessa ancora</div>';
+      return;
+    }
+    var curIdx   = Number(currentMarket ? currentMarket.currency : 0);
+    var decimals = CUR_DEC[curIdx];
+    var curName  = CUR_NAMES[curIdx] || "ETH";
+
+    el.innerHTML = "";
+    var header = document.createElement("div");
+    header.style.cssText = "display:grid;grid-template-columns:60px 1fr 1fr 80px;gap:6px;font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);padding:4px 0;margin-bottom:4px;border-bottom:1px solid var(--border)";
+    header.innerHTML = "<span>Lato</span><span>Wallet</span><span>Importo</span><span style='text-align:right'>Blocco</span>";
+    el.appendChild(header);
+
+    last10.forEach(function(ev) {
+      var side = ev.args.side;
+      var amt  = parseFloat(ethers.formatUnits(ev.args.amount, decimals));
+      var row  = document.createElement("div");
+      row.className = "my-order-row";
+      row.style.cssText = "display:grid;grid-template-columns:60px 1fr 1fr 80px;gap:6px;align-items:center";
+
+      var sideBadge = document.createElement("span");
+      sideBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px;" +
+        (side ? "color:#34d399;background:rgba(16,185,129,.1)" : "color:#f87171;background:rgba(239,68,68,.1)");
+      sideBadge.textContent = side ? "YES" : "NO";
+
+      var walletEl = document.createElement("span");
+      walletEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3)";
+      walletEl.textContent = ev.args.user.slice(0,6)+"..."+ev.args.user.slice(-4);
+
+      var amtEl = document.createElement("span");
+      amtEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.68rem;color:var(--gold2)";
+      amtEl.textContent = amt.toFixed(decimals===6?2:4)+" "+curName;
+
+      var blockEl = document.createElement("a");
+      blockEl.href = "https://sepolia.basescan.org/tx/"+ev.transactionHash;
+      blockEl.target = "_blank";
+      blockEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.6rem;color:var(--purple3);text-align:right";
+      blockEl.textContent = "#"+Number(ev.blockNumber);
+
+      row.appendChild(sideBadge);
+      row.appendChild(walletEl);
+      row.appendChild(amtEl);
+      row.appendChild(blockEl);
+      el.appendChild(row);
+    });
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red2);font-size:.75rem">Errore: '+e.message+'</div>';
+  }
+}
+
+// ── ORDERBOOK ─────────────────────────────────────────────────────
+async function loadOrderbook() {
+  if (currentMarketId === null) return;
+  try {
+    var res = await fetch("/api/v1/trading/orderbook/"+currentMarketId);
+    if (!res.ok) throw new Error("API non disponibile");
+    var ob = await res.json();
+
+    // Render asks (NO)
+    var asksEl = document.getElementById("ob-asks");
+    asksEl.innerHTML = "";
+    if (!ob.asks || !ob.asks.length) {
+      asksEl.innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.7rem">Nessun ordine NO</div>';
+    } else {
+      var maxAmt = Math.max.apply(null, ob.asks.map(function(a){return a.amount;}));
+      ob.asks.slice(0,6).forEach(function(a) {
+        var row = document.createElement("div");
+        row.className = "ob-row";
+        var bar = document.createElement("div");
+        bar.className = "ob-bar ask-bar";
+        bar.style.width = (a.amount/maxAmt*100).toFixed(0)+"%";
+        row.appendChild(bar);
+        var p = document.createElement("span"); p.className="ob-price-ask"; p.textContent=a.price.toFixed(3); row.appendChild(p);
+        var am = document.createElement("span"); am.style.cssText="text-align:center;font-family:'DM Mono',monospace;font-size:.68rem"; am.textContent=a.amount.toFixed(4); row.appendChild(am);
+        var cnt = document.createElement("span"); cnt.className="ob-label"; cnt.textContent=a.count; row.appendChild(cnt);
+        asksEl.appendChild(row);
+      });
+    }
+
+    // Spread
+    document.getElementById("ob-spread").textContent = ob.spread !== null ? "spread: "+ob.spread.toFixed(3) : "spread: —";
+
+    // Render bids (YES)
+    var bidsEl = document.getElementById("ob-bids");
+    bidsEl.innerHTML = "";
+    if (!ob.bids || !ob.bids.length) {
+      bidsEl.innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.7rem">Nessun ordine YES</div>';
+    } else {
+      var maxAmtB = Math.max.apply(null, ob.bids.map(function(b){return b.amount;}));
+      ob.bids.slice(0,6).forEach(function(b) {
+        var row = document.createElement("div");
+        row.className = "ob-row";
+        var bar = document.createElement("div");
+        bar.className = "ob-bar bid-bar";
+        bar.style.width = (b.amount/maxAmtB*100).toFixed(0)+"%";
+        row.appendChild(bar);
+        var p = document.createElement("span"); p.className="ob-price-bid"; p.textContent=b.price.toFixed(3); row.appendChild(p);
+        var am = document.createElement("span"); am.style.cssText="text-align:center;font-family:'DM Mono',monospace;font-size:.68rem"; am.textContent=b.amount.toFixed(4); row.appendChild(am);
+        var cnt = document.createElement("span"); cnt.className="ob-label"; cnt.textContent=b.count; row.appendChild(cnt);
+        bidsEl.appendChild(row);
+      });
+    }
+  } catch(e) {
+    document.getElementById("ob-bids").innerHTML = '<div style="text-align:center;padding:5px;color:var(--text3);font-size:.65rem">Orderbook non disponibile</div>';
+  }
+}
+
+// ── ORDER FORM ────────────────────────────────────────────────────
+function setOrderSide(side) {
+  orderSide = side;
+  document.getElementById("otab-yes").className = "order-tab yes" + (side ? " active" : "");
+  document.getElementById("otab-no").className  = "order-tab no"  + (!side ? " active" : "");
+  updateOrderPreview();
+}
+
+function setOrderType(type) {
+  orderType = type;
+  document.getElementById("ot-limit").className  = "ot-btn" + (type==="limit"  ? " active" : "");
+  document.getElementById("ot-market").className = "ot-btn" + (type==="market" ? " active" : "");
+  document.getElementById("limit-price-row").style.display = type==="limit" ? "block" : "none";
+  updateOrderPreview();
+}
+
+function setExpiry(h) {
+  expiryHours = h;
+  ["24","48","7d"].forEach(function(e){ document.getElementById("exp-"+e).className = "ot-btn"; });
+  var map = {24:"24", 48:"48", 168:"7d"};
+  if (map[h]) document.getElementById("exp-"+map[h]).className = "ot-btn active";
+}
+
+function setPrice(v) { document.getElementById("order-price").value = v; updateOrderPreview(); }
+function setAmount(v){ document.getElementById("order-amount").value = v; updateOrderPreview(); }
+
+function updateOrderPreview() {
+  var price  = parseFloat(document.getElementById("order-price").value) || 0;
+  var amount = parseFloat(document.getElementById("order-amount").value) || 0;
+  var curIdx = currentMarket ? Number(currentMarket.currency||0) : 0;
+  var curName = CUR_NAMES[curIdx]||"ETH";
+
+  document.getElementById("prev-type").textContent =
+    (orderType==="limit" ? "Limite " : "Market ") + (orderSide ? "YES" : "NO");
+  document.getElementById("prev-condition").textContent =
+    orderType==="limit" ? (orderSide ? "≤ "+price.toFixed(3) : "≥ "+(1-price).toFixed(3)) : "Immediato";
+  document.getElementById("prev-amount").textContent =
+    amount > 0 ? amount.toFixed(curIdx===1||curIdx===2?2:4)+" "+curName : "—";
+}
+
+// ── PLACE ORDER ───────────────────────────────────────────────────
+async function placeOrder() {
+  if (!WALLET.address) { openModal("wallet-modal"); return; }
+  if (currentMarketId === null) { showToast("❌", "Seleziona un mercato"); return; }
+
+  var price  = parseFloat(document.getElementById("order-price").value)  || 0;
+  var amount = parseFloat(document.getElementById("order-amount").value) || 0;
+
+  if (orderType === "limit" && (price <= 0 || price >= 1)) {
+    showToast("❌", "Prezzo limite deve essere tra 0 e 1"); return;
+  }
+  if (amount <= 0) { showToast("❌", "Inserisci un importo valido"); return; }
+
+  var curIdx  = currentMarket ? Number(currentMarket.currency||0) : 0;
+  var curName = CUR_NAMES[curIdx] || "ETH";
+
+  var btn = document.getElementById("btn-order");
+  btn.disabled = true; btn.textContent = "Invio...";
+
+  try {
+    var body = {
+      market_id:   currentMarketId,
+      wallet:      WALLET.address,
+      side:        orderSide,
+      order_type:  orderType,
+      amount:      amount,
+      limit_price: orderType==="limit" ? price : null,
+      currency:    curName,
+      expires_hours: expiryHours
+    };
+
+    var res = await fetch("/api/v1/trading/orders", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      var err = await res.json().catch(function(){return{detail:"Errore server"};});
+      throw new Error(err.detail || "Errore API");
+    }
+
+    var data = await res.json();
+    showToast("✅", "Ordine "+orderType+" "+( orderSide?"YES":"NO")+" registrato!");
+    document.getElementById("order-price").value  = "";
+    document.getElementById("order-amount").value = "";
+    await loadMyOrders();
+    await loadOrderbook();
+
+  } catch(e) {
+    showToast("❌", e.message || "Errore");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Piazza Ordine";
+  }
+}
+
+// ── MY ORDERS ─────────────────────────────────────────────────────
+async function loadMyOrders() {
+  var el = document.getElementById("my-orders-list");
+  if (!WALLET.address) {
+    el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Connetti il wallet</div>';
+    return;
+  }
+  try {
+    var res = await fetch("/api/v1/trading/orders/user/"+WALLET.address);
+    if (!res.ok) throw new Error("API non disponibile");
+    var orders = await res.json();
+    var open   = orders.filter(function(o){ return o.status === "open"; });
+
+    if (!open.length) {
+      el.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text3);font-size:.75rem">Nessun ordine aperto</div>';
+      return;
+    }
+    el.innerHTML = "";
+    open.forEach(function(o) {
+      var row = document.createElement("div");
+      row.className = "my-order-row";
+
+      var left = document.createElement("div");
+      var sideBadge = document.createElement("span");
+      sideBadge.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:6px;" +
+        (o.side ? "color:#34d399;background:rgba(16,185,129,.1)" : "color:#f87171;background:rgba(239,68,68,.1)");
+      sideBadge.textContent = o.side ? "YES" : "NO";
+      var info = document.createElement("span");
+      info.style.cssText = "font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3)";
+      info.textContent = "Mkt#"+o.market_id+" · "+o.amount+" "+o.currency+
+        (o.limit_price ? " @ "+o.limit_price : " market");
+      left.appendChild(sideBadge);
+      left.appendChild(info);
+
+      var cancelBtn = document.createElement("button");
+      cancelBtn.className = "btn btn-ghost";
+      cancelBtn.style.cssText = "font-size:.65rem;padding:2px 8px;flex-shrink:0";
+      cancelBtn.textContent = "Cancella";
+      cancelBtn.onclick = (function(id){ return function(){ cancelOrder(id); }; })(o.id);
+
+      row.appendChild(left);
+      row.appendChild(cancelBtn);
+      el.appendChild(row);
+    });
+  } catch(e) {
+    el.innerHTML = '<div style="font-size:.72rem;color:var(--text3);text-align:center;padding:8px">API non disponibile</div>';
+  }
+}
+
+async function cancelOrder(orderId) {
+  try {
+    var res = await fetch("/api/v1/trading/orders/"+orderId+"?wallet="+WALLET.address, {method:"DELETE"});
+    if (!res.ok) throw new Error("Errore");
+    showToast("✅", "Ordine cancellato");
+    await loadMyOrders();
+    await loadOrderbook();
+  } catch(e) {
+    showToast("❌", e.message);
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(icon, msg, link) {
+  document.getElementById("toast-icon").textContent = icon;
+  document.getElementById("toast-msg").textContent  = msg;
+  var l = document.getElementById("toast-link");
+  if (link) { l.href=link; l.textContent="Dettagli"; l.style.display="block"; }
+  else l.style.display="none";
+  var t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 6000);
+}
+</script>
+</body></html>
