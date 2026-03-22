@@ -95,9 +95,9 @@ const CP = {
     }
     this.updateNav();
     this.updatePresaleBanner();
-    // Risolvi la promise CP.ready — le pagine aspettano questa
+    // Resolve CP.ready promise — pages wait for this
     _cpReadyResolve({ address: WALLET.address, connected: !!WALLET.address });
-    // Emetti anche evento per compatibilità
+    // Also emit event for compatibility
     window.dispatchEvent(new CustomEvent('cp:wallet-ready', {
       detail: { address: WALLET.address, connected: !!WALLET.address }
     }));
@@ -129,7 +129,7 @@ const CP = {
     const c = document.getElementById('nav-connect-btn');
     if (WALLET.address) {
       if (b) {
-        // Mostra ETH con abbastanza decimali + CPRED se presente
+        // Show ETH with enough decimals + CPRED if present
         var ethVal  = WALLET.ethBalance || 0;
         var ethStr  = ethVal.toFixed(4) + ' ETH';
         var cpred   = WALLET.cpredBalance || 0;
@@ -147,7 +147,7 @@ const CP = {
       if (b) b.style.display='none';
       if (w) w.style.display='none';
       if (a) a.style.display='none';
-      if (c) { c.style.display='flex'; c.onclick=()=>openModal('wallet-modal'); }
+      if (c) { c.style.display='flex'; c.onclick=function(){ if(typeof openModal==='function') openModal('wallet-modal'); }; }
     }
   },
 
@@ -157,9 +157,9 @@ const CP = {
     const target = new Date(Date.now() + 21*24*3600*1000);
     const tick = () => {
       const diff = target - Date.now();
-      if (diff<=0){el.textContent='SCADUTO';return;}
+      if (diff<=0){el.textContent='EXPIRED';return;}
       const d=Math.floor(diff/864e5),h=Math.floor(diff%864e5/36e5),m=Math.floor(diff%36e5/6e4);
-      el.textContent=`CHIUDE TRA ${d}G ${h}H ${m}M`;
+      el.textContent=`CLOSES IN ${d}d ${h}h ${m}m`;
     };
     tick(); setInterval(tick,30000);
   },
@@ -305,8 +305,8 @@ const CP = {
       if (!info) return;
       const liveEl  = document.querySelector('.pb-live');
       const priceEl = document.querySelector('.pb-price');
-      if (liveEl)  liveEl.innerHTML  = `<span class="tick-dot"></span>PRESALE LIVE — STAGE ${info.currentStage} · ${info.pctSold}% VENDUTO`;
-      if (priceEl) priceEl.textContent = `· $${info.priceUsd.toFixed(3)} · ${info.totalRaisedEth.toFixed(3)} ETH raccolti`;
+      if (liveEl)  liveEl.innerHTML  = `<span class="tick-dot"></span>PRESALE LIVE — STAGE ${info.currentStage} · ${info.pctSold}% SOLD`;
+      if (priceEl) priceEl.textContent = `· $${info.priceUsd.toFixed(3)} · $${(info.totalRaisedEth * 2000).toFixed(0)} raised`;
       // Countdown dal contratto
       const endsAt = info.presaleEndsAt * 1000;
       const el = document.getElementById('pb-countdown');
@@ -318,7 +318,7 @@ const CP = {
           const hh = Math.floor(diff%864e5/36e5);
           const mm = Math.floor(diff%36e5/6e4);
           const ss = Math.floor(diff%6e4/1e3);
-          el.textContent = `CHIUDE TRA ${dd}G ${hh}H ${mm}M ${String(ss).padStart(2,'0')}S`;
+          el.textContent = `CLOSES IN ${dd}G ${hh}H ${mm}M ${String(ss).padStart(2,'0')}S`;
         };
         tick(); setInterval(tick, 1000);
       }
@@ -337,8 +337,8 @@ const CP = {
         <button onclick="closeModal('wallet-modal')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:32px;height:32px;cursor:pointer;color:#7a738f;font-size:16px;">✕</button>
 
         <div id="wm-connect-view">
-          <div style="font-size:1.1rem;font-weight:800;color:#f0ecff;margin-bottom:6px">Connect wallet</div>
-          <div style="font-size:.8rem;color:#7a738f;margin-bottom:6px">Rete: <strong style="color:#00d4ff">Base Sepolia</strong> (testnet)</div>
+          <div style="font-size:1.1rem;font-weight:800;color:#f0ecff;margin-bottom:6px">Connect Wallet</div>
+          <div style="font-size:.8rem;color:#7a738f;margin-bottom:6px">Network: <strong style="color:#00d4ff">Base Sepolia</strong> (testnet)</div>
           <div style="font-size:.73rem;color:#7a738f;margin-bottom:22px;padding:8px 10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:8px">
             🔗 I contratti sono live su Base Sepolia. Ti servirà ETH testnet gratuito da <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" style="color:#00d4ff">faucet.quicknode.com</a>
           </div>
@@ -377,7 +377,7 @@ const CP = {
           </div>
           <div style="display:flex;gap:8px">
             <a href="portfolio.html" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-size:.82rem;font-weight:700;text-decoration:none;text-align:center">Portfolio</a>
-            <button onclick="WALLET.disconnect();document.getElementById('wm-connect-view').style.display='block';document.getElementById('wm-connected-view').style.display='none';" style="flex:1;padding:10px;background:rgba(255,58,92,.08);border:1px solid rgba(255,58,92,.2);border-radius:10px;color:#f87171;font-size:.82rem;font-weight:700;cursor:pointer">Disconnetti</button>
+            <button onclick="WALLET.disconnect();document.getElementById('wm-connect-view').style.display='block';document.getElementById('wm-connected-view').style.display='none';" style="flex:1;padding:10px;background:rgba(255,58,92,.08);border:1px solid rgba(255,58,92,.2);border-radius:10px;color:#f87171;font-size:.82rem;font-weight:700;cursor:pointer">Disconnect</button>
           </div>
         </div>
       </div>`;
