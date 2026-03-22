@@ -10,8 +10,18 @@
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.15);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
-.mkt-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s}
-.mkt-card:hover{border-color:var(--border2)}
+.mkt-card{
+  background:var(--card);
+  border:1px solid rgba(124,58,237,.2);
+  border-radius:16px;overflow:hidden;
+  transition:border-color .25s, box-shadow .25s, transform .2s;
+  box-shadow:0 2px 12px rgba(0,0,0,.3), 0 0 0 1px rgba(124,58,237,.06);
+}
+.mkt-card:hover{
+  border-color:rgba(124,58,237,.5);
+  box-shadow:0 4px 28px rgba(124,58,237,.15), 0 0 0 1px rgba(124,58,237,.15);
+  transform:translateY(-2px);
+}
 .bet-panel{background:rgba(0,0,0,.25);border-top:2px solid;padding:14px 16px;animation:slideDown .18s ease}
 .bet-panel.yes-mode{border-top-color:rgba(16,185,129,.5)}
 .bet-panel.no-mode{border-top-color:rgba(239,68,68,.5)}
@@ -139,7 +149,7 @@
   </div>
 
   <!-- Grid -->
-  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px">
+  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;max-width:960px;margin:0 auto">
     <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1">
       <span class="spin"></span>
       <span style="margin-left:8px;color:var(--text3);font-size:.85rem">Caricamento mercati on-chain...</span>
@@ -342,49 +352,77 @@ function buildCard(el, m) {
   body.appendChild(q);
 
   // Bar
+  // Barra probabilità stile B — alta 16px, con percentuali grandi
+  var probWrap = document.createElement("div");
+  probWrap.style.cssText = "margin-bottom:12px";
+
+  var probNums = document.createElement("div");
+  probNums.style.cssText = "display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px";
+  var yesNum = document.createElement("span");
+  yesNum.style.cssText = "font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--green2);line-height:1";
+  yesNum.textContent = m.yesPct+"%";
+  var yesLblSm = document.createElement("span");
+  yesLblSm.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--green2);margin-left:3px";
+  yesLblSm.textContent = "YES";
+  var noNum = document.createElement("span");
+  noNum.style.cssText = "font-family:'DM Mono',monospace;font-size:.95rem;font-weight:700;color:var(--text3);line-height:1";
+  noNum.textContent = m.noPct+"%";
+  var noLblSm = document.createElement("span");
+  noLblSm.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3);margin-left:3px";
+  noLblSm.textContent = "NO";
+  var yesGroup = document.createElement("span");
+  yesGroup.appendChild(yesNum); yesGroup.appendChild(yesLblSm);
+  var noGroup = document.createElement("span");
+  noGroup.appendChild(noNum); noGroup.appendChild(noLblSm);
+  probNums.appendChild(yesGroup);
+  probNums.appendChild(noGroup);
+  probWrap.appendChild(probNums);
+
   var barWrap = document.createElement("div");
-  barWrap.className = "cp-bar";
-  barWrap.style.marginBottom = "6px";
+  barWrap.style.cssText = "height:10px;border-radius:5px;overflow:hidden;display:flex;background:rgba(255,255,255,.06)";
   var barFill = document.createElement("div");
-  barFill.className = "cp-bar-fill up";
-  barFill.style.width = m.yesPct + "%";
+  barFill.style.cssText = "height:100%;border-radius:5px 0 0 5px;background:linear-gradient(90deg,var(--green),var(--green2));width:"+m.yesPct+"%";
+  var barNo = document.createElement("div");
+  barNo.style.cssText = "height:100%;border-radius:0 5px 5px 0;background:rgba(239,68,68,.35);flex:1";
   barWrap.appendChild(barFill);
-  body.appendChild(barWrap);
+  barWrap.appendChild(barNo);
+  probWrap.appendChild(barWrap);
+  body.appendChild(probWrap);
 
-  // Pct labels
-  var pctRow = document.createElement("div");
-  pctRow.style.cssText = "display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.62rem;margin-bottom:12px";
-  var yesLbl = document.createElement("span");
-  yesLbl.style.color = "var(--green2)";
-  yesLbl.textContent = "YES "+m.yesPct+"%";
-  var noLbl = document.createElement("span");
-  noLbl.style.color = "var(--red2)";
-  noLbl.textContent = "NO "+m.noPct+"%";
-  pctRow.appendChild(yesLbl);
-  pctRow.appendChild(noLbl);
-  body.appendChild(pctRow);
-
-  // Pool + buttons
-  var poolRow = document.createElement("div");
-  poolRow.style.cssText = "display:flex;align-items:center;justify-content:space-between";
-  var poolLbl = document.createElement("div");
-  poolLbl.style.cssText = "font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700";
+  // Pool evidence box
   var mktCurLabel = m.currency || "ETH";
   var poolDec = (mktCurLabel==="USDC"||mktCurLabel==="USDT") ? 2 : 4;
-  poolLbl.textContent = "Pool: "+m.poolEth.toFixed(poolDec)+" "+mktCurLabel;
+  var poolBox = document.createElement("div");
+  poolBox.style.cssText = "display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;margin-bottom:10px";
+  var poolLblEl = document.createElement("div");
+  poolLblEl.style.cssText = "font-size:.7rem;color:var(--text3)";
+  poolLblEl.innerHTML = "Pool <strong style='color:var(--gold2);font-family:monospace'>"+m.poolEth.toFixed(poolDec)+" "+mktCurLabel+"</strong>";
+  var yieldPoolEl = document.createElement("div");
+  var CUR_PRICE = {ETH:2000,USDC:1,USDT:1,CPRED:0.05};
+  var yUsd2 = (m.poolEth * (CUR_PRICE[mktCurLabel]||1) * 0.048 / 365);
+  yieldPoolEl.style.cssText = "font-size:.7rem;color:var(--green2)";
+  yieldPoolEl.textContent = "+$"+(yUsd2 < 0.01 ? yUsd2.toFixed(4) : yUsd2.toFixed(2))+"/g";
+  poolBox.appendChild(poolLblEl); poolBox.appendChild(yieldPoolEl);
+  body.appendChild(poolBox);
+
+  // Buttons + pool row
+  var poolRow = document.createElement("div");
+  poolRow.style.cssText = "display:flex;align-items:center;justify-content:space-between";
+  var poolLbl = document.createElement("div"); // legacy compat
+  poolLbl.style.cssText = "display:none";
   var btns = document.createElement("div");
-  btns.style.cssText = "display:flex;gap:6px";
+  btns.style.cssText = "display:flex;gap:6px;width:100%";
 
   var btnYes = document.createElement("button");
   btnYes.className = "btn btn-up";
-  btnYes.style.cssText = "font-size:.72rem;padding:5px 12px;font-weight:700";
-  btnYes.textContent = (panel && panel.side === true) ? "✕ YES" : "▲ YES";
+  btnYes.style.cssText = "flex:1;justify-content:center;font-size:.78rem;padding:8px;font-weight:700;border-radius:9px";
+  btnYes.textContent = (panel && panel.side === true) ? "✕ YES" : "▲ YES "+m.yesPct+"%";
   btnYes.onclick = (function(id){return function(){togglePanel(id,true);};})(m.id);
 
   var btnNo = document.createElement("button");
   btnNo.className = "btn btn-dn";
-  btnNo.style.cssText = "font-size:.72rem;padding:5px 12px;font-weight:700";
-  btnNo.textContent = (panel && panel.side === false) ? "✕ NO" : "▼ NO";
+  btnNo.style.cssText = "flex:1;justify-content:center;font-size:.78rem;padding:8px;font-weight:700;border-radius:9px";
+  btnNo.textContent = (panel && panel.side === false) ? "✕ NO" : "▼ NO "+m.noPct+"%";
   btnNo.onclick = (function(id){return function(){togglePanel(id,false);};})(m.id);
 
   btns.appendChild(btnYes);
@@ -395,14 +433,12 @@ function buildCard(el, m) {
 
   // Meta: countdown + partecipanti
   var meta = document.createElement("div");
-  meta.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-top:8px";
-
+  meta.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:10px";
   var cdEl = document.createElement("div");
   cdEl.id = "cd-"+m.id;
-  cdEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;font-weight:700";
+  cdEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;font-weight:700";
   cdEl.textContent = "...";
   meta.appendChild(cdEl);
-
   var partsEl = document.createElement("div");
   partsEl.style.cssText = "font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)";
   var partsNum = document.createElement("span");
@@ -412,30 +448,6 @@ function buildCard(el, m) {
   partsEl.appendChild(document.createTextNode(" partecipanti"));
   meta.appendChild(partsEl);
   body.appendChild(meta);
-
-  // Yield bar
-  var ybar = document.createElement("div");
-  ybar.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:6px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)";
-  // Yield bar — DOM puro, calcolo in USD
-  var CUR_PRICE = {ETH:2000, USDC:1, USDT:1, CPRED:0.05};
-  var yUsd = (m.poolEth * (CUR_PRICE[m.currency||"ETH"]||1) * 0.048 / 365);
-  var yTxt = yUsd < 0.01 ? ('$'+yUsd.toFixed(4)) : ('$'+yUsd.toFixed(2));
-  var ydLeft = document.createElement('div');
-  ydLeft.style.cssText = 'display:flex;align-items:center;gap:5px';
-  var ydDot = document.createElement('span');
-  ydDot.className = 'yield-dot';
-  var ydLbl = document.createElement('span');
-  ydLbl.style.cssText = 'font-size:.6rem;color:#00e87a;font-weight:700';
-  ydLbl.textContent = 'YIELD';
-  ydLeft.appendChild(ydDot); ydLeft.appendChild(ydLbl);
-  var ydMid = document.createElement('span');
-  ydMid.style.cssText = 'font-size:.6rem;color:#00e87a;font-weight:700';
-  ydMid.textContent = '+' + yTxt + '/g';
-  var ydApy = document.createElement('span');
-  ydApy.style.cssText = 'font-size:.58rem;color:var(--text3)';
-  ydApy.textContent = '4.8% APY';
-  ybar.appendChild(ydLeft); ybar.appendChild(ydMid); ybar.appendChild(ydApy);
-  body.appendChild(ybar);
 
   // Immagine card (sopra il body)
   var imgWrap = document.createElement("div");
@@ -481,29 +493,28 @@ function buildCard(el, m) {
     var svgStr = SVGS[catKey]   || SVGS.altro;
 
     var ph = document.createElement("div");
-    ph.style.cssText = "width:100%;height:140px;display:flex;flex-direction:column;align-items:center;" +
-      "justify-content:center;gap:8px;background:" + th.bg + ";border-bottom:1px solid " + th.border + ";";
+    ph.style.cssText = "width:100%;height:120px;display:flex;flex-direction:column;align-items:center;" +
+      "justify-content:center;gap:6px;background:" + th.bg + ";border-bottom:1px solid " + th.border + ";position:relative";
+
+    // Badge categoria top-right
+    var catBadge = document.createElement("div");
+    catBadge.style.cssText = "position:absolute;top:8px;right:8px;padding:2px 8px;border-radius:4px;" +
+      "font-family:monospace;font-size:.58rem;font-weight:700;letter-spacing:.06em;" +
+      "color:"+th.color+";background:rgba(0,0,0,.35);border:1px solid "+th.border;
+    catBadge.textContent = catKey.toUpperCase();
+    ph.appendChild(catBadge);
 
     var svgWrap = document.createElement("div");
-    svgWrap.style.cssText = "width:44px;height:44px;color:" + th.color;
+    svgWrap.style.cssText = "width:40px;height:40px;color:" + th.color;
     svgWrap.innerHTML = svgStr;
-
-    var lblEl = document.createElement("div");
-    lblEl.style.cssText = "font-family:monospace;font-size:.58rem;font-weight:700;" +
-      "letter-spacing:.1em;color:" + th.color + ";opacity:.6";
-    lblEl.textContent = catKey.toUpperCase();
+    ph.appendChild(svgWrap);
 
     if (m.asset && m.asset !== "OTHER") {
       var astEl = document.createElement("div");
       astEl.style.cssText = "font-family:monospace;font-size:.72rem;font-weight:700;" +
-        "color:" + th.color + ";opacity:.55";
+        "color:" + th.color + ";opacity:.7";
       astEl.textContent = m.asset;
-      ph.appendChild(svgWrap);
       ph.appendChild(astEl);
-      ph.appendChild(lblEl);
-    } else {
-      ph.appendChild(svgWrap);
-      ph.appendChild(lblEl);
     }
     imgWrap.appendChild(ph);
   }
