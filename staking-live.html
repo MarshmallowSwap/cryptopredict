@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Live Staking — CryptoPredict</title>
+<meta name="description" content="Stake $CPRED after listing and earn real ETH from protocol fees. Permanent on-chain revenue sharing with governance weight.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse-ring{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{box-shadow:0 0 0 10px transparent}}
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:#a855f7;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+.pool-card{border-radius:18px;padding:26px;border:1px solid;transition:all .25s;position:relative;overflow:hidden;cursor:pointer}
+.pool-card:hover{transform:translateY(-3px)}
+.pool-card.selected{outline:2px solid currentColor;outline-offset:2px}
+.pool-silver{background:linear-gradient(135deg,rgba(148,163,184,.1),rgba(148,163,184,.04));border-color:rgba(148,163,184,.3);color:#94a3b8}
+.pool-gold{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border-color:rgba(245,158,11,.3);color:#f59e0b}
+.pool-diamond{background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(6,182,212,.06));border-color:rgba(167,139,250,.4);color:#a78bfa}
+.apy-big{font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-.03em}
+.tier-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border-radius:20px;font-size:.68rem;font-weight:700;font-family:'DM Mono',monospace;border:1px solid currentColor;background:rgba(255,255,255,.05);margin-bottom:16px}
+.pool-stat{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.pool-stat:last-child{border:none}
+.pool-bar-wrap{height:5px;background:rgba(255,255,255,.07);border-radius:3px;margin:12px 0}
+.pool-bar-fill{height:5px;border-radius:3px;background:currentColor;transition:width 1.2s ease}
+.stake-panel{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:22px}
+.cpred-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;font-family:'DM Mono',monospace;font-size:.95rem;color:var(--text);outline:none;box-sizing:border-box;transition:border-color .2s}
+.cpred-input:focus{border-color:var(--purple2)}
+.mech-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px 22px;transition:all .2s}
+.mech-card:hover{border-color:rgba(124,58,237,.3);transform:translateY(-1px)}
+.coming-soon-overlay{position:absolute;inset:0;background:rgba(8,8,16,.75);backdrop-filter:blur(2px);border-radius:18px;display:flex;align-items:center;justify-content:center;z-index:10}
+.reward-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;font-family:'DM Mono',monospace}
+</style>
+</head>
+<body data-page="staking-live">
+
+<div class="ticker-bar"><div class="ticker-track">
+  <span class="tick-live"><span class="tick-dot"></span>LIVE STAKING — POST LISTING</span>
+  <span class="tick-item">Earn real ETH from protocol fees</span>
+  <span class="tick-item"><span class="sym">Silver</span> 18% APY · <span class="sym">Gold</span> 28% APY · <span class="sym">Diamond</span> 40% APY</span>
+  <span class="tick-item">2× governance weight when staked</span>
+  <span class="tick-live"><span class="tick-dot"></span>LIVE STAKING — POST LISTING</span>
+  <span class="tick-item">1 CPRED staked = 2 governance votes</span>
+  <span class="tick-item">ETH rewards from every market payout</span>
+</div></div>
+
+<nav class="main-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🔮</div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">LIVE STAKING</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html"       class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="presale.html"     class="nav-link" data-page="presale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Presale</span><span class="badge"></span></a>
+    <a href="mercati.html"     class="nav-link" data-page="mercati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Markets</span></a>
+    <a href="staking.html"     class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Presale Staking</span></a>
+    <a href="staking-live.html" class="nav-link active" data-page="staking-live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg><span>Live Staking</span></a>
+    <a href="governance.html"  class="nav-link" data-page="governance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>Governance</span></a>
+    <a href="docs.html"        class="nav-link" data-page="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Docs</span></a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-balance" id="nav-balance" style="display:none"></span>
+    <span class="nav-wallet"  id="nav-wallet"  style="display:none"></span>
+    <div class="nav-avatar"   id="nav-avatar"  style="display:none">👤</div>
+    <button class="nav-connect" id="nav-connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<div class="presale-banner">
+  <span class="pb-live"><span class="tick-dot" style="background:#fbbf24"></span>LAUNCHING AT LISTING</span>
+  <span class="pb-price">· Get CPRED in presale at $0.050 for maximum staking power</span>
+  <a href="presale.html" class="pb-btn">Buy CPRED →</a>
+</div>
+
+<!-- HERO -->
+<div style="text-align:center;padding:60px 24px 44px;position:relative">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(124,58,237,.1),transparent);pointer-events:none"></div>
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:5px 16px;margin-bottom:18px">
+    <span style="font-size:.65rem;font-weight:700;color:#a855f7;letter-spacing:.12em">LIVE STAKING</span>
+    <span style="background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:1px 8px;font-size:.6rem;font-weight:700;color:#fbbf24">LAUNCHES AT LISTING Q4 2025</span>
+  </div>
+  <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:14px">
+    Stake CPRED.<br>
+    <span style="background:linear-gradient(135deg,#10b981,#00e87a);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Earn Real ETH.</span>
+  </h1>
+  <p style="font-size:.92rem;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 32px;line-height:1.75;font-family:'DM Mono',monospace;font-size:.8rem">
+    After the presale, CPRED staking becomes permanent and revenue-generating. Lock CPRED, receive ETH from every market payout, vote on the protocol.
+  </p>
+
+  <!-- Comparison presale vs live -->
+  <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:36px">
+    <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:12px 20px;text-align:left">
+      <div style="font-size:.65rem;color:#fbbf24;font-weight:700;letter-spacing:.08em;margin-bottom:6px">PRESALE STAKING (NOW)</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6">
+        ✅ Up to 28% APY in CPRED<br>
+        ✅ ETH from protocol fees<br>
+        ⏳ Ends at listing
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;font-size:1.4rem;color:rgba(255,255,255,.2)">→</div>
+    <div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:12px;padding:12px 20px;text-align:left;box-shadow:0 2px 20px rgba(124,58,237,.12)">
+      <div style="font-size:.65rem;color:#a855f7;font-weight:700;letter-spacing:.08em;margin-bottom:6px">LIVE STAKING (POST LISTING)</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.6">
+        🚀 Up to 40% APY in CPRED<br>
+        💎 ETH from ALL market fees<br>
+        🗳️ 2× governance voting power<br>
+        ♾️ Permanent, no end date
+      </div>
+    </div>
+  </div>
+
+  <a href="presale.html" style="padding:14px 32px;background:linear-gradient(135deg,#ffd700,#ff9500);border:none;border-radius:10px;color:#000;font-weight:900;font-size:.92rem;cursor:pointer;letter-spacing:.03em;font-family:'Syne',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(255,215,0,.25)">
+    💎 Buy CPRED now at $0.050 — best staking entry
+  </a>
+</div>
+
+<div class="page-wrap">
+
+  <!-- How it works -->
+  <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:18px">// HOW LIVE STAKING WORKS</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:32px">
+    <div class="mech-card">
+      <div style="font-size:1.6rem;margin-bottom:10px">🔒</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">Lock CPRED</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Choose a tier and lock your CPRED. The longer the lock, the higher your APY multiplier and governance weight.</div>
+    </div>
+    <div class="mech-card">
+      <div style="font-size:1.6rem;margin-bottom:10px">💰</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">Earn ETH Revenue</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">1% of every winning payout across ALL markets goes to the ETH reward pool. Distributed proportionally to stakers every epoch (7 days).</div>
+    </div>
+    <div class="mech-card">
+      <div style="font-size:1.6rem;margin-bottom:10px">📈</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">CPRED APY Boost</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">In addition to ETH, stakers earn CPRED at a fixed APY on their locked capital. Rewards accrue every second on-chain.</div>
+    </div>
+    <div class="mech-card">
+      <div style="font-size:1.6rem;margin-bottom:10px">🗳️</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">Governance Power</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Staked CPRED counts as 2× governance votes. Diamond tier gets an additional 0.5× bonus. Your voice grows with your commitment.</div>
+    </div>
+    <div class="mech-card">
+      <div style="font-size:1.6rem;margin-bottom:10px">🔄</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">Auto-compound</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">CPRED rewards can be auto-compounded back into your stake position, growing your principal and ETH earnings automatically.</div>
+    </div>
+    <div class="mech-card">
+      <div style="font-size:1.6rem;margin-bottom:10px">⚡</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">Early Unstake Penalty</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Unstaking before lock end incurs a 10% penalty on staked CPRED. Penalty goes to the reward pool — rewarding committed stakers.</div>
+    </div>
+  </div>
+
+  <!-- 3 Pool cards -->
+  <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:18px">// STAKING TIERS — POST LISTING</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:28px;position:relative">
+
+    <!-- Silver -->
+    <div class="pool-card pool-silver">
+      <div class="tier-badge">🥈 SILVER</div>
+      <div class="apy-big">18%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">APY in CPRED · annual</div>
+      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:45%"></div></div>
+      <div class="pool-stat"><span style="opacity:.65">Lock period</span><span style="font-family:'DM Mono',monospace">30 days</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Early unstake</span><span style="font-family:'DM Mono',monospace;color:#ef4444">-10% penalty</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Governance weight</span><span style="font-family:'DM Mono',monospace">2× VP</span></div>
+      <div class="pool-stat"><span style="opacity:.65">ETH reward share</span><span style="font-family:'DM Mono',monospace">Proportional</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Max TVL</span><span style="font-family:'DM Mono',monospace">20M CPRED</span></div>
+      <div style="margin-top:14px;padding:8px;background:rgba(255,255,255,.04);border-radius:8px;font-family:'DM Mono',monospace;font-size:.7rem;text-align:center;opacity:.7">
+        ✅ Unstake after 30 days
+      </div>
+      <div style="display:flex;gap:6px;margin-top:12px">
+        <span class="reward-pill" style="background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.2);color:#94a3b8">CPRED 18%</span>
+        <span class="reward-pill" style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#34d399">ETH fees</span>
+      </div>
+    </div>
+
+    <!-- Gold — highlighted -->
+    <div class="pool-card pool-gold" style="box-shadow:0 4px 32px rgba(245,158,11,.15)">
+      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:0 0 10px 10px;padding:3px 16px;font-size:.6rem;font-weight:700;color:#000;white-space:nowrap">⭐ MOST POPULAR</div>
+      <div class="tier-badge" style="margin-top:16px">🥇 GOLD</div>
+      <div class="apy-big">28%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">APY in CPRED · annual</div>
+      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:70%"></div></div>
+      <div class="pool-stat"><span style="opacity:.65">Lock period</span><span style="font-family:'DM Mono',monospace">90 days</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Early unstake</span><span style="font-family:'DM Mono',monospace;color:#ef4444">-10% penalty</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Governance weight</span><span style="font-family:'DM Mono',monospace">2× VP</span></div>
+      <div class="pool-stat"><span style="opacity:.65">ETH reward share</span><span style="font-family:'DM Mono',monospace">1.5× multiplier</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Max TVL</span><span style="font-family:'DM Mono',monospace">15M CPRED</span></div>
+      <div style="margin-top:14px;padding:8px;background:rgba(245,158,11,.1);border-radius:8px;font-family:'DM Mono',monospace;font-size:.7rem;text-align:center">
+        🔒 Locked 90 days · 1.5× ETH boost
+      </div>
+      <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
+        <span class="reward-pill" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:#fbbf24">CPRED 28%</span>
+        <span class="reward-pill" style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#34d399">ETH 1.5×</span>
+      </div>
+    </div>
+
+    <!-- Diamond -->
+    <div class="pool-card pool-diamond" style="box-shadow:0 4px 32px rgba(124,58,237,.15)">
+      <div class="tier-badge">💎 DIAMOND</div>
+      <div class="apy-big" style="background:linear-gradient(135deg,#a78bfa,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">40%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">APY in CPRED · annual</div>
+      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:100%"></div></div>
+      <div class="pool-stat"><span style="opacity:.65">Lock period</span><span style="font-family:'DM Mono',monospace">365 days</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Early unstake</span><span style="font-family:'DM Mono',monospace;color:#ef4444">-10% penalty</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Governance weight</span><span style="font-family:'DM Mono',monospace">2.5× VP</span></div>
+      <div class="pool-stat"><span style="opacity:.65">ETH reward share</span><span style="font-family:'DM Mono',monospace">2× multiplier</span></div>
+      <div class="pool-stat"><span style="opacity:.65">Max TVL</span><span style="font-family:'DM Mono',monospace">10M CPRED</span></div>
+      <div style="margin-top:14px;padding:8px;background:rgba(124,58,237,.12);border-radius:8px;font-family:'DM Mono',monospace;font-size:.7rem;text-align:center">
+        💎 1 year lock · max rewards · 2.5× governance
+      </div>
+      <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
+        <span class="reward-pill" style="background:rgba(124,58,237,.15);border:1px solid rgba(167,139,250,.3);color:#c4b5fd">CPRED 40%</span>
+        <span class="reward-pill" style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#34d399">ETH 2×</span>
+        <span class="reward-pill" style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);color:#22d3ee">2.5× GOV</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue model -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px">
+
+    <!-- ETH Revenue flow -->
+    <div class="stake-panel">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:16px">// ETH REVENUE FLOW</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15);border-radius:10px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🎯</div>
+          <div>
+            <div style="font-size:.78rem;font-weight:700">User wins market</div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.4)">claimPayout() called on-chain</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:.7rem;color:rgba(255,255,255,.3)">↓ 2% fee on gross payout</div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;padding:10px 12px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:10px;text-align:center">
+            <div style="font-size:.65rem;color:#fbbf24;font-weight:700;margin-bottom:3px">1% CREATOR</div>
+            <div style="font-size:.7rem;color:rgba(255,255,255,.4)">Market creator wallet</div>
+          </div>
+          <div style="flex:1;padding:10px 12px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:10px;text-align:center">
+            <div style="font-size:.65rem;color:#a855f7;font-weight:700;margin-bottom:3px">1% STAKERS</div>
+            <div style="font-size:.7rem;color:rgba(255,255,255,.4)">ETH reward pool</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:.7rem;color:rgba(255,255,255,.3)">↓ Every 7-day epoch</div>
+        <div style="padding:10px 12px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:10px">
+          <div style="font-size:.75rem;font-weight:700;margin-bottom:4px;color:#c4b5fd">Distributed to stakers</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.4);line-height:1.6">
+            Proportional to: staked CPRED × tier multiplier<br>
+            Silver: 1× · Gold: 1.5× · Diamond: 2×
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings calculator -->
+    <div class="stake-panel">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:16px">// EARNINGS CALCULATOR</div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Your CPRED amount</div>
+        <input type="number" id="calc-cpred" value="10000" min="1" step="1000"
+          class="cpred-input" oninput="calcEarnings()" placeholder="10000">
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Tier</div>
+        <div style="display:flex;gap:6px">
+          <button onclick="setTier('silver',this)" class="btn btn-ghost" id="tier-silver" style="flex:1;justify-content:center;font-size:.72rem;padding:6px">🥈 Silver</button>
+          <button onclick="setTier('gold',this)" class="btn btn-primary" id="tier-gold" style="flex:1;justify-content:center;font-size:.72rem;padding:6px">🥇 Gold</button>
+          <button onclick="setTier('diamond',this)" class="btn btn-ghost" id="tier-diamond" style="flex:1;justify-content:center;font-size:.72rem;padding:6px">💎 Diamond</button>
+        </div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Monthly protocol volume (ETH)</div>
+        <input type="number" id="calc-volume" value="500" min="1"
+          class="cpred-input" oninput="calcEarnings()" placeholder="500">
+      </div>
+      <div id="calc-result" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+          <span style="font-size:.75rem;color:rgba(255,255,255,.5)">CPRED APY reward (yearly)</span>
+          <span id="calc-cpred-reward" style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:#fbbf24">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+          <span style="font-size:.75rem;color:rgba(255,255,255,.5)">ETH from fees (monthly)</span>
+          <span id="calc-eth-reward" style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:#34d399">—</span>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:8px;margin-top:4px;display:flex;justify-content:space-between">
+          <span style="font-size:.75rem;color:rgba(255,255,255,.5)">Total USD value/year</span>
+          <span id="calc-total" style="font-family:'DM Mono',monospace;font-size:.9rem;font-weight:800;color:#a855f7">—</span>
+        </div>
+        <div style="font-size:.62rem;color:rgba(255,255,255,.3);margin-top:6px;text-align:center">Based on CPRED at $0.15 · ETH at $2,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staking form — coming soon overlay -->
+  <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:18px">// STAKE CPRED — LAUNCHES AT LISTING</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px">
+    <div class="stake-panel" style="position:relative;opacity:.5;pointer-events:none">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);margin-bottom:16px">// STAKE</div>
+      <div style="font-size:.75rem;color:rgba(255,255,255,.5);margin-bottom:6px">Select tier</div>
+      <div style="display:flex;gap:6px;margin-bottom:14px">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:.72rem">🥈 Silver</button>
+        <button class="btn btn-primary" style="flex:1;justify-content:center;font-size:.72rem">🥇 Gold</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:.72rem">💎 Diamond</button>
+      </div>
+      <input type="number" class="cpred-input" placeholder="CPRED amount" style="margin-bottom:14px">
+      <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:.92rem;padding:12px">🔒 Stake CPRED</button>
+      <div class="coming-soon-overlay" style="position:absolute;inset:0;background:rgba(8,8,16,.8);backdrop-filter:blur(3px);border-radius:16px;display:flex;align-items:center;justify-content:center;pointer-events:all">
+        <div style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:10px">🚀</div>
+          <div style="font-weight:800;font-size:.92rem;color:#e2e8f0;margin-bottom:6px">Launches at listing</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-bottom:14px">Buy CPRED in presale to be<br>ready on day 1</div>
+          <a href="presale.html" style="padding:9px 20px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:8px;color:#000;font-weight:700;font-size:.78rem;text-decoration:none">Buy CPRED →</a>
+        </div>
+      </div>
+    </div>
+    <div class="stake-panel" style="position:relative;opacity:.5">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);margin-bottom:16px">// YOUR POSITIONS</div>
+      <div style="text-align:center;padding:30px;color:rgba(255,255,255,.3);font-size:.82rem">
+        No staking positions yet.<br>Launches at listing.
+      </div>
+      <div class="coming-soon-overlay" style="position:absolute;inset:0;background:rgba(8,8,16,.8);backdrop-filter:blur(3px);border-radius:16px;display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">⏳</div>
+          <div style="font-weight:800;font-size:.85rem;color:#e2e8f0">Coming at listing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison table -->
+  <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:16px">// PRESALE STAKING VS LIVE STAKING</div>
+  <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;margin-bottom:28px">
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.08)">
+          <th style="padding:14px 18px;text-align:left;font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:.08em;font-weight:400">FEATURE</th>
+          <th style="padding:14px 18px;text-align:center;color:#fbbf24;font-size:.75rem">⏳ Presale Staking</th>
+          <th style="padding:14px 18px;text-align:center;color:#a855f7;font-size:.75rem">🚀 Live Staking</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">Duration</td>
+          <td style="padding:12px 18px;text-align:center;font-family:'DM Mono',monospace;font-size:.75rem;color:#fbbf24">Until listing</td>
+          <td style="padding:12px 18px;text-align:center;font-family:'DM Mono',monospace;font-size:.75rem;color:#a855f7">Permanent ♾️</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">Max APY</td>
+          <td style="padding:12px 18px;text-align:center;font-family:'DM Mono',monospace;font-size:.75rem">28% (90-day)</td>
+          <td style="padding:12px 18px;text-align:center;font-family:'DM Mono',monospace;font-size:.75rem;color:#a855f7;font-weight:700">40% (Diamond 365d)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">ETH rewards</td>
+          <td style="padding:12px 18px;text-align:center">✅ 1× share</td>
+          <td style="padding:12px 18px;text-align:center">✅ Up to 2× multiplier</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">Governance votes</td>
+          <td style="padding:12px 18px;text-align:center">✅ 2× VP</td>
+          <td style="padding:12px 18px;text-align:center">✅ 2× – 2.5× VP</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">Early unstake</td>
+          <td style="padding:12px 18px;text-align:center;font-size:.75rem">No penalty (Flexible)</td>
+          <td style="padding:12px 18px;text-align:center;font-size:.75rem;color:#ef4444">-10% penalty → reward pool</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">Auto-compound</td>
+          <td style="padding:12px 18px;text-align:center">❌</td>
+          <td style="padding:12px 18px;text-align:center">✅ CPRED rewards</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 18px;color:rgba(255,255,255,.5)">Reward epochs</td>
+          <td style="padding:12px 18px;text-align:center;font-size:.75rem">Per second (on-chain)</td>
+          <td style="padding:12px 18px;text-align:center;font-size:.75rem">Every 7 days (ETH) + per second (CPRED)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CTA final -->
+  <div style="background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(6,182,212,.06));border:1px solid rgba(124,58,237,.25);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <div>
+      <div style="font-weight:800;font-size:1.05rem;color:#e2e8f0;margin-bottom:6px">Get maximum staking power on day 1</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.6">Buy CPRED at $0.050 in presale → listing at $0.150 (+200%) → stake immediately for Diamond tier → earn 40% APY + ETH from all market fees.</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0">
+      <a href="presale.html" style="padding:12px 24px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:10px;color:#000;font-weight:800;font-size:.85rem;text-decoration:none">💎 Buy CPRED →</a>
+      <a href="staking.html" style="padding:12px 24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#e2e8f0;font-weight:700;font-size:.85rem;text-decoration:none">Presale Staking →</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+<script src="web3.js"></script>
+<script src="_shared.js"></script>
+<script>
+var currentTier = 'gold';
+var TIERS = {
+  silver:  { apy: 0.18, ethMult: 1.0,  label: 'Silver' },
+  gold:    { apy: 0.28, ethMult: 1.5,  label: 'Gold' },
+  diamond: { apy: 0.40, ethMult: 2.0,  label: 'Diamond' },
+};
+
+function setTier(tier, btn) {
+  currentTier = tier;
+  ['silver','gold','diamond'].forEach(function(t) {
+    var b = document.getElementById('tier-' + t);
+    if (b) {
+      b.className = t === tier ? 'btn btn-primary' : 'btn btn-ghost';
+      b.style.justifyContent = 'center';
+      b.style.fontSize = '.72rem';
+      b.style.padding = '6px';
+    }
+  });
+  calcEarnings();
+}
+
+function calcEarnings() {
+  var cpred  = parseFloat(document.getElementById('calc-cpred').value)  || 0;
+  var volume = parseFloat(document.getElementById('calc-volume').value) || 0;
+  var tier   = TIERS[currentTier];
+
+  // CPRED APY reward (yearly)
+  var cpredReward = cpred * tier.apy;
+  var cpredUsd    = cpredReward * 0.15; // $0.15 listing price
+
+  // ETH from fees — assume total staked = 5M CPRED, user share proportional
+  var TOTAL_STAKED = 5000000;
+  var userShare    = cpred / TOTAL_STAKED;
+  var protocolFee  = volume * 0.01; // 1% of monthly volume in ETH
+  var userEth      = protocolFee * userShare * tier.ethMult;
+  var userEthUsd   = userEth * 2000;
+
+  var totalUsd = cpredUsd + userEthUsd * 12; // annual
+
+  document.getElementById('calc-cpred-reward').textContent =
+    cpredReward.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CPRED ($' + cpredUsd.toFixed(0) + ')';
+  document.getElementById('calc-eth-reward').textContent =
+    userEth.toFixed(4) + ' ETH ($' + userEthUsd.toFixed(2) + ')';
+  document.getElementById('calc-total').textContent =
+    '$' + totalUsd.toLocaleString(undefined,{maximumFractionDigits:0}) + '/yr';
+}
+
+calcEarnings();
+CP.ready.then(function() {});
+</script>
+</body></html>
