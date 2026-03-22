@@ -406,7 +406,7 @@ function connectWallet() { openModal('wallet-modal'); }
 document.addEventListener('DOMContentLoaded', () => CP.init());
 
 /* ── AI ADVISOR FLOATING WIDGET ──────────────────────────────── */
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
   // Inject styles
   var style = document.createElement('style');
   style.textContent = `
@@ -564,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => CP.init());
       setTimeout(function(){ document.getElementById('ai-drawer-inp').focus(); }, 100);
     }
   });
-})();
+});
 
 /* ── AI WIDGET LOGIC ── */
 var aiWidget = (function() {
