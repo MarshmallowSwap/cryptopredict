@@ -429,8 +429,19 @@ async function loadPriceChart() {
     // Leggi eventi BetPlaced per questo mercato
     var filter = c.filters.BetPlaced(currentMarketId);
     var latestBlock = await provider.getBlockNumber();
-    var fromBlock   = Math.max(0, latestBlock - 10000); // ultimi 10000 blocchi
-    var events      = await c.queryFilter(filter, fromBlock, "latest");
+    // Max 2000 blocchi per chiamata per evitare HTTP 413
+    var events = [];
+    var batchSize = 2000;
+    var from = Math.max(0, latestBlock - 2000);
+    try {
+      events = await c.queryFilter(filter, from, "latest");
+    } catch(e2) {
+      // Se ancora troppo, prova con 500 blocchi
+      try {
+        from = Math.max(0, latestBlock - 500);
+        events = await c.queryFilter(filter, from, "latest");
+      } catch(e3) { events = []; }
+    }
 
     if (!events.length) {
       document.getElementById("chart-loading").innerHTML =
@@ -564,7 +575,14 @@ async function loadRecentTrades() {
     var c = new ethers.Contract(W3.CONTRACTS.market, MKT_ABI_T, provider);
     var filter  = c.filters.BetPlaced(currentMarketId);
     var latest  = await provider.getBlockNumber();
-    var events  = await c.queryFilter(filter, Math.max(0, latest - 5000), "latest");
+    var events = [];
+    try {
+      events = await c.queryFilter(filter, Math.max(0, latest - 2000), "latest");
+    } catch(e2) {
+      try {
+        events = await c.queryFilter(filter, Math.max(0, latest - 500), "latest");
+      } catch(e3) { events = []; }
+    }
     var last10  = events.slice(-10).reverse();
 
     if (!last10.length) {
