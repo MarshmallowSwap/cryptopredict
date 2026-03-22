@@ -481,7 +481,6 @@ async function createMarket() {
     var tx = await mktC.createMarket(
       question, category, asset, 0n, true, BigInt(expiresAt),
       curIdx, liqAmount,
-      question, category, asset, 0n, true, BigInt(expiresAt),
       txOpts
     );
     btn.innerHTML = '<span class="spin"></span> Conferma in corso...';
