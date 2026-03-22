@@ -108,6 +108,16 @@
         <div class="stat-val" id="stat-reward" style="color:var(--cyan2)">—</div>
         <span class="stat-change">CPRED accumulati</span>
       </div>
+      <div class="stat-card">
+        <div class="stat-label">USDC</div>
+        <div class="stat-val" id="stat-usdc" style="color:#2775ca">—</div>
+        <span class="stat-change">testnet</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">USDT</div>
+        <div class="stat-val" id="stat-usdt" style="color:#26a17b">—</div>
+        <span class="stat-change">testnet</span>
+      </div>
     </div>
 
     <div class="g2" style="margin-bottom:20px">
@@ -120,9 +130,10 @@
         </div>
         <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
           <a href="https://faucet.quicknode.com/base/sepolia" target="_blank"
-             class="btn btn-ghost" style="font-size:.75rem">🚰 Faucet ETH</a>
-          <a href="presale.html" class="btn btn-gold" style="font-size:.75rem">💎 Compra CPRED</a>
-          <a href="staking.html" class="btn btn-ghost" style="font-size:.75rem">🔒 Staking →</a>
+             class="btn btn-ghost" style="font-size:.75rem">Faucet ETH</a>
+          <a href="presale.html" class="btn btn-gold" style="font-size:.75rem">Compra CPRED</a>
+          <a href="faucet.html" class="btn btn-ghost" style="font-size:.75rem">Faucet USDC/USDT</a>
+          <a href="staking.html" class="btn btn-ghost" style="font-size:.75rem">Staking</a>
         </div>
       </div>
 
@@ -215,13 +226,23 @@ async function loadPortfolio() {
 
   try {
     // Carica tutto in parallelo
-    const [ethBal, cpred, userStaking, marketC, presaleC] = await Promise.all([
+    const ERC20_ABI = ["function balanceOf(address) view returns (uint256)"];
+    const provider = await W3.getProvider();
+    const usdcContract = new ethers.Contract(W3.CONTRACTS.mockUsdc, ERC20_ABI, provider);
+    const usdtContract = new ethers.Contract(W3.CONTRACTS.mockUsdt, ERC20_ABI, provider);
+
+    const [ethBal, cpred, userStaking, marketC, presaleC, usdcRaw, usdtRaw] = await Promise.all([
       W3.getEthBalance(addr),
       W3.getCpredBalance(addr),
       W3.getUserPresaleStaking(addr),
       W3.getContract('market'),
       W3.getContract('presale'),
+      usdcContract.balanceOf(addr),
+      usdtContract.balanceOf(addr),
     ]);
+
+    const usdcBal = parseFloat(ethers.formatUnits(usdcRaw, 6));
+    const usdtBal = parseFloat(ethers.formatUnits(usdtRaw, 6));
 
     // ── STATS ──────────────────────────────────────────────────
     document.getElementById('stat-eth').textContent = ethBal.toFixed(4) + ' ETH';
@@ -238,6 +259,9 @@ async function loadPortfolio() {
     document.getElementById('stat-reward').textContent = totalReward.toFixed(4) + ' CPRED';
     document.getElementById('reward-big').textContent = totalReward.toFixed(4) + ' CPRED';
 
+    document.getElementById('stat-usdc').textContent = usdcBal.toLocaleString() + ' USDC';
+    document.getElementById('stat-usdt').textContent = usdtBal.toLocaleString() + ' USDT';
+
     if (totalReward <= 0) {
       document.getElementById('claim-btn').disabled = true;
       document.getElementById('claim-btn').style.opacity = '.4';
@@ -251,8 +275,10 @@ async function loadPortfolio() {
     assetsList.innerHTML = '';
 
     const assets = [
-      { name: 'ETH', sub: 'Base Sepolia', qty: ethBal.toFixed(4), val: `~$${(ethBal*2000).toFixed(0)}`, note: 'testnet', noteColor: 'var(--text3)' },
-      { name: 'CPRED', sub: 'In wallet', qty: cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0}), val: `$${(cpred.balance*0.05).toFixed(2)}`, note: 'listing +200%', noteColor: 'var(--green2)' },
+      { name: 'ETH',  sub: 'Base Sepolia', qty: ethBal.toFixed(4),  val: '~$'+(ethBal*2000).toFixed(0),          note: 'testnet',     noteColor: 'var(--cyan2)' },
+      { name: 'CPRED',sub: 'In wallet',    qty: cpred.balance.toLocaleString(undefined,{maximumFractionDigits:0}), val: '$'+(cpred.balance*0.05).toFixed(2), note: 'listing +200%', noteColor: 'var(--green2)' },
+      { name: 'USDC', sub: 'Mock testnet', qty: usdcBal.toLocaleString(), val: '$'+usdcBal.toFixed(2),            note: 'stablecoin',  noteColor: '#2775ca' },
+      { name: 'USDT', sub: 'Mock testnet', qty: usdtBal.toLocaleString(), val: '$'+usdtBal.toFixed(2),            note: 'stablecoin',  noteColor: '#26a17b' },
     ];
     if (totalStaked > 0)
       assets.push({ name: 'CPRED', sub: 'In staking', qty: totalStaked.toLocaleString(undefined,{maximumFractionDigits:0}), val: `$${(totalStaked*0.05).toFixed(2)}`, note: 'genera rewards', noteColor: 'var(--cyan2)' });
