@@ -34,7 +34,7 @@
     <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">TESTNET FAUCET</div></div>
   </a>
   <div class="nav-links">
-    <a href="mercati.html"   class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Mercati</span></a>
+    <a href="mercati.html"   class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Markets</span></a>
     <a href="presale.html"   class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Presale</span></a>
     <a href="staking.html"   class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
     <a href="portfolio.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
@@ -49,7 +49,7 @@
   <div class="page-header">
     <span class="page-tag">// Testnet · Base Sepolia</span>
     <div class="page-title">Faucet Token</div>
-    <div class="page-sub">Ottieni token testnet gratuiti per provare la piattaforma</div>
+    <div class="page-sub">Get free testnet tokens to try the platform</div>
   </div>
 
   <!-- ETH link -->
@@ -81,7 +81,7 @@
       </div>
       <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;margin-bottom:8px">
         <div style="display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:4px">
-          <span style="color:var(--text3)">Il tuo saldo</span>
+          <span style="color:var(--text3)">Your balance</span>
           <span id="usdc-bal" style="color:#2775ca;font-weight:700">—</span>
         </div>
         <div style="display:flex;justify-content:space-between;font-size:.7rem">
@@ -107,7 +107,7 @@
       </div>
       <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;margin-bottom:8px">
         <div style="display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:4px">
-          <span style="color:var(--text3)">Il tuo saldo</span>
+          <span style="color:var(--text3)">Your balance</span>
           <span id="usdt-bal" style="color:#26a17b;font-weight:700">—</span>
         </div>
         <div style="display:flex;justify-content:space-between;font-size:.7rem">
@@ -129,17 +129,17 @@
       <div style="width:40px;height:40px;border-radius:10px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fbbf24;font-size:1.1rem">◈</div>
       <div>
         <div style="font-weight:700;margin-bottom:2px">CPRED Token</div>
-        <div style="font-size:.65rem;color:var(--text3)">Hai: <span id="cpred-bal-row">—</span></div>
+        <div style="font-size:.65rem;color:var(--text3)">You have: <span id="cpred-bal-row">—</span></div>
       </div>
     </div>
-    <a href="presale.html" class="btn btn-primary" style="font-size:.78rem">Compra in Presale</a>
+    <a href="presale.html" class="btn btn-primary" style="font-size:.78rem">Buy in Presale</a>
   </div>
 
   <!-- Saldi -->
   <div class="cp-card cp-card-cyan" id="balances-card">
     <div style="font-size:.65rem;color:var(--text3);margin-bottom:14px">// I TUOI SALDI — TESTNET</div>
     <div id="balances-list">
-      <div style="color:var(--text3);font-size:.82rem">Connetti il wallet per vedere i saldi</div>
+      <div style="color:var(--text3);font-size:.82rem">Connect wallet to view balances</div>
     </div>
   </div>
 
@@ -283,7 +283,7 @@ function showToast(type, msg, link) {
   document.getElementById("toast-icon").textContent = type === "OK" ? "OK" : "X";
   document.getElementById("toast-msg").textContent  = msg;
   var l = document.getElementById("toast-link");
-  if (link) { l.href = link; l.textContent = "Vedi su BaseScan"; l.style.display = "block"; }
+  if (link) { l.href = link; l.textContent = "View on BaseScan"; l.style.display = "block"; }
   else { l.style.display = "none"; }
   var el = document.getElementById("toast");
   el.classList.add("show");
