@@ -149,7 +149,7 @@
   </div>
 
   <!-- Grid -->
-  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;max-width:960px;margin:0 auto">
+  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;max-width:1100px;margin:0 auto">
     <div class="cp-card" style="text-align:center;padding:30px;grid-column:1/-1">
       <span class="spin"></span>
       <span style="margin-left:8px;color:var(--text3);font-size:.85rem">Caricamento mercati on-chain...</span>
@@ -359,7 +359,7 @@ function buildCard(el, m) {
   var probNums = document.createElement("div");
   probNums.style.cssText = "display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px";
   var yesNum = document.createElement("span");
-  yesNum.style.cssText = "font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--green2);line-height:1";
+  yesNum.style.cssText = "font-family:'DM Mono',monospace;font-size:1.15rem;font-weight:700;color:var(--green2);line-height:1";
   yesNum.textContent = m.yesPct+"%";
   var yesLblSm = document.createElement("span");
   yesLblSm.style.cssText = "font-family:'DM Mono',monospace;font-size:.65rem;color:var(--green2);margin-left:3px";
@@ -493,7 +493,7 @@ function buildCard(el, m) {
     var svgStr = SVGS[catKey]   || SVGS.altro;
 
     var ph = document.createElement("div");
-    ph.style.cssText = "width:100%;height:120px;display:flex;flex-direction:column;align-items:center;" +
+    ph.style.cssText = "width:100%;height:100px;display:flex;flex-direction:column;align-items:center;" +
       "justify-content:center;gap:6px;background:" + th.bg + ";border-bottom:1px solid " + th.border + ";position:relative";
 
     // Badge categoria top-right
