@@ -364,6 +364,8 @@
   <button class="guide-tab" onclick="showGuide('staking', this)">🔒 Fare Staking</button>
   <button class="guide-tab" onclick="showGuide('payout', this)">🎉 Ritirare il Payout</button>
   <button class="guide-tab" onclick="showGuide('faucet', this)">🚰 Faucet Testnet</button>
+  <button class="guide-tab" onclick="showGuide('trading', this)">📈 Trading</button>
+  <button class="guide-tab" onclick="showGuide('vendi', this)">💸 Vendi Quote</button>
 </div>
 
 <div class="guide-container">
@@ -1183,6 +1185,275 @@
               <div class="mk-success" style="padding:10px">
                 <div class="mk-check" style="width:36px;height:36px;font-size:1rem">✅</div>
                 <div style="font-size:.72rem;font-weight:700">CPRED aggiunto a MetaMask!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══ GUIDE 7: TRADING ═══ -->
+  <div class="guide-panel" id="guide-trading">
+    <div class="guide-header">
+      <div class="guide-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25)">📈</div>
+      <div class="guide-header-text">
+        <h2>Come Usare il Trading</h2>
+        <p>Analizza i mercati con il grafico prezzo blockchain e piazza ordini limite automatici</p>
+      </div>
+      <div class="guide-time">⏱ ~3 minuti<br><span style="color:#34d399">Difficoltà: Media</span></div>
+    </div>
+
+    <div class="guide-steps">
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">01</div>
+          <div class="step-title">Seleziona il mercato</div>
+          <div class="step-desc">Vai su <strong>/trading.html</strong> e scegli un mercato dal dropdown in alto. Il grafico si carica automaticamente leggendo gli eventi <strong>BetPlaced</strong> dalla blockchain Base Sepolia — nessun server intermedio.</div>
+          <div class="step-tip">💡 Il grafico mostra la probabilità implicita YES (0–1) ad ogni scommessa</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/trading</div>
+            </div>
+            <div class="mockup-body">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+                <div style="font-size:.9rem;font-weight:800">Trading</div>
+                <div class="mk-highlight" style="flex:1">
+                  <div class="mk-input" style="color:#c4b5fd">#3 Bitcoin arriverà a 80000 usd...</div>
+                </div>
+                <div style="background:rgba(255,255,255,.04);border:1px solid var(--g-border);border-radius:20px;padding:4px 12px;font-size:.6rem;display:flex;align-items:center;gap:6px">
+                  <span style="width:5px;height:5px;border-radius:50%;background:#34d399;display:inline-block"></span>
+                  YES <strong style="color:#34d399">1.000</strong> | NO <strong style="color:#f87171">0.000</strong>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,.03);border:1px solid var(--g-border);border-radius:8px;padding:10px;height:80px;display:flex;align-items:center;justify-content:center">
+                <div style="font-size:.72rem;color:var(--text3)">📊 Grafico prezzo da eventi blockchain</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">02</div>
+          <div class="step-title">Leggi il grafico</div>
+          <div class="step-desc">Ogni punto è una scommessa. <strong style="color:#34d399">Verde = YES</strong>, <strong style="color:#f87171">rosso = NO</strong>. L'asse Y va da 0% a 100% — mostra la probabilità implicita che l'evento si verifichi secondo il mercato. Un grafico che sale significa che sempre più persone scommettono YES.</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/trading · Grafico</div>
+            </div>
+            <div class="mockup-body">
+              <div style="display:flex;gap:8px;margin-bottom:8px;justify-content:flex-end">
+                <span style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:4px;padding:2px 8px;font-size:.6rem;color:#c4b5fd">50 eventi</span>
+                <span style="background:rgba(255,255,255,.04);border:1px solid var(--g-border);border-radius:4px;padding:2px 8px;font-size:.6rem;color:var(--text3)">100</span>
+                <span style="background:rgba(255,255,255,.04);border:1px solid var(--g-border);border-radius:4px;padding:2px 8px;font-size:.6rem;color:var(--text3)">200</span>
+              </div>
+              <div style="background:rgba(255,255,255,.02);border:1px solid var(--g-border);border-radius:8px;padding:10px;height:90px;position:relative;overflow:hidden">
+                <div style="position:absolute;bottom:15px;left:10px;right:10px;height:2px;background:rgba(255,255,255,.06)"></div>
+                <svg viewBox="0 0 200 60" style="width:100%;height:100%">
+                  <polyline points="0,50 20,45 40,38 60,30 80,25 100,20 120,15 140,12 160,10 180,8 200,5"
+                    fill="none" stroke="#a855f7" stroke-width="2"/>
+                  <circle cx="0"   cy="50" r="3" fill="#34d399"/>
+                  <circle cx="40"  cy="38" r="3" fill="#f87171"/>
+                  <circle cx="80"  cy="25" r="3" fill="#34d399"/>
+                  <circle cx="120" cy="15" r="3" fill="#34d399"/>
+                  <circle cx="160" cy="10" r="3" fill="#f87171"/>
+                  <circle cx="200" cy="5"  r="3" fill="#34d399"/>
+                </svg>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--text3);margin-top:4px">
+                <span>0% NO</span><span>100% YES →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">03</div>
+          <div class="step-title">Piazza un ordine limite</div>
+          <div class="step-desc">Scegli YES o NO, seleziona "Limite", imposta il <strong>prezzo massimo</strong> che sei disposto a pagare (0–1) e l'importo. L'ordine viene salvato su Supabase. Il backend lo eseguirà automaticamente quando il prezzo on-chain raggiunge il tuo limite.</div>
+          <div class="step-tip">💡 Esempio: "Voglio YES a max 0.40" — compra quando il mercato pensa YES al 40% o meno</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/trading · Ordine</div>
+            </div>
+            <div class="mockup-body">
+              <div style="display:flex;margin-bottom:10px">
+                <div style="flex:1;padding:8px;text-align:center;border-bottom:2px solid #10b981;background:rgba(16,185,129,.1);border-radius:0;font-size:.72rem;font-weight:700;color:#34d399">▲ YES</div>
+                <div style="flex:1;padding:8px;text-align:center;border:1px solid var(--g-border);font-size:.72rem;color:var(--text3)">▼ NO</div>
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:8px">
+                <div style="flex:1;padding:5px;border:1px solid rgba(124,58,237,.4);background:rgba(124,58,237,.15);border-radius:5px;font-size:.65rem;color:#c4b5fd;text-align:center">Limite</div>
+                <div style="flex:1;padding:5px;border:1px solid var(--g-border);border-radius:5px;font-size:.65rem;color:var(--text3);text-align:center">Market</div>
+              </div>
+              <div style="font-size:.7rem;color:var(--text3);margin-bottom:4px">PREZZO LIMITE YES (0–1)</div>
+              <div class="mk-highlight">
+                <div class="mk-input" style="color:#fff">0.40</div>
+              </div>
+              <div style="background:rgba(255,255,255,.03);border-radius:6px;padding:8px;font-size:.65rem;margin-top:6px">
+                <div style="color:var(--text3)">Esegue se prezzo YES ≤ <strong style="color:#06b6d4">0.40</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">04</div>
+          <div class="step-title">Monitora e cancella</div>
+          <div class="step-desc">I tuoi ordini aperti appaiono in "I miei ordini" con il pulsante <strong>Cancella</strong>. Quando un ordine viene eseguito, la scommessa appare on-chain nel portfolio come una normale posizione YES/NO.</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/trading · I miei ordini</div>
+            </div>
+            <div class="mockup-body">
+              <div style="font-size:.6rem;color:var(--text3);margin-bottom:8px">// I MIEI ORDINI APERTI</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="background:rgba(16,185,129,.1);color:#34d399;padding:1px 6px;border-radius:3px;font-size:.62rem;font-weight:700">YES</span>
+                  <span style="font-size:.65rem;color:var(--text3)">Mkt#3 · 0.01 ETH @ 0.40</span>
+                </div>
+                <div class="mk-highlight" style="display:inline-block">
+                  <span style="background:rgba(255,255,255,.06);border:1px solid var(--g-border);border-radius:4px;padding:2px 8px;font-size:.6rem;color:var(--text3)">Cancella</span>
+                </div>
+              </div>
+              <div style="text-align:center;padding:10px;font-size:.65rem;color:var(--green2)">
+                ✅ Ordine eseguito → posizione YES on-chain
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GUIDE 8: VENDI QUOTE ═══ -->
+  <div class="guide-panel" id="guide-vendi">
+    <div class="guide-header">
+      <div class="guide-icon" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25)">💸</div>
+      <div class="guide-header-text">
+        <h2>Come Vendere le tue Quote</h2>
+        <p>Incassa subito senza aspettare la risoluzione — vendi la tua posizione ad altri utenti</p>
+      </div>
+      <div class="guide-time">⏱ ~2 minuti<br><span style="color:#fbbf24">Difficoltà: Media</span></div>
+    </div>
+
+    <div class="guide-steps">
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">01</div>
+          <div class="step-title">Scegli la posizione da vendere</div>
+          <div class="step-desc">Vai su <strong>/vendi.html</strong> → tab <strong>"+ Vendi una quota"</strong>. Vedrai tutte le tue posizioni aperte su mercati ancora attivi. Scegli quella che vuoi vendere prima della scadenza.</div>
+          <div class="step-tip">💡 Puoi vendere in profitto se il mercato si è mosso a tuo favore</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/vendi</div>
+            </div>
+            <div class="mockup-body">
+              <div style="font-size:.6rem;color:var(--text3);margin-bottom:8px">// LE TUE POSIZIONI APERTE</div>
+              <div class="mk-card mk-highlight">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                  <span style="background:rgba(16,185,129,.1);color:#34d399;padding:1px 6px;border-radius:3px;font-size:.62rem;font-weight:700">YES</span>
+                  <span style="background:rgba(255,255,255,.05);color:#00d4ff;padding:1px 6px;border-radius:3px;font-size:.6rem">ETH</span>
+                  <span style="font-size:.6rem;color:var(--text3);margin-left:auto">29g rimasti</span>
+                </div>
+                <div style="font-size:.78rem;font-weight:700;margin-bottom:6px">BTC supererà $100,000?</div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:.65rem;color:#fbbf24">Stake: 0.01 ETH (~$20)</span>
+                  <div style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:4px 10px;border-radius:6px;font-size:.65rem;font-weight:700">Vendi →</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">02</div>
+          <div class="step-title">Imposta il prezzo</div>
+          <div class="step-desc">Scegli a quanto vuoi vendere la tua quota. Hai suggerimenti automatici: <strong>-50% / -25% / Pari / +25% / +50%</strong> rispetto al tuo stake originale. Il sistema mostra quanto riceverai dopo la fee del 0.5%.</div>
+          <div class="step-tip">💡 Vendi a +25% se il mercato si è mosso a tuo favore rispetto all'entrata</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/vendi · Imposta prezzo</div>
+            </div>
+            <div class="mockup-body">
+              <div style="background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:12px">
+                <div style="font-size:.62rem;color:var(--text3);margin-bottom:8px">STEP 2 — IMPOSTA PREZZO DI VENDITA</div>
+                <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+                  <span style="background:rgba(255,255,255,.05);border:1px solid var(--g-border);border-radius:4px;padding:2px 6px;font-size:.58rem;color:var(--text3)">-50%</span>
+                  <span style="background:rgba(255,255,255,.05);border:1px solid var(--g-border);border-radius:4px;padding:2px 6px;font-size:.58rem;color:var(--text3)">-25%</span>
+                  <span style="background:rgba(255,255,255,.05);border:1px solid var(--g-border);border-radius:4px;padding:2px 6px;font-size:.58rem;color:var(--text3)">Pari</span>
+                  <span class="mk-highlight" style="display:inline-block">
+                    <span style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:4px;padding:2px 6px;font-size:.58rem;color:#c4b5fd">+25%</span>
+                  </span>
+                  <span style="background:rgba(255,255,255,.05);border:1px solid var(--g-border);border-radius:4px;padding:2px 6px;font-size:.58rem;color:var(--text3)">+50%</span>
+                </div>
+                <div style="background:rgba(255,255,255,.03);border-radius:6px;padding:8px;font-size:.65rem">
+                  <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Prezzo</span><span style="font-family:monospace;color:#fbbf24">0.0125 ETH</span></div>
+                  <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Fee 0.5%</span><span style="font-family:monospace;color:#f87171">-0.000063</span></div>
+                  <div style="display:flex;justify-content:space-between;font-weight:700"><span>Riceverai</span><span style="font-family:monospace;color:#10b981">0.012437 ETH</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-left">
+          <div class="step-num">03</div>
+          <div class="step-title">Metti in vendita</div>
+          <div class="step-desc">Clicca "Metti in Vendita" e conferma in MetaMask. La tua posizione viene trasferita al contratto <span style="color:#a855f7;font-family:'DM Mono',monospace">PositionMarket</span> che la custodisce. Appare nei "Listings attivi" visibile a tutti gli utenti.</div>
+          <div class="step-tip">💡 Puoi cancellare la listing in qualsiasi momento e recuperare la posizione</div>
+        </div>
+        <div class="step-right">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+              <div class="mockup-url">cryptopredict.app/vendi · Listings attivi</div>
+            </div>
+            <div class="mockup-body">
+              <div style="font-size:.6rem;color:var(--text3);margin-bottom:8px">// LISTINGS ATTIVI</div>
+              <div style="background:rgba(124,58,237,.04);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:10px">
+                <div style="display:flex;gap:6px;margin-bottom:5px">
+                  <span style="background:rgba(16,185,129,.1);color:#34d399;padding:1px 6px;border-radius:3px;font-size:.6rem;font-weight:700">YES</span>
+                  <span style="background:rgba(255,255,255,.05);color:#00d4ff;padding:1px 6px;border-radius:3px;font-size:.6rem">ETH</span>
+                  <span style="background:rgba(255,255,255,.04);padding:1px 6px;border-radius:3px;font-size:.6rem;color:var(--text3)">#0</span>
+                  <span style="font-size:.6rem;color:var(--text3);margin-left:auto">2min fa</span>
+                </div>
+                <div style="font-size:.75rem;font-weight:700;margin-bottom:6px">BTC supererà $100,000?</div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div style="font-size:.65rem;color:#fbbf24">Prezzo: 0.0125 ETH</div>
+                  <div style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:4px 10px;border-radius:6px;font-size:.65rem;font-weight:700">Compra quota</div>
+                </div>
               </div>
             </div>
           </div>
