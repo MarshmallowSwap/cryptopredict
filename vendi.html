@@ -91,7 +91,7 @@
     <div id="listings-list">
       <div style="text-align:center;padding:40px;color:var(--text3)">
         <div style="font-size:2rem;margin-bottom:12px">🔄</div>
-        <div style="font-size:.9rem;font-weight:700;margin-bottom:8px">Contratto in deploy</div>
+        <div style="font-size:.9rem;font-weight:700;margin-bottom:8px">Contract in deploy</div>
         <div style="font-size:.8rem;margin-bottom:20px">PositionMarket will be available after the next contract redeploy</div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
           <a href="mercati.html" class="btn btn-primary" style="font-size:.8rem">Go to Markets</a>
@@ -580,7 +580,7 @@ async function buildListingCard(l, isMine) {
 
   stats.appendChild(statEl("Stake posizione", amt.toFixed(decimals===6?2:4)+" "+curName, "var(--text3)"));
   stats.appendChild(statEl("Asking price", askPrice.toFixed(decimals===6?2:5)+" "+curName, "var(--gold2)"));
-  stats.appendChild(statEl("Valore USD", "~$"+usdVal.toFixed(2), "var(--cyan2)"));
+  stats.appendChild(statEl("Value USD", "~$"+usdVal.toFixed(2), "var(--cyan2)"));
   stats.appendChild(statEl("Seller", l.seller.slice(0,6)+"..."+l.seller.slice(-4), "var(--purple3)"));
   card.appendChild(stats);
 
