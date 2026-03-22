@@ -370,7 +370,8 @@ function buildCard(el, m) {
   var poolLbl = document.createElement("div");
   poolLbl.style.cssText = "font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold2);font-weight:700";
   var mktCurLabel = m.currency || "ETH";
-  poolLbl.textContent = "Pool: "+m.poolEth.toFixed(4)+" "+mktCurLabel;
+  var poolDec = (mktCurLabel==="USDC"||mktCurLabel==="USDT") ? 2 : 4;
+  poolLbl.textContent = "Pool: "+m.poolEth.toFixed(poolDec)+" "+mktCurLabel;
   var btns = document.createElement("div");
   btns.style.cssText = "display:flex;gap:6px";
 
@@ -416,7 +417,8 @@ function buildCard(el, m) {
   var ybar = document.createElement("div");
   ybar.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:6px 10px;border-radius:7px;background:rgba(0,232,122,.06);border:1px solid rgba(0,232,122,.18)";
   // Yield bar — DOM puro, calcolo in USD
-  var yUsd = (m.poolEth * 0.048 / 365 * 2000);
+  var CUR_PRICE = {ETH:2000, USDC:1, USDT:1, CPRED:0.05};
+  var yUsd = (m.poolEth * (CUR_PRICE[m.currency||"ETH"]||1) * 0.048 / 365);
   var yTxt = yUsd < 0.01 ? ('$'+yUsd.toFixed(4)) : ('$'+yUsd.toFixed(2));
   var ydLeft = document.createElement('div');
   ydLeft.style.cssText = 'display:flex;align-items:center;gap:5px';
