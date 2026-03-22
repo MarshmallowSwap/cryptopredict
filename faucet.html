@@ -239,7 +239,7 @@ async function claimFaucet(token) {
   var btn = document.getElementById("btn-" + token);
   var orig = btn.textContent;
   btn.disabled = true;
-  btn.innerHTML = "<span class="spin"></span> Claim in corso...";
+  btn.textContent = "Claim...";
 
   try {
     var ok = await W3.ensureNetwork();
@@ -247,7 +247,7 @@ async function claimFaucet(token) {
     var signer = await W3.getSigner();
     var c   = new ethers.Contract(t.addr(), ERC20_ABI, signer);
     var tx  = await c.faucet();
-    btn.innerHTML = "<span class="spin"></span> Attesa...";
+    btn.textContent = "Attesa...";
     var rec = await tx.wait();
     showToast("OK", "10,000 " + t.sym + " accreditati!", "https://sepolia.basescan.org/tx/" + rec.hash);
     await loadBalances();
