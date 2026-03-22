@@ -222,7 +222,7 @@ async function loadBalances() {
       var row = document.createElement("div");
       row.className = "bal-row";
       row.innerHTML = '<span style="font-weight:700;font-size:.85rem">' + item.sym + '</span>' +
-        '<span style="font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;color:' + item.color + '">' + item.val + '</span>';
+      valEl.style.color = item.color;
       list.appendChild(row);
     });
   } catch(e) { console.warn("loadBalances:", e); }
