@@ -404,3 +404,259 @@ const CP = {
 
 function connectWallet() { openModal('wallet-modal'); }
 document.addEventListener('DOMContentLoaded', () => CP.init());
+
+/* ── AI ADVISOR FLOATING WIDGET ──────────────────────────────── */
+(function() {
+  // Inject styles
+  var style = document.createElement('style');
+  style.textContent = `
+    @keyframes ai-pop{from{opacity:0;transform:scale(.8) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    @keyframes ai-dot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
+    #ai-fab{
+      position:fixed;bottom:28px;right:28px;z-index:9000;
+      width:52px;height:52px;border-radius:50%;
+      background:linear-gradient(135deg,#7c3aed,#a855f7);
+      border:none;cursor:pointer;
+      box-shadow:0 4px 24px rgba(124,58,237,.45);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;transition:transform .2s,box-shadow .2s;
+      color:#fff;
+    }
+    #ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(124,58,237,.6)}
+    #ai-fab .ai-badge{
+      position:absolute;top:-3px;right:-3px;
+      width:16px;height:16px;border-radius:50%;
+      background:#10b981;border:2px solid #080810;
+      animation:pulse 2s infinite;
+    }
+    #ai-drawer{
+      position:fixed;bottom:90px;right:28px;z-index:9001;
+      width:340px;max-width:calc(100vw - 40px);
+      background:#0f0f1a;
+      border:1px solid rgba(124,58,237,.3);
+      border-radius:16px;overflow:hidden;
+      box-shadow:0 8px 48px rgba(124,58,237,.2),0 2px 16px rgba(0,0,0,.6);
+      display:none;flex-direction:column;
+      animation:ai-pop .2s ease;
+    }
+    #ai-drawer.open{display:flex}
+    #ai-drawer-head{
+      padding:12px 14px;
+      background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(124,58,237,.06));
+      border-bottom:1px solid rgba(124,58,237,.2);
+      display:flex;align-items:center;gap:10px;
+    }
+    #ai-drawer-msgs{
+      padding:12px 14px;
+      height:240px;overflow-y:auto;
+      display:flex;flex-direction:column;gap:10px;
+      scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.3) transparent;
+    }
+    #ai-drawer-msgs::-webkit-scrollbar{width:4px}
+    #ai-drawer-msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:2px}
+    .ai-msg-user{
+      align-self:flex-end;
+      background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);
+      border-radius:12px 2px 12px 12px;
+      padding:8px 12px;font-size:.78rem;color:#e2e8f0;
+      line-height:1.5;max-width:85%;
+    }
+    .ai-msg-bot{
+      align-self:flex-start;display:flex;gap:8px;align-items:flex-start;max-width:90%;
+    }
+    .ai-msg-bot-bubble{
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+      border-radius:2px 12px 12px 12px;
+      padding:8px 12px;font-size:.78rem;color:#e2e8f0;line-height:1.5;
+    }
+    .ai-avatar-sm{
+      width:24px;height:24px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,#7c3aed,#a855f7);
+      display:flex;align-items:center;justify-content:center;font-size:11px;
+    }
+    .ai-typing-dot{
+      width:5px;height:5px;border-radius:50%;background:#a855f7;
+      animation:ai-dot .6s ease infinite;display:inline-block;margin:0 1px;
+    }
+    #ai-drawer-sugg{
+      padding:0 14px 8px;display:flex;gap:5px;flex-wrap:wrap;
+    }
+    .ai-sugg-btn{
+      padding:3px 10px;background:rgba(124,58,237,.08);
+      border:1px solid rgba(124,58,237,.25);border-radius:20px;
+      font-size:.62rem;color:#c4b5fd;cursor:pointer;
+      font-family:'DM Mono',monospace;transition:background .15s;
+    }
+    .ai-sugg-btn:hover{background:rgba(124,58,237,.2)}
+    #ai-drawer-inp-row{
+      padding:10px 12px;border-top:1px solid rgba(255,255,255,.06);
+      display:flex;gap:8px;
+    }
+    #ai-drawer-inp{
+      flex:1;background:rgba(255,255,255,.05);
+      border:1px solid rgba(124,58,237,.2);border-radius:8px;
+      padding:7px 10px;font-size:.75rem;color:#e2e8f0;
+      outline:none;font-family:'DM Mono',monospace;
+      transition:border-color .2s;
+    }
+    #ai-drawer-inp:focus{border-color:rgba(124,58,237,.5)}
+    #ai-drawer-inp::placeholder{color:rgba(255,255,255,.3)}
+    #ai-drawer-send{
+      padding:7px 12px;background:linear-gradient(135deg,#7c3aed,#a855f7);
+      border:none;border-radius:8px;color:#fff;
+      font-weight:700;font-size:.72rem;cursor:pointer;
+      font-family:'Syne',sans-serif;white-space:nowrap;
+      transition:opacity .2s;
+    }
+    #ai-drawer-send:hover{opacity:.85}
+    #ai-drawer-send:disabled{opacity:.5;cursor:default}
+  `;
+  document.head.appendChild(style);
+
+  // FAB Button
+  var fab = document.createElement('button');
+  fab.id = 'ai-fab';
+  fab.title = 'AI Advisor';
+  fab.innerHTML = '🔮<span class="ai-badge"></span>';
+  document.body.appendChild(fab);
+
+  // Drawer
+  var drawer = document.createElement('div');
+  drawer.id = 'ai-drawer';
+  drawer.innerHTML = `
+    <div id="ai-drawer-head">
+      <div class="ai-avatar-sm">🔮</div>
+      <div style="flex:1">
+        <div style="font-size:.78rem;font-weight:700;color:#e2e8f0">CryptoPredict AI</div>
+        <div style="font-size:.6rem;color:#a855f7;font-family:'DM Mono',monospace">Powered by Claude</div>
+      </div>
+      <button onclick="document.getElementById('ai-drawer').classList.remove('open')"
+        style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1">✕</button>
+    </div>
+    <div id="ai-drawer-msgs"></div>
+    <div id="ai-drawer-sugg">
+      <button class="ai-sugg-btn" onclick="aiWidget.ask('How does yield work?')">Yield?</button>
+      <button class="ai-sugg-btn" onclick="aiWidget.ask('How to buy CPRED?')">Buy CPRED?</button>
+      <button class="ai-sugg-btn" onclick="aiWidget.ask('What staking APY can I earn?')">Staking APY?</button>
+      <button class="ai-sugg-btn" onclick="aiWidget.ask('How does governance work?')">Governance?</button>
+    </div>
+    <div id="ai-drawer-inp-row">
+      <input id="ai-drawer-inp" placeholder="Ask anything..." type="text">
+      <button id="ai-drawer-send" onclick="aiWidget.send()">Send ↗</button>
+    </div>
+  `;
+  document.body.appendChild(drawer);
+
+  // Initial bot message
+  var msgs = document.getElementById('ai-drawer-msgs');
+  aiWidget.addBot("Hi! I'm the CryptoPredict AI. Ask me anything about prediction markets, $CPRED, staking, or governance! 🚀");
+
+  // Input enter key
+  document.getElementById('ai-drawer-inp').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') aiWidget.send();
+  });
+
+  // Toggle
+  fab.addEventListener('click', function() {
+    var d = document.getElementById('ai-drawer');
+    d.classList.toggle('open');
+    if (d.classList.contains('open')) {
+      setTimeout(function(){ document.getElementById('ai-drawer-inp').focus(); }, 100);
+    }
+  });
+})();
+
+/* ── AI WIDGET LOGIC ── */
+var aiWidget = (function() {
+  var history = [];
+  var SYSTEM = 'You are the CryptoPredict AI advisor. CryptoPredict is a 100% crypto-native prediction market on Base Sepolia. Key facts: Token $CPRED (100M supply), presale Stage 1 $0.050, listing target $0.150. Markets: bet YES/NO on events using ETH, USDC, USDT or CPRED. Yield: 4.8% APY automatic on pools (simulated testnet, real DeFi on mainnet via Aave). Staking: Flexible 12%, 30-day 20%, 90-day 28% APY in CPRED + ETH from protocol fees. Fees: 2% on payout (1% creator + 1% stakers), 0% CPRED markets. Need 1,000 CPRED to create markets. Governance: 1 CPRED = 1 vote, launches mainnet Q4 2025. Secondary market: sell positions before expiry, 0.5% fee. Be concise and helpful. Answer in the same language the user writes in.';
+
+  function addBot(text) {
+    var msgs = document.getElementById('ai-drawer-msgs');
+    if (!msgs) return;
+    var row = document.createElement('div');
+    row.className = 'ai-msg-bot';
+    row.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble">' + escHtml(text) + '</div>';
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addUser(text) {
+    var msgs = document.getElementById('ai-drawer-msgs');
+    if (!msgs) return;
+    var el = document.createElement('div');
+    el.className = 'ai-msg-user';
+    el.textContent = text;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    var msgs = document.getElementById('ai-drawer-msgs');
+    var el = document.createElement('div');
+    el.id = 'ai-typing-indicator';
+    el.className = 'ai-msg-bot';
+    el.innerHTML = '<div class="ai-avatar-sm">🔮</div><div class="ai-msg-bot-bubble"><span class="ai-typing-dot"></span><span class="ai-typing-dot" style="animation-delay:.15s"></span><span class="ai-typing-dot" style="animation-delay:.3s"></span></div>';
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    var el = document.getElementById('ai-typing-indicator');
+    if (el) el.remove();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+
+  function hideSugg() {
+    var s = document.getElementById('ai-drawer-sugg');
+    if (s) s.style.display = 'none';
+  }
+
+  async function send() {
+    var inp = document.getElementById('ai-drawer-inp');
+    var btn = document.getElementById('ai-drawer-send');
+    if (!inp) return;
+    var q = inp.value.trim();
+    if (!q) return;
+    inp.value = '';
+    hideSugg();
+    addUser(q);
+    history.push({role:'user', content:q});
+    addTyping();
+    if (btn) { btn.disabled = true; btn.textContent = '...'; }
+    try {
+      var res = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:350,
+          system:SYSTEM,
+          messages:history
+        })
+      });
+      var data = await res.json();
+      var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Sorry, I could not process your request right now.';
+      history.push({role:'assistant', content:reply});
+      removeTyping();
+      addBot(reply);
+    } catch(e) {
+      removeTyping();
+      addBot('Sorry, the AI is temporarily unavailable. Check our docs for more info!');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Send ↗'; }
+    }
+  }
+
+  async function ask(q) {
+    document.getElementById('ai-drawer').classList.add('open');
+    document.getElementById('ai-drawer-inp').value = q;
+    await send();
+  }
+
+  return { addBot:addBot, send:send, ask:ask };
+})();
+
