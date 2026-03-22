@@ -35,10 +35,10 @@
 <body data-page="docs">
 
 <div class="ticker-bar"><div class="ticker-track">
-  <span class="tick-live"><span class="tick-dot"></span>DOCUMENTAZIONE</span>
+  <span class="tick-live"><span class="tick-dot"></span>DOCUMENTATION</span>
   <span class="tick-item">CryptoPredict · Base Sepolia Testnet</span>
   <span class="tick-item">Prediction Market · DeFi · Yield</span>
-  <span class="tick-live"><span class="tick-dot"></span>DOCUMENTAZIONE</span>
+  <span class="tick-live"><span class="tick-dot"></span>DOCUMENTATION</span>
 </div></div>
 
 <nav class="main-nav">
@@ -67,33 +67,33 @@
 
 <div class="page-wrap" style="max-width:900px">
   <div class="page-header">
-    <span class="page-tag">// Documentazione completa</span>
+    <span class="page-tag">// Full documentation</span>
     <div class="page-title">CryptoPredict Docs</div>
-    <div class="page-sub">Piattaforma di prediction market on-chain su Base Sepolia · Token $CPRED · Yield automatico sui pool</div>
+    <div class="page-sub">On-chain prediction market platform on Base Sepolia · $CPRED Token · Automatic yield on pools</div>
   </div>
 
   <div style="display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start">
 
     <!-- Sidebar TOC -->
     <div class="cp-card" style="position:sticky;top:80px;background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.2)">
-      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#a855f7;letter-spacing:.12em;margin-bottom:12px">// INDICE</div>
-      <a href="#overview"    class="toc-link">1. Panoramica</a>
-      <a href="#mercati"     class="toc-link">2. Come funzionano i Mercati</a>
-      <a href="#pool"        class="toc-link">3. Pool e Liquidità</a>
-      <a href="#yield"       class="toc-link">4. Yield Automatico</a>
-      <a href="#fee"         class="toc-link">5. Fee e Revenue</a>
-      <a href="#payout"      class="toc-link">6. Calcolo Payout</a>
-      <a href="#valute"      class="toc-link">7. Valute Supportate</a>
-      <a href="#cpred"       class="toc-link">8. Token CPRED</a>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#a855f7;letter-spacing:.12em;margin-bottom:12px">// INDEX</div>
+      <a href="#overview"    class="toc-link">1. Overview</a>
+      <a href="#mercati"     class="toc-link">2. How Markets Work</a>
+      <a href="#pool"        class="toc-link">3. Pools & Liquidity</a>
+      <a href="#yield"       class="toc-link">4. Automatic Yield</a>
+      <a href="#fee"         class="toc-link">5. Fees & Revenue</a>
+      <a href="#payout"      class="toc-link">6. Payout Calculation</a>
+      <a href="#valute"      class="toc-link">7. Supported Currencies</a>
+      <a href="#cpred"       class="toc-link">8. CPRED Token</a>
       <a href="#presale"     class="toc-link">9. Presale</a>
       <a href="#staking"     class="toc-link">10. Staking</a>
-      <a href="#crea"        class="toc-link">11. Creare un Mercato</a>
-      <a href="#risoluzione" class="toc-link"><span class="toc-num">12</span>Risoluzione Mercati</a>
+      <a href="#crea"        class="toc-link">11. Creating a Market</a>
+      <a href="#risoluzione" class="toc-link"><span class="toc-num">12</span>Market Resolution</a>
       <a href="#contratti"   class="toc-link">13. Smart Contracts</a>
-      <a href="#sicurezza"   class="toc-link">14. Sicurezza</a>
+      <a href="#sicurezza"   class="toc-link">14. Security</a>
       <a href="#roadmap"     class="toc-link">15. Roadmap</a>
-      <a href="#trading"     class="toc-link">16. Trading e Grafico</a>
-      <a href="#secondario"  class="toc-link">17. Mercato Secondario</a>
+      <a href="#trading"     class="toc-link">16. Trading & Chart</a>
+      <a href="#secondario"  class="toc-link">17. Secondary Market</a>
       <a href="#amm"         class="toc-link">18. AMM (roadmap)</a>
     </div>
 
@@ -102,26 +102,26 @@
 
       <!-- 1. Overview -->
       <div class="doc-section" id="overview">
-        <div class="doc-h2"><span class="sec-num">01</span>🔮 1. Panoramica</div>
-        <div class="doc-p">CryptoPredict è un <strong>prediction market on-chain</strong> su Base Sepolia. Gli utenti scommettono su eventi futuri (crypto, macro, sport, politica) usando ETH, USDC, USDT o CPRED. I capitali nei pool non rimangono fermi — generano yield automatico del 4.8% APY che viene distribuito ai vincitori e agli staker CPRED.</div>
+        <div class="doc-h2"><span class="sec-num">01</span>🔮 1. Overview</div>
+        <div class="doc-p">CryptoPredict is an <strong>on-chain prediction market</strong> on Base Sepolia. Users bet on future events (crypto, macro, sport, politica) usando ETH, USDC, USDT o CPRED. Capital in pools doesn't sit idle — generates automatic yield at 4.8% APY che viene distributed to winners and CPRED stakers.</div>
         <div class="doc-box doc-box-purple">
-          <div style="font-weight:700;margin-bottom:8px;font-size:.88rem">Cosa rende CryptoPredict diverso</div>
-          <div class="doc-p" style="margin:0">A differenza di Polymarket (USDC only, no yield), CryptoPredict supporta 4 valute native, genera yield automatico su ogni pool, distribuisce le fee di protocollo agli staker CPRED, e permette a chiunque di creare mercati purché detenga 1,000 CPRED.</div>
+          <div style="font-weight:700;margin-bottom:8px;font-size:.88rem">What makes CryptoPredict different</div>
+          <div class="doc-p" style="margin:0">Unlike Polymarket (USDC only, no yield), CryptoPredict supports 4 native currencies, generates automatic yield on every pool, distributes protocol fees to CPRED stakers, e allows anyone to create markets as long as they hold 1,000 CPRED.</div>
         </div>
       </div>
 
       <!-- 2. Mercati -->
       <div class="doc-section" id="mercati">
-        <div class="doc-h2"><span class="sec-num">02</span>📊 2. Come funzionano i Mercati</div>
-        <div class="doc-p">Ogni mercato è una domanda binaria con risposta YES o NO e una data di scadenza. Gli utenti scommettono nella valuta nativa del mercato (scelta dal creatore). Alla scadenza, il mercato viene risolto e i vincitori ritirano il loro payout proporzionale.</div>
+        <div class="doc-h2"><span class="sec-num">02</span>📊 2. How Markets Work</div>
+        <div class="doc-p">Every market is a binary question with a YES or NO answer e una data di scadenza. Users bet in the market's native currency (scelta dal creatore). Alla scadenza, il mercato viene risolto e winners claim their proportional payout.</div>
 
-        <div class="doc-h3">Ciclo di vita</div>
-        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><div class="flow-title">Creazione</div><div class="flow-desc">Il creatore deposita liquidità iniziale (min 0.0025 ETH o equivalente), sceglie la valuta, la categoria e la data di scadenza. Richiede 1,000 CPRED in wallet o staking.</div></div></div>
-        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><div class="flow-title">Scommesse aperte</div><div class="flow-desc">Gli utenti piazzano scommesse YES o NO nella valuta del mercato. Ogni scommessa entra nel pool corrispondente e genera yield. Il prezzo implicito (% YES / % NO) si aggiusta in base ai flussi.</div></div></div>
-        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><div class="flow-title">Scadenza</div><div class="flow-desc">Alla data impostata il mercato smette di accettare scommesse. Il team/resolver analizza il risultato e risolve il mercato on-chain.</div></div></div>
-        <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><div class="flow-title">Risoluzione e payout</div><div class="flow-desc">I vincitori chiamano claimPayout() e ricevono la loro quota del pool totale (incluso yield accrued) al netto delle fee di protocollo (2%).</div></div></div>
+        <div class="doc-h3">Lifecycle</div>
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><div class="flow-title">Creazione</div><div class="flow-desc">The creator deposits initial liquidity (min 0.0025 ETH o equivalente), sceglie la valuta, la categoria e la data di scadenza. Richiede 1,000 CPRED in wallet or staking.</div></div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><div class="flow-title">Open Bets</div><div class="flow-desc">Users place YES or NO bets nella valuta del mercato. Each bet enters the corresponding pool e genera yield. The implied price (% YES / % NO) adjusts based on flows.</div></div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><div class="flow-title">Scadenza</div><div class="flow-desc">At the set date the market stops accepting bets. The team/resolver analyzes the result e resolves the market on-chain.</div></div></div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><div class="flow-title">Resolution and payout</div><div class="flow-desc">Winners call claimPayout() e receive their share of the total pool (incluso yield accrued) net of protocol fees (2%).</div></div></div>
 
-        <div class="doc-h3">Categorie disponibili</div>
+        <div class="doc-h3">Available Categories</div>
         <table class="doc-table">
           <tr><th>Categoria</th><th>Esempi</th></tr>
           <tr><td><span class="doc-code">crypto</span></td><td>BTC supererà $100K? ETH tornerà a $4K?</td></tr>
@@ -139,25 +139,25 @@
 
       <!-- 3. Pool -->
       <div class="doc-section" id="pool">
-        <div class="doc-h2"><span class="sec-num">03</span>💧 3. Pool e Liquidità</div>
-        <div class="doc-p">Ogni mercato ha due pool: <strong>YES pool</strong> e <strong>NO pool</strong>. Le scommesse entrano nel pool corrispondente alla direzione scelta. Il creatore finanzia la liquidità iniziale in modo da non avere un pool a zero.</div>
+        <div class="doc-h2"><span class="sec-num">03</span>💧 3. Pools & Liquidity</div>
+        <div class="doc-p">Every market has two pools: <strong>YES pool</strong> e <strong>NO pool</strong>. Bets enter the corresponding pool alla direzione scelta. The creator funds the initial liquidity to avoid having a zero pool.</div>
 
-        <div class="doc-h3">Come funziona il pool</div>
+        <div class="doc-h3">How the pool works</div>
         <div class="doc-box">
           <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2">
-            Pool totale = YES pool + NO pool + yield accrued<br>
+            Total pool = YES pool + NO pool + yield accrued<br>
             % YES = YES pool / Pool totale × 100<br>
             % NO  = NO pool  / Pool totale × 100
           </div>
         </div>
-        <div class="doc-p">La liquidità iniziale del creatore viene distribuita sul lato YES del pool. Questo garantisce che il mercato parta con un prezzo implicito del 100% YES e si aggiusti man mano che arrivano scommesse NO.</div>
-        <div class="doc-p">I capitali nel pool <strong>non rimangono fermi</strong> — generano yield automatico del 4.8% APY (vedi sezione Yield). La liquidità iniziale del creatore viene rimborsata integralmente alla chiusura del mercato.</div>
+        <div class="doc-p">The creator's initial liquidity is distributed sul lato YES del pool. Questo garantisce che il mercato parta con un prezzo implicito del 100% YES e si aggiusti man mano che arrivano scommesse NO.</div>
+        <div class="doc-p">I capitali nel pool <strong>non rimangono fermi</strong> — generates automatic yield at 4.8% APY (vedi sezione Yield). La liquidità iniziale del creatore is fully refunded at market close.</div>
       </div>
 
 
       <!-- 4. Yield -->
       <div class="doc-section" id="yield">
-        <div class="doc-h2"><span class="sec-num">04</span>📈 4. Yield Automatico sui Pool</div>
+        <div class="doc-h2"><span class="sec-num">04</span>📈 4. Automatic Yield sui Pool</div>
 
         <div class="doc-box doc-box-green">
           <div style="font-weight:700;color:var(--green2);margin-bottom:6px;font-size:.88rem">Il capitale nei pool non rimane fermo</div>
@@ -168,82 +168,82 @@
 
         <div class="doc-box" class="doc-box-gold" style="margin-bottom:16px">
           <div style="font-weight:700;color:var(--gold2);margin-bottom:6px;font-size:.85rem">Testnet vs Mainnet</div>
-          <div class="doc-p" style="margin:0">Su testnet il rendimento è <strong>simulato</strong> dal backend. Sul mainnet il rendimento sarà <strong>reale</strong>, generato deployando il capitale su protocolli DeFi come Aave.</div>
+          <div class="doc-p" style="margin:0">On testnet the yield is <strong>simulated</strong> by the backend. On mainnet the yield will be <strong>real</strong>, generated by deploying capital on DeFi protocols like Aave.</div>
         </div>
 
         <div class="doc-box">
           <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
-            <div class="flow-title">Testnet (attuale) — Yield simulato dal backend</div>
-            <div class="flow-desc">Il backend Python gira un cron ogni 24h che calcola il 4.8% APY sul capitale nei pool e scrive <span class="doc-code">yieldAccrued</span> nel contratto. È un numero simulato — non c'è ETH reale che si muove. Serve per testare la meccanica del payout con yield incluso.</div>
+            <div class="flow-title">Testnet (current) — Yield simulated by backend</div>
+            <div class="flow-desc">The Python backend runs a cron every 24h che calcola il 4.8% APY sul capitale nei pool e scrive <span class="doc-code">yieldAccrued</span> nel contratto. It's a simulated number — no real ETH moves. Used to test payout mechanics with yield included.</div>
           </div></div>
           <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
-            <div class="flow-title">Mainnet (roadmap v3) — Yield reale su Aave / Compound</div>
-            <div class="flow-desc">Sul mainnet Base, il capitale nei pool verrà deployato automaticamente su <strong>Aave v3</strong> o <strong>Compound</strong> mentre aspetta la risoluzione del mercato. Il rendimento reale (tipicamente 3-8% APY sulle stablecoin) viene accumulato e aggiunto al pool. Alla risoluzione, il capitale + yield viene ritirato da Aave e distribuito ai vincitori.</div>
+            <div class="flow-title">Mainnet (roadmap v3) — Real yield on Aave / Compound</div>
+            <div class="flow-desc">On Base mainnet, pool capital will be automatically deployed to <strong>Aave v3</strong> o <strong>Compound</strong> while awaiting market resolution. The real yield (tipicamente 3-8% APY sulle stablecoin) is accumulated and added to the pool. At resolution, capital + yield is withdrawn from Aave and distributed to winners.</div>
           </div></div>
           <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
-            <div class="flow-title">Protocol fee on-chain (già attivo ora)</div>
-            <div class="flow-desc">L'1% di protocol fee raccolta su ogni <span class="doc-code">claimPayout()</span> viene inviata immediatamente al reward pool ETH del token CPRED via <span class="doc-code">depositRewards()</span>. Questo è già funzionante on-chain sia su testnet che sarà su mainnet — non è simulato.</div>
+            <div class="flow-title">Protocol fee on-chain (already active now)</div>
+            <div class="flow-desc">L'1% di protocol fee raccolta su ogni <span class="doc-code">claimPayout()</span> is immediately sent to the CPRED token ETH reward pool via <span class="doc-code">depositRewards()</span>. Questo è già funzionante on-chain sia su testnet che sarà su mainnet — is not simulated.</div>
           </div></div>
         </div>
 
-        <div class="doc-h3">Stack infrastrutturale</div>
+        <div class="doc-h3">Infrastructure Stack</div>
         <table class="doc-table">
           <tr><th>Layer</th><th>Tecnologia</th><th>Funzione</th></tr>
-          <tr><td>Blockchain</td><td>Base Sepolia (L2 Ethereum)</td><td>Contratti immutabili, custodia fondi, payout automatici</td></tr>
-          <tr><td>Backend API</td><td>FastAPI + Python su VPS (Hetzner)</td><td>Auto-resolver prezzi, cron yield, endpoint REST</td></tr>
-          <tr><td>Database</td><td>Supabase (PostgreSQL)</td><td>Metadata mercati, immagini, stato off-chain</td></tr>
-          <tr><td>Price feeds</td><td>Binance API + CoinGecko</td><td>Prezzi real-time per auto-risoluzione mercati crypto</td></tr>
-          <tr><td>Frontend</td><td>Static HTML/JS su Vercel</td><td>UI, lettura diretta blockchain via ethers.js v6</td></tr>
-          <tr><td>Scheduler</td><td>APScheduler (Python)</td><td>Auto-resolve ogni 5 min, yield cron ogni 24h</td></tr>
+          <tr><td>Blockchain</td><td>Base Sepolia (L2 Ethereum)</td><td>Immutable contracts, custody of funds, automatic payouts</td></tr>
+          <tr><td>Backend API</td><td>FastAPI + Python su VPS (Hetzner)</td><td>Auto-resolver prices, yield cron, REST endpoints</td></tr>
+          <tr><td>Database</td><td>Supabase (PostgreSQL)</td><td>Market metadata, images, off-chain state</td></tr>
+          <tr><td>Price feeds</td><td>Binance API + CoinGecko</td><td>Real-time prices for auto-resolution of crypto markets</td></tr>
+          <tr><td>Frontend</td><td>Static HTML/JS su Vercel</td><td>UI, direct blockchain reading via ethers.js v6</td></tr>
+          <tr><td>Scheduler</td><td>APScheduler (Python)</td><td>Auto-resolve every 5 min, yield cron every 24h</td></tr>
         </table>
 
-        <div class="doc-h3">Flusso yield on-chain</div>
+        <div class="doc-h3">On-chain yield flow</div>
         <div class="doc-box doc-box-cyan">
           <div style="font-family:'DM Mono',monospace;font-size:.75rem;line-height:2.2;color:var(--text2)">
-            Utente vince e chiama <strong>claimPayout(marketId)</strong><br>
+            User wins and calls <strong>claimPayout(marketId)</strong><br>
             &nbsp;&nbsp;&nbsp;↓<br>
-            PredictionMarket calcola gross payout<br>
+            PredictionMarket calculates gross payout<br>
             &nbsp;&nbsp;&nbsp;↓<br>
-            <strong>1%</strong> → creator fee → pagata direttamente al creatore del mercato (ETH)<br>
+            <strong>1%</strong> → creator fee → paid directly to the market creator (ETH)<br>
             <strong>1%</strong> → protocol fee → <span style="color:var(--cyan2)">CryptoPredictToken.depositRewards()</span><br>
-            <strong>98%</strong> → payout netto → vincitore<br>
+            <strong>98%</strong> → net payout → winner<br>
             &nbsp;&nbsp;&nbsp;↓<br>
-            ETH accumulato in <span style="color:var(--cyan2)">rewardPool</span> nel token contract<br>
+            ETH accumulated in <span style="color:var(--cyan2)">rewardPool</span> in the token contract<br>
             &nbsp;&nbsp;&nbsp;↓<br>
-            Staker CPRED chiamano <span style="color:var(--cyan2)">claimRewards()</span> e ricevono ETH<br>
-            proporzionale al loro CPRED stakato
+            CPRED stakers call <span style="color:var(--cyan2)">claimRewards()</span> and receive ETH<br>
+            proportional to their staked CPRED
           </div>
         </div>
 
-        <div class="doc-h3">Calcolo yield giornaliero</div>
+        <div class="doc-h3">Daily yield calculation</div>
         <div class="doc-box">
           <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2">
-            Yield giornaliero = Pool totale × 4.8% / 365<br><br>
-            Esempio — Pool $10,000 · Mercato attivo 30 giorni:<br>
+            Daily yield = Total pool × 4.8% / 365<br><br>
+            Esempio — Pool $10,000 · Market active 30 days:<br>
             Yield totale = $10,000 × 0.048 / 365 × 30 = <strong style="color:var(--green2)">$39.45</strong><br><br>
             Di cui:<br>
-            → 50% ($19.72) aumenta il payout dei vincitori<br>
-            → 30% ($11.84) va agli staker CPRED in ETH<br>
-            → 20% ($7.89)  va alla treasury del protocollo
+            → 50% ($19.72) increases winners' payout<br>
+            → 30% ($11.84) goes to CPRED stakers in ETH<br>
+            → 20% ($7.89)  goes to the protocol treasury
           </div>
         </div>
 
-        <div class="doc-h3">Yield sulla card mercato</div>
-        <div class="doc-p">Ogni card mostra <span class="doc-code">+$X.XX/g</span> — il rendimento giornaliero stimato in USD basato sul pool corrente. Con pool piccoli (testnet) il numero è basso ma la formula è identica: su pool da $100K vedresti <span class="doc-code">+$13.15/g</span>.</div>
+        <div class="doc-h3">Yield on market card</div>
+        <div class="doc-p">Each card shows <span class="doc-code">+$X.XX/g</span> — the estimated daily yield in USD based on the current pool. Con pool piccoli (testnet) il numero è basso ma la formula è identica: su pool da $100K vedresti <span class="doc-code">+$13.15/g</span>.</div>
       </div>
 
 
       <!-- 5. Fee -->
       <div class="doc-section" id="fee">
-        <div class="doc-h2"><span class="sec-num">05</span>💰 5. Fee e Revenue</div>
-        <div class="doc-p">Le fee vengono applicate solo al momento del <strong>ritiro del payout</strong> (claimPayout), non sulle scommesse. Chi perde non paga fee.</div>
+        <div class="doc-h2"><span class="sec-num">05</span>💰 5. Fees & Revenue</div>
+        <div class="doc-p">Fees are applied only at <strong>payout withdrawal</strong> (claimPayout), non sulle scommesse. Losers pay no fees.</div>
 
         <table class="doc-table">
           <tr><th>Fee</th><th>Importo</th><th>Destinazione</th></tr>
-          <tr><td>Platform fee totale</td><td><span class="badge-gold">2%</span></td><td>Sul gross payout dei vincitori</td></tr>
-          <tr><td>→ Creator fee</td><td><span class="badge-purple">1%</span></td><td>Al creatore del mercato</td></tr>
-          <tr><td>→ Protocol fee</td><td><span class="badge-green">1%</span></td><td>Agli staker CPRED via depositRewards()</td></tr>
-          <tr><td>Fee con CPRED in wallet</td><td><span class="badge-green">1% (dimezzata)</span></td><td>Holder CPRED pagano solo la creator fee</td></tr>
+          <tr><td>Total platform fee</td><td><span class="badge-gold">2%</span></td><td>On winners' gross payout</td></tr>
+          <tr><td>→ Creator fee</td><td><span class="badge-purple">1%</span></td><td>To the market creator</td></tr>
+          <tr><td>→ Protocol fee</td><td><span class="badge-green">1%</span></td><td>To CPRED stakers via depositRewards()</td></tr>
+          <tr><td>Fee with CPRED in wallet</td><td><span class="badge-green">1% (dimezzata)</span></td><td>CPRED holders pay only the creator fee</td></tr>
         </table>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
@@ -262,9 +262,9 @@
           </div>
         </div>
 
-        <div class="doc-h3">Revenue team per volume</div>
+        <div class="doc-h3">Team revenue per volume</div>
         <table class="doc-table">
-          <tr><th>Volume mensile</th><th>Creator fee (1%)</th><th>Yield treasury (20%)</th><th>Totale mese</th></tr>
+          <tr><th>Monthly volume</th><th>Creator fee (1%)</th><th>Yield treasury (20%)</th><th>Monthly total</th></tr>
           <tr><td>$1M</td><td>$10,000</td><td>$789</td><td><strong>$10,789</strong></td></tr>
           <tr><td>$10M</td><td>$100,000</td><td>$7,890</td><td><strong>$107,890</strong></td></tr>
           <tr><td>$100M</td><td>$1,000,000</td><td>$78,900</td><td><strong>$1,078,900</strong></td></tr>
@@ -273,8 +273,8 @@
 
       <!-- 6. Payout -->
       <div class="doc-section" id="payout">
-        <div class="doc-h2"><span class="sec-num">06</span>🎯 6. Calcolo Payout</div>
-        <div class="doc-p">Il payout è proporzionale alla quota del pool vincente. Chi scommette di più guadagna di più, ma chi scommette su un lato meno popolare ha un payout potenziale maggiore.</div>
+        <div class="doc-h2"><span class="sec-num">06</span>🎯 6. Payout Calculation</div>
+        <div class="doc-p">Payout is proportional to the share of the winning pool. Those who bet more earn more, ma those who bet on a less popular side have higher potential payout.</div>
 
         <div class="doc-box">
           <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2">
@@ -287,26 +287,26 @@
           </div>
         </div>
 
-        <div class="doc-h3">Quando ritirare</div>
-        <div class="doc-p">Il payout è disponibile appena il mercato viene risolto. Non c'è scadenza per il ritiro. La funzione <span class="doc-code">claimPayout(marketId)</span> è chiamabile direttamente o tramite il pulsante "Ritira Vincita" nel Portfolio o nella sezione Le mie scommesse.</div>
+        <div class="doc-h3">When to claim</div>
+        <div class="doc-p">Payout is available as soon as the market is resolved. There is no withdrawal deadline. La funzione <span class="doc-code">claimPayout(marketId)</span> è chiamabile directly or via the button "Ritira Vincita" in Portfolio or in My Bets section.</div>
       </div>
 
       <!-- 7. Valute -->
       <div class="doc-section" id="valute">
-        <div class="doc-h2"><span class="sec-num">07</span>💱 7. Valute Supportate</div>
-        <div class="doc-p">Ogni mercato usa una sola valuta scelta al momento della creazione. Scommesse e payout avvengono sempre nella stessa valuta del mercato.</div>
+        <div class="doc-h2"><span class="sec-num">07</span>💱 7. Supported Currencies</div>
+        <div class="doc-p">Each market uses a single currency chosen at creation. Bets and payouts always occur in the market's currency.</div>
 
         <table class="doc-table">
           <tr><th>Valuta</th><th>Tipo</th><th>Fee</th><th>Nota</th></tr>
-          <tr><td><strong>ETH</strong></td><td>Nativo</td><td>2%</td><td>Gas per scommessa, liquidità min 0.0025 ETH</td></tr>
-          <tr><td><strong>USDC</strong></td><td>ERC20 stablecoin</td><td>2%</td><td>Richiede approve() prima della scommessa</td></tr>
-          <tr><td><strong>USDT</strong></td><td>ERC20 stablecoin</td><td>2%</td><td>Richiede approve() prima della scommessa</td></tr>
-          <tr><td><strong>CPRED</strong></td><td>Token nativo</td><td>0%</td><td>Fee 0% come incentivo holder — vantaggioso</td></tr>
+          <tr><td><strong>ETH</strong></td><td>Nativo</td><td>2%</td><td>Gas per bet, min liquidity 0.0025 ETH</td></tr>
+          <tr><td><strong>USDC</strong></td><td>ERC20 stablecoin</td><td>2%</td><td>Requires approve() before betting</td></tr>
+          <tr><td><strong>USDT</strong></td><td>ERC20 stablecoin</td><td>2%</td><td>Requires approve() before betting</td></tr>
+          <tr><td><strong>CPRED</strong></td><td>Token nativo</td><td>0%</td><td>0% fee as holder incentive — advantageous</td></tr>
         </table>
 
         <div class="doc-box doc-box-purple">
-          <div style="font-weight:700;margin-bottom:6px;font-size:.85rem">Mercati CPRED — 0% fee</div>
-          <div class="doc-p" style="margin:0">I mercati denominati in CPRED non applicano nessuna fee di protocollo. Il 100% del pool va ai vincitori. Questo crea un forte incentivo a scommettere e detenere CPRED.</div>
+          <div style="font-weight:700;margin-bottom:6px;font-size:.85rem">CPRED Markets — 0% fee</div>
+          <div class="doc-p" style="margin:0">CPRED-denominated markets apply no protocol fee. 100% of the pool goes to winners. This creates a strong incentive to bet and hold CPRED.</div>
         </div>
       </div>
 
@@ -322,22 +322,22 @@
           <div class="doc-stat"><span class="doc-stat-val" style="color:#06b6d4">+200%</span><span class="doc-stat-label">TARGET LISTING</span></div>
         </div>
         <table class="doc-table">
-          <tr><th>Allocazione</th><th>%</th><th>Quantità</th><th>Note</th></tr>
+          <tr><th>Allocation</th><th>%</th><th>Quantità</th><th>Note</th></tr>
           <tr><td>Presale</td><td>45%</td><td>45,000,000</td><td>Stage 1/2/3</td></tr>
-          <tr><td>Liquidità</td><td>30%</td><td>30,000,000</td><td>DEX al listing</td></tr>
-          <tr><td>Team</td><td>15%</td><td>15,000,000</td><td>Lock 12 mesi</td></tr>
+          <tr><td>Liquidity</td><td>30%</td><td>30,000,000</td><td>DEX at listing</td></tr>
+          <tr><td>Team</td><td>15%</td><td>15,000,000</td><td>12-month lock</td></tr>
           <tr><td>Ecosystem</td><td>10%</td><td>10,000,000</td><td>Rewards, partnership</td></tr>
         </table>
 
         <div class="doc-h3">Utility CPRED</div>
         <table class="doc-table">
           <tr><th>Beneficio</th><th>Dettaglio</th></tr>
-          <tr><td>Fee ridotta</td><td>1% invece di 2% su tutti i mercati se hai CPRED in wallet</td></tr>
-          <tr><td>Fee 0%</td><td>Mercati denominati in CPRED non hanno fee</td></tr>
-          <tr><td>Staking rewards ETH</td><td>30% delle protocol fee (ETH) distribuite agli staker</td></tr>
-          <tr><td>Creare mercati</td><td>Serve 1,000 CPRED (wallet + staking) per creare mercati</td></tr>
-          <tr><td>Governance</td><td>Voto su nuovi mercati e parametri del protocollo</td></tr>
-          <tr><td>Mercati esclusivi</td><td>Accesso a mercati riservati agli holder</td></tr>
+          <tr><td>Reduced fee</td><td>1% instead of 2% on all markets if you hold CPRED in wallet</td></tr>
+          <tr><td>Fee 0%</td><td>CPRED-denominated markets have no fee</td></tr>
+          <tr><td>ETH Staking rewards</td><td>30% of protocol fees (ETH) distributed to stakers</td></tr>
+          <tr><td>Create markets</td><td>Requires 1,000 CPRED (wallet + staking) to create markets</td></tr>
+          <tr><td>Governance</td><td>Vote on new markets and protocol parameters</td></tr>
+          <tr><td>Exclusive markets</td><td>Access to holder-exclusive markets</td></tr>
         </table>
       </div>
 
@@ -346,21 +346,21 @@
         <div class="doc-h2"><span class="sec-num">09</span>🚀 9. Presale $CPRED</div>
 
         <table class="doc-table">
-          <tr><th>Stage</th><th>Prezzo</th><th>Allocazione</th><th>Stato</th></tr>
+          <tr><th>Stage</th><th>Price</th><th>Allocation</th><th>Stato</th></tr>
           <tr><td>Stage 1</td><td style="color:var(--gold2)">$0.050</td><td>20,000,000 CPRED</td><td><span class="badge-green">LIVE</span></td></tr>
           <tr><td>Stage 2</td><td>$0.080</td><td>15,000,000 CPRED</td><td><span class="badge-purple">In arrivo</span></td></tr>
           <tr><td>Stage 3</td><td>$0.100</td><td>10,000,000 CPRED</td><td><span class="badge-purple">In arrivo</span></td></tr>
           <tr><td>Listing</td><td style="color:var(--green2)">$0.150</td><td>DEX + CEX</td><td>Target +200% da S1</td></tr>
         </table>
 
-        <div class="doc-p">Il contratto presale gestisce automaticamente il passaggio tra stage. I token acquistati sono immediatamente trasferibili nel wallet e utilizzabili per lo staking o per creare mercati.</div>
+        <div class="doc-p">The presale contract automatically manages stage transitions. Purchased tokens are immediately transferable nel wallet e usable for staking or creating markets.</div>
       </div>
 
       <!-- 10. Staking -->
       <div class="doc-section" id="staking">
         <div class="doc-h2"><span class="sec-num">10</span>🔒 10. Staking Presale</div>
 
-        <div class="doc-p">Lo staking presale permette di bloccare CPRED e ricevere rewards in CPRED (APY fisso) e in ETH (dalle protocol fee dei mercati).</div>
+        <div class="doc-p">Presale staking allows locking CPRED e receive rewards in CPRED (fixed APY) and ETH (from market protocol fees.</div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
           <div class="doc-stat"><span class="doc-stat-val" style="color:#a855f7">12%</span><span class="doc-stat-label">APY FLEX</span></div>
@@ -370,69 +370,69 @@
         </div>
         <table class="doc-table">
           <tr><th>Pool</th><th>Lock</th><th>APY CPRED</th><th>Max TVL</th></tr>
-          <tr><td><strong>Flessibile</strong></td><td>Nessuno</td><td style="color:var(--purple3)">12%</td><td>10M CPRED</td></tr>
+          <tr><td><strong>Flessibile</strong></td><td>None</td><td style="color:var(--purple3)">12%</td><td>10M CPRED</td></tr>
           <tr><td><strong>30 Giorni</strong></td><td>30 giorni</td><td style="color:var(--cyan2)">20%</td><td>10M CPRED</td></tr>
           <tr><td><strong>90 Giorni</strong></td><td>90 giorni</td><td style="color:var(--gold2)">28%</td><td>10M CPRED</td></tr>
         </table>
 
-        <div class="doc-h3">Doppio reward</div>
+        <div class="doc-h3">Dual reward</div>
         <div class="doc-box doc-box-cyan">
-          <div class="doc-p" style="margin:0">Gli staker CPRED ricevono due tipi di reward:<br>
-          <strong>1. CPRED</strong> — APY fisso calcolato sul capitale stakato e sul tempo trascorso<br>
-          <strong>2. ETH</strong> — 1% di ogni payout ritirato dai vincitori viene inviato al reward pool ETH e distribuito proporzionalmente agli staker</div>
+          <div class="doc-p" style="margin:0">CPRED stakers receive two types of rewards:<br>
+          <strong>1. CPRED</strong> — Fixed APY calculated on staked capital and elapsed time<br>
+          <strong>2. ETH</strong> — 1% of every winner's payout is sent to the ETH reward pool e distributed proportionally to stakers</div>
         </div>
 
-        <div class="doc-h3">CPRED in staking conta come balance</div>
-        <div class="doc-p">Il CPRED in staking viene conteggiato nel balance totale per il requisito di creazione mercati (1,000 CPRED). Non serve unstakare per creare mercati.</div>
+        <div class="doc-h3">Staked CPRED counts as balance</div>
+        <div class="doc-p">Staked CPRED is counted in the total balance per il requisito di creazione mercati (1,000 CPRED). No need to unstake to create markets.</div>
       </div>
 
       <!-- 11. Crea mercato -->
       <div class="doc-section" id="crea">
-        <div class="doc-h2"><span class="sec-num">11</span>✨ 11. Creare un Mercato</div>
+        <div class="doc-h2"><span class="sec-num">11</span>✨ 11. Creating a Market</div>
 
-        <div class="doc-h3">Requisiti</div>
+        <div class="doc-h3">Requirements</div>
         <table class="doc-table">
           <tr><th>Requisito</th><th>Valore</th></tr>
-          <tr><td>CPRED in wallet o staking</td><td><strong>1,000 CPRED</strong></td></tr>
-          <tr><td>Liquidità iniziale ETH</td><td>min 0.0025 ETH (~$5)</td></tr>
-          <tr><td>Liquidità iniziale USDC/USDT</td><td>min 5 USDC/USDT</td></tr>
-          <tr><td>Liquidità iniziale CPRED</td><td>min 100 CPRED</td></tr>
+          <tr><td>CPRED in wallet or staking</td><td><strong>1,000 CPRED</strong></td></tr>
+          <tr><td>Liquidity iniziale ETH</td><td>min 0.0025 ETH (~$5)</td></tr>
+          <tr><td>Liquidity iniziale USDC/USDT</td><td>min 5 USDC/USDT</td></tr>
+          <tr><td>Liquidity iniziale CPRED</td><td>min 100 CPRED</td></tr>
         </table>
 
-        <div class="doc-h3">Processo</div>
-        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><div class="flow-title">Compila il form su /crea.html</div><div class="flow-desc">Domanda, categoria, asset di riferimento (per mercati crypto/macro), data di scadenza, valuta del mercato, liquidità iniziale, immagine opzionale.</div></div></div>
-        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><div class="flow-title">Approvazione ERC20 (se non ETH)</div><div class="flow-desc">Per mercati USDC/USDT/CPRED, MetaMask chiede prima l'approve() del token al contratto Market.</div></div></div>
-        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><div class="flow-title">Conferma createMarket()</div><div class="flow-desc">Una sola transazione crea il mercato on-chain, deposita la liquidità iniziale e lo rende visibile nella lista mercati.</div></div></div>
-        <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><div class="flow-title">Guadagna il 1% di ogni payout</div><div class="flow-desc">Ogni volta che un vincitore ritira il payout dal tuo mercato, ricevi automaticamente l'1% del gross payout come creator fee.</div></div></div>
+        <div class="doc-h3">Process</div>
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><div class="flow-title">Fill out the form at /crea.html</div><div class="flow-desc">Question, category, reference asset (per mercati crypto/macro), expiry date, market currency, initial liquidity, optional image.</div></div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><div class="flow-title">ERC20 Approval (if not ETH)</div><div class="flow-desc">Per mercati USDC/USDT/CPRED, MetaMask will request approve() of the token to the Market contract.</div></div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><div class="flow-title">Conferma createMarket()</div><div class="flow-desc">A single transaction creates the market on-chain, deposits the initial liquidity e makes it visible in the markets list.</div></div></div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><div class="flow-title">Earn 1% of every payout</div><div class="flow-desc">Every time a winner claims payout from your market, you automatically receive 1% of the gross payout as creator fee.</div></div></div>
       </div>
 
       <!-- 12. Risoluzione -->
       <div class="doc-section" id="risoluzione">
-        <div class="doc-h2"><span class="sec-num">12</span>⚖️ 12. Risoluzione Mercati</div>
+        <div class="doc-h2"><span class="sec-num">12</span>⚖️ 12. Market Resolution</div>
 
-        <div class="doc-h3">Chi risolve</div>
+        <div class="doc-h3">Who resolves</div>
         <table class="doc-table">
-          <tr><th>Tipo mercato</th><th>Metodo</th></tr>
-          <tr><td>Crypto con price target (BTC, ETH, SOL...)</td><td>Auto-resolver ogni 5 min via Binance/CoinGecko API</td></tr>
-          <tr><td>Macro (tassi Fed, inflazione)</td><td>Auto-resolver via CoinGecko o manuale</td></tr>
-          <tr><td>Sport, politica, entertainment</td><td>Manuale dall'admin panel</td></tr>
+          <tr><th>Market type</th><th>Method</th></tr>
+          <tr><td>Crypto with price target (BTC, ETH, SOL...)</td><td>Auto-resolver every 5 min via Binance/CoinGecko API</td></tr>
+          <tr><td>Macro (Fed rates, inflation)</td><td>Auto-resolver via CoinGecko or manual</td></tr>
+          <tr><td>Sport, politics, entertainment</td><td>Manual from admin panel</td></tr>
         </table>
 
         <div class="doc-h3">Resolver whitelist</div>
-        <div class="doc-p">Il contratto mantiene una whitelist di resolver autorizzati. Attualmente il team wallet (<span class="doc-code">0x1902b...74E</span>) è autorizzato. L'owner può aggiungere/rimuovere resolver con <span class="doc-code">addResolver(address)</span>.</div>
+        <div class="doc-p">The contract maintains a whitelist of authorized resolvers. Attualmente il team wallet (<span class="doc-code">0x1902b...74E</span>) is authorized. The owner can add/remove resolvers with <span class="doc-code">addResolver(address)</span>.</div>
 
-        <div class="doc-h3">Risoluzione anticipata</div>
-        <div class="doc-p">Owner e resolver autorizzati possono risolvere un mercato prima della scadenza (forza risoluzione). Gli utenti normali non possono risolvere prima della scadenza.</div>
+        <div class="doc-h3">Early resolution</div>
+        <div class="doc-p">Owner and authorized resolvers can resolve a market before expiry (forza risoluzione). Regular users cannot resolve before expiry.</div>
       </div>
 
       <!-- 13. Contratti -->
       <div class="doc-section" id="contratti">
         <div class="doc-h2"><span class="sec-num">13</span>📋 13. Smart Contracts — Base Sepolia</div>
-        <div class="doc-p">Tutti i contratti sono verificabili su BaseScan. La rete è Base Sepolia (chainId 84532).</div>
+        <div class="doc-p">All contracts are verifiable on BaseScan. The network is Base Sepolia (chainId 84532).</div>
 
         <table class="doc-table">
           <tr><th>Contratto</th><th>Indirizzo</th><th>Funzione</th></tr>
-          <tr><td>CryptoPredictToken</td><td><a href="https://sepolia.basescan.org/address/0xEc937bF3123874115EDcBBE1b3802C95f572e8E5" target="_blank" style="color:var(--purple3);font-family:monospace;font-size:.72rem">0xEc93...E5</a></td><td>Token CPRED, staking, reward pool ETH</td></tr>
+          <tr><td>CryptoPredictToken</td><td><a href="https://sepolia.basescan.org/address/0xEc937bF3123874115EDcBBE1b3802C95f572e8E5" target="_blank" style="color:var(--purple3);font-family:monospace;font-size:.72rem">0xEc93...E5</a></td><td>CPRED Token, staking, reward pool ETH</td></tr>
           <tr><td>PredictionMarket v2</td><td><a href="https://sepolia.basescan.org/address/0x775267160f3F7fb7908A7f2a4a2b0AFe22CD9e66" target="_blank" style="color:var(--purple3);font-family:monospace;font-size:.72rem">0x7752...66</a></td><td>Core — crea mercati, scommesse, payout, multi-currency</td></tr>
           <tr><td>CPREDPresale v2</td><td><a href="https://sepolia.basescan.org/address/0xC881FF7f99a666372DD0B9d50A9244E6564ea2B7" target="_blank" style="color:var(--purple3);font-family:monospace;font-size:.72rem">0xC881...B7</a></td><td>Vendita CPRED in 3 stage, timer automatico</td></tr>
           <tr><td>PresaleStaking</td><td><a href="https://sepolia.basescan.org/address/0x6e9FE398C06E479Cd69663737415375e095c3454" target="_blank" style="color:var(--purple3);font-family:monospace;font-size:.72rem">0x6e9F...54</a></td><td>3 pool staking (12/20/28% APY), 5M CPRED rewards</td></tr>
@@ -440,31 +440,31 @@
           <tr><td>MockUSDT</td><td><a href="https://sepolia.basescan.org/address/0xaBB48e1693Df04fb894843e52B239D5C5d0ab871" target="_blank" style="color:var(--purple3);font-family:monospace;font-size:.72rem">0xaBB4...71</a></td><td>USDT testnet, faucet 10K gratuiti</td></tr>
         </table>
 
-        <div class="doc-h3">Wallet chiave</div>
+        <div class="doc-h3">Key wallets</div>
         <table class="doc-table">
-          <tr><th>Wallet</th><th>Indirizzo</th><th>Ruolo</th></tr>
-          <tr><td>Deployer / Owner</td><td style="font-family:monospace;font-size:.72rem">0x109f...6281</td><td>Deploy contratti, ownership, addResolver</td></tr>
-          <tr><td>Team Resolver</td><td style="font-family:monospace;font-size:.72rem">0x1902b...74E</td><td>Risolve mercati dall'admin panel</td></tr>
+          <tr><th>Wallet</th><th>Indirizzo</th><th>Role</th></tr>
+          <tr><td>Deployer / Owner</td><td style="font-family:monospace;font-size:.72rem">0x109f...6281</td><td>Deploy contracts, ownership, addResolver</td></tr>
+          <tr><td>Team Resolver</td><td style="font-family:monospace;font-size:.72rem">0x1902b...74E</td><td>Resolves markets from admin panel</td></tr>
         </table>
       </div>
 
-      <!-- 14. Sicurezza -->
+      <!-- 14. Security -->
       <div class="doc-section" id="sicurezza">
-        <div class="doc-h2"><span class="sec-num">14</span>🛡️ 14. Sicurezza</div>
+        <div class="doc-h2"><span class="sec-num">14</span>🛡️ 14. Security</div>
 
         <table class="doc-table">
           <tr><th>Meccanismo</th><th>Implementazione</th></tr>
-          <tr><td>ReentrancyGuard</td><td>Tutte le funzioni che muovono fondi usano nonReentrant</td></tr>
-          <tr><td>Resolver whitelist</td><td>Solo owner e resolver autorizzati possono risolvere mercati</td></tr>
+          <tr><td>ReentrancyGuard</td><td>All fund-moving functions use nonReentrant</td></tr>
+          <tr><td>Resolver whitelist</td><td>Only owner and authorized resolvers can resolve markets</td></tr>
           <tr><td>Requisito CPRED</td><td>1,000 CPRED richiesti per creare mercati — skin in the game</td></tr>
-          <tr><td>Liquidità minima</td><td>Min 0.0025 ETH per creare mercati — previene spam</td></tr>
-          <tr><td>One-side bet</td><td>Impossibile scommettere su entrambi i lati dello stesso mercato</td></tr>
-          <tr><td>Claimed flag</td><td>Il payout può essere ritirato una sola volta per posizione</td></tr>
+          <tr><td>Liquidity minima</td><td>Min 0.0025 ETH per creare mercati — prevents spam</td></tr>
+          <tr><td>One-side bet</td><td>Cannot bet on both sides of the same market</td></tr>
+          <tr><td>Claimed flag</td><td>Payout can only be claimed once per position</td></tr>
         </table>
 
         <div class="doc-box" class="doc-box-red" style="margin-top:14px">
-          <div style="font-weight:700;color:#f87171;margin-bottom:6px;font-size:.85rem">Testnet — Fondi non reali</div>
-          <div class="doc-p" style="margin:0;color:var(--text3)">CryptoPredict è attualmente su Base Sepolia testnet. I token ETH, USDC e USDT non hanno valore reale. Il CPRED acquistato in presale è token testnet. Il mainnet launch è previsto dopo il completamento dell'audit.</div>
+          <div style="font-weight:700;color:#f87171;margin-bottom:6px;font-size:.85rem">Testnet — Not real funds</div>
+          <div class="doc-p" style="margin:0;color:var(--text3)">CryptoPredict is currently on Base Sepolia testnet. ETH, USDC and USDT tokens have no real value. CPRED purchased in presale is a testnet token. Mainnet launch is planned after audit completion.</div>
         </div>
       </div>
 
@@ -474,11 +474,11 @@
 
         <table class="doc-table">
           <tr><th>Fase</th><th>Stato</th><th>Features</th></tr>
-          <tr><td>Testnet v1</td><td><span class="badge-green">COMPLETATO</span></td><td>Smart contracts, presale, staking, mercati ETH</td></tr>
-          <tr><td>Testnet v2</td><td><span class="badge-green">IN CORSO</span></td><td>Multi-currency (USDC/USDT/CPRED), yield on-chain, protocol fee, placeBetERC20</td></tr>
-          <tr><td>Testnet v3</td><td><span class="badge-purple">PROSSIMO</span></td><td>Presale multi-currency, penalty unstake anticipato, token live staking, analytics dashboard</td></tr>
-          <tr><td>Audit</td><td><span class="badge-purple">Q3 2025</span></td><td>Audit completo smart contracts, bug bounty</td></tr>
-          <tr><td>Mainnet</td><td><span class="badge-purple">Q4 2025</span></td><td>Deploy Base mainnet, liquidità iniziale, marketing</td></tr>
+          <tr><td>Testnet v1</td><td><span class="badge-green">COMPLETATO</span></td><td>Smart contracts, presale, staking, ETH markets</td></tr>
+          <tr><td>Testnet v2</td><td><span class="badge-green">IN CORSO</span></td><td>Multi-currency (USDC/USDT/CPRED), on-chain yield, protocol fee, placeBetERC20</td></tr>
+          <tr><td>Testnet v3</td><td><span class="badge-purple">PROSSIMO</span></td><td>Multi-currency presale, early unstake penalty, live token staking, analytics dashboard</td></tr>
+          <tr><td>Audit</td><td><span class="badge-purple">Q3 2025</span></td><td>Full smart contract audit, bug bounty</td></tr>
+          <tr><td>Mainnet</td><td><span class="badge-purple">Q4 2025</span></td><td>Deploy Base mainnet, initial liquidity, marketing</td></tr>
           <tr><td>Trading v1</td><td><span class="badge-green">COMPLETATO</span></td><td>Grafico prezzo da blockchain, orderbook off-chain, ordini limite via Supabase</td></tr>
           <tr><td>Vendi Quote v1</td><td><span class="badge-green">COMPLETATO</span></td><td>UI mercato secondario pronta — PositionMarket.sol scritto, deploy al prossimo redeploy</td></tr>
           <tr><td>v2.0</td><td><span class="badge-purple">2026</span></td><td>AMM on-chain (CPMM), governance, mobile app, notifiche telegram</td></tr>
@@ -488,95 +488,95 @@
 
       <!-- 16. Trading -->
       <div class="doc-section" id="trading">
-        <div class="doc-h2"><span class="sec-num">16</span>📉 16. Trading e Grafico Prezzi</div>
-        <div class="doc-p">La pagina <span class="doc-code">/trading.html</span> offre strumenti di analisi e trading avanzati basati sui dati on-chain e su un orderbook off-chain via Supabase.</div>
+        <div class="doc-h2"><span class="sec-num">16</span>📉 16. Trading & Chart Prezzi</div>
+        <div class="doc-p">The page <span class="doc-code">/trading.html</span> offers advanced analysis and trading tools based on on-chain data and an off-chain orderbook via Supabase.</div>
 
-        <div class="doc-h3">Grafico Prezzo Implicito</div>
-        <div class="doc-p">Il grafico legge gli eventi <span class="doc-code">BetPlaced</span> direttamente dalla blockchain e ricostruisce il <strong>prezzo implicito YES</strong> (0–1) ad ogni scommessa. Ogni punto rappresenta quanto il mercato "pensa" che l'evento accada.</div>
+        <div class="doc-h3">Implied Price Chart</div>
+        <div class="doc-p">The chart reads <span class="doc-code">BetPlaced</span> directly from the blockchain e reconstructs the <strong>implied YES price</strong> (0–1) per bet. Each point represents how much the market "pensa" che l'evento accada.</div>
         <div class="doc-box">
           <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2">
-            Prezzo YES = YES pool / (YES pool + NO pool)<br>
-            Prezzo NO  = 1 - Prezzo YES<br><br>
+            Price YES = YES pool / (YES pool + NO pool)<br>
+            Price NO  = 1 - Price YES<br><br>
             Esempio: YES pool = 75 ETH, NO pool = 25 ETH<br>
-            → Prezzo YES = 0.75 (75% probabilità che accada)<br>
-            → Prezzo NO  = 0.25
+            → Price YES = 0.75 (75% probabilità che accada)<br>
+            → Price NO  = 0.25
           </div>
         </div>
         <div class="doc-p">I punti sul grafico sono colorati: <strong style="color:#34d399">verde = scommessa YES</strong>, <strong style="color:#f87171">rosso = scommessa NO</strong>. Il grafico si aggiorna ad ogni nuova scommessa on-chain.</div>
 
-        <div class="doc-h3">Orderbook Ordini Limite</div>
-        <div class="doc-p">Gli ordini limite sono salvati su Supabase e non bloccano fondi on-chain. Quando il backend rileva che il prezzo on-chain ha raggiunto il tuo limite, esegue automaticamente la scommessa via <span class="doc-code">placeBet()</span>.</div>
+        <div class="doc-h3">Limit Order Orderbook</div>
+        <div class="doc-p">Limit orders are saved on Supabase e don't lock on-chain funds. When the backend detects the on-chain price has reached your limit, automatically executes the bet via <span class="doc-code">placeBet()</span>.</div>
 
         <table class="doc-table">
-          <tr><th>Tipo ordine</th><th>Funzionamento</th><th>Fondi bloccati</th></tr>
-          <tr><td><strong>Market</strong></td><td>Eseguito immediatamente al prezzo corrente</td><td>Al momento dell'esecuzione</td></tr>
-          <tr><td><strong>Limite YES</strong></td><td>Eseguito quando Prezzo YES ≤ tuo limite</td><td>No — solo salvato su Supabase</td></tr>
-          <tr><td><strong>Limite NO</strong></td><td>Eseguito quando Prezzo YES ≥ tuo limite (NO economico)</td><td>No — solo salvato su Supabase</td></tr>
+          <tr><th>Order type</th><th>Funzionamento</th><th>Locked funds</th></tr>
+          <tr><td><strong>Market</strong></td><td>Executed immediately at current price</td><td>At execution time</td></tr>
+          <tr><td><strong>Limite YES</strong></td><td>Executed when YES Price ≤ your limit</td><td>No — only saved on Supabase</td></tr>
+          <tr><td><strong>Limite NO</strong></td><td>Executed when YES Price ≥ your limit (cheap NO)</td><td>No — only saved on Supabase</td></tr>
         </table>
 
-        <div class="doc-h3">Scommesse recenti</div>
-        <div class="doc-p">La sezione "Scommesse recenti" mostra gli ultimi 10 eventi <span class="doc-code">BetPlaced</span> letti dalla blockchain in tempo reale — wallet, importo, side, link BaseScan.</div>
+        <div class="doc-h3">Recent bets</div>
+        <div class="doc-p">The section "Recent bets" shows the last 10 events <span class="doc-code">BetPlaced</span> read from the blockchain in real-time — wallet, importo, side, link BaseScan.</div>
       </div>
 
-      <!-- 17. Mercato Secondario -->
+      <!-- 17. Secondary Market -->
       <div class="doc-section" id="secondario">
-        <div class="doc-h2"><span class="sec-num">17</span>💸 17. Mercato Secondario — Vendi Quote</div>
-        <div class="doc-p">La pagina <span class="doc-code">/vendi.html</span> permette di vendere le proprie posizioni aperte ad altri utenti <strong>prima della scadenza del mercato</strong>, incassando subito senza aspettare la risoluzione.</div>
+        <div class="doc-h2"><span class="sec-num">17</span>💸 17. Secondary Market — Vendi Quote</div>
+        <div class="doc-p">The page <span class="doc-code">/vendi.html</span> allows selling open positions to other users <strong>before market expiry</strong>, cashing out immediately without waiting for resolution.</div>
 
         <div class="doc-h3">Come funziona</div>
         <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
-          <div class="flow-title">Venditore: metti in vendita</div>
-          <div class="flow-desc">Vai su /vendi.html → tab "Vendi una quota" → scegli la posizione → imposta il prezzo → "Metti in Vendita". Il contratto PositionMarket diventa custode della tua posizione.</div>
+          <div class="flow-title">Seller: list for sale</div>
+          <div class="flow-desc">Vai su /vendi.html → tab "Vendi una quota" → scegli la posizione → imposta il prezzo → "Metti in Vendita". The PositionMarket contract becomes custodian of your position.</div>
         </div></div>
         <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
-          <div class="flow-title">Compratore: acquista la quota</div>
-          <div class="flow-desc">Tab "Listings attivi" → trova la quota → "Compra quota" → paga il prezzo richiesto. Il PositionMarket trasferisce la posizione al compratore e il pagamento al venditore.</div>
+          <div class="flow-title">Buyer: purchase the share</div>
+          <div class="flow-desc">Tab "Listings attivi" → trova la quota → "Compra quota" → paga il prezzo richiesto. Il PositionMarket transfers the position to the buyer e the payment to the seller.</div>
         </div></div>
         <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
           <div class="flow-title">Fee di vendita: 0.5%</div>
-          <div class="flow-desc">Sul prezzo di vendita viene applicata una fee dello 0.5% al protocollo. Il venditore riceve il 99.5% del prezzo richiesto.</div>
+          <div class="flow-desc">A 0.5% protocol fee is applied to the sale price. The seller receives 99.5% of the asking price.</div>
         </div></div>
 
         <div class="doc-box" class="doc-box-gold" style="margin-top:12px">
           <div style="font-weight:700;color:var(--gold2);margin-bottom:4px;font-size:.85rem">Stato attuale</div>
-          <div class="doc-p" style="margin:0;font-size:.8rem">Il contratto <span class="doc-code">PositionMarket.sol</span> è scritto e testato. Sarà deployato nel prossimo redeploy insieme ad altre migliorie. La UI è già funzionante e pronta.</div>
+          <div class="doc-p" style="margin:0;font-size:.8rem">The contract <span class="doc-code">PositionMarket.sol</span> is written and tested. Will be deployed in the next redeploy insieme ad altre migliorie. The UI is already functional and ready.</div>
         </div>
       </div>
 
       <!-- 18. AMM -->
       <div class="doc-section" id="amm">
         <div class="doc-h2"><span class="sec-num">18</span>🔄 18. AMM — Automated Market Maker (Roadmap)</div>
-        <div class="doc-p">L'AMM è la versione avanzata del trading su CryptoPredict — prezzi continui, swap istantanei, liquidità automatica. È nella roadmap v2.0 e richiede un nuovo contratto dedicato.</div>
+        <div class="doc-p">The AMM is the advanced version of trading on CryptoPredict — continuous prices, instant swaps, automatic liquidity. It's on the v2.0 roadmap and requires a new dedicated contract.</div>
 
-        <div class="doc-h3">Differenza tra modello attuale e AMM</div>
+        <div class="doc-h3">Difference between current model and AMM</div>
         <table class="doc-table">
           <tr><th></th><th>Attuale (Parimutuel)</th><th>AMM (v2.0)</th></tr>
-          <tr><td>Entrata</td><td>Fissi YES o NO, aspetti risoluzione</td><td>Compri/vendi quote in qualsiasi momento</td></tr>
-          <tr><td>Prezzo</td><td>Determinato dal pool al momento</td><td>Curva continua x×y=k</td></tr>
-          <tr><td>Uscita</td><td>Solo alla risoluzione del mercato</td><td>Vendi quando vuoi, prezzo di mercato</td></tr>
-          <tr><td>Liquidità</td><td>Scommesse degli utenti</td><td>LP depositano e guadagnano fee di swap</td></tr>
-          <tr><td>Slippage</td><td>Nessuno (pool unico)</td><td>Dipende dalla liquidità disponibile</td></tr>
+          <tr><td>Entry</td><td>Fix YES or NO, wait for resolution</td><td>Buy/sell shares at any time</td></tr>
+          <tr><td>Price</td><td>Determined by pool at the time</td><td>Continuous curve x×y=k</td></tr>
+          <tr><td>Exit</td><td>Only at market resolution</td><td>Sell whenever, market price</td></tr>
+          <tr><td>Liquidity</td><td>User bets</td><td>LPs deposit and earn swap fees</td></tr>
+          <tr><td>Slippage</td><td>None (pool unico)</td><td>Depends on available liquidity</td></tr>
         </table>
 
-        <div class="doc-h3">Come funzionerà l'AMM</div>
+        <div class="doc-h3">How the AMM will work</div>
         <div class="doc-box">
           <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
             <div class="flow-title">Liquidity Provider (LP)</div>
-            <div class="flow-desc">Gli LP depositano fondi nel pool AMM del mercato. In cambio ricevono LP token e guadagnano le fee di swap (0.3%) su ogni trade. La liquidità viene ritirata alla risoluzione.</div>
+            <div class="flow-desc">LPs deposit funds into the market's AMM pool. In exchange they receive LP tokens e earn swap fees (0.3%) on every trade. Liquidity is withdrawn at resolution.</div>
           </div></div>
           <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
             <div class="flow-title">Trader</div>
-            <div class="flow-desc">I trader comprano e vendono quote YES/NO come su un DEX. Il prezzo si muove lungo la curva CPMM (x×y=k). Possono entrare e uscire in qualsiasi momento senza aspettare la risoluzione.</div>
+            <div class="flow-desc">Traders buy and sell YES/NO shares like on a DEX. Price moves along the CPMM curve (x×y=k). They can enter and exit at any time without waiting for resolution.</div>
           </div></div>
           <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
             <div class="flow-title">Risoluzione</div>
-            <div class="flow-desc">Alla risoluzione le quote vincenti valgono 1 (100% del pool) e quelle perdenti 0. Gli LP ritirano la loro quota di liquidità + fee accumulate.</div>
+            <div class="flow-desc">At resolution winning shares are worth 1 (100% del pool) e losing shares 0. LPs withdraw their share of liquidity + accumulated fees.</div>
           </div></div>
         </div>
 
         <div class="doc-box doc-box-purple">
-          <div style="font-weight:700;margin-bottom:6px;font-size:.85rem">Perché è in roadmap e non ora</div>
-          <div class="doc-p" style="margin:0">L'AMM richiede un contratto completamente nuovo (non modificabile sull'attuale PredictionMarket), un audit specifico per la curva di prezzo, e un sistema di LP token. È una feature fondamentale ma complessa — la priorità attuale è consolidare il modello parimutuel e il mercato secondario.</div>
+          <div style="font-weight:700;margin-bottom:6px;font-size:.85rem">Why it's on the roadmap and not now</div>
+          <div class="doc-p" style="margin:0">The AMM requires a completely new contract (not modifiable on the current PredictionMarket), a specific audit for the price curve, e a LP token system. It's a fundamental but complex feature — current priority is consolidating the parimutuel model and the secondary market.</div>
         </div>
       </div>
 
