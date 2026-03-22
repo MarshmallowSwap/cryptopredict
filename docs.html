@@ -75,8 +75,8 @@
   <div style="display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start">
 
     <!-- Sidebar TOC -->
-    <div class="cp-card" style="position:sticky;top:80px">
-      <div style="font-size:.62rem;color:var(--text3);margin-bottom:10px">INDICE</div>
+    <div class="cp-card" style="position:sticky;top:80px;background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.2)">
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#a855f7;letter-spacing:.12em;margin-bottom:12px">// INDICE</div>
       <a href="#overview"    class="toc-link">1. Panoramica</a>
       <a href="#mercati"     class="toc-link">2. Come funzionano i Mercati</a>
       <a href="#pool"        class="toc-link">3. Pool e Liquidità</a>
@@ -88,7 +88,7 @@
       <a href="#presale"     class="toc-link">9. Presale</a>
       <a href="#staking"     class="toc-link">10. Staking</a>
       <a href="#crea"        class="toc-link">11. Creare un Mercato</a>
-      <a href="#risoluzione" class="toc-link">12. Risoluzione Mercati</a>
+      <a href="#risoluzione" class="toc-link"><span class="toc-num">12</span>Risoluzione Mercati</a>
       <a href="#contratti"   class="toc-link">13. Smart Contracts</a>
       <a href="#sicurezza"   class="toc-link">14. Sicurezza</a>
       <a href="#roadmap"     class="toc-link">15. Roadmap</a>
@@ -102,7 +102,7 @@
 
       <!-- 1. Overview -->
       <div class="doc-section" id="overview">
-        <div class="doc-h2">1. Panoramica</div>
+        <div class="doc-h2"><span class="sec-num">01</span>🔮 1. Panoramica</div>
         <div class="doc-p">CryptoPredict è un <strong>prediction market on-chain</strong> su Base Sepolia. Gli utenti scommettono su eventi futuri (crypto, macro, sport, politica) usando ETH, USDC, USDT o CPRED. I capitali nei pool non rimangono fermi — generano yield automatico del 4.8% APY che viene distribuito ai vincitori e agli staker CPRED.</div>
         <div class="doc-box doc-box-purple">
           <div style="font-weight:700;margin-bottom:8px;font-size:.88rem">Cosa rende CryptoPredict diverso</div>
@@ -112,7 +112,7 @@
 
       <!-- 2. Mercati -->
       <div class="doc-section" id="mercati">
-        <div class="doc-h2">2. Come funzionano i Mercati</div>
+        <div class="doc-h2"><span class="sec-num">02</span>📊 2. Come funzionano i Mercati</div>
         <div class="doc-p">Ogni mercato è una domanda binaria con risposta YES o NO e una data di scadenza. Gli utenti scommettono nella valuta nativa del mercato (scelta dal creatore). Alla scadenza, il mercato viene risolto e i vincitori ritirano il loro payout proporzionale.</div>
 
         <div class="doc-h3">Ciclo di vita</div>
@@ -139,7 +139,7 @@
 
       <!-- 3. Pool -->
       <div class="doc-section" id="pool">
-        <div class="doc-h2">3. Pool e Liquidità</div>
+        <div class="doc-h2"><span class="sec-num">03</span>💧 3. Pool e Liquidità</div>
         <div class="doc-p">Ogni mercato ha due pool: <strong>YES pool</strong> e <strong>NO pool</strong>. Le scommesse entrano nel pool corrispondente alla direzione scelta. Il creatore finanzia la liquidità iniziale in modo da non avere un pool a zero.</div>
 
         <div class="doc-h3">Come funziona il pool</div>
@@ -157,7 +157,7 @@
 
       <!-- 4. Yield -->
       <div class="doc-section" id="yield">
-        <div class="doc-h2">4. Yield Automatico sui Pool</div>
+        <div class="doc-h2"><span class="sec-num">04</span>📈 4. Yield Automatico sui Pool</div>
 
         <div class="doc-box doc-box-green">
           <div style="font-weight:700;color:var(--green2);margin-bottom:6px;font-size:.88rem">Il capitale nei pool non rimane fermo</div>
@@ -166,7 +166,7 @@
 
         <div class="doc-h3">Da dove viene il 4.8% APY</div>
 
-        <div class="doc-box" style="border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05);margin-bottom:16px">
+        <div class="doc-box" class="doc-box-gold" style="margin-bottom:16px">
           <div style="font-weight:700;color:var(--gold2);margin-bottom:6px;font-size:.85rem">Testnet vs Mainnet</div>
           <div class="doc-p" style="margin:0">Su testnet il rendimento è <strong>simulato</strong> dal backend. Sul mainnet il rendimento sarà <strong>reale</strong>, generato deployando il capitale su protocolli DeFi come Aave.</div>
         </div>
@@ -235,7 +235,7 @@
 
       <!-- 5. Fee -->
       <div class="doc-section" id="fee">
-        <div class="doc-h2">5. Fee e Revenue</div>
+        <div class="doc-h2"><span class="sec-num">05</span>💰 5. Fee e Revenue</div>
         <div class="doc-p">Le fee vengono applicate solo al momento del <strong>ritiro del payout</strong> (claimPayout), non sulle scommesse. Chi perde non paga fee.</div>
 
         <table class="doc-table">
@@ -246,6 +246,12 @@
           <tr><td>Fee con CPRED in wallet</td><td><span class="badge-green">1% (dimezzata)</span></td><td>Holder CPRED pagano solo la creator fee</td></tr>
         </table>
 
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#ef4444">2%</span><span class="doc-stat-label">FEE TOTALE</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#a855f7">1%</span><span class="doc-stat-label">CREATOR</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#34d399">1%</span><span class="doc-stat-label">STAKER CPRED</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#06b6d4">0%</span><span class="doc-stat-label">MERCATI CPRED</span></div>
+        </div>
         <div class="doc-h3">Esempio — Pool $1,000,000</div>
         <div class="doc-box doc-box-gold">
           <div style="font-family:'DM Mono',monospace;font-size:.78rem;line-height:2.2">
@@ -267,7 +273,7 @@
 
       <!-- 6. Payout -->
       <div class="doc-section" id="payout">
-        <div class="doc-h2">6. Calcolo Payout</div>
+        <div class="doc-h2"><span class="sec-num">06</span>🎯 6. Calcolo Payout</div>
         <div class="doc-p">Il payout è proporzionale alla quota del pool vincente. Chi scommette di più guadagna di più, ma chi scommette su un lato meno popolare ha un payout potenziale maggiore.</div>
 
         <div class="doc-box">
@@ -287,7 +293,7 @@
 
       <!-- 7. Valute -->
       <div class="doc-section" id="valute">
-        <div class="doc-h2">7. Valute Supportate</div>
+        <div class="doc-h2"><span class="sec-num">07</span>💱 7. Valute Supportate</div>
         <div class="doc-p">Ogni mercato usa una sola valuta scelta al momento della creazione. Scommesse e payout avvengono sempre nella stessa valuta del mercato.</div>
 
         <table class="doc-table">
@@ -306,9 +312,15 @@
 
       <!-- 8. CPRED -->
       <div class="doc-section" id="cpred">
-        <div class="doc-h2">8. Token $CPRED</div>
+        <div class="doc-h2"><span class="sec-num">08</span>🪙 8. Token $CPRED</div>
 
         <div class="doc-h3">Tokenomics</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#fbbf24">100M</span><span class="doc-stat-label">SUPPLY TOTALE</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#34d399">$0.05</span><span class="doc-stat-label">PREZZO S1</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#a855f7">45%</span><span class="doc-stat-label">PRESALE</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#06b6d4">+200%</span><span class="doc-stat-label">TARGET LISTING</span></div>
+        </div>
         <table class="doc-table">
           <tr><th>Allocazione</th><th>%</th><th>Quantità</th><th>Note</th></tr>
           <tr><td>Presale</td><td>45%</td><td>45,000,000</td><td>Stage 1/2/3</td></tr>
@@ -331,7 +343,7 @@
 
       <!-- 9. Presale -->
       <div class="doc-section" id="presale">
-        <div class="doc-h2">9. Presale $CPRED</div>
+        <div class="doc-h2"><span class="sec-num">09</span>🚀 9. Presale $CPRED</div>
 
         <table class="doc-table">
           <tr><th>Stage</th><th>Prezzo</th><th>Allocazione</th><th>Stato</th></tr>
@@ -346,10 +358,16 @@
 
       <!-- 10. Staking -->
       <div class="doc-section" id="staking">
-        <div class="doc-h2">10. Staking Presale</div>
+        <div class="doc-h2"><span class="sec-num">10</span>🔒 10. Staking Presale</div>
 
         <div class="doc-p">Lo staking presale permette di bloccare CPRED e ricevere rewards in CPRED (APY fisso) e in ETH (dalle protocol fee dei mercati).</div>
 
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#a855f7">12%</span><span class="doc-stat-label">APY FLEX</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#06b6d4">20%</span><span class="doc-stat-label">APY 30GG</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#fbbf24">28%</span><span class="doc-stat-label">APY 90GG</span></div>
+          <div class="doc-stat"><span class="doc-stat-val" style="color:#34d399">30M</span><span class="doc-stat-label">MAX TVL</span></div>
+        </div>
         <table class="doc-table">
           <tr><th>Pool</th><th>Lock</th><th>APY CPRED</th><th>Max TVL</th></tr>
           <tr><td><strong>Flessibile</strong></td><td>Nessuno</td><td style="color:var(--purple3)">12%</td><td>10M CPRED</td></tr>
@@ -370,7 +388,7 @@
 
       <!-- 11. Crea mercato -->
       <div class="doc-section" id="crea">
-        <div class="doc-h2">11. Creare un Mercato</div>
+        <div class="doc-h2"><span class="sec-num">11</span>✨ 11. Creare un Mercato</div>
 
         <div class="doc-h3">Requisiti</div>
         <table class="doc-table">
@@ -390,7 +408,7 @@
 
       <!-- 12. Risoluzione -->
       <div class="doc-section" id="risoluzione">
-        <div class="doc-h2">12. Risoluzione Mercati</div>
+        <div class="doc-h2"><span class="sec-num">12</span>⚖️ 12. Risoluzione Mercati</div>
 
         <div class="doc-h3">Chi risolve</div>
         <table class="doc-table">
@@ -409,7 +427,7 @@
 
       <!-- 13. Contratti -->
       <div class="doc-section" id="contratti">
-        <div class="doc-h2">13. Smart Contracts — Base Sepolia</div>
+        <div class="doc-h2"><span class="sec-num">13</span>📋 13. Smart Contracts — Base Sepolia</div>
         <div class="doc-p">Tutti i contratti sono verificabili su BaseScan. La rete è Base Sepolia (chainId 84532).</div>
 
         <table class="doc-table">
@@ -432,7 +450,7 @@
 
       <!-- 14. Sicurezza -->
       <div class="doc-section" id="sicurezza">
-        <div class="doc-h2">14. Sicurezza</div>
+        <div class="doc-h2"><span class="sec-num">14</span>🛡️ 14. Sicurezza</div>
 
         <table class="doc-table">
           <tr><th>Meccanismo</th><th>Implementazione</th></tr>
@@ -444,7 +462,7 @@
           <tr><td>Claimed flag</td><td>Il payout può essere ritirato una sola volta per posizione</td></tr>
         </table>
 
-        <div class="doc-box" style="margin-top:14px;border-color:rgba(239,68,68,.2);background:rgba(239,68,68,.04)">
+        <div class="doc-box" class="doc-box-red" style="margin-top:14px">
           <div style="font-weight:700;color:#f87171;margin-bottom:6px;font-size:.85rem">Testnet — Fondi non reali</div>
           <div class="doc-p" style="margin:0;color:var(--text3)">CryptoPredict è attualmente su Base Sepolia testnet. I token ETH, USDC e USDT non hanno valore reale. Il CPRED acquistato in presale è token testnet. Il mainnet launch è previsto dopo il completamento dell'audit.</div>
         </div>
@@ -452,7 +470,7 @@
 
       <!-- 15. Roadmap -->
       <div class="doc-section" id="roadmap">
-        <div class="doc-h2">15. Roadmap</div>
+        <div class="doc-h2"><span class="sec-num">15</span>🗺️ 15. Roadmap</div>
 
         <table class="doc-table">
           <tr><th>Fase</th><th>Stato</th><th>Features</th></tr>
@@ -470,7 +488,7 @@
 
       <!-- 16. Trading -->
       <div class="doc-section" id="trading">
-        <div class="doc-h2">16. Trading e Grafico Prezzi</div>
+        <div class="doc-h2"><span class="sec-num">16</span>📉 16. Trading e Grafico Prezzi</div>
         <div class="doc-p">La pagina <span class="doc-code">/trading.html</span> offre strumenti di analisi e trading avanzati basati sui dati on-chain e su un orderbook off-chain via Supabase.</div>
 
         <div class="doc-h3">Grafico Prezzo Implicito</div>
@@ -502,7 +520,7 @@
 
       <!-- 17. Mercato Secondario -->
       <div class="doc-section" id="secondario">
-        <div class="doc-h2">17. Mercato Secondario — Vendi Quote</div>
+        <div class="doc-h2"><span class="sec-num">17</span>💸 17. Mercato Secondario — Vendi Quote</div>
         <div class="doc-p">La pagina <span class="doc-code">/vendi.html</span> permette di vendere le proprie posizioni aperte ad altri utenti <strong>prima della scadenza del mercato</strong>, incassando subito senza aspettare la risoluzione.</div>
 
         <div class="doc-h3">Come funziona</div>
@@ -519,7 +537,7 @@
           <div class="flow-desc">Sul prezzo di vendita viene applicata una fee dello 0.5% al protocollo. Il venditore riceve il 99.5% del prezzo richiesto.</div>
         </div></div>
 
-        <div class="doc-box" style="border-color:rgba(245,158,11,.2);background:rgba(245,158,11,.04);margin-top:12px">
+        <div class="doc-box" class="doc-box-gold" style="margin-top:12px">
           <div style="font-weight:700;color:var(--gold2);margin-bottom:4px;font-size:.85rem">Stato attuale</div>
           <div class="doc-p" style="margin:0;font-size:.8rem">Il contratto <span class="doc-code">PositionMarket.sol</span> è scritto e testato. Sarà deployato nel prossimo redeploy insieme ad altre migliorie. La UI è già funzionante e pronta.</div>
         </div>
@@ -527,7 +545,7 @@
 
       <!-- 18. AMM -->
       <div class="doc-section" id="amm">
-        <div class="doc-h2">18. AMM — Automated Market Maker (Roadmap)</div>
+        <div class="doc-h2"><span class="sec-num">18</span>🔄 18. AMM — Automated Market Maker (Roadmap)</div>
         <div class="doc-p">L'AMM è la versione avanzata del trading su CryptoPredict — prezzi continui, swap istantanei, liquidità automatica. È nella roadmap v2.0 e richiede un nuovo contratto dedicato.</div>
 
         <div class="doc-h3">Differenza tra modello attuale e AMM</div>
