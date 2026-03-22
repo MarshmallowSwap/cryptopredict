@@ -17,3 +17,5 @@ No trading. No leverage. No liquidations.
 ## Links
 - Live: https://cryptopredict.vercel.app (coming)
 - FundShot (sister project): https://fundshot.app
+
+<!-- deploy trigger: 2026-03-22T23:50:28Z -->
