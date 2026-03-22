@@ -162,20 +162,24 @@
         </div>
 
         <div class="doc-h3">Da dove viene il 4.8% APY</div>
-        <div class="doc-p">Il rendimento non viene inventato — proviene da tre fonti reali che l'infrastruttura CryptoPredict aggrega automaticamente:</div>
+
+        <div class="doc-box" style="border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05);margin-bottom:16px">
+          <div style="font-weight:700;color:var(--gold2);margin-bottom:6px;font-size:.85rem">Testnet vs Mainnet</div>
+          <div class="doc-p" style="margin:0">Su testnet il rendimento è <strong>simulato</strong> dal backend. Sul mainnet il rendimento sarà <strong>reale</strong>, generato deployando il capitale su protocolli DeFi come Aave.</div>
+        </div>
 
         <div class="doc-box">
           <div class="flow-step"><div class="flow-num">1</div><div class="flow-content">
-            <div class="flow-title">Protocol fee reinvestite (principale fonte)</div>
-            <div class="flow-desc">L'1% di protocol fee raccolta su ogni payout viene parzialmente reinvestita nel reward pool. Con volumi significativi questa fee genera un flusso costante di ETH che alimenta il rendimento degli staker e dei pool.</div>
+            <div class="flow-title">Testnet (attuale) — Yield simulato dal backend</div>
+            <div class="flow-desc">Il backend Python gira un cron ogni 24h che calcola il 4.8% APY sul capitale nei pool e scrive <span class="doc-code">yieldAccrued</span> nel contratto. È un numero simulato — non c'è ETH reale che si muove. Serve per testare la meccanica del payout con yield incluso.</div>
           </div></div>
           <div class="flow-step"><div class="flow-num">2</div><div class="flow-content">
-            <div class="flow-title">Liquidità deployata su protocolli DeFi (roadmap v3)</div>
-            <div class="flow-desc">In v3, il capitale nei pool verrà deployato su Aave o Compound su Base mentre aspetta la risoluzione del mercato. Il rendimento ottenuto (tipicamente 3-6% APY sulle stablecoin) viene accumulato e aggiunto al pool. Questo rende il capitale produttivo senza rischio aggiuntivo per gli utenti.</div>
+            <div class="flow-title">Mainnet (roadmap v3) — Yield reale su Aave / Compound</div>
+            <div class="flow-desc">Sul mainnet Base, il capitale nei pool verrà deployato automaticamente su <strong>Aave v3</strong> o <strong>Compound</strong> mentre aspetta la risoluzione del mercato. Il rendimento reale (tipicamente 3-8% APY sulle stablecoin) viene accumulato e aggiunto al pool. Alla risoluzione, il capitale + yield viene ritirato da Aave e distribuito ai vincitori.</div>
           </div></div>
           <div class="flow-step"><div class="flow-num">3</div><div class="flow-content">
-            <div class="flow-title">Treasury yield (corrente su testnet)</div>
-            <div class="flow-desc">Attualmente su testnet il 4.8% APY viene accumulato dal backend ogni 24 ore come <span class="doc-code">yieldAccrued</span> nel contratto. Sul mainnet questo sarà sostituito dal rendimento DeFi reale.</div>
+            <div class="flow-title">Protocol fee on-chain (già attivo ora)</div>
+            <div class="flow-desc">L'1% di protocol fee raccolta su ogni <span class="doc-code">claimPayout()</span> viene inviata immediatamente al reward pool ETH del token CPRED via <span class="doc-code">depositRewards()</span>. Questo è già funzionante on-chain sia su testnet che sarà su mainnet — non è simulato.</div>
           </div></div>
         </div>
 
