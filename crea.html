@@ -70,7 +70,7 @@
   <p class="hero-sub">Write a YES/NO question, deposit initial liquidity, and receive 1% of every winning payout — forever. Requires 1,000 CPRED.</p>
 </div>
 <div class="page-wrap">
-  <div class="page-header">
+  <div class="page-header" style="padding-top:8px;padding-bottom:20px">
     <span class="page-tag">// Crea — On-Chain</span>
     <div class="page-title">Create a Market</div>
     <div class="page-sub">Scrivi la domanda, imposta i parametri e guadagna il <strong>on every payout</strong> nel tuo mercato</div>
@@ -87,7 +87,7 @@
 
       <!-- Immagine -->
       <div class="cp-card cp-card-accent">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// MARKET IMAGE</div>
+        <div class="sec-label">// MARKET IMAGE</div>
 
         <!-- Drop zone / preview -->
         <div class="img-drop" id="img-drop" onclick="document.getElementById('img-file').click()">
@@ -116,7 +116,7 @@
 
       <!-- Domanda -->
       <div class="cp-card">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// MARKET QUESTION *</div>
+        <div class="sec-label">// MARKET QUESTION *</div>
         <textarea class="cp-input" id="question" rows="3"
           placeholder="Es: BTC supererà $100,000 entro fine aprile 2025?"
           style="resize:vertical"
@@ -126,7 +126,7 @@
 
       <!-- Category + Asset -->
       <div class="cp-card">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// DETAILS</div>
+        <div class="sec-label">// DETAILS</div>
         <div class="g2">
           <div>
             <label class="cp-label">Category</label>
@@ -175,7 +175,7 @@
 
       <!-- Liquidity -->
       <div class="cp-card cp-card-gold">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// CURRENCY & INITIAL LIQUIDITY</div>
+        <div class="sec-label">// CURRENCY & INITIAL LIQUIDITY</div>
         <label class="cp-label">Market currency</label>
         <div style="display:flex;gap:8px;margin-bottom:14px" id="currency-selector">
           <button type="button" class="btn btn-primary" id="cur-eth"  onclick="selectCurrency('ETH')"  style="flex:1;justify-content:center;font-size:.8rem">ETH</button>
@@ -222,7 +222,7 @@
 
       <!-- Preview card -->
       <div class="cp-card cp-card-cyan">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// PREVIEW CARD</div>
+        <div class="sec-label">// PREVIEW CARD</div>
         <div class="preview-card">
           <!-- Preview image -->
           <div class="preview-card-img" id="prev-img-wrap">
@@ -256,7 +256,7 @@
 
       <!-- Fee info -->
       <div class="cp-card cp-card-gold">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:12px">// YOUR EARNINGS</div>
+        <div class="sec-label">// YOUR EARNINGS</div>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:.83rem">
           <div style="display:flex;justify-content:space-between">
             <span style="color:var(--text3)">Fee per payout</span>
@@ -280,7 +280,7 @@
 
       <!-- Regole -->
       <div class="cp-card">
-        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:10px">// RULES</div>
+        <div class="sec-label">// RULES</div>
         <div style="display:flex;flex-direction:column;gap:7px;font-size:.78rem;color:var(--text3)">
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Domanda binaria YES/NO obbligatoria</div>
           <div style="display:flex;gap:8px"><span style="color:var(--purple3)">✦</span>Expiry min. 1 ora nel futuro</div>
