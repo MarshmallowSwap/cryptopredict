@@ -106,6 +106,15 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/docs.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }
