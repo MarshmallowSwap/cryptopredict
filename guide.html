@@ -548,62 +548,83 @@
         </div>
       </div>
     </div>
+    <!-- STEP 02+03 — Widget faucet integrato funzionante -->
     <div class="step">
       <div>
         <div class="step-num">STEP 02</div>
-        <div class="step-title">Claim USDC and USDT (built-in)</div>
-        <div class="step-desc">Go to <strong>/faucet.html</strong>. Click <strong>"Claim 10,000 USDC"</strong> and/or <strong>"Claim 10,000 USDT"</strong>. One transaction per token. You can claim once per token address.</div>
-        <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
-          <a href="https://sepolia.basescan.org/address/0x8A54f0e841CFCA5fA654912AF33cCD121D182311#writeContract" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(39,117,202,.1);border:1px solid rgba(39,117,202,.3);border-radius:8px;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(39,117,202,.2)'" onmouseout="this.style.background='rgba(39,117,202,.1)'">
-            <span style="font-size:.8rem">🔵</span>
+        <div class="step-title">Claim USDC &amp; USDT — direttamente qui</div>
+        <div class="step-desc">Connetti il wallet e clicca i bottoni sotto. La transazione viene eseguita on-chain su Base Sepolia. Puoi fare claim una volta per token.</div>
+        <div class="step-tip">💡 Serve wallet connesso e un po' di ETH per il gas (Step 01)</div>
+      </div>
+      <!-- Widget faucet reale al posto del mockup -->
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+
+        <!-- ETH link compatto -->
+        <div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:1.1rem">Ξ</span>
             <div>
-              <div style="font-size:.72rem;font-weight:700;color:#2775ca">Claim MockUSDC on BaseScan</div>
-              <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.35)">0x8A54...2311 · mint() → writeContract</div>
+              <div style="font-size:.72rem;font-weight:700;color:#e2e8f0">Testnet ETH</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,.35)">Necessario per il gas</div>
             </div>
-            <span style="margin-left:auto;font-size:.65rem;color:rgba(255,255,255,.3)">↗</span>
-          </a>
-          <a href="https://sepolia.basescan.org/address/0xaBB48e1693Df04fb894843e52B239D5C5d0ab871#writeContract" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(38,161,123,.08);border:1px solid rgba(38,161,123,.25);border-radius:8px;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(38,161,123,.18)'" onmouseout="this.style.background='rgba(38,161,123,.08)'">
-            <span style="font-size:.8rem">🟢</span>
-            <div>
-              <div style="font-size:.72rem;font-weight:700;color:#26a17b">Claim MockUSDT on BaseScan</div>
-              <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.35)">0xaBB4...0871 · mint() → writeContract</div>
-            </div>
-            <span style="margin-left:auto;font-size:.65rem;color:rgba(255,255,255,.3)">↗</span>
-          </a>
-        </div>
-        <div class="step-tip">💡 On BaseScan: Connect wallet → Write Contract → <code style="font-size:.7rem;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:3px">mint</code> → enter your address + amount (e.g. 10000000000 for 10K USDC/USDT with 6 decimals)</div>
-      </div>
-      <div class="mockup">
-        <div class="mockup-bar"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-url">cryptopredict.app/faucet</div></div>
-        <div class="mockup-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-            <div style="background:rgba(39,117,202,.1);border:1px solid rgba(39,117,202,.3);border-radius:10px;padding:10px;text-align:center"><div style="font-size:.65rem;font-weight:700;color:#2775ca;margin-bottom:4px">USDC</div><div style="font-family:'DM Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:6px">Balance: 0</div><div style="padding:6px;background:rgba(39,117,202,.2);border-radius:6px;font-size:.65rem;font-weight:700;color:#2775ca">Claim 10,000</div></div>
-            <div style="background:rgba(38,161,123,.1);border:1px solid rgba(38,161,123,.3);border-radius:10px;padding:10px;text-align:center"><div style="font-size:.65rem;font-weight:700;color:#26a17b;margin-bottom:4px">USDT</div><div style="font-family:'DM Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:6px">Balance: 0</div><div style="padding:6px;background:rgba(38,161,123,.2);border-radius:6px;font-size:.65rem;font-weight:700;color:#26a17b">Claim 10,000</div></div>
           </div>
-          <div class="mk-success" style="padding:8px"><div style="font-size:.72rem;font-weight:700;color:#34d399">✅ 10,000 USDC credited!</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="step">
-      <div>
-        <div class="step-num">STEP 03</div>
-        <div class="step-title">Add tokens to MetaMask</div>
-        <div class="step-desc">Use the <strong>"Add to MetaMask"</strong> buttons for CPRED, USDC and USDT. MetaMask will open a popup — confirm to add the token. This way you see balances directly in your wallet.</div>
-      </div>
-      <div class="mockup">
-        <div class="mockup-bar"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-url">cryptopredict.app/faucet · Add tokens</div></div>
-        <div class="mockup-body">
-          <div class="mk-card">
-            <div style="font-size:.62rem;color:rgba(255,255,255,.35);margin-bottom:6px">ADD TO METAMASK</div>
-            <div style="display:flex;gap:6px;margin-bottom:8px">
-              <div style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:6px;padding:5px 12px;font-size:.65rem;color:#c4b5fd">+ CPRED</div>
-              <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px 12px;font-size:.65rem;color:rgba(255,255,255,.5)">+ USDC</div>
-              <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px 12px;font-size:.65rem;color:rgba(255,255,255,.5)">+ USDT</div>
-            </div>
-            <div style="font-size:.6rem;color:rgba(255,255,255,.35)">MetaMask will open a popup to confirm</div>
+          <div style="display:flex;gap:6px">
+            <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" class="btn btn-ghost" style="font-size:.65rem;padding:5px 10px">QuickNode ↗</a>
+            <a href="https://faucet.coinbase.com/" target="_blank" class="btn btn-ghost" style="font-size:.65rem;padding:5px 10px">Coinbase ↗</a>
           </div>
-          <div class="mk-success" style="padding:8px;margin-top:6px"><div style="font-size:.72rem;font-weight:700;color:#34d399">✅ CPRED added to MetaMask!</div></div>
         </div>
+
+        <!-- Card USDC -->
+        <div style="background:rgba(39,117,202,.07);border:1px solid rgba(39,117,202,.25);border-radius:12px;padding:14px 16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:32px;height:32px;border-radius:8px;background:rgba(39,117,202,.15);border:1px solid rgba(39,117,202,.3);display:flex;align-items:center;justify-content:center;font-weight:900;color:#2775ca;font-size:.9rem">$</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#e2e8f0">Mock USDC</div>
+                <div style="font-size:.6rem;color:rgba(255,255,255,.35)">Balance: <span id="gf-usdc-bal" style="color:#2775ca;font-weight:700">—</span></div>
+              </div>
+            </div>
+            <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:#2775ca;font-weight:700">+10,000</span>
+          </div>
+          <button id="gf-btn-usdc" onclick="guideFaucet.claim('usdc')"
+            style="width:100%;padding:9px;background:linear-gradient(135deg,#2775ca,#1a5ca8);border:none;border-radius:8px;color:#fff;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            Claim 10,000 USDC
+          </button>
+        </div>
+
+        <!-- Card USDT -->
+        <div style="background:rgba(38,161,123,.07);border:1px solid rgba(38,161,123,.25);border-radius:12px;padding:14px 16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:32px;height:32px;border-radius:8px;background:rgba(38,161,123,.15);border:1px solid rgba(38,161,123,.3);display:flex;align-items:center;justify-content:center;font-weight:900;color:#26a17b;font-size:.9rem">₮</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#e2e8f0">Mock USDT</div>
+                <div style="font-size:.6rem;color:rgba(255,255,255,.35)">Balance: <span id="gf-usdt-bal" style="color:#26a17b;font-weight:700">—</span></div>
+              </div>
+            </div>
+            <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:#26a17b;font-weight:700">+10,000</span>
+          </div>
+          <button id="gf-btn-usdt" onclick="guideFaucet.claim('usdt')"
+            style="width:100%;padding:9px;background:linear-gradient(135deg,#26a17b,#1a7a5e);border:none;border-radius:8px;color:#fff;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            Claim 10,000 USDT
+          </button>
+        </div>
+
+        <!-- Add to MetaMask -->
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px">
+          <div style="font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:.08em;margin-bottom:8px">// ADD TO METAMASK</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="guideFaucet.addMM('cpred')" class="btn btn-ghost" style="font-size:.68rem;padding:5px 12px">+ CPRED</button>
+            <button onclick="guideFaucet.addMM('usdc')"  class="btn btn-ghost" style="font-size:.68rem;padding:5px 12px">+ USDC</button>
+            <button onclick="guideFaucet.addMM('usdt')"  class="btn btn-ghost" style="font-size:.68rem;padding:5px 12px">+ USDT</button>
+          </div>
+        </div>
+
+        <!-- Feedback inline -->
+        <div id="gf-toast" style="display:none;padding:10px 14px;border-radius:10px;font-size:.75rem;font-weight:700;border:1px solid"></div>
+
       </div>
     </div>
   </div>
@@ -842,4 +863,91 @@ function showGuide(id, btn) {
 }
 CP.ready.then(function() {});
 </script>
+
+<script>
+/* ── GUIDE FAUCET WIDGET ──────────────────────────────────────── */
+var guideFaucet = (function() {
+  var ERC20_ABI = ["function balanceOf(address) view returns (uint256)", "function faucet()"];
+
+  function tok(name) {
+    var map = {
+      usdc:  { addr: function(){ return W3.CONTRACTS.mockUsdc; }, sym: "USDC", dec: 6, color: "#2775ca" },
+      usdt:  { addr: function(){ return W3.CONTRACTS.mockUsdt; }, sym: "USDT", dec: 6, color: "#26a17b" },
+      cpred: { addr: function(){ return W3.CONTRACTS.token;    }, sym: "CPRED", dec: 18, color: "#fbbf24" }
+    };
+    return map[name];
+  }
+
+  function feedback(msg, ok) {
+    var el = document.getElementById("gf-toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = "block";
+    el.style.color = ok ? "#34d399" : "#f87171";
+    el.style.borderColor = ok ? "rgba(52,211,153,.25)" : "rgba(248,113,113,.25)";
+    el.style.background = ok ? "rgba(16,185,129,.07)" : "rgba(239,68,68,.07)";
+    setTimeout(function(){ el.style.display = "none"; }, 6000);
+  }
+
+  async function loadBals() {
+    if (!WALLET.address || !window.W3) return;
+    try {
+      var provider = await W3.getProvider();
+      ["usdc","usdt"].forEach(async function(name) {
+        var t = tok(name);
+        var c = new ethers.Contract(t.addr(), ERC20_ABI, provider);
+        var raw = await c.balanceOf(WALLET.address);
+        var val = parseFloat(ethers.formatUnits(raw, t.dec));
+        var el = document.getElementById("gf-" + name + "-bal");
+        if (el) el.textContent = val.toLocaleString() + " " + t.sym;
+      });
+    } catch(e) {}
+  }
+
+  async function claim(name) {
+    if (!WALLET.address) { openModal("wallet-modal"); return; }
+    var t = tok(name);
+    var btn = document.getElementById("gf-btn-" + name);
+    var orig = btn ? btn.textContent : "";
+    if (btn) { btn.disabled = true; btn.textContent = "Sending..."; }
+    try {
+      var ok = await W3.ensureNetwork();
+      if (!ok) throw new Error("Switch to Base Sepolia");
+      var signer = await W3.getSigner();
+      var c = new ethers.Contract(t.addr(), ERC20_ABI, signer);
+      var tx = await c.faucet();
+      if (btn) btn.textContent = "Confirming...";
+      var rec = await tx.wait();
+      feedback("✅ 10,000 " + t.sym + " credited! · " + rec.hash.slice(0,12) + "...", true);
+      await loadBals();
+      if (btn) { btn.disabled = false; btn.textContent = "✅ Claimed!"; setTimeout(function(){ btn.textContent = orig; }, 4000); }
+    } catch(e) {
+      feedback("❌ " + (e.reason || e.message || "Error"), false);
+      if (btn) { btn.disabled = false; btn.textContent = orig; }
+    }
+  }
+
+  async function addMM(name) {
+    if (!window.ethereum) { feedback("❌ MetaMask not found", false); return; }
+    var t = tok(name);
+    try {
+      var res = await window.ethereum.request({ method: "wallet_watchAsset",
+        params: { type: "ERC20", options: { address: t.addr(), symbol: t.sym, decimals: t.dec } }
+      });
+      feedback(res ? "✅ " + t.sym + " added to MetaMask!" : "Cancelled", res);
+    } catch(e) { feedback("❌ " + (e.message || "Error"), false); }
+  }
+
+  // Auto-load balances when wallet connects
+  CP.ready.then(function(state) {
+    if (state.address) loadBals();
+  });
+  window.addEventListener("cp:wallet-ready", function(e) {
+    if (e.detail && e.detail.address) setTimeout(loadBals, 500);
+  });
+
+  return { claim: claim, addMM: addMM, loadBals: loadBals };
+})();
+</script>
+
 </body></html>
