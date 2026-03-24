@@ -72,6 +72,13 @@
 
 /* Monospace block */
 .doc-mono{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px 18px;font-family:'DM Mono',monospace;font-size:.76rem;line-height:2.1;color:rgba(255,255,255,.65)}
+
+/* Cross-link buttons */
+.doc-link-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;font-size:.75rem;font-weight:700;text-decoration:none;transition:all .2s;border:1px solid;margin-top:14px}
+.doc-link-btn-guide{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25);color:#34d399}
+.doc-link-btn-guide:hover{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.5)}
+.doc-link-btn-page{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25);color:#c4b5fd}
+.doc-link-btn-page:hover{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.5)}
 </style>
 </head>
 <body data-page="docs">
@@ -148,7 +155,7 @@
       <a href="#roadmap"     class="doc-toc-link"><span class="doc-toc-num">15</span>Roadmap</a>
       <a href="#trading"     class="doc-toc-link"><span class="doc-toc-num">16</span>Trading & Chart</a>
       <a href="#secondario"  class="doc-toc-link"><span class="doc-toc-num">17</span>Secondary Market</a>
-      <a href="#amm"         class="doc-toc-link"><span class="doc-toc-num">18</span>AMM (roadmap)</a>
+      <a href="#amm"         class="doc-toc-link"><span class="doc-toc-num">18</span>AMM Liquidity</a>
       <a href="#governance"  class="doc-toc-link"><span class="doc-toc-num">19</span>DAO Governance</a>
     </div>
 
@@ -206,6 +213,10 @@
             <tr><td><span class="doc-code">nft</span></td><td>Bored Apes floor price, new drops</td></tr>
           </tbody>
         </table>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#bet" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="mercati.html" class="doc-link-btn doc-link-btn-page">🔗 Open Markets →</a>
+        </div>
       </div>
 
       <!-- 03 Pools -->
@@ -271,6 +282,10 @@
           30% ($11.84) → CPRED stakers in ETH<br>
           20% ($7.89)  → protocol treasury
         </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#bet" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="mercati.html" class="doc-link-btn doc-link-btn-page">🔗 Open Markets →</a>
+        </div>
       </div>
 
       <!-- 05 Fees -->
@@ -317,6 +332,9 @@
             <tr><td>$100M</td><td>$1,000,000</td><td>$78,900</td><td><strong style="color:#34d399">$1,078,900</strong></td></tr>
           </tbody>
         </table>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#payout" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+        </div>
       </div>
 
       <!-- 06 Payout -->
@@ -335,6 +353,9 @@
           Net   = 0.001333 × 0.98 = <strong style="color:#34d399">0.001307 ETH (+30.7%)</strong>
         </div>
         <div class="doc-p" style="margin-top:12px">Payout is available as soon as the market is resolved. There is no withdrawal deadline. <span class="doc-code">claimPayout(marketId)</span> is callable directly or via the "Claim Winnings" button in Portfolio.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#payout" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+        </div>
       </div>
 
       <!-- 07 Currencies -->
@@ -392,6 +413,10 @@
             <tr><td>Exclusive markets</td><td>Access to holder-exclusive markets</td></tr>
           </tbody>
         </table>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#presale" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="presale.html" class="doc-link-btn doc-link-btn-page">🔗 Open Presale →</a>
+        </div>
       </div>
 
       <!-- 09 Presale -->
@@ -410,6 +435,10 @@
           </tbody>
         </table>
         <div class="doc-p">The presale contract automatically manages stage transitions. Purchased tokens are immediately transferable and usable for staking or creating markets.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#presale" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="presale.html" class="doc-link-btn doc-link-btn-page">🔗 Open Presale →</a>
+        </div>
       </div>
 
       <!-- 10 Staking -->
@@ -437,6 +466,10 @@
           <div class="doc-p" style="margin:0"><strong>1. CPRED</strong> — Fixed APY calculated on staked capital and elapsed time, accrues every second on-chain.<br><strong>2. ETH</strong> — 1% of every winner's payout goes to the ETH reward pool, distributed proportionally to all stakers.</div>
         </div>
         <div class="doc-p" style="margin-top:12px"><strong>Staked CPRED counts as balance</strong> — it satisfies the 1,000 CPRED market creation requirement without unstaking.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#staking" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="staking.html" class="doc-link-btn doc-link-btn-page">🔗 Open Staking →</a>
+        </div>
       </div>
 
       <!-- 11 Create -->
@@ -461,6 +494,10 @@
           <div class="flow-step"><div class="flow-num">2</div><div><div class="flow-title">ERC20 Approval (if not ETH)</div><div class="flow-desc">For USDC/USDT/CPRED markets, MetaMask will request approve() of the token to the Market contract.</div></div></div>
           <div class="flow-step"><div class="flow-num">3</div><div><div class="flow-title">Confirm createMarket()</div><div class="flow-desc">A single transaction creates the market on-chain, deposits liquidity and makes it visible in the markets list.</div></div></div>
           <div class="flow-step" style="margin-bottom:0"><div class="flow-num">4</div><div><div class="flow-title">Earn 1% of every payout</div><div class="flow-desc">Every time a winner claims payout from your market, you automatically receive 1% of the gross payout as creator fee.</div></div></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#create" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="crea.html" class="doc-link-btn doc-link-btn-page">🔗 Open Create Market →</a>
         </div>
       </div>
 
@@ -570,6 +607,10 @@
             <tr><td><strong>Limit NO</strong></td><td>When YES Price ≥ your limit</td><td>No — only saved on Supabase</td></tr>
           </tbody>
         </table>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#trading" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="trading.html" class="doc-link-btn doc-link-btn-page">🔗 Open Trading →</a>
+        </div>
       </div>
 
       <!-- 17 Secondary Market -->
@@ -587,6 +628,10 @@
         <div class="doc-box doc-box-gold" style="margin-top:12px">
           <div class="doc-box-head" style="color:#fbbf24">Current status</div>
           <div class="doc-p" style="margin:0;font-size:.8rem"><span class="doc-code">PositionMarket.sol</span> is written and tested. Will be deployed in the next redeploy alongside other improvements. The UI is already functional and ready.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#sell" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="vendi.html" class="doc-link-btn doc-link-btn-page">🔗 Open Sell Shares →</a>
         </div>
       </div>
 
@@ -609,6 +654,10 @@
         <div class="doc-box doc-box-purple" style="margin-top:12px">
           <div class="doc-box-head" style="color:#c4b5fd">Why it's on the roadmap and not now</div>
           <div class="doc-p" style="margin:0">The AMM requires a completely new contract, a specific audit for the price curve, and an LP token system. Current priority is consolidating the parimutuel model and the secondary market.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#amm" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="amm.html" class="doc-link-btn doc-link-btn-page">🔗 Open AMM Liquidity →</a>
         </div>
       </div>
 
@@ -654,6 +703,10 @@
           <a href="presale.html" style="padding:10px 20px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:10px;color:#000;font-weight:800;font-size:.82rem;text-decoration:none">💎 Buy CPRED →</a>
         </div>
       </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="guide.html#governance" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
+          <a href="governance.html" class="doc-link-btn doc-link-btn-page">🔗 Open Governance →</a>
+        </div>
 
     </div><!-- /content -->
   </div><!-- /doc-layout -->
