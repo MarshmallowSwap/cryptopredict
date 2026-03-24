@@ -11,7 +11,7 @@
 
 /* Tab bar */
 .amm-tabs{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:4px;margin-bottom:24px}
-.amm-tab{flex:1;padding:10px;border:none;border-radius:10px;background:none;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s}
+.amm-tab{flex:1;padding:10px;border:none;border-radius:10px;background:none;font-family:Syne,sans-serif;font-size:.85rem;font-weight:700;color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s}
 .amm-tab.active{background:rgba(124,58,237,.2);color:#c4b5fd;border:1px solid rgba(124,58,237,.3)}
 .amm-tab:hover:not(.active){background:rgba(255,255,255,.05);color:rgba(255,255,255,.7)}
 
@@ -47,7 +47,7 @@
 .swap-input-label{font-size:.65rem;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:8px}
 .swap-input-row{display:flex;align-items:center;gap:10px}
 .swap-amount{flex:1;background:none;border:none;font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:700;color:#e2e8f0;outline:none;min-width:0}
-.swap-token-btn{display:flex;align-items:center;gap:7px;padding:7px 12px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;font-weight:700;font-size:.82rem;color:#c4b5fd;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif}
+.swap-token-btn{display:flex;align-items:center;gap:7px;padding:7px 12px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;font-weight:700;font-size:.82rem;color:#c4b5fd;cursor:pointer;white-space:nowrap;font-family:Syne,sans-serif}
 .swap-arrow{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:10px auto;font-size:1rem;transition:all .2s}
 .swap-arrow:hover{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3)}
 .swap-info-row{display:flex;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.4);padding:3px 0}
@@ -63,7 +63,7 @@
 .liq-input-row{display:flex;align-items:center;gap:10px}
 .liq-amount{flex:1;background:none;border:none;font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:#e2e8f0;outline:none}
 .pct-btns{display:flex;gap:4px;margin-bottom:12px}
-.pct-btn{flex:1;padding:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:7px;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.45);cursor:pointer;font-family:'Syne',sans-serif;transition:all .15s}
+.pct-btn{flex:1;padding:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:7px;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.45);cursor:pointer;font-family:Syne,sans-serif;transition:all .15s}
 .pct-btn:hover{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.25);color:#c4b5fd}
 
 /* Prices & pool share box */
@@ -335,7 +335,7 @@
       </div>
 
       <button onclick="ammAddLiquidity()" id="amm-add-btn"
-        style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:14px;font-size:.95rem;font-weight:800;color:#fff;cursor:pointer;font-family:'Syne',sans-serif;transition:all .2s">
+        style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:14px;font-size:.95rem;font-weight:800;color:#fff;cursor:pointer;font-family:Syne,sans-serif;transition:all .2s">
         💧 Add Liquidity
       </button>
       <div id="amm-add-feedback" class="amm-toast"></div>
@@ -367,11 +367,11 @@
         <div class="swap-arrow" onclick="setSwapSide(!ammState.swapIsYes)">⇅</div>
         <div style="display:flex;gap:6px;flex:1">
           <button id="amm-swap-yes-btn" onclick="setSwapSide(true)"
-            style="flex:1;padding:8px;border:2px solid rgba(16,185,129,.5);background:rgba(16,185,129,.12);border-radius:10px;color:#34d399;font-weight:800;font-size:.78rem;cursor:pointer;font-family:'Syne',sans-serif">
+            style="flex:1;padding:8px;border:2px solid rgba(16,185,129,.5);background:rgba(16,185,129,.12);border-radius:10px;color:#34d399;font-weight:800;font-size:.78rem;cursor:pointer;font-family:Syne,sans-serif">
             ▲ YES shares
           </button>
           <button id="amm-swap-no-btn" onclick="setSwapSide(false)"
-            style="flex:1;padding:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:10px;color:rgba(255,255,255,.4);font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Syne',sans-serif">
+            style="flex:1;padding:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:10px;color:rgba(255,255,255,.4);font-weight:700;font-size:.78rem;cursor:pointer;font-family:Syne,sans-serif">
             ▼ NO shares
           </button>
         </div>
@@ -397,7 +397,7 @@
       </div>
 
       <button onclick="ammSwapExecute()" id="amm-swap-btn"
-        style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;font-size:.95rem;font-weight:800;color:#fff;cursor:pointer;font-family:'Syne',sans-serif">
+        style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;font-size:.95rem;font-weight:800;color:#fff;cursor:pointer;font-family:Syne,sans-serif">
         Swap
       </button>
       <div id="amm-swap-feedback" class="amm-toast"></div>
@@ -432,7 +432,7 @@
       <div id="amm-no-pos-cta" style="display:none;text-align:center;padding:20px">
         <div style="font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:12px">You have no active LP positions</div>
         <button onclick="showAmmTab('add',document.getElementById('tab-add'))"
-          style="padding:10px 24px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Syne',sans-serif">
+          style="padding:10px 24px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:Syne,sans-serif">
           + Add Liquidity →
         </button>
       </div>
@@ -624,11 +624,11 @@ function setSwapSide(isYes) {
   var yBtn = document.getElementById('amm-swap-yes-btn');
   var nBtn = document.getElementById('amm-swap-no-btn');
   if (isYes) {
-    yBtn.style.cssText = 'flex:1;padding:9px;border:2px solid rgba(16,185,129,.6);background:rgba(16,185,129,.2);border-radius:8px;color:#34d399;font-weight:800;font-size:.8rem;cursor:pointer;font-family:\'Syne\',sans-serif';
-    nBtn.style.cssText = 'flex:1;padding:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:8px;color:rgba(255,255,255,.4);font-weight:700;font-size:.8rem;cursor:pointer;font-family:\'Syne\',sans-serif';
+    yBtn.style.cssText = 'flex:1;padding:9px;border:2px solid rgba(16,185,129,.6);background:rgba(16,185,129,.2);border-radius:8px;color:#34d399;font-weight:800;font-size:.8rem;cursor:pointer;font-family:Syne,sans-serif';
+    nBtn.style.cssText = 'flex:1;padding:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:8px;color:rgba(255,255,255,.4);font-weight:700;font-size:.8rem;cursor:pointer;font-family:Syne,sans-serif';
   } else {
-    nBtn.style.cssText = 'flex:1;padding:9px;border:2px solid rgba(239,68,68,.6);background:rgba(239,68,68,.15);border-radius:8px;color:#f87171;font-weight:800;font-size:.8rem;cursor:pointer;font-family:\'Syne\',sans-serif';
-    yBtn.style.cssText = 'flex:1;padding:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:8px;color:rgba(255,255,255,.4);font-weight:700;font-size:.8rem;cursor:pointer;font-family:\'Syne\',sans-serif';
+    nBtn.style.cssText = 'flex:1;padding:9px;border:2px solid rgba(239,68,68,.6);background:rgba(239,68,68,.15);border-radius:8px;color:#f87171;font-weight:800;font-size:.8rem;cursor:pointer;font-family:Syne,sans-serif';
+    yBtn.style.cssText = 'flex:1;padding:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:8px;color:rgba(255,255,255,.4);font-weight:700;font-size:.8rem;cursor:pointer;font-family:Syne,sans-serif';
   }
   ammUpdateSwapQuote();
 }
@@ -775,8 +775,8 @@ function renderPools(pools) {
         '<div class="pool-metric"><div class="pm-label">FEE RATE</div><div class="pm-val" style="color:#a855f7">0.3%</div></div>' +
       '</div>' +
       '<div class="pool-actions">' +
-        '<button onclick="goAddLiq('+p.marketId+')" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:\'Syne\',sans-serif">+ Add Liquidity</button>' +
-        '<button onclick="goSwap('+p.marketId+')" style="flex:1;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;color:#34d399;font-weight:700;font-size:.82rem;cursor:pointer;font-family:\'Syne\',sans-serif">⇄ Swap</button>' +
+        '<button onclick="goAddLiq('+p.marketId+')" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:Syne,sans-serif">+ Add Liquidity</button>' +
+        '<button onclick="goSwap('+p.marketId+')" style="flex:1;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;color:#34d399;font-weight:700;font-size:.82rem;cursor:pointer;font-family:Syne,sans-serif">⇄ Swap</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -873,8 +873,8 @@ async function ammLoadPositions() {
         '</div>' +
         '<div class="pos-bar"><div class="pos-bar-fill" style="width:'+Math.min(100,share*5)+'%"></div></div>' +
         '<div style="display:flex;gap:8px">' +
-          '<button onclick="ammRemoveLiq('+p.marketId+','+lp+')" style="flex:1;padding:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;font-size:.78rem;color:#f87171;cursor:pointer;font-weight:700;font-family:\'Syne\',sans-serif">Withdraw</button>' +
-          (fee>0 ? '<button onclick="ammClaim('+p.marketId+')" style="flex:1;padding:9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:10px;font-size:.78rem;color:#34d399;cursor:pointer;font-weight:700;font-family:\'Syne\',sans-serif">Claim Fees</button>' : '') +
+          '<button onclick="ammRemoveLiq('+p.marketId+','+lp+')" style="flex:1;padding:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;font-size:.78rem;color:#f87171;cursor:pointer;font-weight:700;font-family:Syne,sans-serif">Withdraw</button>' +
+          (fee>0 ? '<button onclick="ammClaim('+p.marketId+')" style="flex:1;padding:9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:10px;font-size:.78rem;color:#34d399;cursor:pointer;font-weight:700;font-family:Syne,sans-serif">Claim Fees</button>' : '') +
         '</div>' +
       '</div>';
     }
@@ -1060,8 +1060,8 @@ renderPools = function(pools) {
         '<div class="pool-metric"><div class="pm-label">FEE RATE</div><div class="pm-val" style="color:#a855f7">0.3%</div></div>' +
       '</div>' +
       '<div class="pool-actions">' +
-        '<button onclick="goAddLiq('+p.marketId+')" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Syne',sans-serif">+ Add Liquidity</button>' +
-        '<button onclick="goSwap('+p.marketId+')" style="flex:1;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;color:#34d399;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Syne',sans-serif">⇄ Swap</button>' +
+        '<button onclick="goAddLiq('+p.marketId+')" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:Syne,sans-serif">+ Add Liquidity</button>' +
+        '<button onclick="goSwap('+p.marketId+')" style="flex:1;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;color:#34d399;font-weight:700;font-size:.82rem;cursor:pointer;font-family:Syne,sans-serif">⇄ Swap</button>' +
       '</div>' +
     '</div>';
   }).join('');
