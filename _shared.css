@@ -264,3 +264,35 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{
 .bar-fill-gold{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
 .bar-fill-green{background:linear-gradient(90deg,#10b981,#34d399)}
 .bar-fill-cyan{background:linear-gradient(90deg,#06b6d4,#22d3ee)}
+
+
+/* ── NAVBAR DROPDOWNS ───────────────────────────────────────── */
+.nav-dropdown{position:relative}
+.nav-dropdown-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:.78rem;font-weight:700;color:var(--text3);cursor:pointer;text-decoration:none;transition:all .18s;white-space:nowrap;border:none;background:none;font-family:'Syne',sans-serif}
+.nav-dropdown-btn:hover,.nav-dropdown:hover .nav-dropdown-btn{background:rgba(255,255,255,.06);color:var(--text)}
+.nav-dropdown-btn .dd-arrow{font-size:.55rem;opacity:.5;transition:transform .18s;margin-left:1px}
+.nav-dropdown:hover .dd-arrow{transform:rotate(180deg)}
+
+/* Live at Presale — green tint */
+.nav-dropdown.dd-presale .nav-dropdown-btn{color:#34d399}
+.nav-dropdown.dd-presale .nav-dropdown-btn:hover,.nav-dropdown.dd-presale:hover .nav-dropdown-btn{background:rgba(16,185,129,.1);color:#34d399}
+.nav-dropdown.dd-presale .nav-dd-menu{border-color:rgba(16,185,129,.2)}
+.nav-dropdown.dd-presale .dd-dot{background:#34d399;box-shadow:0 0 6px #34d399}
+
+/* Live at Listing — cyan/purple tint */
+.nav-dropdown.dd-listing .nav-dropdown-btn{color:#a855f7}
+.nav-dropdown.dd-listing .nav-dropdown-btn:hover,.nav-dropdown.dd-listing:hover .nav-dropdown-btn{background:rgba(124,58,237,.1);color:#c4b5fd}
+.nav-dropdown.dd-listing .nav-dd-menu{border-color:rgba(124,58,237,.25)}
+.nav-dropdown.dd-listing .dd-dot{background:#a855f7;box-shadow:0 0 6px #a855f7}
+
+.dd-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:pulse 1.8s infinite}
+
+.nav-dd-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:200px;background:rgba(10,9,22,.97);border:1px solid var(--border2);border-radius:12px;padding:6px;box-shadow:0 12px 40px rgba(0,0,0,.6);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s,transform .18s;z-index:400;backdrop-filter:blur(20px)}
+.nav-dropdown:hover .nav-dd-menu{opacity:1;pointer-events:all;transform:translateY(0)}
+
+.dd-section{font-family:'DM Mono',monospace;font-size:.55rem;color:rgba(255,255,255,.25);letter-spacing:.1em;padding:6px 10px 3px;margin-top:2px}
+.dd-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:.78rem;font-weight:600;color:var(--text3);text-decoration:none;transition:all .15s;white-space:nowrap}
+.dd-link:hover{background:rgba(255,255,255,.06);color:var(--text)}
+.dd-link.active{background:rgba(124,58,237,.15);color:var(--purple3)}
+.dd-link svg{width:13px;height:13px;flex-shrink:0;opacity:.65}
+.dd-link .badge{width:6px;height:6px;background:var(--red2);border-radius:50%;animation:pulse 1.5s infinite;margin-left:auto}
