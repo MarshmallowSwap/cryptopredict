@@ -47,6 +47,15 @@
 .bet-chip{flex-shrink:0;width:270px;background:rgba(255,255,255,.04);border-radius:10px;padding:12px 14px;border:1px solid rgba(124,58,237,.2)}
 .bet-chip.won{border-color:rgba(16,185,129,.4)}
 .bet-chip.lost{border-color:rgba(239,68,68,.3)}
+
+/* Cross-link reference bar */
+.xref-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 20px;background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.15);border-radius:14px;margin:28px 0 8px}
+.xref-label{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.1em;flex-shrink:0}
+.xref-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:7px;font-size:.74rem;font-weight:700;text-decoration:none;transition:all .18s;border:1px solid;white-space:nowrap}
+.xref-guide{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.22);color:#34d399}
+.xref-guide:hover{background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.5)}
+.xref-docs{background:rgba(124,58,237,.07);border-color:rgba(124,58,237,.22);color:#c4b5fd}
+.xref-docs:hover{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.5)}
 </style>
 </head>
 <body data-page="markets">
@@ -182,6 +191,13 @@
       <a href="presale.html" style="padding:12px 24px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:10px;color:#000;font-weight:800;font-size:.85rem;text-decoration:none">💎 Buy CPRED →</a>
       <a href="staking.html" style="padding:12px 24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#e2e8f0;font-weight:700;font-size:.85rem;text-decoration:none">Stake →</a>
     </div>
+  </div>
+
+  <!-- Cross-reference bar -->
+  <div class="xref-bar">
+    <span class="xref-label">REFERENCE</span>
+    <a href="guide.html#bet" class="xref-btn xref-guide">📖 Guide: Place a Bet →</a>
+    <a href="docs.html#mercati"   class="xref-btn xref-docs">📋 Docs: How Markets Work →</a>
   </div>
 </div>
 

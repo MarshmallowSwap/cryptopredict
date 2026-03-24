@@ -16,6 +16,15 @@
 .bal-row:last-child{border-bottom:none}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(13,11,28,.97);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px 20px;font-size:.82rem;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:300px;opacity:0;transition:opacity .3s;display:flex;gap:10px;align-items:center}
 .toast.show{opacity:1}
+
+/* Cross-link reference bar */
+.xref-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 20px;background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.15);border-radius:14px;margin:28px 0 8px}
+.xref-label{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.1em;flex-shrink:0}
+.xref-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:7px;font-size:.74rem;font-weight:700;text-decoration:none;transition:all .18s;border:1px solid;white-space:nowrap}
+.xref-guide{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.22);color:#34d399}
+.xref-guide:hover{background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.5)}
+.xref-docs{background:rgba(124,58,237,.07);border-color:rgba(124,58,237,.22);color:#c4b5fd}
+.xref-docs:hover{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.5)}
 </style>
 </head>
 <body data-page="faucet">
@@ -185,6 +194,13 @@
     <div class="mech-card"><div class="mech-icon">💵</div><div class="mech-title">2. Claim USDC/USDT</div><div class="mech-desc">Click the buttons below to claim 10,000 USDC and 10,000 USDT directly on-chain. One tx per token.</div></div>
     <div class="mech-card"><div class="mech-icon">💎</div><div class="mech-title">3. Buy CPRED</div><div class="mech-desc">Buy CPRED in presale at $0.050 to unlock fee discounts, staking and market creation.</div></div>
     <div class="mech-card"><div class="mech-icon">🎯</div><div class="mech-title">4. Start Betting</div><div class="mech-desc">Browse markets, place bets and earn 4.8% APY while you wait for resolution.</div></div>
+  </div>
+
+  <!-- Cross-reference bar -->
+  <div class="xref-bar">
+    <span class="xref-label">REFERENCE</span>
+    <a href="guide.html#faucet" class="xref-btn xref-guide">📖 Guide: Faucet Guide →</a>
+    <a href="docs.html#valute"   class="xref-btn xref-docs">📋 Docs: Supported Currencies →</a>
   </div>
 </div>
 
