@@ -220,13 +220,6 @@
   </div>
   <button onclick="document.getElementById('tx-toast').classList.remove('show')"
     style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px">✕</button>
-
-  <!-- Cross-reference bar -->
-  <div class="xref-bar">
-    <span class="xref-label">REFERENCE</span>
-    <a href="guide.html#payout" class="xref-btn xref-guide">📖 Guide: Claim Payout →</a>
-    <a href="docs.html#payout"   class="xref-btn xref-docs">📋 Docs: Payout Calculation →</a>
-  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
@@ -479,4 +472,13 @@ CP.ready.then(async function(state) {
   }
 });
 </script>
+
+<!-- Cross-reference bar -->
+<div class="page-wrap" style="padding-top:0">
+  <div class="xref-bar">
+    <span class="xref-label">REFERENCE</span>
+    <a href="guide.html#payout" class="xref-btn xref-guide">📖 Guide: Claim Payout →</a>
+    <a href="docs.html#payout"   class="xref-btn xref-docs">📋 Docs: Payout Calculation →</a>
+  </div>
+</div>
 </body></html>

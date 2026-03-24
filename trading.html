@@ -334,12 +334,6 @@
     <a id="toast-link" href="#" target="_blank" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#a855f7;display:none"></a>
   </div>
   <button onclick="document.getElementById('toast').classList.remove('show')" style="background:none;border:none;color:var(--text3);cursor:pointer">✕</button>
-  <!-- Cross-reference bar -->
-  <div class="xref-bar">
-    <span class="xref-label">REFERENCE</span>
-    <a href="guide.html#trading" class="xref-btn xref-guide">📖 Guide: Trading & Chart →</a>
-    <a href="docs.html#trading"  class="xref-btn xref-docs">📋 Docs: Trading & Chart →</a>
-  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
@@ -918,4 +912,13 @@ function showToast(icon, msg, link) {
   setTimeout(function(){ t.classList.remove("show"); }, 6000);
 }
 </script>
+
+<!-- Cross-reference bar -->
+<div class="page-wrap" style="padding-top:0">
+  <div class="xref-bar">
+    <span class="xref-label">REFERENCE</span>
+    <a href="guide.html#trading" class="xref-btn xref-guide">📖 Guide: Trading & Chart →</a>
+    <a href="docs.html#trading"   class="xref-btn xref-docs">📋 Docs: Trading & Chart →</a>
+  </div>
+</div>
 </body></html>
