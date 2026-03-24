@@ -959,11 +959,17 @@ ammLoadPools = async function() {
   }
 };
 
-// Init on page load
+// Init — load pools immediately (read-only, no wallet needed)
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    ammLoadPools().catch(function(e){ console.warn('ammLoadPools DOMContentLoaded:', e); });
+  }, 500);
+});
+
 CP.ready.then(function(state) {
-  ammLoadPools();
+  // Reload pools once CP is fully ready (ensures W3 provider is set)
+  ammLoadPools().catch(function(e){ console.warn('ammLoadPools CP.ready:', e); });
   if (state.address) ammLoadPositions();
-  // Refresh positions when wallet connects
   var origRefresh = CP.refreshWalletData.bind(CP);
   CP.refreshWalletData = async function() {
     await origRefresh();
