@@ -527,7 +527,26 @@
         </table>
         <div class="doc-box doc-box-cyan">
           <div class="doc-box-head" style="color:#22d3ee">Dual Reward</div>
-          <div class="doc-p" style="margin:0"><strong>1. CPRED</strong> — Fixed APY calculated on staked capital and elapsed time, accrues every second on-chain.<br><strong>2. ETH</strong> — 1% of every winner's payout goes to the ETH reward pool, distributed proportionally to all stakers.</div>
+          <div class="doc-p" style="margin:0">
+            <strong>1. CPRED (APY)</strong> — Fixed APY calculated on staked capital, accrues every second on-chain.<br><br>
+            <strong>2. CPRED (fee share)</strong> — 2% of every market payout is collected in the market's native currency (ETH, USDC, USDT or CPRED). The protocol <strong>auto-swaps all fees to CPRED</strong> via Aerodrome DEX (pairs: CPRED/ETH · CPRED/USDC · CPRED/USDT). The resulting CPRED is distributed to stakers every 7-day epoch, proportional to staked CPRED × tier multiplier.
+          </div>
+        </div>
+        <div class="doc-box" style="margin-top:10px">
+          <div class="doc-box-head">Fee → CPRED auto-swap flow</div>
+          <div class="doc-mono">
+            claimPayout() called by winner<br>
+            → 1% to market creator (in market currency)<br>
+            → 1% to protocol fee collector<br><br>
+            Fee collector calls Aerodrome router:<br>
+            ETH  → swap via CPRED/ETH pool  → CPRED<br>
+            USDC → swap via CPRED/USDC pool → CPRED<br>
+            USDT → swap via CPRED/USDT pool → CPRED<br>
+            CPRED → no swap needed → direct<br><br>
+            CPRED deposited to reward pool<br>
+            → distributed every 7-day epoch<br>
+            → Silver 1× · Gold 1.5× · Diamond 2×
+          </div>
         </div>
         <div class="doc-p" style="margin-top:12px"><strong>Staked CPRED counts as balance</strong> — it satisfies the 1,000 CPRED market creation requirement without unstaking.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
