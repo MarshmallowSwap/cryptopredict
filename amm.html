@@ -1,79 +1,49 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AMM — CryptoPredict</title>
-<meta name="description" content="Provide liquidity to CryptoPredict AMM pools and earn swap fees from every trade — without taking a position.">
+<title>AMM Liquidity — CryptoPredict</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="_shared.css?v=20260323d">
 <style>
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes glow-pulse{0%,100%{box-shadow:0 0 20px rgba(124,58,237,.2)}50%{box-shadow:0 0 40px rgba(124,58,237,.4)}}
-@keyframes border-rotate{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-
-.amm-coming-overlay{
-  position:absolute;inset:0;
-  background:rgba(8,8,18,.82);
-  backdrop-filter:blur(4px);
-  border-radius:inherit;
-  display:flex;align-items:center;justify-content:center;
-  z-index:10;
-}
-
-/* Pool tier cards */
-.pool-card{border-radius:18px;padding:26px;border:1px solid;transition:all .25s;position:relative;overflow:hidden;cursor:default}
-.pool-card:hover{transform:translateY(-3px)}
-.pool-bronze{background:linear-gradient(135deg,rgba(180,120,60,.1),rgba(180,120,60,.04));border-color:rgba(180,120,60,.3);color:#cd853f}
-.pool-silver{background:linear-gradient(135deg,rgba(148,163,184,.1),rgba(148,163,184,.04));border-color:rgba(148,163,184,.3);color:#94a3b8}
-.pool-gold{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border-color:rgba(245,158,11,.3);color:#f59e0b;box-shadow:0 4px 32px rgba(245,158,11,.1)}
-.pool-diamond{background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(6,182,212,.06));border-color:rgba(167,139,250,.4);color:#a78bfa;box-shadow:0 4px 32px rgba(124,58,237,.12)}
-
-.apy-big{font-size:3.2rem;font-weight:900;line-height:1;letter-spacing:-.03em}
-.tier-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border-radius:20px;font-size:.68rem;font-weight:700;font-family:'DM Mono',monospace;border:1px solid currentColor;background:rgba(255,255,255,.05);margin-bottom:16px}
-.pool-stat{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.pool-stat:last-child{border:none}
-.pool-bar-wrap{height:5px;background:rgba(255,255,255,.07);border-radius:3px;margin:12px 0}
-.pool-bar-fill{height:5px;border-radius:3px;background:currentColor;transition:width 1.2s ease}
-
-/* Comparison table */
-.cmp-table{width:100%;border-collapse:collapse;font-size:.82rem}
-.cmp-table th{padding:11px 16px;text-align:center;font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.08em;font-weight:400;border-bottom:1px solid rgba(255,255,255,.08)}
-.cmp-table th:first-child{text-align:left}
-.cmp-table td{padding:10px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.6)}
-.cmp-table td:first-child{text-align:left;color:rgba(255,255,255,.5)}
-.cmp-table tr:last-child td{border:none}
-.cmp-table tbody tr:hover td{background:rgba(124,58,237,.04)}
-
-/* Calculator */
-.calc-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:.9rem;color:#e2e8f0;outline:none;box-sizing:border-box;transition:all .2s}
-.calc-input:focus{border-color:rgba(124,58,237,.6);background:rgba(124,58,237,.07)}
-.tier-btn{flex:1;padding:8px;border:1px solid rgba(124,58,237,.2);background:rgba(255,255,255,.03);border-radius:9px;color:rgba(255,255,255,.5);font-size:.72rem;cursor:pointer;transition:all .15s;font-family:'Syne',sans-serif;font-weight:700}
-.tier-btn.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:#c4b5fd}
-
-/* Flow diagram */
-.flow-arrow{text-align:center;font-size:.7rem;color:rgba(255,255,255,.3);margin:6px 0}
-.flow-box{padding:10px 14px;border-radius:10px;font-size:.75rem;font-weight:700}
-
-/* Roadmap steps */
-.roadmap-step{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.roadmap-step:last-child{border:none}
-.rs-num{width:32px;height:32px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:2px}
+.step-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:28px;transition:all .25s}
+.step-card:hover{border-color:rgba(124,58,237,.35);transform:translateY(-2px)}
+.tier-card{border-radius:16px;padding:22px;border:1px solid;transition:all .2s;position:relative}
+.tier-card:hover{transform:translateY(-2px)}
+.tier-free{background:rgba(148,163,184,.06);border-color:rgba(148,163,184,.2);color:#94a3b8}
+.tier-silver{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.3);color:#94a3b8}
+.tier-gold{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:#f59e0b}
+.tier-diamond{background:rgba(124,58,237,.12);border-color:rgba(167,139,250,.4);color:#a78bfa}
+.fee-big{font-size:2.6rem;font-weight:900;line-height:1;letter-spacing:-.03em;margin:10px 0 6px}
+.example-box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px 18px;font-family:'DM Mono',monospace;font-size:.78rem;line-height:2.2;color:rgba(255,255,255,.65)}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.06)}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:16px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:#e2e8f0;font-size:.88rem;font-weight:700;font-family:'Syne',sans-serif}
+.faq-q:hover{color:#c4b5fd}
+.faq-a{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.75;padding-bottom:14px;display:none}
+.faq-a.open{display:block}
+.faq-arr{font-size:.7rem;color:rgba(124,58,237,.6);transition:transform .2s;flex-shrink:0}
+.faq-arr.open{transform:rotate(90deg)}
+.calc-in{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:.9rem;color:#e2e8f0;outline:none;box-sizing:border-box;transition:all .2s}
+.calc-in:focus{border-color:rgba(124,58,237,.6);background:rgba(124,58,237,.07)}
+.tier-pill{padding:7px 14px;border:1px solid rgba(124,58,237,.2);background:rgba(255,255,255,.03);border-radius:20px;color:rgba(255,255,255,.45);font-size:.72rem;cursor:pointer;transition:all .15s;font-family:'Syne',sans-serif;font-weight:700;white-space:nowrap}
+.tier-pill.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:#c4b5fd}
+.flow-node{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;text-align:center}
+.flow-node-purple{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)}
 </style>
 </head>
 <body data-page="amm">
 
 <div class="ticker-bar"><div class="ticker-track">
-  <span class="tick-live"><span class="tick-dot" style="background:#a855f7"></span>AMM · ROADMAP v2.0</span>
-  <span class="tick-item">Automated Market Maker · Continuous Price Trading</span>
-  <span class="tick-item">LP Tokens · Swap Fees · No Position Required</span>
-  <span class="tick-item">Launches after mainnet · Expected 2026</span>
-  <span class="tick-live"><span class="tick-dot" style="background:#a855f7"></span>AMM · ROADMAP v2.0</span>
+  <span class="tick-live"><span class="tick-dot" style="background:#a855f7"></span>AMM LIQUIDITY — LIVE AT LISTING</span>
+  <span class="tick-item">Earn fees from every swap · No prediction needed</span>
+  <span class="tick-item">0.3% on every trade · LP tokens · Exit anytime</span>
+  <span class="tick-live"><span class="tick-dot" style="background:#a855f7"></span>AMM LIQUIDITY — LIVE AT LISTING</span>
 </div></div>
 
 <nav class="main-nav">
   <a href="index.html" class="nav-brand">
     <div class="nav-brand-icon">🔮</div>
-    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">AMM · LIQUIDITY</div></div>
+    <div><div class="nav-brand-text">CRYPTOPREDICT</div><div class="nav-brand-sub">AMM LIQUIDITY</div></div>
   </a>
   <div class="nav-links">
     <a href="index.html"        class="nav-link" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
@@ -84,6 +54,7 @@
     <a href="portfolio.html"    class="nav-link" data-page="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Portfolio</span></a>
     <a href="staking.html"      class="nav-link" data-page="staking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Staking</span></a>
     <a href="staking-live.html" class="nav-link" data-page="staking-live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg><span>Live Staking</span></a>
+    <a href="amm.html"          class="nav-link active" data-page="amm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg><span>AMM</span></a>
     <a href="crea.html"         class="nav-link" data-page="crea"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Create</span></a>
     <a href="governance.html"   class="nav-link" data-page="governance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>Governance</span></a>
     <a href="guide.html"        class="nav-link" data-page="guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg><span>Guides</span></a>
@@ -99,7 +70,7 @@
 
 <div class="presale-banner">
   <span class="pb-live"><span class="tick-dot"></span>PRESALE LIVE — STAGE 1</span>
-  <span class="pb-price">· $0.050</span>
+  <span class="pb-price">· $0.050 · AMM live at listing</span>
   <span class="pb-timer" id="pb-countdown">—</span>
   <a href="presale.html" class="pb-btn">Buy CPRED →</a>
 </div>
@@ -107,461 +78,304 @@
 <!-- HERO -->
 <div class="page-hero">
   <div class="hero-badge">
-    <span class="hero-badge-text">AMM · LIQUIDITY POOLS</span>
-    <span class="hero-tag">ROADMAP v2.0 · 2026</span>
+    <span class="hero-badge-text">AMM LIQUIDITY</span>
+    <span class="hero-tag">LIVE AT LISTING</span>
   </div>
-  <h1 class="hero-h1">Provide Liquidity.<br>
-    <span style="background:linear-gradient(135deg,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Earn Every Swap.</span>
+  <h1 class="hero-h1">Deposit money.<br>
+    <span style="background:linear-gradient(135deg,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Earn from every trade.</span>
   </h1>
-  <p class="hero-sub">Deposit liquidity into YES/NO market pools and earn 0.3% on every swap — without taking a position on the outcome. Continuous price trading, instant exit, LP tokens.</p>
-  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:8px 18px;margin-top:4px">
-    <span style="font-size:.85rem">⏳</span>
-    <span style="font-size:.75rem;color:#fbbf24;font-weight:700;font-family:'DM Mono',monospace">Launches after mainnet · Get CPRED now for maximum LP power</span>
-  </div>
+  <p class="hero-sub">You don't need to predict who wins. Just add funds to a market pool and automatically earn 0.3% on every YES/NO trade that happens — forever, with no action required.</p>
 </div>
 
 <div class="page-wrap">
 
-  <!-- WHAT DOES THE LP DEPOSIT -->
-  <div style="background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.25);border-radius:16px;padding:22px 26px;margin-bottom:28px">
-    <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(167,139,250,.7);letter-spacing:.1em;margin-bottom:16px">// WHAT DOES THE LP DEPOSIT?</div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;flex-wrap:wrap">
+  <!-- THE CASINO ANALOGY -->
+  <div class="sec-label">// THE IDEA IN ONE SENTENCE</div>
+  <div style="background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.25);border-radius:16px;padding:24px 28px;margin-bottom:32px;display:flex;align-items:flex-start;gap:16px">
+    <div style="font-size:2rem;flex-shrink:0;margin-top:2px">💡</div>
+    <div>
+      <div style="font-size:1.05rem;font-weight:800;color:#e2e8f0;margin-bottom:8px">Think of yourself as the casino — not the gambler.</div>
+      <div style="font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.8">
+        Gamblers bet on YES or NO. <strong style="color:#e2e8f0">You</strong> own the table — and collect 0.3% of every bet placed, regardless of who wins. You never need to know or care about the outcome.
+      </div>
+    </div>
+  </div>
 
-      <!-- Step 1: deposita valuta -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px">
-        <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:rgba(255,255,255,.35);margin-bottom:8px">LP DEPOSITA</div>
-        <div style="display:flex;flex-direction:column;gap:5px">
-          <div style="display:flex;align-items:center;gap:7px"><span style="font-size:.85rem">Ξ</span><span style="font-size:.78rem;font-weight:700;color:#e2e8f0">ETH</span><span style="font-size:.65rem;color:rgba(255,255,255,.35)">mercati ETH</span></div>
-          <div style="display:flex;align-items:center;gap:7px"><span style="font-size:.85rem;color:#2775ca">$</span><span style="font-size:.78rem;font-weight:700;color:#e2e8f0">USDC</span><span style="font-size:.65rem;color:rgba(255,255,255,.35)">mercati USDC</span></div>
-          <div style="display:flex;align-items:center;gap:7px"><span style="font-size:.85rem;color:#26a17b">₮</span><span style="font-size:.78rem;font-weight:700;color:#e2e8f0">USDT</span><span style="font-size:.65rem;color:rgba(255,255,255,.35)">mercati USDT</span></div>
-          <div style="display:flex;align-items:center;gap:7px"><span style="font-size:.85rem;color:#fbbf24">◈</span><span style="font-size:.78rem;font-weight:700;color:#e2e8f0">CPRED</span><span style="font-size:.65rem;color:rgba(255,255,255,.35)">mercati CPRED</span></div>
+  <!-- 3 STEPS -->
+  <div class="sec-label">// HOW IT WORKS — 3 STEPS</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px">
+    <div class="step-card">
+      <div style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:1rem;font-weight:900;flex-shrink:0;margin-bottom:14px;background:rgba(6,182,212,.15);border:2px solid rgba(6,182,212,.3);color:#22d3ee">1</div>
+      <div style="font-size:1.8rem;margin-bottom:10px">💧</div>
+      <div style="font-weight:800;font-size:1rem;color:#e2e8f0;margin-bottom:8px">You deposit money</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.7">Pick a market and deposit ETH, USDC, USDT or CPRED. The protocol automatically splits it into YES and NO liquidity. You hold both sides — completely neutral on the outcome.</div>
+    </div>
+    <div class="step-card">
+      <div style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:1rem;font-weight:900;flex-shrink:0;margin-bottom:14px;background:rgba(16,185,129,.15);border:2px solid rgba(16,185,129,.3);color:#34d399">2</div>
+      <div style="font-size:1.8rem;margin-bottom:10px">🔄</div>
+      <div style="font-weight:800;font-size:1rem;color:#e2e8f0;margin-bottom:8px">Traders buy and sell</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.7">Other users trade YES/NO shares. Every swap charges a 0.3% fee — 80% goes to you automatically. This happens 24/7 with no action required from you.</div>
+    </div>
+    <div class="step-card">
+      <div style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:1rem;font-weight:900;flex-shrink:0;margin-bottom:14px;background:rgba(245,158,11,.15);border:2px solid rgba(245,158,11,.3);color:#fbbf24">3</div>
+      <div style="font-size:1.8rem;margin-bottom:10px">💰</div>
+      <div style="font-weight:800;font-size:1rem;color:#e2e8f0;margin-bottom:8px">Withdraw anytime</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.7">When you want your money back, just withdraw. You get your original deposit back plus all the fees earned. No lockup, no waiting for market resolution.</div>
+    </div>
+  </div>
+
+  <!-- WHAT DO YOU DEPOSIT -->
+  <div class="sec-label">// WHAT DO YOU ACTUALLY DEPOSIT?</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px">
+    <div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;margin-bottom:14px">
+        <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:14px">YOU DEPOSIT (one currency per market)</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:10px">
+            <span style="font-size:1.3rem;width:30px;text-align:center">Ξ</span>
+            <div><div style="font-weight:700;font-size:.85rem;color:#e2e8f0">ETH</div><div style="font-size:.68rem;color:rgba(255,255,255,.4)">for ETH markets</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(39,117,202,.05);border:1px solid rgba(39,117,202,.15);border-radius:10px">
+            <span style="font-size:1.3rem;width:30px;text-align:center;color:#2775ca">$</span>
+            <div><div style="font-weight:700;font-size:.85rem;color:#e2e8f0">USDC</div><div style="font-size:.68rem;color:rgba(255,255,255,.4)">for USDC markets</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(38,161,123,.05);border:1px solid rgba(38,161,123,.15);border-radius:10px">
+            <span style="font-size:1.3rem;width:30px;text-align:center;color:#26a17b">₮</span>
+            <div><div style="font-weight:700;font-size:.85rem;color:#e2e8f0">USDT</div><div style="font-size:.68rem;color:rgba(255,255,255,.4)">for USDT markets</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.15);border-radius:10px">
+            <span style="font-size:1.3rem;width:30px;text-align:center;color:#fbbf24">◈</span>
+            <div><div style="font-weight:700;font-size:.85rem;color:#e2e8f0">CPRED</div><div style="font-size:.68rem;color:rgba(255,255,255,.4)">for CPRED markets (0% fee)</div></div>
+          </div>
         </div>
       </div>
-
-      <!-- Freccia -->
-      <div style="text-align:center;font-size:.7rem;color:rgba(124,58,237,.6);font-weight:700;white-space:nowrap">→<br><span style="font-size:.6rem;font-family:'DM Mono',monospace">split 50/50</span></div>
-
-      <!-- Step 2: AMM converte -->
-      <div style="background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:14px 16px">
-        <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:#a855f7;margin-bottom:8px">AMM CONVERTE IN</div>
-        <div style="display:flex;flex-direction:column;gap:7px">
-          <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:7px;padding:7px 10px;display:flex;justify-content:space-between">
-            <span style="font-size:.78rem;font-weight:700;color:#34d399">YES shares</span>
-            <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.4)">50%</span>
-          </div>
-          <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);border-radius:7px;padding:7px 10px;display:flex;justify-content:space-between">
-            <span style="font-size:.78rem;font-weight:700;color:#f87171">NO shares</span>
-            <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.4)">50%</span>
-          </div>
-          <div style="font-size:.65rem;color:rgba(255,255,255,.35);text-align:center;margin-top:2px">Entrambe nel pool · x×y=k</div>
-        </div>
+      <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:12px;padding:12px 14px;font-size:.78rem;color:rgba(255,255,255,.6);line-height:1.6">
+        ✅ <strong style="color:#34d399">One deposit = both sides covered.</strong> You never choose YES or NO — the protocol creates both from your single deposit automatically.
       </div>
-
-      <!-- Freccia -->
-      <div style="text-align:center;font-size:.7rem;color:rgba(124,58,237,.6);font-weight:700;white-space:nowrap">→<br><span style="font-size:.6rem;font-family:'DM Mono',monospace">ricevi</span></div>
-
-      <!-- Step 3: LP token -->
-      <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:14px 16px">
-        <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:#fbbf24;margin-bottom:8px">LP RICEVE</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);border-radius:7px;padding:7px 10px;text-align:center">
-            <div style="font-size:.78rem;font-weight:700;color:#fbbf24">LP-TOKEN ERC20</div>
-            <div style="font-size:.62rem;color:rgba(255,255,255,.4);margin-top:2px">quota del pool</div>
-          </div>
-          <div style="font-size:.65rem;color:rgba(255,255,255,.35);line-height:1.5;margin-top:2px">Brucia LP token per<br>ritirare in valuta base<br>+ fee accumulate</div>
-        </div>
+    </div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px">
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:14px">CONCRETE EXAMPLE</div>
+      <div class="example-box">
+        You deposit <span style="color:#fbbf24;font-weight:700">1,000 USDC</span> into<br>
+        the "BTC above $200K?" market.<br><br>
+        Protocol splits automatically:<br>
+        → <span style="color:#34d399;font-weight:700">500 USDC</span> → YES liquidity<br>
+        → <span style="color:#34d399;font-weight:700">500 USDC</span> → NO liquidity<br><br>
+        You receive <span style="color:#a855f7;font-weight:700">1,000 LP-USDC tokens</span><br><br>
+        Traders swap YES ↔ NO every day.<br>
+        Each swap: <span style="color:#fbbf24;font-weight:700">0.3% fee</span> → <span style="color:#34d399;font-weight:700">80% to you.</span><br><br>
+        After 30 days:<br>
+        Withdraw <span style="color:#34d399;font-weight:700">1,000 + $47 in fees</span> ✅
       </div>
-
-    </div>
-    <div style="margin-top:14px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.6">
-      💡 <strong style="color:#e2e8f0">L'LP non prende posizione sull'esito.</strong> Deposita 100 USDC → il protocollo crea 100 YES share + 100 NO share nel pool. Se BTC sale, i trader comprano YES e vendono NO — l'LP guadagna le fee di ogni swap senza scommettere su nulla.
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="sec-label">// HOW AMM LIQUIDITY WORKS</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:32px">
-    <div class="mech-card">
-      <div class="mech-icon">💧</div>
-      <div class="mech-title">Deposit Market Currency</div>
-      <div class="mech-desc">You deposit the <strong style="color:#e2e8f0">market's native currency</strong> — ETH, USDC, USDT or CPRED depending on the market. The protocol splits it into equal YES+NO liquidity automatically. You hold both sides — zero directional exposure.</div>
-    </div>
-    <div class="mech-card">
-      <div class="mech-icon">🔄</div>
-      <div class="mech-title">Earn Swap Fees</div>
-      <div class="mech-desc">Every time a trader buys or sells YES/NO shares, 0.3% goes to LPs. More volume = more fees. Fees compound automatically in your LP position.</div>
-    </div>
-    <div class="mech-card">
-      <div class="mech-icon">📈</div>
-      <div class="mech-title">Continuous Prices</div>
-      <div class="mech-desc">The CPMM curve (x×y=k) provides continuous pricing. Traders get instant execution at any size — price adjusts automatically based on pool depth.</div>
-    </div>
-    <div class="mech-card">
-      <div class="mech-icon">⚡</div>
-      <div class="mech-title">Exit Anytime</div>
-      <div class="mech-desc">Burn LP tokens to withdraw your share of the pool in the <strong style="color:#e2e8f0">market's base currency</strong> — original deposit + fees − any IL. No lockup required.</div>
-    </div>
-    <div class="mech-card">
-      <div class="mech-icon">💎</div>
-      <div class="mech-title">CPRED Boosts</div>
-      <div class="mech-desc">Holding CPRED gives LP fee boosts: Silver (1.2×), Gold (1.5×), Diamond (2×). The earlier you buy CPRED, the higher your LP multiplier at launch.</div>
-    </div>
-    <div class="mech-card">
-      <div class="mech-icon">🛡️</div>
-      <div class="mech-title">IL Protection</div>
-      <div class="mech-desc">Impermanent loss is bounded by the YES/NO price range [0,1]. Protocol treasury partially covers IL for LPs who stay through resolution.</div>
-    </div>
-  </div>
-
-  <!-- CURRENT vs AMM COMPARISON -->
-  <div class="sec-label">// CURRENT MODEL VS AMM — WHAT CHANGES</div>
-  <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;margin-bottom:32px">
-    <table class="cmp-table">
-      <thead>
-        <tr style="border-bottom:1px solid rgba(255,255,255,.08)">
-          <th style="text-align:left;padding:14px 16px">Feature</th>
-          <th style="color:#fbbf24">⏳ Current (Parimutuel)</th>
-          <th style="color:#a855f7">🚀 AMM (v2.0)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Price mechanism</td>
-          <td>Pool ratio at bet time</td>
-          <td style="color:#a855f7;font-weight:700">CPMM curve x×y=k</td>
-        </tr>
-        <tr>
-          <td>Enter/Exit</td>
-          <td>Bet in, wait for resolution</td>
-          <td style="color:#a855f7;font-weight:700">Buy/sell shares anytime</td>
-        </tr>
-        <tr>
-          <td>Liquidity providers</td>
-          <td>Only bettors</td>
-          <td style="color:#a855f7;font-weight:700">Dedicated LP role</td>
-        </tr>
-        <tr>
-          <td>LP fees</td>
-          <td>None (creator gets 1%)</td>
-          <td style="color:#a855f7;font-weight:700">0.3% on every swap</td>
-        </tr>
-        <tr>
-          <td>Position token</td>
-          <td>Record in contract</td>
-          <td style="color:#a855f7;font-weight:700">LP ERC20 token</td>
-        </tr>
-        <tr>
-          <td>Slippage</td>
-          <td>None (pool-based)</td>
-          <td>Depends on depth</td>
-        </tr>
-        <tr>
-          <td>Price discovery</td>
-          <td>Snapshot per bet</td>
-          <td style="color:#a855f7;font-weight:700">Continuous, instant</td>
-        </tr>
-        <tr>
-          <td>Status</td>
-          <td><span style="background:rgba(16,185,129,.12);color:#34d399;padding:2px 9px;border-radius:4px;font-size:.65rem;font-weight:700">LIVE NOW</span></td>
-          <td><span style="background:rgba(245,158,11,.12);color:#fbbf24;padding:2px 9px;border-radius:4px;font-size:.65rem;font-weight:700">2026 ROADMAP</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- LP TIERS -->
-  <div class="sec-label">// LP TIERS — CPRED BOOST MULTIPLIERS</div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;position:relative">
-
-    <!-- Bronze -->
-    <div class="pool-card pool-bronze">
-      <div class="tier-badge">🥉 BRONZE</div>
-      <div class="apy-big">0.3%</div>
-      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">base swap fee</div>
-      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:25%"></div></div>
-      <div class="pool-stat"><span style="opacity:.65">CPRED required</span><span style="font-family:'DM Mono',monospace">0</span></div>
-      <div class="pool-stat"><span style="opacity:.65">Fee multiplier</span><span style="font-family:'DM Mono',monospace">1×</span></div>
-      <div class="pool-stat"><span style="opacity:.65">IL protection</span><span style="font-family:'DM Mono',monospace">None</span></div>
-      <div class="pool-stat"><span style="opacity:.65">LP token</span><span style="font-family:'DM Mono',monospace">✅ ERC20</span></div>
-    </div>
-
-    <!-- Silver -->
-    <div class="pool-card pool-silver">
-      <div class="tier-badge">🥈 SILVER</div>
-      <div class="apy-big">0.36%</div>
-      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">effective fee rate</div>
-      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:45%"></div></div>
-      <div class="pool-stat"><span style="opacity:.65">CPRED required</span><span style="font-family:'DM Mono',monospace">1,000</span></div>
-      <div class="pool-stat"><span style="opacity:.65">Fee multiplier</span><span style="font-family:'DM Mono',monospace;color:#94a3b8;font-weight:700">1.2×</span></div>
-      <div class="pool-stat"><span style="opacity:.65">IL protection</span><span style="font-family:'DM Mono',monospace">10%</span></div>
-      <div class="pool-stat"><span style="opacity:.65">LP token</span><span style="font-family:'DM Mono',monospace">✅ ERC20</span></div>
-    </div>
-
-    <!-- Gold -->
-    <div class="pool-card pool-gold">
-      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:0 0 10px 10px;padding:3px 16px;font-size:.6rem;font-weight:700;color:#000;white-space:nowrap">⭐ BEST VALUE</div>
-      <div class="tier-badge" style="margin-top:16px">🥇 GOLD</div>
-      <div class="apy-big">0.45%</div>
-      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">effective fee rate</div>
-      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:70%"></div></div>
-      <div class="pool-stat"><span style="opacity:.65">CPRED required</span><span style="font-family:'DM Mono',monospace">10,000</span></div>
-      <div class="pool-stat"><span style="opacity:.65">Fee multiplier</span><span style="font-family:'DM Mono',monospace;color:#f59e0b;font-weight:700">1.5×</span></div>
-      <div class="pool-stat"><span style="opacity:.65">IL protection</span><span style="font-family:'DM Mono',monospace">25%</span></div>
-      <div class="pool-stat"><span style="opacity:.65">LP token</span><span style="font-family:'DM Mono',monospace">✅ ERC20</span></div>
-    </div>
-
-    <!-- Diamond -->
-    <div class="pool-card pool-diamond">
-      <div class="tier-badge">💎 DIAMOND</div>
-      <div class="apy-big" style="background:linear-gradient(135deg,#a78bfa,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0.6%</div>
-      <div style="font-size:.72rem;opacity:.65;margin-bottom:16px">effective fee rate</div>
-      <div class="pool-bar-wrap"><div class="pool-bar-fill" style="width:100%"></div></div>
-      <div class="pool-stat"><span style="opacity:.65">CPRED required</span><span style="font-family:'DM Mono',monospace">50,000</span></div>
-      <div class="pool-stat"><span style="opacity:.65">Fee multiplier</span><span style="font-family:'DM Mono',monospace;color:#a78bfa;font-weight:700">2×</span></div>
-      <div class="pool-stat"><span style="opacity:.65">IL protection</span><span style="font-family:'DM Mono',monospace">50%</span></div>
-      <div class="pool-stat"><span style="opacity:.65">LP token</span><span style="font-family:'DM Mono',monospace">✅ ERC20</span></div>
-    </div>
-  </div>
-
-  <!-- REVENUE MODEL + CALCULATOR -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px">
-
-    <!-- Fee flow -->
+  <!-- CALCULATOR + FEE FLOW -->
+  <div class="sec-label">// HOW MUCH CAN YOU EARN?</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px">
     <div class="info-panel">
-      <div class="panel-label">// FEE FLOW — EVERY SWAP</div>
+      <div class="panel-label">// EARNINGS CALCULATOR</div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Your deposit (USD)</div>
+        <input type="number" id="calc-dep" value="5000" min="1" step="500" class="calc-in" oninput="calcAmm()">
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Daily trading volume on that market (USD)</div>
+        <input type="number" id="calc-vol" value="20000" min="1" step="1000" class="calc-in" oninput="calcAmm()">
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Your CPRED tier</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button onclick="setAmmTier('free',this)"    class="tier-pill">🆓 Free</button>
+          <button onclick="setAmmTier('silver',this)"  class="tier-pill">🥈 Silver</button>
+          <button onclick="setAmmTier('gold',this)"    class="tier-pill active">🥇 Gold</button>
+          <button onclick="setAmmTier('diamond',this)" class="tier-pill">💎 Diamond</button>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:.78rem;color:rgba(255,255,255,.5)">Daily earnings</span>
+          <span id="ar-daily" style="font-family:'DM Mono',monospace;font-size:.82rem;font-weight:700;color:#34d399">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:.78rem;color:rgba(255,255,255,.5)">Monthly earnings</span>
+          <span id="ar-monthly" style="font-family:'DM Mono',monospace;font-size:.82rem;font-weight:700;color:#34d399">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)">
+          <span style="font-size:.78rem;color:rgba(255,255,255,.5)">Estimated annual APY</span>
+          <span id="ar-apy" style="font-family:'DM Mono',monospace;font-size:1rem;font-weight:800;color:#a855f7">—</span>
+        </div>
+        <div style="font-size:.62rem;color:rgba(255,255,255,.3);margin-top:8px;text-align:center">Assumes pool = 10× your deposit · before IL</div>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="panel-label">// WHERE DOES THE 0.3% FEE GO?</div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <div class="flow-box" style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15)">
-          <div style="font-size:.78rem;font-weight:700;color:#34d399;margin-bottom:3px">🎯 Trader swaps YES ↔ NO</div>
-          <div style="font-size:.68rem;color:rgba(255,255,255,.4)">Any size, any market, instant execution</div>
+        <div class="flow-node" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.2)">
+          <div style="font-size:.65rem;color:#34d399;font-weight:700;font-family:'DM Mono',monospace;margin-bottom:4px">TRADER SWAPS YES ↔ NO</div>
+          <div style="font-size:.75rem;color:#e2e8f0">Any amount · any market · instant</div>
         </div>
-        <div class="flow-arrow">↓ 0.3% swap fee on notional</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="flow-box" style="background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);text-align:center">
-            <div style="font-size:.65rem;color:#a855f7;font-weight:700;margin-bottom:3px">80% → LPs</div>
-            <div style="font-size:.68rem;color:rgba(255,255,255,.4)">Proportional to pool share</div>
+        <div style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.25)">↓ 0.3% fee on every swap</div>
+        <div style="display:grid;grid-template-columns:4fr 1fr;gap:8px">
+          <div class="flow-node flow-node-purple">
+            <div style="font-size:.65rem;color:#a855f7;font-weight:700;font-family:'DM Mono',monospace;margin-bottom:4px">80% → YOU (LP)</div>
+            <div style="font-size:.75rem;color:#e2e8f0">Auto-credited to your LP position</div>
           </div>
-          <div class="flow-box" style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);text-align:center">
-            <div style="font-size:.65rem;color:#fbbf24;font-weight:700;margin-bottom:3px">20% → Protocol</div>
-            <div style="font-size:.68rem;color:rgba(255,255,255,.4)">Treasury + CPRED stakers</div>
+          <div class="flow-node">
+            <div style="font-size:.65rem;color:rgba(255,255,255,.35);font-weight:700;font-family:'DM Mono',monospace;margin-bottom:4px">20%</div>
+            <div style="font-size:.65rem;color:rgba(255,255,255,.35)">Treasury</div>
           </div>
         </div>
-        <div class="flow-arrow">↓ Auto-compound into LP position</div>
-        <div class="flow-box" style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15)">
-          <div style="font-size:.75rem;font-weight:700;color:#34d399;margin-bottom:3px">LP balance grows every block</div>
-          <div style="font-size:.68rem;color:rgba(255,255,255,.4)">Withdraw anytime — principal + fees</div>
+        <div style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.25)">↓ auto-compounding every block</div>
+        <div class="flow-node" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.2)">
+          <div style="font-size:.75rem;color:#34d399;font-weight:700">Your LP value grows 📈</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:3px">Withdraw = deposit + all fees</div>
         </div>
       </div>
-    </div>
-
-    <!-- Calculator -->
-    <div class="info-panel">
-      <div class="panel-label">// LP EARNINGS CALCULATOR</div>
-      <div style="margin-bottom:12px">
-        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Liquidity deposited (USD)</div>
-        <input type="number" id="calc-liq" value="10000" min="1" step="1000"
-          class="calc-input" oninput="calcLP()">
-      </div>
-      <div style="margin-bottom:14px">
-        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">CPRED tier</div>
-        <div style="display:flex;gap:6px">
-          <button onclick="setLPTier('bronze',this)" class="tier-btn" id="lt-bronze">🥉</button>
-          <button onclick="setLPTier('silver',this)" class="tier-btn" id="lt-silver">🥈</button>
-          <button onclick="setLPTier('gold',this)"   class="tier-btn active" id="lt-gold">🥇</button>
-          <button onclick="setLPTier('diamond',this)" class="tier-btn" id="lt-diamond">💎</button>
-        </div>
-      </div>
-      <div style="margin-bottom:14px">
-        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Daily pool volume (USD)</div>
-        <input type="number" id="calc-vol" value="50000" min="1"
-          class="calc-input" oninput="calcLP()">
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px" id="calc-result">
-        <div style="display:flex;justify-content:space-between;margin-bottom:7px">
-          <span style="font-size:.75rem;color:rgba(255,255,255,.5)">Daily fees earned</span>
-          <span id="cr-daily" style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:#34d399">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:7px">
-          <span style="font-size:.75rem;color:rgba(255,255,255,.5)">Monthly fees</span>
-          <span id="cr-monthly" style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:#34d399">—</span>
-        </div>
-        <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:8px;margin-top:4px;display:flex;justify-content:space-between">
-          <span style="font-size:.75rem;color:rgba(255,255,255,.5)">Annual APY (fees only)</span>
-          <span id="cr-apy" style="font-family:'DM Mono',monospace;font-size:.9rem;font-weight:800;color:#a855f7">—</span>
-        </div>
-        <div style="font-size:.62rem;color:rgba(255,255,255,.3);margin-top:6px;text-align:center">Before IL · assumes constant volume</div>
+      <div style="margin-top:14px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:10px;padding:11px 14px;font-size:.78rem;color:rgba(255,255,255,.6);line-height:1.6">
+        🔑 You earn on <strong style="color:#fbbf24">every</strong> swap — YES or NO, outcome irrelevant.
       </div>
     </div>
   </div>
 
-  <!-- CPMM FORMULA -->
-  <div class="sec-label">// THE CPMM FORMULA — HOW PRICE IS DETERMINED</div>
+  <!-- TIERS -->
+  <div class="sec-label">// EARN MORE WITH CPRED — LP TIERS</div>
+  <div style="font-size:.85rem;color:rgba(255,255,255,.5);margin-bottom:18px;line-height:1.7">Hold $CPRED to boost your fee share. Buy in presale at $0.050 to lock your tier at the best price from day one.</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px">
+    <div class="tier-card tier-free">
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.1em;margin-bottom:10px">🆓 FREE</div>
+      <div class="fee-big">0.24%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:14px">effective rate</div>
+      <div class="stat-row"><span class="stat-key">CPRED needed</span><span class="stat-val">0</span></div>
+      <div class="stat-row"><span class="stat-key">Multiplier</span><span class="stat-val">1×</span></div>
+      <div class="stat-row"><span class="stat-key">IL protection</span><span class="stat-val">None</span></div>
+    </div>
+    <div class="tier-card tier-silver">
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.1em;margin-bottom:10px">🥈 SILVER</div>
+      <div class="fee-big">0.29%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:14px">effective rate</div>
+      <div class="stat-row"><span class="stat-key">CPRED needed</span><span class="stat-val">1,000</span></div>
+      <div class="stat-row"><span class="stat-key">Multiplier</span><span class="stat-val" style="color:#94a3b8">1.2×</span></div>
+      <div class="stat-row"><span class="stat-key">IL protection</span><span class="stat-val">10%</span></div>
+    </div>
+    <div class="tier-card tier-gold" style="box-shadow:0 4px 24px rgba(245,158,11,.12)">
+      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:0 0 8px 8px;padding:2px 14px;font-size:.58rem;font-weight:700;color:#000;white-space:nowrap">⭐ BEST VALUE</div>
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.1em;margin-bottom:10px;margin-top:10px">🥇 GOLD</div>
+      <div class="fee-big">0.36%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:14px">effective rate</div>
+      <div class="stat-row"><span class="stat-key">CPRED needed</span><span class="stat-val">10,000</span></div>
+      <div class="stat-row"><span class="stat-key">Multiplier</span><span class="stat-val" style="color:#f59e0b">1.5×</span></div>
+      <div class="stat-row"><span class="stat-key">IL protection</span><span class="stat-val">25%</span></div>
+    </div>
+    <div class="tier-card tier-diamond" style="box-shadow:0 4px 24px rgba(124,58,237,.12)">
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.1em;margin-bottom:10px">💎 DIAMOND</div>
+      <div class="fee-big" style="background:linear-gradient(135deg,#a78bfa,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0.48%</div>
+      <div style="font-size:.72rem;opacity:.65;margin-bottom:14px">effective rate</div>
+      <div class="stat-row"><span class="stat-key">CPRED needed</span><span class="stat-val">50,000</span></div>
+      <div class="stat-row"><span class="stat-key">Multiplier</span><span class="stat-val" style="color:#a78bfa">2×</span></div>
+      <div class="stat-row"><span class="stat-key">IL protection</span><span class="stat-val">50%</span></div>
+    </div>
+  </div>
+
+  <!-- IL RISK -->
+  <div class="sec-label">// THE ONLY RISK — IMPERMANENT LOSS (EXPLAINED SIMPLY)</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px">
+    <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.15);border-radius:16px;padding:22px">
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:#f87171;letter-spacing:.1em;margin-bottom:14px">⚠️ THE RISK</div>
+      <div style="font-size:.84rem;color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:12px">Imagine you deposit <strong style="color:#e2e8f0">$1,000</strong> into a BTC market pool when odds are 50/50.</div>
+      <div style="font-size:.84rem;color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:12px">If BTC surges and everyone rushes to buy YES, the pool becomes unbalanced. When you withdraw you might get back <strong style="color:#f87171">slightly less than $1,000</strong> in value.</div>
+      <div style="font-size:.84rem;color:rgba(255,255,255,.65);line-height:1.8">This is called <strong style="color:#f87171">impermanent loss</strong>. In most cases the fees you earn offset it completely — especially on active markets.</div>
+    </div>
+    <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:16px;padding:22px">
+      <div style="font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:#34d399;letter-spacing:.1em;margin-bottom:14px">✅ HOW TO MINIMIZE IT</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px"><span style="font-size:1rem;flex-shrink:0">🎯</span><div><div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:2px">Choose ~50/50 markets</div><div style="font-size:.76rem;color:rgba(255,255,255,.5)">Markets near 50% YES probability have minimal IL.</div></div></div>
+        <div style="display:flex;gap:10px"><span style="font-size:1rem;flex-shrink:0">⚡</span><div><div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:2px">Active markets offset IL with fees</div><div style="font-size:.76rem;color:rgba(255,255,255,.5)">$50K/day volume → ~$180/mo per $10K deposited. Usually exceeds IL.</div></div></div>
+        <div style="display:flex;gap:10px"><span style="font-size:1rem;flex-shrink:0">🛡️</span><div><div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:2px">CPRED tier protection</div><div style="font-size:.76rem;color:rgba(255,255,255,.5)">Gold = 25% of IL covered. Diamond = 50% covered by protocol.</div></div></div>
+        <div style="display:flex;gap:10px"><span style="font-size:1rem;flex-shrink:0">📅</span><div><div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:2px">Exit before it's too lopsided</div><div style="font-size:.76rem;color:rgba(255,255,255,.5)">If one side hits 80%+, consider withdrawing early.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LP INTERFACE (coming at listing) -->
+  <div class="sec-label">// LP INTERFACE — LIVE AT LISTING</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px">
-    <div class="info-panel">
-      <div class="panel-label">// CONSTANT PRODUCT x × y = k</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.76rem;line-height:2.1;color:rgba(255,255,255,.65);background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px 18px">
-        // 100 USDC depositati → 100 YES + 100 NO nel pool<br><br>        x = YES token reserves<br>
-        y = NO token reserves<br>
-        k = constant product (invariant)<br><br>
-        Price YES = y / (x + y)<br>
-        Price NO  = x / (x + y)<br><br>
-        <span style="color:#34d399">Example: x=75, y=25, k=1875</span><br>
-        Price YES = 25/(75+25) = <strong style="color:#34d399">0.25</strong> → 75% prob<br>
-        Price NO  = 75/(75+25) = <strong style="color:#f87171">0.75</strong> → 25% prob<br><br>
-        After buy of 10 YES:<br>
-        new x = 75+10 = 85<br>
-        new y = k/85 = <strong style="color:#fbbf24">22.06</strong><br>
-        new Price YES = 22.06/107.06 = <strong style="color:#34d399">0.206</strong>
-      </div>
-    </div>
-    <div class="info-panel">
-      <div class="panel-label">// LP WORKFLOW</div>
-      <div style="display:flex;flex-direction:column;gap:0">
-        <div class="roadmap-step">
-          <div class="rs-num" style="border-color:rgba(124,58,237,.4);color:#a855f7;background:rgba(124,58,237,.1)">1</div>
-          <div>
-            <div style="font-weight:700;font-size:.85rem;color:#e2e8f0;margin-bottom:3px">Deposit into pool</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Call <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#c4b5fd">addLiquidity(marketId, amount)</span>. You receive LP-ERC20 tokens proportional to your share of the pool.</div>
-          </div>
-        </div>
-        <div class="roadmap-step">
-          <div class="rs-num" style="border-color:rgba(6,182,212,.4);color:#22d3ee;background:rgba(6,182,212,.1)">2</div>
-          <div>
-            <div style="font-weight:700;font-size:.85rem;color:#e2e8f0;margin-bottom:3px">Fees accrue automatically</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Every swap in your market generates 0.3% fee. 80% goes to LPs — automatically reflected in LP token value. No claim needed.</div>
-          </div>
-        </div>
-        <div class="roadmap-step">
-          <div class="rs-num" style="border-color:rgba(16,185,129,.4);color:#34d399;background:rgba(16,185,129,.1)">3</div>
-          <div>
-            <div style="font-weight:700;font-size:.85rem;color:#e2e8f0;margin-bottom:3px">Withdraw anytime</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">Call <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:#34d399">removeLiquidity(lpTokens)</span> to burn LP tokens and withdraw your share: original deposit + accumulated fees − IL.</div>
-          </div>
-        </div>
-        <div class="roadmap-step">
-          <div class="rs-num" style="border-color:rgba(245,158,11,.4);color:#fbbf24;background:rgba(245,158,11,.1)">4</div>
-          <div>
-            <div style="font-weight:700;font-size:.85rem;color:#e2e8f0;margin-bottom:3px">Resolution bonus</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6">LPs who stay through market resolution receive an extra 0.1% bonus from the resolution fee, rewarding long-term liquidity commitment.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROADMAP TIMELINE -->
-  <div class="sec-label">// DEVELOPMENT ROADMAP</div>
-  <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;margin-bottom:28px">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
-      <div style="text-align:center;padding:16px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px">
-        <div style="font-size:1.3rem;margin-bottom:8px">✅</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#34d399;letter-spacing:.08em;margin-bottom:6px">COMPLETED</div>
-        <div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:4px">Parimutuel v2</div>
-        <div style="font-size:.72rem;color:rgba(255,255,255,.4)">Multi-currency markets, on-chain yield, protocol fees</div>
-      </div>
-      <div style="text-align:center;padding:16px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px">
-        <div style="font-size:1.3rem;margin-bottom:8px">✅</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#34d399;letter-spacing:.08em;margin-bottom:6px">COMPLETED</div>
-        <div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:4px">Secondary Market</div>
-        <div style="font-size:.72rem;color:rgba(255,255,255,.4)">PositionMarket.sol, sell shares before resolution</div>
-      </div>
-      <div style="text-align:center;padding:16px;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:12px">
-        <div style="font-size:1.3rem;margin-bottom:8px">🔜</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#a855f7;letter-spacing:.08em;margin-bottom:6px">Q4 2025</div>
-        <div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:4px">Mainnet Launch</div>
-        <div style="font-size:.72rem;color:rgba(255,255,255,.4)">Base mainnet, audit complete, real funds</div>
-      </div>
-      <div style="text-align:center;padding:16px;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:12px">
-        <div style="font-size:1.3rem;margin-bottom:8px">🔜</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#a855f7;letter-spacing:.08em;margin-bottom:6px">Q1 2026</div>
-        <div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:4px">Live Staking</div>
-        <div style="font-size:.72rem;color:rgba(255,255,255,.4)">Post-listing staking, up to 40% APY, ETH rewards</div>
-      </div>
-      <div style="text-align:center;padding:16px;background:rgba(245,158,11,.06);border:2px solid rgba(245,158,11,.3);border-radius:12px;animation:glow-pulse 3s infinite">
-        <div style="font-size:1.3rem;margin-bottom:8px">🚀</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:#fbbf24;letter-spacing:.08em;margin-bottom:6px">2026 — THIS PAGE</div>
-        <div style="font-size:.82rem;font-weight:700;color:#e2e8f0;margin-bottom:4px">AMM v1</div>
-        <div style="font-size:.72rem;color:rgba(255,255,255,.4)">CPMM pools, LP tokens, 0.3% swap fees, IL protection</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LP INTERFACE — Coming Soon -->
-  <div class="sec-label">// LP INTERFACE — LAUNCHES WITH AMM v1</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;position:relative">
-    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;opacity:.45;pointer-events:none;position:relative">
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;position:relative;overflow:hidden">
       <div class="panel-label">// ADD LIQUIDITY</div>
-      <div style="margin-bottom:12px">
-        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Market</div>
-        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px;font-size:.8rem;color:rgba(255,255,255,.4)">Select a market...</div>
+      <div style="margin-bottom:10px"><div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:5px">Market</div><div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:9px;font-size:.8rem;color:rgba(255,255,255,.3)">Select a market...</div></div>
+      <div style="margin-bottom:10px"><div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:5px">Amount</div><div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:9px;font-family:'DM Mono',monospace;font-size:.85rem;color:rgba(255,255,255,.3)">1,000 USDC</div></div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:10px;font-size:.75rem;color:rgba(255,255,255,.35);margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span>Effective fee rate</span><span style="color:#f59e0b">0.36% (🥇 Gold)</span></div>
+        <div style="display:flex;justify-content:space-between"><span>LP tokens received</span><span style="color:#a855f7">1,000 LP-USDC</span></div>
       </div>
-      <div style="margin-bottom:14px">
-        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">CPRED tier</div>
-        <div style="display:flex;gap:6px">
-          <div style="flex:1;padding:7px;border:1px solid rgba(255,255,255,.08);border-radius:8px;text-align:center;font-size:.72rem;color:rgba(255,255,255,.3)">🥉</div>
-          <div style="flex:1;padding:7px;border:1px solid rgba(255,255,255,.08);border-radius:8px;text-align:center;font-size:.72rem;color:rgba(255,255,255,.3)">🥈</div>
-          <div style="flex:1;padding:7px;border:1px solid rgba(124,58,237,.3);border-radius:8px;text-align:center;font-size:.72rem;color:#a855f7;background:rgba(124,58,237,.1)">🥇</div>
-          <div style="flex:1;padding:7px;border:1px solid rgba(255,255,255,.08);border-radius:8px;text-align:center;font-size:.72rem;color:rgba(255,255,255,.3)">💎</div>
-        </div>
-      </div>
-      <div style="margin-bottom:14px">
-        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:6px">Amount (valuta del mercato)</div>
-        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px;font-family:'DM Mono',monospace;font-size:.85rem;color:rgba(255,255,255,.3)">10,000</div>
-      </div>
-      <div style="padding:11px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.25);border-radius:10px;font-size:.88rem;font-weight:800;color:#c4b5fd;text-align:center">💧 Add Liquidity</div>
-      <div class="amm-coming-overlay">
+      <div style="padding:10px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.2);border-radius:9px;text-align:center;font-weight:800;color:#c4b5fd;font-size:.85rem;opacity:.5">💧 Add Liquidity</div>
+      <div style="position:absolute;inset:0;background:rgba(8,8,18,.82);backdrop-filter:blur(3px);border-radius:16px;display:flex;align-items:center;justify-content:center">
         <div style="text-align:center">
           <div style="font-size:2rem;margin-bottom:10px">🚀</div>
-          <div style="font-weight:800;font-size:.92rem;color:#e2e8f0;margin-bottom:6px">Launches with AMM v1</div>
-          <div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-bottom:14px">Expected 2026 · after mainnet</div>
-          <a href="presale.html" style="padding:9px 20px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:8px;color:#000;font-weight:700;font-size:.78rem;text-decoration:none">Get CPRED → max tier</a>
+          <div style="font-weight:800;font-size:.92rem;color:#e2e8f0;margin-bottom:6px">Live at listing</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-bottom:14px">Right after the presale ends</div>
+          <a href="presale.html" style="padding:9px 20px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:8px;color:#000;font-weight:700;font-size:.78rem;text-decoration:none">Get your tier now →</a>
         </div>
       </div>
     </div>
-    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;opacity:.45;pointer-events:none;position:relative">
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;position:relative;overflow:hidden">
       <div class="panel-label">// YOUR LP POSITIONS</div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
-        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="font-size:.8rem;font-weight:700;color:rgba(255,255,255,.5)">BTC &gt; $100K?</span>
-            <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:#fbbf24">🥇 Gold</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:rgba(255,255,255,.35)">
-            <span>$5,000 deposited</span>
-            <span style="color:#34d399">+$23.40 fees</span>
-          </div>
-          <div class="bar-wrap" style="margin:8px 0"><div class="bar-fill bar-fill-green" style="width:62%"></div></div>
-          <div style="text-align:right"><button style="padding:5px 14px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);border-radius:7px;font-size:.65rem;color:#f87171;cursor:pointer">Remove</button></div>
-        </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:.8rem;font-weight:700;color:rgba(255,255,255,.5)">BTC above $200K?</span><span style="font-family:'DM Mono',monospace;font-size:.72rem;color:#f59e0b">🥇 Gold</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:7px"><span>5,000 USDC deposited</span><span style="color:#34d399">+$34.20 fees</span></div>
+        <div class="bar-wrap"><div class="bar-fill bar-fill-green" style="width:55%"></div></div>
       </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="font-size:.75rem;color:rgba(255,255,255,.35)">Total deposited</span>
-          <span style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:#e2e8f0">$5,000</span>
-        </div>
-        <div style="display:flex;justify-content:space-between">
-          <span style="font-size:.75rem;color:rgba(255,255,255,.35)">Total fees earned</span>
-          <span style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:#34d399">+$23.40</span>
-        </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px;font-size:.75rem">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:rgba(255,255,255,.4)">Total deposited</span><span style="font-family:'DM Mono',monospace;color:#e2e8f0">5,000 USDC</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:rgba(255,255,255,.4)">Total fees earned</span><span style="font-family:'DM Mono',monospace;color:#34d399;font-weight:700">+$34.20</span></div>
       </div>
-      <div class="amm-coming-overlay">
+      <div style="position:absolute;inset:0;background:rgba(8,8,18,.82);backdrop-filter:blur(3px);border-radius:16px;display:flex;align-items:center;justify-content:center">
         <div style="text-align:center">
           <div style="font-size:2rem;margin-bottom:8px">⏳</div>
-          <div style="font-weight:800;font-size:.85rem;color:#e2e8f0">Coming with AMM v1</div>
+          <div style="font-weight:800;font-size:.85rem;color:#e2e8f0">Live at listing</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="sec-label">// FAQ</div>
+  <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:4px 24px;margin-bottom:28px">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Do I need to predict who wins? <span class="faq-arr">▶</span></button>
+      <div class="faq-a">No. You earn from trading activity, not outcomes. Whether the market resolves YES or NO doesn't matter — your fees come from every swap, regardless of direction.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Can I lose money? <span class="faq-arr">▶</span></button>
+      <div class="faq-a">You can experience impermanent loss if trading becomes very one-sided. In practice, fees on active markets usually outweigh IL. Choose balanced markets and use CPRED tier IL protection to reduce risk.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Can I withdraw at any time? <span class="faq-arr">▶</span></button>
+      <div class="faq-a">Yes. No lockup period. Burn your LP tokens anytime to receive your deposit + accumulated fees immediately.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">What are LP tokens? <span class="faq-arr">▶</span></button>
+      <div class="faq-a">LP tokens are your receipt. You get 1,000 LP tokens for depositing 1,000 USDC. They represent your share of the pool. Burn them to withdraw. They are standard ERC-20 tokens that can be transferred or used as collateral in other DeFi protocols.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Why does CPRED give a fee boost? <span class="faq-arr">▶</span></button>
+      <div class="faq-a">CPRED holders are long-term protocol supporters. The fee multiplier rewards them for building the ecosystem. Diamond LPs (2×) earn double vs free LPs on the same deposit — a direct incentive to buy and hold CPRED.</div>
+    </div>
+    <div class="faq-item" style="border:none">
+      <button class="faq-q" onclick="toggleFaq(this)">When does AMM go live? <span class="faq-arr">▶</span></button>
+      <div class="faq-a">AMM launches at listing — immediately after the presale ends. The full platform goes live all at once: markets, trading, AMM liquidity, live staking. Buy CPRED now at $0.050 to secure your tier for day one.</div>
     </div>
   </div>
 
   <!-- CTA -->
   <div class="cta-banner">
     <div>
-      <div class="cta-title">Prepare your LP position now</div>
-      <div class="cta-desc">Buy CPRED in presale at $0.050 to secure Diamond tier access at launch. Diamond LPs earn 2× fees and 50% IL protection from day one — the earlier you buy, the better your entry.</div>
+      <div class="cta-title">Secure your LP tier before listing</div>
+      <div class="cta-desc">Buy CPRED at $0.050 → Diamond tier at listing → earn 2× fees from day one. The platform goes live right after the presale ends.</div>
     </div>
     <div class="cta-actions">
       <a href="presale.html" style="padding:12px 24px;background:linear-gradient(135deg,#ffd700,#ff9500);border-radius:10px;color:#000;font-weight:800;font-size:.85rem;text-decoration:none">💎 Buy CPRED →</a>
-      <a href="staking-live.html" style="padding:12px 24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#e2e8f0;font-weight:700;font-size:.85rem;text-decoration:none">Live Staking →</a>
-      <a href="docs.html#amm" style="padding:12px 24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#e2e8f0;font-weight:700;font-size:.85rem;text-decoration:none">Read Docs →</a>
+      <a href="guide.html"   style="padding:12px 24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#e2e8f0;font-weight:700;font-size:.85rem;text-decoration:none">Step-by-step Guide →</a>
     </div>
   </div>
 
@@ -571,43 +385,39 @@
 <script src="web3.js?v=20260323d"></script>
 <script src="_shared.js?v=20260323d"></script>
 <script>
-var lpTier = 'gold';
-var LP_TIERS = {
-  bronze:  { mult: 1.0,  label: '🥉 Bronze'  },
-  silver:  { mult: 1.2,  label: '🥈 Silver'  },
-  gold:    { mult: 1.5,  label: '🥇 Gold'    },
-  diamond: { mult: 2.0,  label: '💎 Diamond' },
-};
+var ammTier = 'gold';
+var AMM_TIERS = { free:{mult:1.0}, silver:{mult:1.2}, gold:{mult:1.5}, diamond:{mult:2.0} };
 
-function setLPTier(tier, btn) {
-  lpTier = tier;
-  ['bronze','silver','gold','diamond'].forEach(function(t) {
-    var b = document.getElementById('lt-' + t);
-    if (b) b.className = t === tier ? 'tier-btn active' : 'tier-btn';
-  });
-  calcLP();
+function setAmmTier(tier, btn) {
+  ammTier = tier;
+  document.querySelectorAll('.tier-pill').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  calcAmm();
 }
 
-function calcLP() {
-  var liq = parseFloat(document.getElementById('calc-liq').value) || 0;
+function calcAmm() {
+  var dep = parseFloat(document.getElementById('calc-dep').value) || 0;
   var vol = parseFloat(document.getElementById('calc-vol').value) || 0;
-  var t = LP_TIERS[lpTier];
-
-  var feeRate = 0.003 * t.mult * 0.8; // 0.3% × multiplier × 80% to LP
-  var daily = vol * feeRate * (liq / (liq + vol * 0.1));  // approximate share
-  // Simpler: assume pool is ~10× deposit
-  var poolSize = liq * 10;
-  var share = liq / poolSize;
+  var t   = AMM_TIERS[ammTier];
+  var share     = dep / (dep * 10);
   var dailyFees = vol * 0.003 * t.mult * 0.8 * share;
-  var monthlyFees = dailyFees * 30;
-  var apy = (dailyFees * 365 / liq) * 100;
-
-  document.getElementById('cr-daily').textContent   = '$' + dailyFees.toFixed(2);
-  document.getElementById('cr-monthly').textContent = '$' + monthlyFees.toFixed(2);
-  document.getElementById('cr-apy').textContent     = apy.toFixed(1) + '% APY';
+  var monthly   = dailyFees * 30;
+  var apy       = dep > 0 ? (dailyFees * 365 / dep * 100) : 0;
+  document.getElementById('ar-daily').textContent   = '$' + dailyFees.toFixed(2);
+  document.getElementById('ar-monthly').textContent = '$' + monthly.toFixed(2);
+  document.getElementById('ar-apy').textContent     = apy.toFixed(1) + '% APY';
 }
 
-calcLP();
+function toggleFaq(btn) {
+  var a   = btn.nextElementSibling;
+  var arr = btn.querySelector('.faq-arr');
+  var isOpen = a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){ el.classList.remove('open'); });
+  document.querySelectorAll('.faq-arr').forEach(function(el){ el.classList.remove('open'); });
+  if (!isOpen) { a.classList.add('open'); arr.classList.add('open'); }
+}
+
+calcAmm();
 CP.ready.then(function() {});
 </script>
 </body></html>
