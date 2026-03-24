@@ -19,4 +19,4 @@ No trading. No leverage. No liquidations.
 - FundShot (sister project): https://fundshot.app
 
 <!-- deploy trigger: 2026-03-22T23:50:28Z -->
-<!-- deploy: 2026-03-24T16:14:44Z -->
+<!-- deploy: 2026-03-24T16:31:07Z -->
