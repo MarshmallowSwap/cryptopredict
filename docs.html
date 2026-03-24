@@ -635,29 +635,62 @@
         </div>
       </div>
 
-      <!-- 18 AMM -->
+            <!-- 18 AMM -->
       <div class="doc-section" id="amm">
         <div class="doc-section-head">
-          <div class="doc-section-icon" style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2)">🔄</div>
-          <div><div class="doc-section-num">18 · AMM</div><div class="doc-section-title">AMM — Automated Market Maker (Roadmap)</div></div>
+          <div class="doc-section-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25)">💧</div>
+          <div><div class="doc-section-num">18 · AMM</div><div class="doc-section-title">AMM Liquidity — Earn from Every Trade</div></div>
         </div>
-        <div class="doc-p">The AMM is the advanced version of trading on CryptoPredict — continuous prices, instant swaps, automatic liquidity. It's on the v2.0 roadmap.</div>
+
+        <div class="doc-box doc-box-purple" style="margin-bottom:16px">
+          <div class="doc-box-head" style="color:#c4b5fd">💡 In one sentence</div>
+          <div class="doc-p" style="margin:0">Think of yourself as the casino, not the gambler. You deposit funds into a market pool and earn <strong>0.3% on every YES/NO swap</strong>, regardless of the outcome. No prediction needed. Launches at listing.</div>
+        </div>
+
+        <div class="doc-p">Any user can deposit the market's native currency (ETH, USDC, USDT or CPRED) into any open market's pool. The protocol automatically splits the deposit 50/50 into YES and NO liquidity. The LP receives ERC-20 LP tokens representing their share and earns fees from every swap — completely neutral on the outcome.</div>
+
+        <div class="doc-h3">What you deposit</div>
         <table class="doc-table">
-          <thead><tr><th></th><th>Current (Parimutuel)</th><th>AMM (v2.0)</th></tr></thead>
+          <thead><tr><th>Market type</th><th>LP deposits</th><th>Auto-split</th></tr></thead>
           <tbody>
-            <tr><td>Entry</td><td>Fix YES or NO, wait for resolution</td><td>Buy/sell shares at any time</td></tr>
-            <tr><td>Price</td><td>Determined by pool at the time</td><td>Continuous curve x×y=k</td></tr>
-            <tr><td>Exit</td><td>Only at market resolution</td><td>Sell whenever, market price</td></tr>
-            <tr><td>Liquidity</td><td>User bets</td><td>LPs deposit and earn swap fees</td></tr>
+            <tr><td>ETH market</td><td>ETH</td><td>50% YES + 50% NO</td></tr>
+            <tr><td>USDC market</td><td>USDC</td><td>50% YES + 50% NO</td></tr>
+            <tr><td>USDT market</td><td>USDT</td><td>50% YES + 50% NO</td></tr>
+            <tr><td>CPRED market</td><td>CPRED</td><td>50% YES + 50% NO</td></tr>
           </tbody>
         </table>
-        <div class="doc-box doc-box-purple" style="margin-top:12px">
-          <div class="doc-box-head" style="color:#c4b5fd">Why it's on the roadmap and not now</div>
-          <div class="doc-p" style="margin:0">The AMM requires a completely new contract, a specific audit for the price curve, and an LP token system. Current priority is consolidating the parimutuel model and the secondary market.</div>
+
+        <div class="doc-h3">Fee structure</div>
+        <div class="doc-mono">
+          Every swap: 0.3% fee on notional amount<br>
+          → 80% to LP (auto-credited, compounds every block)<br>
+          → 20% to protocol treasury<br><br>
+          CPRED tier fee multipliers:<br>
+          Free: 1× · Silver (1K CPRED): 1.2× · Gold (10K): 1.5× · Diamond (50K): 2×<br><br>
+          IL protection: Silver 10% · Gold 25% · Diamond 50% (covered by protocol)
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+
+        <div class="doc-h3">LP workflow</div>
+        <div class="doc-box">
+          <div class="flow-step"><div class="flow-num">1</div><div><div class="flow-title">Deposit market currency</div><div class="flow-desc"><span class="doc-code">addLiquidity(marketId, amount)</span> — protocol splits 50/50. You receive LP-ERC20 tokens proportional to your pool share.</div></div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div><div class="flow-title">Fees accrue automatically</div><div class="flow-desc">Every swap on that market → 0.3% fee → 80% to LPs proportionally, every block. No action needed.</div></div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div><div class="flow-title">Withdraw anytime</div><div class="flow-desc"><span class="doc-code">removeLiquidity(lpTokens)</span> — burns LP tokens, returns deposit + fees − IL. No lockup period.</div></div></div>
+        </div>
+
+        <div class="doc-h3">Parimutuel vs AMM</div>
+        <table class="doc-table">
+          <thead><tr><th>Feature</th><th>Current (Parimutuel)</th><th>AMM (live at listing)</th></tr></thead>
+          <tbody>
+            <tr><td>Role</td><td>Bettor — choose YES or NO</td><td><strong style="color:#a855f7">LP — earn from both sides</strong></td></tr>
+            <tr><td>Earnings</td><td>Win/lose on prediction</td><td><strong style="color:#a855f7">0.3% on every swap, outcome-neutral</strong></td></tr>
+            <tr><td>Exit</td><td>Only at resolution</td><td><strong style="color:#a855f7">Anytime, no lockup</strong></td></tr>
+            <tr><td>Price curve</td><td>Pool ratio at bet time</td><td><strong style="color:#a855f7">Continuous x×y=k</strong></td></tr>
+            <tr><td>Status</td><td><span class="badge-green">LIVE NOW</span></td><td><span class="badge-cyan" style="background:rgba(6,182,212,.1);color:#22d3ee;padding:2px 9px;border-radius:4px;font-size:.65rem;font-weight:700">LIVE AT LISTING</span></td></tr>
+          </tbody>
+        </table>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
           <a href="guide.html#amm" class="doc-link-btn doc-link-btn-guide">📖 Step-by-step guide →</a>
-          <a href="amm.html" class="doc-link-btn doc-link-btn-page">🔗 Open AMM Liquidity →</a>
+          <a href="amm.html" class="doc-link-btn doc-link-btn-page">🔗 Open AMM page →</a>
         </div>
       </div>
 
