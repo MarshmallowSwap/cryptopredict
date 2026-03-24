@@ -929,13 +929,171 @@ ammUpdateSwapQuote = async function() {
   } catch(e) {}
 };
 
-// Override ammLoadPools to use new renderer
+// Override ammLoadPools — uses public RPC directly for reads (no wallet needed)
+var AMM_ADDR = '0xaa645dca8a82764db9a725ab3ac9e2caab1440d0';
+var AMM_RPC  = 'https://gateway.tenderly.co/public/base-sepolia';
+
+async function fetchAMMPool(iface, contract, marketId) {
+  var r = await contract.getPool(marketId);
+  var currency = r[0], yesR = r[1], noR = r[2], lpSupply = r[3], feeAcc = r[4], question = r[5];
+  var total = yesR + noR;
+  return {
+    marketId:       marketId,
+    currency:       currency.toLowerCase(),
+    question:       question,
+    yesReserve:     parseFloat(ethers.formatUnits(yesR, 6)),
+    noReserve:      parseFloat(ethers.formatUnits(noR,  6)),
+    totalLPSupply:  parseFloat(ethers.formatEther(lpSupply)),
+    feeAccumulator: parseFloat(ethers.formatUnits(feeAcc, 6)),
+    yesPrice:       total > 0n ? Number(noR * 10000n / total) / 10000 : 0.5,
+    noPrice:        total > 0n ? Number(yesR * 10000n / total) / 10000 : 0.5,
+  };
+}
+
 var _origLoadPools = ammLoadPools;
 ammLoadPools = async function() {
   try {
-    const pools = await W3.getAllAMMPools();
+    // Use public RPC provider directly — no wallet needed, no chain switching
+    var provider = new ethers.JsonRpcProvider(AMM_RPC);
+    var contract  = new ethers.Contract(AMM_ADDR, AMM_ABI, provider);
+    var ids       = await contract.getAllMarketIds();
+    var pools     = await Promise.all(ids.map(function(id) {
+      return fetchAMMPool(null, contract, Number(id));
+    }));
     ammState.pools = pools;
+    // Store currency map for W3 comparisons (normalize to lowercase)
+    ammState.pools.forEach(function(p) {
+      p.currency = p.currency.toLowerCase();
+    });
     renderPools(pools);
+    ['amm-pool-select','amm-swap-market'].forEach(function(id) {
+      var sel = document.getElementById(id);
+      if (!sel) return;
+      sel.innerHTML = '<option value="">Select a pool...</option>';
+      pools.forEach(function(p) {
+        var sym = currSym(p.currency);
+        var opt = document.createElement('option');
+        opt.value = p.marketId;
+        opt.textContent = '#'+p.marketId+' · '+p.question.slice(0,32)+'  ['+sym+']';
+        sel.appendChild(opt);
+      });
+    });
+    if (pools.length) {
+      updateLiqPrices(pools[0].marketId);
+      document.getElementById('amm-pool-select').value = pools[0].marketId;
+      document.getElementById('amm-swap-market').value = pools[0].marketId;
+      ammUpdateSwapQuote();
+    }
+  } catch(e) {
+    console.error('ammLoadPools error:', e);
+    var el = document.getElementById('pools-list');
+    if (el) el.innerHTML = '<div style="color:#f87171;padding:20px;text-align:center">Error: '+e.message+'</div>';
+  }
+};
+
+// Currency symbol helper (uses lowercase address)
+function currSym(addr) {
+  addr = (addr||'').toLowerCase();
+  if (addr === '0x8a54f0e841cfca5fa654912af33ccd121d182311') return 'USDC';
+  if (addr === '0xabb48e1693df04fb894843e52b239d5c5d0ab871') return 'USDT';
+  if (addr === '0xec937bf3123874115edcbbe1b3802c95f572e8e5') return 'CPRED';
+  return 'TOKEN';
+}
+
+// Override renderPools to use currSym instead of W3.CONTRACTS comparison
+var _origRenderPools = renderPools;
+renderPools = function(pools) {
+  var list = document.getElementById('pools-list');
+  var count = document.getElementById('pool-count-label');
+  if (!list) return;
+  if (!pools.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.25)">No pools found</div>'; return; }
+  if (count) count.textContent = pools.length + ' pool' + (pools.length>1?'s':'') + ' · Base Sepolia';
+  var sp = document.getElementById('stat-pools');
+  if (sp) sp.textContent = pools.length;
+  var totalTvl = pools.reduce(function(a,p){ return a + p.yesReserve + p.noReserve; }, 0);
+  var st = document.getElementById('stat-tvl');
+  if (st) st.textContent = totalTvl.toFixed(0) + ' tokens';
+  list.innerHTML = pools.map(function(p) {
+    var sym  = currSym(p.currency);
+    var tvl  = (p.yesReserve + p.noReserve).toFixed(0);
+    var active = p.yesReserve + p.noReserve > 0;
+    var badgeStyle = active
+      ? 'background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.2)'
+      : 'background:rgba(255,255,255,.06);color:rgba(255,255,255,.3)';
+    return '<div class="pool-card" id="pool-card-'+p.marketId+'">' +
+      '<div class="pool-card-header" onclick="togglePoolCard('+p.marketId+')">' +
+        '<div class="pool-icons">' +
+          '<div class="pool-icon" style="background:rgba(16,185,129,.2);font-size:.7rem;font-weight:900;color:#34d399">Y</div>' +
+          '<div class="pool-icon" style="background:rgba(239,68,68,.15);font-size:.7rem;font-weight:900;color:#f87171">N</div>' +
+        '</div>' +
+        '<div style="flex:1">' +
+          '<div class="pool-pair">YES / NO · '+sym+'</div>' +
+          '<div style="font-size:.65rem;color:rgba(255,255,255,.35);margin-top:2px">'+p.question.slice(0,45)+'</div>' +
+        '</div>' +
+        '<span class="pool-badge" style="'+badgeStyle+'">'+(active?'ACTIVE':'EMPTY')+'</span>' +
+        '<span class="pool-chevron">▼</span>' +
+      '</div>' +
+      '<div class="pool-metrics">' +
+        '<div class="pool-metric"><div class="pm-label">TVL</div><div class="pm-val">'+tvl+' '+sym+'</div></div>' +
+        '<div class="pool-metric"><div class="pm-label">YES PRICE</div><div class="pm-val" style="color:#34d399">'+(p.yesPrice*100).toFixed(1)+'%</div></div>' +
+        '<div class="pool-metric"><div class="pm-label">NO PRICE</div><div class="pm-val" style="color:#f87171">'+(p.noPrice*100).toFixed(1)+'%</div></div>' +
+        '<div class="pool-metric"><div class="pm-label">FEE RATE</div><div class="pm-val" style="color:#a855f7">0.3%</div></div>' +
+      '</div>' +
+      '<div class="pool-actions">' +
+        '<button onclick="goAddLiq('+p.marketId+')" style="flex:1;padding:10px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;color:#c4b5fd;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Syne',sans-serif">+ Add Liquidity</button>' +
+        '<button onclick="goSwap('+p.marketId+')" style="flex:1;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;color:#34d399;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Syne',sans-serif">⇄ Swap</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+};
+
+// Swap quote — also use direct provider
+ammUpdateSwapQuote = async function() {
+  var marketId = parseInt(document.getElementById('amm-swap-market').value);
+  var amount   = parseFloat(document.getElementById('amm-swap-amount').value) || 0;
+  var pool     = ammState.pools.find(function(p){ return p.marketId === marketId; });
+  var priceEl  = document.getElementById('amm-yes-price');
+  if (priceEl && pool) priceEl.textContent = (pool.yesPrice*100).toFixed(1)+'%';
+  if (!pool || amount <= 0) { var o=document.getElementById('swap-out-display'); if(o) o.textContent='—'; return; }
+  try {
+    var provider = new ethers.JsonRpcProvider(AMM_RPC);
+    var contract  = new ethers.Contract(AMM_ADDR, AMM_ABI, provider);
+    var amtWei    = ethers.parseUnits(amount.toString(), 6);
+    var r         = await contract.getSwapQuote(marketId, amtWei, ammState.swapIsYes);
+    var sym       = currSym(pool.currency);
+    var outEl = document.getElementById('swap-out-display');
+    var feeEl = document.getElementById('amm-swap-fee');
+    var impEl = document.getElementById('swap-impact');
+    if (outEl) outEl.textContent = parseFloat(ethers.formatUnits(r[0], 6)).toFixed(4);
+    if (feeEl) feeEl.textContent = parseFloat(ethers.formatUnits(r[1], 6)).toFixed(4)+' '+sym;
+    if (impEl) { var imp=((amount-parseFloat(ethers.formatUnits(r[0],6)))/amount*100).toFixed(2); impEl.textContent=imp+'%'; impEl.style.color=parseFloat(imp)>5?'#f87171':'rgba(255,255,255,.7)'; }
+  } catch(e) { console.warn('swapQuote:', e); }
+};
+
+// Also update updateLiqPrices to use currSym
+var _origUpdateLiqPrices = updateLiqPrices;
+updateLiqPrices = function(marketId) {
+  var pool = ammState.pools.find(function(p){ return p.marketId == marketId; });
+  if (!pool) { var lb=document.getElementById('liq-prices-box'); if(lb) lb.style.display='none'; return; }
+  var lb = document.getElementById('liq-prices-box');
+  if (lb) lb.style.display='block';
+  var yp = document.getElementById('liq-yes-price');
+  var np = document.getElementById('liq-no-price');
+  var tv = document.getElementById('liq-tvl');
+  if (yp) yp.textContent = (pool.yesPrice*100).toFixed(1)+'%';
+  if (np) np.textContent = (pool.noPrice*100).toFixed(1)+'%';
+  var sym = currSym(pool.currency);
+  if (tv) tv.textContent = (pool.yesReserve+pool.noReserve).toFixed(0)+' '+sym;
+  var tb = document.getElementById('liq-token-badge');
+  var sp = document.getElementById('swap-pay-token');
+  if (tb) tb.textContent = sym;
+  if (sp) sp.textContent = sym;
+  ammUpdateLiqPreview();
+};
+
+// ammLoadPools call — now use direct RPC
+if (pools.length) {
+  updateLiqPrices(pools[0].marketId);
     ['amm-pool-select','amm-swap-market'].forEach(function(id) {
       var sel = document.getElementById(id);
       if (!sel) return;
