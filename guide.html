@@ -39,6 +39,9 @@
 .mk-check{font-size:1.8rem;margin-bottom:6px}
 .mk-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .mk-pool{border-radius:8px;padding:10px;margin-bottom:6px;border:1px solid}
+
+.guide-doc-link{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;font-size:.75rem;font-weight:700;text-decoration:none;transition:all .2s;border:1px solid rgba(124,58,237,.25);background:rgba(124,58,237,.07);color:#c4b5fd;margin-top:16px}
+.guide-doc-link:hover{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.5)}
 </style>
 </head>
 <body data-page="guide">
@@ -187,6 +190,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#cpred" class="guide-doc-link">📋 Read in Docs: CPRED Token & Presale →</a>
   </div>
 
   <!-- PLACE A BET -->
@@ -256,6 +260,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#mercati" class="guide-doc-link">📋 Read in Docs: How Markets Work →</a>
   </div>
 
   <!-- CREATE MARKET -->
@@ -326,6 +331,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#crea" class="guide-doc-link">📋 Read in Docs: Creating a Market →</a>
   </div>
 
   <!-- PRESALE STAKING -->
@@ -398,6 +404,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#staking" class="guide-doc-link">📋 Read in Docs: Presale Staking →</a>
   </div>
 
   <!-- LIVE STAKING -->
@@ -470,6 +477,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#staking" class="guide-doc-link">📋 Read in Docs: Live Staking →</a>
   </div>
 
   <!-- CLAIM PAYOUT -->
@@ -519,6 +527,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#payout" class="guide-doc-link">📋 Read in Docs: Payout Calculation →</a>
   </div>
 
   <!-- FAUCET -->
@@ -629,6 +638,7 @@
 
       </div>
     </div>
+    <a href="docs.html#valute" class="guide-doc-link">📋 Read in Docs: Supported Currencies →</a>
   </div>
 
   <!-- TRADING -->
@@ -702,6 +712,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#trading" class="guide-doc-link">📋 Read in Docs: Trading & Chart →</a>
   </div>
 
   <!-- SELL SHARES -->
@@ -773,6 +784,7 @@
         </div>
       </div>
     </div>
+    <a href="docs.html#secondario" class="guide-doc-link">📋 Read in Docs: Secondary Market →</a>
   </div>
 
   <!-- GOVERNANCE -->
@@ -849,6 +861,7 @@
       </div>
     </div>
 
+    <a href="docs.html#governance" class="guide-doc-link">📋 Read in Docs: DAO Governance →</a>
   </div>
 
 
@@ -959,6 +972,7 @@
 
 </div>
 
+    <a href="docs.html#amm" class="guide-doc-link">📋 Read in Docs: AMM Liquidity →</a>
   </div>
 
 </div>
@@ -975,6 +989,22 @@ function showGuide(id, btn) {
   if (btn) btn.classList.add('active');
 }
 CP.ready.then(function() {});
+
+// Hash-based tab navigation
+(function() {
+  var hash = window.location.hash.replace('#', '');
+  if (hash && document.getElementById('guide-' + hash)) {
+    document.querySelectorAll('.guide-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.guide-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('guide-' + hash).classList.add('active');
+    document.querySelectorAll('.guide-tab').forEach(function(b) {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'" + hash + "'") !== -1) {
+        b.classList.add('active');
+      }
+    });
+  }
+})();
+
 </script>
 
 <script>
