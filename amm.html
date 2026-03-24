@@ -931,7 +931,23 @@ ammUpdateSwapQuote = async function() {
 
 // Override ammLoadPools — uses public RPC directly for reads (no wallet needed)
 var AMM_ADDR = '0xaa645dca8a82764db9a725ab3ac9e2caab1440d0';
-var AMM_RPC  = 'https://gateway.tenderly.co/public/base-sepolia';
+var AMM_RPCS = [
+  'https://base-sepolia.g.alchemy.com/v2/demo',
+  'https://gateway.tenderly.co/public/base-sepolia',
+  'https://sepolia.base.org',
+];
+
+async function getAMMProvider() {
+  for (var i = 0; i < AMM_RPCS.length; i++) {
+    try {
+      var p = new ethers.JsonRpcProvider(AMM_RPCS[i]);
+      await p.getBlockNumber(); // test it works
+      return p;
+    } catch(e) { console.warn('RPC failed:', AMM_RPCS[i], e.message); }
+  }
+  throw new Error('All RPC endpoints failed');
+}
+var AMM_RPC  = AMM_RPCS[0];
 
 async function fetchAMMPool(iface, contract, marketId) {
   var r = await contract.getPool(marketId);
@@ -954,7 +970,7 @@ var _origLoadPools = ammLoadPools;
 ammLoadPools = async function() {
   try {
     // Use public RPC provider directly — no wallet needed, no chain switching
-    var provider = new ethers.JsonRpcProvider(AMM_RPC);
+    var provider = await getAMMProvider();
     var contract  = new ethers.Contract(AMM_ADDR, AMM_ABI, provider);
     var ids       = await contract.getAllMarketIds();
     var pools     = await Promise.all(ids.map(function(id) {
@@ -987,7 +1003,11 @@ ammLoadPools = async function() {
   } catch(e) {
     console.error('ammLoadPools error:', e);
     var el = document.getElementById('pools-list');
-    if (el) el.innerHTML = '<div style="color:#f87171;padding:20px;text-align:center">Error: '+e.message+'</div>';
+    if (el) el.innerHTML = '<div style="padding:24px;text-align:center">' +
+      '<div style="color:#f87171;font-size:.9rem;margin-bottom:8px">⚠️ Could not load pools</div>' +
+      '<div style="color:rgba(255,255,255,.35);font-size:.75rem;font-family:DM Mono,monospace">' + e.message + '</div>' +
+      '<button onclick="ammLoadPools()" style="margin-top:12px;padding:8px 20px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:8px;color:#c4b5fd;cursor:pointer;font-family:Syne,sans-serif;font-weight:700">Retry →</button>' +
+      '</div>';
   }
 };
 
@@ -1056,7 +1076,7 @@ ammUpdateSwapQuote = async function() {
   if (priceEl && pool) priceEl.textContent = (pool.yesPrice*100).toFixed(1)+'%';
   if (!pool || amount <= 0) { var o=document.getElementById('swap-out-display'); if(o) o.textContent='—'; return; }
   try {
-    var provider = new ethers.JsonRpcProvider(AMM_RPC);
+    var provider = await getAMMProvider();
     var contract  = new ethers.Contract(AMM_ADDR, AMM_ABI, provider);
     var amtWei    = ethers.parseUnits(amount.toString(), 6);
     var r         = await contract.getSwapQuote(marketId, amtWei, ammState.swapIsYes);
