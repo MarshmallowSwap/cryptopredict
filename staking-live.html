@@ -505,7 +505,7 @@ function calcEarnings() {
   var cpredReward = cpred * tier.apy;
   var cpredUsd    = cpredReward * 0.15; // $0.15 listing price
 
-  // ETH from fees — assume total staked = 5M CPRED, user share proportional
+  // CPRED from fees (all currencies auto-swapped via Aerodrome) — assume total staked = 5M CPRED
   var TOTAL_STAKED = 5000000;
   var userShare    = cpred / TOTAL_STAKED;
   var protocolFee  = volume * 0.01; // 1% of monthly volume in ETH
