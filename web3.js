@@ -401,4 +401,104 @@ window.W3 = {
   getContract,
   getPresaleStakingInfo, getUserPresaleStaking,
   stakePresale, unstakePresale, claimPresaleRewards,
+
+  // ── AMM Pool helpers ──────────────────────────────────────────────
+  getAMMContract: async function(withSigner) {
+    if (withSigner) {
+      const signer = await getSigner();
+      return new ethers.Contract(CONTRACTS.ammPool, AMM_ABI, signer);
+    }
+    return new ethers.Contract(CONTRACTS.ammPool, AMM_ABI, await getProvider());
+  },
+
+  getAMMPool: async function(marketId) {
+    const c = await W3.getAMMContract(false);
+    const r = await c.getPool(marketId);
+    const total = r[1] + r[2];
+    return {
+      marketId, currency: r[0], question: r[5],
+      yesReserve: parseFloat(ethers.formatUnits(r[1], 6)),
+      noReserve:  parseFloat(ethers.formatUnits(r[2], 6)),
+      totalLPSupply: parseFloat(ethers.formatEther(r[3])),
+      feeAccumulator: parseFloat(ethers.formatUnits(r[4], 6)),
+      yesPrice: total > 0n ? Number(r[2] * 10000n / total) / 10000 : 0.5,
+      noPrice:  total > 0n ? Number(r[1] * 10000n / total) / 10000 : 0.5,
+    };
+  },
+
+  getAllAMMPools: async function() {
+    const c   = await W3.getAMMContract(false);
+    const ids = await c.getAllMarketIds();
+    return Promise.all(ids.map(id => W3.getAMMPool(Number(id))));
+  },
+
+  getAMMLPBalance: async function(marketId, address) {
+    const c = await W3.getAMMContract(false);
+    return parseFloat(ethers.formatEther(await c.getLPBalance(marketId, address)));
+  },
+
+  getAMMPendingFees: async function(marketId, address) {
+    const c = await W3.getAMMContract(false);
+    return parseFloat(ethers.formatUnits(await c.getPendingFees(marketId, address), 6));
+  },
+
+  getAMMSwapQuote: async function(marketId, amountIn, isYes, decimals) {
+    decimals = decimals || 6;
+    const c  = await W3.getAMMContract(false);
+    const r  = await c.getSwapQuote(marketId, ethers.parseUnits(amountIn.toString(), decimals), isYes);
+    return {
+      amountOut:   parseFloat(ethers.formatUnits(r[0], decimals)),
+      fee:         parseFloat(ethers.formatUnits(r[1], decimals)),
+      priceImpact: Number(r[2]) / 100,
+    };
+  },
+
+  ammApproveAndAddLiquidity: async function(marketId, amount, currency, decimals) {
+    decimals    = decimals || 6;
+    const signer = await getSigner();
+    const amtWei = ethers.parseUnits(amount.toString(), decimals);
+    const token  = new ethers.Contract(currency, [
+      'function approve(address,uint256) returns(bool)',
+      'function allowance(address,address) view returns(uint256)'
+    ], signer);
+    const allowance = await token.allowance(await signer.getAddress(), CONTRACTS.ammPool);
+    if (allowance < amtWei) { await (await token.approve(CONTRACTS.ammPool, amtWei * 10n)).wait(); }
+    const c  = await W3.getAMMContract(true);
+    const r  = await (await c.addLiquidity(marketId, amtWei, { gasLimit: 350000 })).wait();
+    return { txHash: r.hash, explorerUrl: CHAIN.explorer + '/tx/' + r.hash };
+  },
+
+  ammRemoveLiquidity: async function(marketId, lpAmount) {
+    const c = await W3.getAMMContract(true);
+    const r = await (await c.removeLiquidity(marketId, ethers.parseEther(lpAmount.toString()), { gasLimit: 300000 })).wait();
+    return { txHash: r.hash, explorerUrl: CHAIN.explorer + '/tx/' + r.hash };
+  },
+
+  ammSwap: async function(marketId, amountIn, isYes, minOut, currency, decimals) {
+    decimals    = decimals || 6;
+    const signer = await getSigner();
+    const amtWei = ethers.parseUnits(amountIn.toString(), decimals);
+    const minWei = ethers.parseUnits(Math.max(0, minOut * 0.98).toFixed(decimals), decimals);
+    const token  = new ethers.Contract(currency, [
+      'function approve(address,uint256) returns(bool)',
+      'function allowance(address,address) view returns(uint256)'
+    ], signer);
+    const allowance = await token.allowance(await signer.getAddress(), CONTRACTS.ammPool);
+    if (allowance < amtWei) { await (await token.approve(CONTRACTS.ammPool, amtWei * 10n)).wait(); }
+    const c = await W3.getAMMContract(true);
+    const r = await (await c.swap(marketId, amtWei, isYes, minWei, { gasLimit: 400000 })).wait();
+    return { txHash: r.hash, explorerUrl: CHAIN.explorer + '/tx/' + r.hash };
+  },
+
+  ammClaimFees: async function(marketId) {
+    const c = await W3.getAMMContract(true);
+    const r = await (await c.claimFees(marketId, { gasLimit: 200000 })).wait();
+    return { txHash: r.hash, explorerUrl: CHAIN.explorer + '/tx/' + r.hash };
+  },
+
+  createAMMPool: async function(marketId, currency, question) {
+    const c = await W3.getAMMContract(true);
+    const r = await (await c.createPoolOpen(marketId, currency, question, { gasLimit: 200000 })).wait();
+    return { txHash: r.hash, explorerUrl: CHAIN.explorer + '/tx/' + r.hash };
+  },
 };
