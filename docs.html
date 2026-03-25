@@ -722,15 +722,25 @@
       <div class="doc-section" id="amm">
         <div class="doc-section-head">
           <div class="doc-section-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25)">💧</div>
-          <div><div class="doc-section-num">18 · AMM</div><div class="doc-section-title">AMM Liquidity — Earn from Every Trade</div></div>
+          <div><div class="doc-section-num">18 · AMM</div><div class="doc-section-title">AMM Liquidity — Mercato Predittivo Live</div></div>
+        </div>
+
+        <div class="doc-box" style="margin-bottom:16px;background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.15)">
+          <div class="doc-box-head" style="color:#f87171">Il problema che l'AMM risolve</div>
+          <div class="doc-p" style="margin:0">Nel modello parimutuel attuale, chi scommette YES o NO deve <strong>aspettare la risoluzione del mercato</strong> (anche mesi) per incassare o perdere. Non può uscire prima. Se il mercato si muove a suo favore nel frattempo, non può monetizzare. I pool di liquidità AMM eliminano questo limite: trasformano ogni mercato predittivo in uno strumento tradabile in tempo reale.</div>
+        </div>
+
+        <div class="doc-box doc-box-cyan" style="margin-bottom:16px">
+          <div class="doc-box-head" style="color:#22d3ee">Come funziona</div>
+          <div class="doc-p" style="margin:0">Un <strong>Liquidity Provider (LP)</strong> deposita la valuta nativa del mercato nel pool. Il contratto crea automaticamente riserve YES e NO (split 50/50). I trader possono ora comprare e vendere YES/NO shares in qualsiasi momento a un prezzo determinato dalla curva CPMM (x×y=k). Ogni swap paga <strong>0.3% di fee</strong> — di cui l'80% va all'LP, il 20% al treasury. L'LP è completamente neutrale sull'esito: guadagna dal volume di trading indipendentemente da chi vince.</div>
         </div>
 
         <div class="doc-box doc-box-purple" style="margin-bottom:16px">
-          <div class="doc-box-head" style="color:#c4b5fd">💡 In one sentence</div>
-          <div class="doc-p" style="margin:0">Think of yourself as the casino, not the gambler. You deposit funds into a market pool and earn <strong>0.3% on every YES/NO swap</strong>, regardless of the outcome. No prediction needed. Launches at listing.</div>
+          <div class="doc-box-head" style="color:#c4b5fd">💡 In una frase</div>
+          <div class="doc-p" style="margin:0">Senza AMM: scommesse chiuse, capitale bloccato, nessun prezzo live. Con AMM: mercato liquido, uscita in qualsiasi momento, prezzo che riflette le probabilità in tempo reale. I pool di liquidità sono il motore che trasforma CryptoPredict da piattaforma di scommesse a mercato predittivo vero.</div>
         </div>
 
-        <div class="doc-p">Any user can deposit the market's native currency (ETH, USDC, USDT or CPRED) into any open market's pool. The protocol automatically splits the deposit 50/50 into YES and NO liquidity. The LP receives ERC-20 LP tokens representing their share and earns fees from every swap — completely neutral on the outcome.</div>
+        <div class="doc-p">Chiunque può depositare la valuta nativa del mercato (ETH, USDC, USDT o CPRED) in qualsiasi pool aperto. Il protocollo divide il deposito automaticamente 50/50 in YES e NO. L'LP riceve LP token ERC-20 proporzionali alla sua quota e guadagna fees da ogni swap — senza mai prendere posizione sull'esito.</div>
 
         <div class="doc-h3">What you deposit</div>
         <table class="doc-table">
