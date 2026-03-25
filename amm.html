@@ -220,7 +220,7 @@
     <p style="font-size:.85rem;color:rgba(255,255,255,.45);margin:0">Provide liquidity and earn 0.3% on every swap — no prediction needed.</p>
   </div>
 
-  <!-- WHY POOLS EXIST — mostrato sopra i tab, sempre visibile -->
+  <!-- WHY POOLS EXIST — shown above tabs -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
     <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.15);border-radius:14px;padding:16px 18px">
       <div style="font-size:.6rem;font-weight:700;font-family:'DM Mono',monospace;color:#f87171;letter-spacing:.1em;margin-bottom:8px">❌ WITHOUT AMM</div>
@@ -495,6 +495,7 @@ function setAmmTier(tier, btn) {
 }
 
 function calcAmm() {
+  if (!document.getElementById('calc-dep')) return;
   var dep = parseFloat(document.getElementById('calc-dep').value) || 0;
   var vol = parseFloat(document.getElementById('calc-vol').value) || 0;
   var t   = AMM_TIERS[ammTier];
@@ -968,14 +969,9 @@ var AMM_RPCS = [
 ];
 
 async function getAMMProvider() {
-  for (var i = 0; i < AMM_RPCS.length; i++) {
-    try {
-      var p = new ethers.JsonRpcProvider(AMM_RPCS[i]);
-      await p.getBlockNumber(); // test it works
-      return p;
-    } catch(e) { console.warn('RPC failed:', AMM_RPCS[i], e.message); }
-  }
-  throw new Error('All RPC endpoints failed');
+  // Return provider directly — no preflight test needed
+  // ethers.js JsonRpcProvider handles retries internally
+  return new ethers.JsonRpcProvider(AMM_RPCS[1]); // gateway.tenderly.co
 }
 var AMM_RPC  = AMM_RPCS[0];
 
