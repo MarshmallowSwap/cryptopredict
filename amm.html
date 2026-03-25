@@ -279,19 +279,23 @@
       </div>
     </div>
 
-    <!-- Summary stats -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px" id="amm-summary-stats">
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:.6rem;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">TOTAL POOLS</div>
-        <div id="stat-pools" style="font-size:1.4rem;font-weight:800;color:#e2e8f0">—</div>
+    <!-- Summary stats — per-currency TVL breakdown -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px" id="amm-summary-stats">
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:.58rem;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">POOLS</div>
+        <div id="stat-pools" style="font-size:1.3rem;font-weight:800;color:#e2e8f0">—</div>
       </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:.6rem;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">TOTAL TVL</div>
-        <div id="stat-tvl" style="font-size:1.4rem;font-weight:800;color:#e2e8f0">—</div>
+      <div style="background:rgba(39,117,202,.06);border:1px solid rgba(39,117,202,.18);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:.58rem;color:#2775ca;font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">TVL · USDC</div>
+        <div id="stat-tvl-usdc" style="font-size:1.1rem;font-weight:800;color:#e2e8f0">—</div>
       </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:.6rem;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">LP FEE</div>
-        <div style="font-size:1.4rem;font-weight:800;color:#a855f7">0.3%</div>
+      <div style="background:rgba(38,161,123,.06);border:1px solid rgba(38,161,123,.18);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:.58rem;color:#26a17b;font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">TVL · USDT</div>
+        <div id="stat-tvl-usdt" style="font-size:1.1rem;font-weight:800;color:#e2e8f0">—</div>
+      </div>
+      <div style="background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.18);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:.58rem;color:#fbbf24;font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px">TVL · CPRED</div>
+        <div id="stat-tvl-cpred" style="font-size:1.1rem;font-weight:800;color:#e2e8f0">—</div>
       </div>
     </div>
   </div>
@@ -774,7 +778,7 @@ function renderPools(pools) {
   count.textContent = pools.length + ' pool' + (pools.length>1?'s':'') + ' · Base Sepolia';
   document.getElementById('stat-pools').textContent = pools.length;
   var totalTvl = pools.reduce(function(a,p){ return a + p.yesReserve + p.noReserve; }, 0);
-  document.getElementById('stat-tvl').textContent = totalTvl.toFixed(0) + ' tokens';
+  // TVL per currency — updated in override renderPools below
 
   list.innerHTML = pools.map(function(p) {
     var sym  = p.currency === W3.CONTRACTS.mockUsdc ? 'USDC' : p.currency === W3.CONTRACTS.mockUsdt ? 'USDT' : 'CPRED';
@@ -1056,9 +1060,21 @@ renderPools = function(pools) {
   if (count) count.textContent = pools.length + ' pool' + (pools.length>1?'s':'') + ' · Base Sepolia';
   var sp = document.getElementById('stat-pools');
   if (sp) sp.textContent = pools.length;
-  var totalTvl = pools.reduce(function(a,p){ return a + p.yesReserve + p.noReserve; }, 0);
-  var st = document.getElementById('stat-tvl');
-  if (st) st.textContent = totalTvl.toFixed(0) + ' tokens';
+  // Per-currency TVL breakdown (can't add USDC + USDT + CPRED)
+  var tvlUsdc = 0, tvlUsdt = 0, tvlCpred = 0;
+  pools.forEach(function(p) {
+    var tvl = p.yesReserve + p.noReserve;
+    var sym = currSym(p.currency);
+    if (sym === 'USDC')  tvlUsdc  += tvl;
+    else if (sym === 'USDT')  tvlUsdt  += tvl;
+    else if (sym === 'CPRED') tvlCpred += tvl;
+  });
+  var su = document.getElementById('stat-tvl-usdc');
+  var st = document.getElementById('stat-tvl-usdt');
+  var sc = document.getElementById('stat-tvl-cpred');
+  if (su) su.textContent = tvlUsdc  > 0 ? tvlUsdc.toFixed(0)  : '—';
+  if (st) st.textContent = tvlUsdt  > 0 ? tvlUsdt.toFixed(0)  : '—';
+  if (sc) sc.textContent = tvlCpred > 0 ? tvlCpred.toFixed(0) : '—';
   list.innerHTML = pools.map(function(p) {
     var sym  = currSym(p.currency);
     var tvl  = (p.yesReserve + p.noReserve).toFixed(0);
